@@ -14,7 +14,7 @@ private let logger = Logger()
 extension API {
     func uploadAvatar(
         image: UIImage
-    ) async throws -> ParraImageAssetStub {
+    ) async throws -> ParraImageAsset {
         let imageField = try MultipartFormField(
             name: "image", // server side requirement
             image: image

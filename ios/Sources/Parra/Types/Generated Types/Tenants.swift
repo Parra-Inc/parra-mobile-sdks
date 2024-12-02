@@ -108,62 +108,6 @@ struct TenantCollectionResponse: Codable, Equatable, Hashable {
     }
 }
 
-public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
-    // MARK: - Lifecycle
-
-    public init(
-        id: String,
-        size: CGSize,
-        url: URL
-    ) {
-        self.id = id
-        self._size = _ParraSize(cgSize: size)
-        self.url = url
-    }
-
-    public init(from decoder: any Decoder) throws {
-        let container = try decoder.container(
-            keyedBy: CodingKeys.self
-        )
-
-        self.id = try container.decode(String.self, forKey: .id)
-        self._size = try container.decode(_ParraSize.self, forKey: .size)
-        self.url = try container.decode(URL.self, forKey: .url)
-    }
-
-    // MARK: - Public
-
-    public let id: String
-
-    public let url: URL
-
-    public var size: CGSize {
-        return _size.toCGSize
-    }
-
-    public func encode(to encoder: any Encoder) throws {
-        var container = encoder.container(
-            keyedBy: CodingKeys.self
-        )
-
-        try container.encode(id, forKey: .id)
-        try container.encode(url, forKey: .url)
-        try container.encode(_size, forKey: .size)
-    }
-
-    // MARK: - Internal
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case size
-        case url
-    }
-
-    // MARK: - Private
-
-    private let _size: _ParraSize
-}
-
 public struct ParraIdentity: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 

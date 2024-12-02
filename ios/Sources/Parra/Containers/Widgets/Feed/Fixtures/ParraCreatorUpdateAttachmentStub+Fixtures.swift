@@ -12,7 +12,7 @@ extension ParraCreatorUpdateAttachmentStub: ParraFixture {
         return [
             ParraCreatorUpdateAttachmentStub(
                 id: .uuid,
-                image: ParraImageAssetStub(
+                image: ParraImageAsset(
                     id: .uuid,
                     size: CGSize(width: 4_284, height: 4_284),
                     url: URL(
@@ -22,7 +22,7 @@ extension ParraCreatorUpdateAttachmentStub: ParraFixture {
             ),
             ParraCreatorUpdateAttachmentStub(
                 id: .uuid,
-                image: ParraImageAssetStub(
+                image: ParraImageAsset(
                     id: .uuid,
                     size: CGSize(width: 600, height: 300),
                     url: URL(
@@ -32,7 +32,7 @@ extension ParraCreatorUpdateAttachmentStub: ParraFixture {
             ),
             ParraCreatorUpdateAttachmentStub(
                 id: .uuid,
-                image: ParraImageAssetStub(
+                image: ParraImageAsset(
                     id: .uuid,
                     size: CGSize(width: 1_320, height: 420),
                     url: URL(
@@ -42,7 +42,7 @@ extension ParraCreatorUpdateAttachmentStub: ParraFixture {
             ),
             ParraCreatorUpdateAttachmentStub(
                 id: .uuid,
-                image: ParraImageAssetStub(
+                image: ParraImageAsset(
                     id: .uuid,
                     size: CGSize(width: 2_940, height: 1_960),
                     url: URL(
@@ -52,7 +52,7 @@ extension ParraCreatorUpdateAttachmentStub: ParraFixture {
             ),
             ParraCreatorUpdateAttachmentStub(
                 id: .uuid,
-                image: ParraImageAssetStub(
+                image: ParraImageAsset(
                     id: .uuid,
                     size: CGSize(width: 2_864, height: 3_580),
                     url: URL(

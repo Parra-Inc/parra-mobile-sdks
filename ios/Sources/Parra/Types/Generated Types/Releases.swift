@@ -1035,7 +1035,7 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
         subdomain: String?,
         isTest: Bool,
         parentTenantId: String?,
-        logo: ParraImageAssetStub?,
+        logo: ParraImageAsset?,
         domains: [ParraDomain]?,
         urls: [URL]?,
         hideBranding: Bool
@@ -1068,7 +1068,7 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
     public let subdomain: String?
     public let isTest: Bool
     public let parentTenantId: String?
-    public let logo: ParraImageAssetStub?
+    public let logo: ParraImageAsset?
     public let domains: PartiallyDecodableArray<ParraDomain>?
     public let urls: [URL]?
     /// Parra branding is hidden within the SDK for some paid plans.

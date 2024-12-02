@@ -40,7 +40,7 @@ public extension ParraUser {
             deletedAt: Date?,
             tenantId: String,
             name: String?,
-            avatar: ParraImageAssetStub?,
+            avatar: ParraImageAsset?,
             identity: String?,
             username: String?,
             email: String?,
@@ -118,7 +118,7 @@ public extension ParraUser {
                 )
             self.avatar = try container
                 .decodeIfPresent(
-                    ParraImageAssetStub.self,
+                    ParraImageAsset.self,
                     forKey: .avatar
                 )
             self.identity = try container
@@ -235,7 +235,7 @@ public extension ParraUser {
         public let deletedAt: Date?
         public let tenantId: String
         public let name: String?
-        public let avatar: ParraImageAssetStub?
+        public let avatar: ParraImageAsset?
         public let identity: String?
         public let username: String?
         public let email: String?

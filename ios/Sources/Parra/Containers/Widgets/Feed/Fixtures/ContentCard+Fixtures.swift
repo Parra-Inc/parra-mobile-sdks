@@ -16,7 +16,7 @@ extension ParraContentCard: ParraFixture {
                 updatedAt: .now.daysAgo(3),
                 deletedAt: nil,
                 backgroundImage: ParraContentCardBackground(
-                    image: ParraImageAssetStub(
+                    image: ParraImageAsset(
                         id: .uuid,
                         size: CGSize(
                             width: 5_616,

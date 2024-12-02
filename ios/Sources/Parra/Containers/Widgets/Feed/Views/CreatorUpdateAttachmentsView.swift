@@ -18,7 +18,7 @@ struct CreatorUpdateAttachmentsView: View {
         maxToDisplay: Int = 4,
         requiredEntitlement: ParraEntitlement? = nil,
         attemptUnlock: (() async -> Void)? = nil,
-        didSelectAsset: ((ParraImageAssetStub) -> Void)? = nil
+        didSelectAsset: ((ParraImageAsset) -> Void)? = nil
     ) {
         self.containerGeometry = containerGeometry
         self.innerSpacing = innerSpacing
@@ -60,16 +60,16 @@ struct CreatorUpdateAttachmentsView: View {
     // MARK: - Internal
 
     enum Layout {
-        case single(ParraImageAssetStub)
-        case doubleSquare(ParraImageAssetStub, ParraImageAssetStub)
-        case doubleRectangle(ParraImageAssetStub, ParraImageAssetStub)
-        case verticalMultiple(ParraImageAssetStub, [ParraImageAssetStub])
-        case horizontalMultiple(ParraImageAssetStub, [ParraImageAssetStub])
+        case single(ParraImageAsset)
+        case doubleSquare(ParraImageAsset, ParraImageAsset)
+        case doubleRectangle(ParraImageAsset, ParraImageAsset)
+        case verticalMultiple(ParraImageAsset, [ParraImageAsset])
+        case horizontalMultiple(ParraImageAsset, [ParraImageAsset])
         case none
 
         // MARK: - Internal
 
-        var allImages: [ParraImageAssetStub] {
+        var allImages: [ParraImageAsset] {
             switch self {
             case .single(let image):
                 return [image]
@@ -125,7 +125,7 @@ struct CreatorUpdateAttachmentsView: View {
 
     @ViewBuilder
     func renderSingle(
-        _ image: ParraImageAssetStub
+        _ image: ParraImageAsset
     ) -> some View {
         let width = containerGeometry.size.width - outerSpacing * 2
         let height = (image.size.height / image.size.width) * width
@@ -141,8 +141,8 @@ struct CreatorUpdateAttachmentsView: View {
 
     @ViewBuilder
     func renderDouble(
-        _ leftImage: ParraImageAssetStub,
-        _ rightImage: ParraImageAssetStub,
+        _ leftImage: ParraImageAsset,
+        _ rightImage: ParraImageAsset,
         _ width: CGFloat,
         _ height: CGFloat
     ) -> some View {
@@ -171,8 +171,8 @@ struct CreatorUpdateAttachmentsView: View {
 
     @ViewBuilder
     func renderDoubleSquare(
-        _ leftImage: ParraImageAssetStub,
-        _ rightImage: ParraImageAssetStub
+        _ leftImage: ParraImageAsset,
+        _ rightImage: ParraImageAsset
     ) -> some View {
         let width = (containerGeometry.size.width - outerSpacing * 2 - innerSpacing) / 2
 
@@ -181,8 +181,8 @@ struct CreatorUpdateAttachmentsView: View {
 
     @ViewBuilder
     func renderDoubleRectangle(
-        _ leftImage: ParraImageAssetStub,
-        _ rightImage: ParraImageAssetStub
+        _ leftImage: ParraImageAsset,
+        _ rightImage: ParraImageAsset
     ) -> some View {
         let width = (containerGeometry.size.width - outerSpacing * 2 - innerSpacing) / 2
         let height = (leftImage.size.height / leftImage.size.width) * width
@@ -192,8 +192,8 @@ struct CreatorUpdateAttachmentsView: View {
 
     @ViewBuilder
     func renderMultipleVertical(
-        _ leftImage: ParraImageAssetStub,
-        _ otherImages: [ParraImageAssetStub]
+        _ leftImage: ParraImageAsset,
+        _ otherImages: [ParraImageAsset]
     ) -> some View {
         let imagesBeforeFold = otherImages.prefix(maxToDisplay - 1)
         let requiresShowMore = otherImages.count > maxToDisplay - 1
@@ -245,8 +245,8 @@ struct CreatorUpdateAttachmentsView: View {
 
     @ViewBuilder
     func renderMultipleHorizontal(
-        _ topImage: ParraImageAssetStub,
-        _ otherImages: [ParraImageAssetStub]
+        _ topImage: ParraImageAsset,
+        _ otherImages: [ParraImageAsset]
     ) -> some View {
         let imagesBeforeFold = otherImages.prefix(maxToDisplay - 1)
         let requiresShowMore = otherImages.count > maxToDisplay - 1
@@ -308,10 +308,10 @@ struct CreatorUpdateAttachmentsView: View {
     private let outerSpacing: CGFloat
     private let maxToDisplay: Int
     private let requiredEntitlement: ParraEntitlement?
-    private let didSelectAsset: ((ParraImageAssetStub) -> Void)?
+    private let didSelectAsset: ((ParraImageAsset) -> Void)?
     private let attemptUnlock: (() async -> Void)?
 
-    @State private var selectedPhoto: ParraImageAssetStub?
+    @State private var selectedPhoto: ParraImageAsset?
     @State private var isShowingFullScreen = false
     @State private var isUnlocking = false
 
@@ -319,7 +319,7 @@ struct CreatorUpdateAttachmentsView: View {
     @Environment(\.parraTheme) private var parraTheme
 
     private func renderImageButton(
-        for image: ParraImageAssetStub
+        for image: ParraImageAsset
     ) -> some View {
         Button {
             handleSelectedImage(image)
@@ -329,10 +329,7 @@ struct CreatorUpdateAttachmentsView: View {
                     config: ParraImageConfig(
                         contentMode: .fill
                     ),
-                    content: ParraAsyncImageContent(
-                        url: image.url,
-                        originalSize: image.size
-                    )
+                    content: ParraAsyncImageContent(image)
                 )
                 .blur(radius: paywalled ? 10 : 0, opaque: true)
                 .overlay(alignment: .center) {
@@ -345,7 +342,7 @@ struct CreatorUpdateAttachmentsView: View {
     }
 
     private func renderSelectMoreButton(
-        for image: ParraImageAssetStub,
+        for image: ParraImageAsset,
         amount: Int
     ) -> some View {
         Button {
@@ -357,10 +354,7 @@ struct CreatorUpdateAttachmentsView: View {
                         config: ParraImageConfig(
                             contentMode: .fill
                         ),
-                        content: ParraAsyncImageContent(
-                            url: image.url,
-                            originalSize: image.size
-                        )
+                        content: ParraAsyncImageContent(image)
                     )
 
                     Color.black.opacity(0.5)
@@ -408,7 +402,7 @@ struct CreatorUpdateAttachmentsView: View {
     }
 
     private func handleSelectedImage(
-        _ image: ParraImageAssetStub
+        _ image: ParraImageAsset
     ) {
         if paywalled {
             Task {

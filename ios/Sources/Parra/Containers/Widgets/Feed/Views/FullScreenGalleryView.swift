@@ -196,8 +196,8 @@ struct ZoomableContainer<Content: View>: View {
 struct FullScreenGalleryView: View {
     // MARK: - Internal
 
-    let photos: [ParraImageAssetStub]
-    @Binding var selectedPhoto: ParraImageAssetStub?
+    let photos: [ParraImageAsset]
+    @Binding var selectedPhoto: ParraImageAsset?
     @Binding var isShowingFullScreen: Bool
 
     var body: some View {
@@ -230,13 +230,10 @@ struct FullScreenGalleryView: View {
         ForEach(photos) { photo in
             ZoomableContainer(contentSize: photo.size) {
                 componentFactory.buildAsyncImage(
-                    content: ParraAsyncImageContent(
-                        url: photo.url,
-                        originalSize: photo.size
-                    )
+                    content: ParraAsyncImageContent(photo)
                 )
             }
-            .tag(photo as ParraImageAssetStub?)
+            .tag(photo as ParraImageAsset?)
         }
     }
 }

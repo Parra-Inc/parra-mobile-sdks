@@ -143,14 +143,14 @@ public struct ParraContentCardBackground: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        image: ParraImageAssetStub?
+        image: ParraImageAsset?
     ) {
         self.image = image
     }
 
     // MARK: - Public
 
-    public let image: ParraImageAssetStub?
+    public let image: ParraImageAsset?
 }
 
 public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
@@ -334,7 +334,7 @@ public struct ParraCreatorUpdateSenderStub: Codable, Equatable, Hashable, Identi
     init(
         id: String,
         name: String,
-        avatar: ParraImageAssetStub?,
+        avatar: ParraImageAsset?,
         verified: Bool?
     ) {
         self.id = id
@@ -347,7 +347,7 @@ public struct ParraCreatorUpdateSenderStub: Codable, Equatable, Hashable, Identi
 
     public let id: String
     public let name: String
-    public let avatar: ParraImageAssetStub?
+    public let avatar: ParraImageAsset?
     public let verified: Bool?
 }
 
@@ -358,7 +358,7 @@ public struct ParraCreatorUpdateAttachmentStub: Codable, Equatable, Hashable,
 
     init(
         id: String,
-        image: ParraImageAssetStub?
+        image: ParraImageAsset?
     ) {
         self.id = id
         self.image = image
@@ -367,7 +367,7 @@ public struct ParraCreatorUpdateAttachmentStub: Codable, Equatable, Hashable,
     // MARK: - Public
 
     public let id: String
-    public let image: ParraImageAssetStub?
+    public let image: ParraImageAsset?
 }
 
 public struct ParraCreatorUpdateAppStub: Codable, Equatable, Hashable, Identifiable {

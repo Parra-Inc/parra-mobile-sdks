@@ -12,7 +12,7 @@ import UIKit
 private let logger = Logger()
 
 extension ApiResourceServer {
-    func fetchAsset(asset: ParraAsset) async throws -> UIImage? {
+    func fetchAsset(asset: ParraImageAsset) async throws -> UIImage? {
         logger.trace("Fetching asset: \(asset.id)", [
             "url": asset.url
         ])
@@ -56,7 +56,7 @@ extension ApiResourceServer {
         return nil
     }
 
-    func isAssetCached(asset: ParraAsset) -> Bool {
+    func isAssetCached(asset: ParraImageAsset) -> Bool {
         logger.trace("Checking if asset is cached: \(asset.id)")
 
         guard let cache = configuration.urlSession.configuration.urlCache else {
@@ -83,7 +83,7 @@ extension ApiResourceServer {
         return true
     }
 
-    private func request(for asset: ParraAsset) throws -> URLRequest {
+    private func request(for asset: ParraImageAsset) throws -> URLRequest {
         var request = try URLRequest(
             with: [:],
             url: asset.url,

@@ -242,8 +242,9 @@ enum ParraCardItemFixtures {
                 title: "title",
                 value: "val",
                 id: "id",
-                asset: ParraAsset(
+                asset: ParraImageAsset(
                     id: "id",
+                    size: CGSize(width: 640, height: 480),
                     url: URL(string: "parra.io/image.png")!
                 )
             ),
@@ -251,8 +252,9 @@ enum ParraCardItemFixtures {
                 title: "title2",
                 value: "val2",
                 id: "id2",
-                asset: ParraAsset(
+                asset: ParraImageAsset(
                     id: "id2222",
+                    size: CGSize(width: 640, height: 480),
                     url: URL(string: "parra.io/image2.png")!
                 )
             )

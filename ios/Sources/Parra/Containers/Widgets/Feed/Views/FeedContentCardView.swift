@@ -109,10 +109,7 @@ struct FeedContentCardView: View {
                 .overlay(alignment: .center) {
                     componentFactory.buildAsyncImage(
                         config: ParraImageConfig(contentMode: .fill),
-                        content: ParraAsyncImageContent(
-                            url: content.url,
-                            originalSize: content.size
-                        )
+                        content: ParraAsyncImageContent(content)
                     )
                     .scaledToFill()
                 }

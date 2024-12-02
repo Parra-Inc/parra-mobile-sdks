@@ -10,7 +10,7 @@ import Foundation
 public struct ParraPaywallMarketingContent: Codable, Equatable, Hashable {
     public let title: String?
     public let subtitle: String?
-    public let productImage: ParraAsset?
+    public let productImage: ParraImageAsset?
 }
 
 public struct ParraApplePaywall: Codable, Equatable, Hashable, Identifiable {

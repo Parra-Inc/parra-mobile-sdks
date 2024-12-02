@@ -21,7 +21,10 @@ struct ReleaseHeaderContent: Identifiable, Hashable {
         }
 
         self.id = releaseHeader.id
-        self.image = ParraAsyncImageContent(url: url)
+        self.image = ParraAsyncImageContent(
+            url: url,
+            originalSize: releaseHeader.size
+        )
         self.size = _ParraSize(
             width: releaseHeader.size.width,
             height: releaseHeader.size.height

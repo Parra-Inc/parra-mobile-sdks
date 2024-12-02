@@ -668,9 +668,162 @@ public enum ParraQuestionKind: String, Codable, Equatable {
     case textLong = "long-text"
 }
 
-public struct ParraAsset: Codable, Equatable, Hashable, Identifiable {
+public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        size: CGSize,
+        url: URL
+    ) {
+        self.id = id
+        self._size = _ParraSize(cgSize: size)
+        self.url = url
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        self.id = try container.decode(
+            String.self,
+            forKey: .id
+        )
+
+        self._size = try container.decode(
+            _ParraSize.self,
+            forKey: .size
+        )
+
+        self.url = try container.decode(
+            URL.self,
+            forKey: .url
+        )
+    }
+
+    // MARK: - Public
+
     public let id: String
     public let url: URL
+
+    public var size: CGSize {
+        return _size.toCGSize
+    }
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        try container.encode(id, forKey: .id)
+        try container.encode(url, forKey: .url)
+        try container.encode(_size, forKey: .size)
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case size
+        case url
+    }
+
+    // MARK: - Private
+
+    private let _size: _ParraSize
+}
+
+public struct ParraImageAssetThumbnails: Codable, Equatable, Hashable {
+    public let sm: ParraImageAssetThumbnail
+    public let md: ParraImageAssetThumbnail
+    public let lg: ParraImageAssetThumbnail
+    public let xl: ParraImageAssetThumbnail
+    public let max: ParraImageAssetThumbnail
+}
+
+public struct ParraImageAsset: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        size: CGSize,
+        url: URL,
+        blurHash: String? = nil,
+        thumbnails: ParraImageAssetThumbnails? = nil
+    ) {
+        self.id = id
+        self._size = _ParraSize(cgSize: size)
+        self.url = url
+        self.blurHash = blurHash
+        self.thumbnails = thumbnails
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        self.id = try container.decode(
+            String.self,
+            forKey: .id
+        )
+
+        self._size = try container.decode(
+            _ParraSize.self,
+            forKey: .size
+        )
+
+        self.url = try container.decode(
+            URL.self,
+            forKey: .url
+        )
+
+        self.blurHash = try container.decodeIfPresent(
+            String.self,
+            forKey: .blurHash
+        )
+
+        self.thumbnails = try container.decodeIfPresent(
+            ParraImageAssetThumbnails.self,
+            forKey: .thumbnails
+        )
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let url: URL
+    public let blurHash: String?
+    public let thumbnails: ParraImageAssetThumbnails?
+
+    public var size: CGSize {
+        return _size.toCGSize
+    }
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        try container.encode(id, forKey: .id)
+        try container.encode(url, forKey: .url)
+        try container.encode(_size, forKey: .size)
+        try container.encodeIfPresent(blurHash, forKey: .blurHash)
+        try container.encodeIfPresent(thumbnails, forKey: .thumbnails)
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case size
+        case url
+        case blurHash
+        case thumbnails
+    }
+
+    let _size: _ParraSize
 }
 
 public struct ParraCheckboxQuestionOption: Codable, Equatable, Hashable,
@@ -728,7 +881,7 @@ public struct ParraImageQuestionOption: Codable, Equatable, Hashable, Identifiab
         title: String?,
         value: String,
         id: String,
-        asset: ParraAsset
+        asset: ParraImageAsset
     ) {
         self.title = title
         self.value = value
@@ -751,12 +904,21 @@ public struct ParraImageQuestionOption: Codable, Equatable, Hashable, Identifiab
             String.self,
             forKey: .imageAssetUrl
         )
+        let imageSize = try container.decodeIfPresent(
+            _ParraSize.self,
+            forKey: .imageAssetSize
+        )
 
         if let imageId,
            let imageUrlString,
+           let imageSize,
            let imageUrl = URL(string: imageUrlString)
         {
-            self.asset = ParraAsset(id: imageId, url: imageUrl)
+            self.asset = ParraImageAsset(
+                id: imageId,
+                size: imageSize.toCGSize,
+                url: imageUrl
+            )
         } else {
             throw ParraError
                 .jsonError("Failed to decode asset for image question option")
@@ -768,7 +930,7 @@ public struct ParraImageQuestionOption: Codable, Equatable, Hashable, Identifiab
     public let title: String?
     public let value: String
     public let id: String
-    public let asset: ParraAsset
+    public let asset: ParraImageAsset
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -788,6 +950,7 @@ public struct ParraImageQuestionOption: Codable, Equatable, Hashable, Identifiab
         case value
         case id
         case imageAssetUrl
+        case imageAssetSize
     }
 }
 

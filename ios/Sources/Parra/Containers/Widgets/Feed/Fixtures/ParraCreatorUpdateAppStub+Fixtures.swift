@@ -20,7 +20,7 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                 sender: ParraCreatorUpdateSenderStub(
                     id: .uuid,
                     name: "Mick M.",
-                    avatar: ParraImageAssetStub(
+                    avatar: ParraImageAsset(
                         id: .uuid,
                         size: CGSize(width: 4_284, height: 4_284),
                         url: URL(
@@ -32,7 +32,7 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                 attachments: [
                     ParraCreatorUpdateAttachmentStub(
                         id: .uuid,
-                        image: ParraImageAssetStub(
+                        image: ParraImageAsset(
                             id: .uuid,
                             size: CGSize(width: 660, height: 300),
                             url: URL(
@@ -42,7 +42,7 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                     ),
                     ParraCreatorUpdateAttachmentStub(
                         id: .uuid,
-                        image: ParraImageAssetStub(
+                        image: ParraImageAsset(
                             id: .uuid,
                             size: CGSize(width: 560, height: 560),
                             url: URL(
@@ -52,7 +52,7 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                     ),
                     ParraCreatorUpdateAttachmentStub(
                         id: .uuid,
-                        image: ParraImageAssetStub(
+                        image: ParraImageAsset(
                             id: .uuid,
                             size: CGSize(width: 1_320, height: 420),
                             url: URL(
