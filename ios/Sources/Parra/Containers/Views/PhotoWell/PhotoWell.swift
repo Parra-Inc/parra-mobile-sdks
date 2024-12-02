@@ -13,28 +13,7 @@ struct PhotoWell: View {
     // MARK: - Lifecycle
 
     init(
-        stub: ParraImageAssetStub? = nil,
-        size: CGSize = CGSize(width: 100, height: 100),
-        onSelectionChanged: ((UIImage?) async -> Void)? = nil
-    ) {
-        let asset: ParraAsset? = if let id = stub?.id, let url = stub?.url {
-            ParraAsset(
-                id: id,
-                url: url
-            )
-        } else {
-            nil
-        }
-
-        self.init(
-            asset: asset,
-            size: size,
-            onSelectionChanged: onSelectionChanged
-        )
-    }
-
-    init(
-        asset: ParraAsset? = nil,
+        asset: ParraImageAsset? = nil,
         size: CGSize = CGSize(width: 100, height: 100),
         onSelectionChanged: ((UIImage?) async -> Void)? = nil
     ) {
@@ -89,7 +68,7 @@ struct PhotoWell: View {
 
     @ViewBuilder var currentImageElement: some View {
         switch state {
-        case .empty, .loadingFromLibrary:
+        case .empty, .loadingFromLibrary, .error:
             Image(systemName: "person.crop.circle.fill")
                 .resizable()
         case .asset(let asset):
@@ -107,9 +86,6 @@ struct PhotoWell: View {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
-        case .error:
-            Image(systemName: "person.crop.circle.badge.exclamationmark.fill")
-                .resizable()
         }
     }
 
@@ -137,8 +113,16 @@ struct PhotoWell: View {
                     )
             })
             .overlay(alignment: .bottomTrailing) {
-                if onSelectionChanged != nil, isEnabled {
-                    Image(systemName: "photo.circle.fill")
+                let overlayIcon: String? = if case .error = state {
+                    "exclamationmark.circle.fill"
+                } else if onSelectionChanged != nil, isEnabled {
+                    "photo.circle.fill"
+                } else {
+                    nil
+                }
+
+                if let overlayIcon {
+                    Image(systemName: overlayIcon)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(
@@ -318,8 +302,9 @@ struct PhotoWell: View {
             PhotoWell(asset: nil)
 
             PhotoWell(
-                asset: ParraAsset(
+                asset: ParraImageAsset(
                     id: UUID().uuidString,
+                    size: CGSize(width: 640, height: 480),
                     url: URL(string: "https://i.imgur.com/bA8JXya.png")!
                 ),
                 onSelectionChanged: { _ in }
@@ -331,8 +316,9 @@ struct PhotoWell: View {
             )
 
             PhotoWell(
-                asset: ParraAsset(
+                asset: ParraImageAsset(
                     id: UUID().uuidString,
+                    size: CGSize(width: 640, height: 480),
                     url: URL(string: "https://i.imgur.com/invalid-url.png")!
                 ),
                 onSelectionChanged: { _ in }
