@@ -545,6 +545,30 @@ final class AuthService {
     // The actual cached token.
     private var _cachedCredential: ParraUser.Credential?
 
+    /// Only for use when the refresh token has expired! Dumps local user
+    /// and triggers reauthentication flow.
+    private func forceLogout() async throws {
+        await applyUserUpdate(.undetermined, shouldBroadcast: true)
+
+        let appInfo = try await Parra.default.parraInternal.appInfoManager.getAppInfo()
+
+        let result: ParraAuthState
+        do {
+            result = try await performUnauthenticatedLogin(
+                appInfo: appInfo
+            )
+        } catch {
+            printInvalidAuth(error: error)
+
+            throw error
+        }
+
+        await applyUserUpdate(
+            result,
+            shouldBroadcast: true
+        )
+    }
+
     private func performUnauthenticatedLogin(
         appInfo: ParraAppInfo
     ) async throws -> ParraAuthState {
@@ -606,7 +630,7 @@ final class AuthService {
                         error
                     )
 
-                    await logout()
+                    try await forceLogout()
 
                     return nil
                 }
@@ -620,7 +644,7 @@ final class AuthService {
                         error
                     )
 
-                    await logout()
+                    try await forceLogout()
 
                     return nil
                 }
