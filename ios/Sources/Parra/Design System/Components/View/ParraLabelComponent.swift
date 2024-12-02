@@ -28,7 +28,6 @@ public struct ParraLabelComponent: View {
         Label(
             title: {
                 Text(content.text)
-                    .applyFrame(attributes.frame)
                     .applyTextAttributes(
                         attributes.text,
                         using: parraTheme
@@ -53,6 +52,7 @@ public struct ParraLabelComponent: View {
                 }
             }
         )
+        .applyFrame(attributes.frame)
         .applyLabelAttributes(
             attributes,
             using: parraTheme
