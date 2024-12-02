@@ -13,15 +13,26 @@ public struct ParraAsyncImageContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(
+        _ imageAsset: ParraImageAsset
+    ) {
+        self.url = imageAsset.url
+        self.originalSize = imageAsset._size
+        self.blurHash = imageAsset.blurHash
+    }
+
+    public init(
         url: URL,
+        blurHash: String? = nil,
         originalSize: CGSize? = nil
     ) {
         self.url = url
+        self.blurHash = blurHash
         self.originalSize = _ParraSize(cgSize: originalSize)
     }
 
     // MARK: - Internal
 
     let url: URL
+    let blurHash: String?
     let originalSize: _ParraSize?
 }

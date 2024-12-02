@@ -55,10 +55,30 @@ public struct ParraAsyncImageComponent: View {
     ) -> some View {
         switch phase {
         case .empty:
-            ZStack {
-                Color(attributes.background ?? .clear)
+            GeometryReader { geometry in
+                ZStack {
+                    let imageSize = content.originalSize?.toCGSize ?? geometry.size
+                    let aspectRatio = imageSize.width / imageSize.height
 
-                ProgressView()
+                    let size = if imageSize.width > imageSize.height {
+                        CGSize(width: 32, height: 32 / aspectRatio)
+                    } else if imageSize.width == imageSize.height {
+                        CGSize(width: 32, height: 32)
+                    } else {
+                        CGSize(width: 32 / aspectRatio, height: 32)
+                    }
+
+                    if let blurHash = content.blurHash, let blurImage = Image(
+                        blurHash: blurHash,
+                        size: size
+                    ) {
+                        blurImage
+                    } else {
+                        Color(attributes.background ?? .clear)
+                    }
+
+                    ProgressView()
+                }
             }
         case .success(let image):
             image
