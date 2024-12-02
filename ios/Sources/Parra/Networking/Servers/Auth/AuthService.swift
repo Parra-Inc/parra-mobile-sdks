@@ -567,6 +567,12 @@ final class AuthService {
             result,
             shouldBroadcast: true
         )
+
+        await ParraAlertManager.shared.showToast(
+            for: 5.0,
+            level: .warn,
+            content: .defaultSessionExpired
+        )
     }
 
     private func performUnauthenticatedLogin(

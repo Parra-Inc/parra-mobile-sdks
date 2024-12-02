@@ -25,6 +25,15 @@ public struct ParraAlertContent: Hashable, Equatable, Sendable {
 
     // MARK: - Public
 
+    public static let defaultSessionExpired: ParraAlertContent = .init(
+        title: ParraLabelContent(text: "Session expired"),
+        subtitle: ParraLabelContent(
+            text: "You have been automatically logged out"
+        ),
+        icon: .symbol("clock.badge.exclamationmark"),
+        dismiss: nil
+    )
+
     public let title: ParraLabelContent
     public let subtitle: ParraLabelContent?
     public let icon: ParraImageContent?
