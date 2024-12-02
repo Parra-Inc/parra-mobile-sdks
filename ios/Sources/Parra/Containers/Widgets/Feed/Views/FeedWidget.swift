@@ -113,6 +113,8 @@ struct FeedWidget: ParraContainer {
                         .layoutPriority(1)
                     }
 
+                    Spacer()
+
                     if contentObserver.feedPaginator.isLoading {
                         VStack(alignment: .center) {
                             ProgressView()
