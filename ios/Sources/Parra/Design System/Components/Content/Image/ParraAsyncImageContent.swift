@@ -13,10 +13,19 @@ public struct ParraAsyncImageContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(
-        _ imageAsset: ParraImageAsset
+        _ imageAsset: ParraImageAsset,
+        preferredThumbnailSize: ParraImageAssetThumbnailSize? = nil
     ) {
-        self.url = imageAsset.url
-        self.originalSize = imageAsset._size
+        if let preferredThumbnailSize, let thumbnails = imageAsset.thumbnails {
+            let thumb = thumbnails.thumbnail(for: preferredThumbnailSize)
+
+            self.url = thumb.url
+            self.originalSize = _ParraSize(cgSize: thumb.size)
+        } else {
+            self.url = imageAsset.url
+            self.originalSize = imageAsset._size
+        }
+
         self.blurHash = imageAsset.blurHash
     }
 

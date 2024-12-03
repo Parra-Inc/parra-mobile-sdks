@@ -134,7 +134,10 @@ struct FeedCreatorUpdateView: View {
         HStack(spacing: 12) {
             if let avatar = sender.avatar {
                 componentFactory.buildAsyncImage(
-                    content: ParraAsyncImageContent(avatar)
+                    content: ParraAsyncImageContent(
+                        avatar,
+                        preferredThumbnailSize: .sm
+                    )
                 )
                 .frame(
                     width: 46,

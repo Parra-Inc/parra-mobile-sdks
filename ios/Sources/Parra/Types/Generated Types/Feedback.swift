@@ -734,12 +734,46 @@ public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
     private let _size: _ParraSize
 }
 
+public enum ParraImageAssetThumbnailSize {
+    case sm
+    case md
+    case lg
+    case xl
+    case max
+}
+
 public struct ParraImageAssetThumbnails: Codable, Equatable, Hashable {
+    /// 128px wide
     public let sm: ParraImageAssetThumbnail
+
+    /// 256px wide
     public let md: ParraImageAssetThumbnail
+
+    /// 512px wide
     public let lg: ParraImageAssetThumbnail
+
+    /// 1024px wide
     public let xl: ParraImageAssetThumbnail
+
+    /// 2048px wide
     public let max: ParraImageAssetThumbnail
+
+    public func thumbnail(
+        for size: ParraImageAssetThumbnailSize
+    ) -> ParraImageAssetThumbnail {
+        switch size {
+        case .sm:
+            return sm
+        case .md:
+            return md
+        case .lg:
+            return lg
+        case .xl:
+            return xl
+        case .max:
+            return max
+        }
+    }
 }
 
 public struct ParraImageAsset: Codable, Equatable, Hashable, Identifiable {

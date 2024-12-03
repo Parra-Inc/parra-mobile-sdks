@@ -329,7 +329,10 @@ struct CreatorUpdateAttachmentsView: View {
                     config: ParraImageConfig(
                         contentMode: .fill
                     ),
-                    content: ParraAsyncImageContent(image)
+                    content: ParraAsyncImageContent(
+                        image,
+                        preferredThumbnailSize: .md
+                    )
                 )
                 .blur(radius: paywalled ? 10 : 0, opaque: true)
                 .overlay(alignment: .center) {
@@ -354,7 +357,10 @@ struct CreatorUpdateAttachmentsView: View {
                         config: ParraImageConfig(
                             contentMode: .fill
                         ),
-                        content: ParraAsyncImageContent(image)
+                        content: ParraAsyncImageContent(
+                            image,
+                            preferredThumbnailSize: .md
+                        )
                     )
 
                     Color.black.opacity(0.5)

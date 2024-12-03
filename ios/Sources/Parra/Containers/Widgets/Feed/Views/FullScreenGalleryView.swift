@@ -230,7 +230,10 @@ struct FullScreenGalleryView: View {
         ForEach(photos) { photo in
             ZoomableContainer(contentSize: photo.size) {
                 componentFactory.buildAsyncImage(
-                    content: ParraAsyncImageContent(photo)
+                    content: ParraAsyncImageContent(
+                        photo,
+                        preferredThumbnailSize: .xl
+                    )
                 )
             }
             .tag(photo as ParraImageAsset?)
