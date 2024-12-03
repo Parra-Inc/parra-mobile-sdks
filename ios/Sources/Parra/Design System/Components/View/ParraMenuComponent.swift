@@ -114,17 +114,13 @@ public struct ParraMenuComponent: View {
 
             Spacer()
 
-            let padding = parraTheme.padding.value(
-                for: attributes.padding
-            )
-
             Image(systemName: "chevron.up.chevron.down")
                 .padding(.vertical, 16)
                 .foregroundStyle(.primary.opacity(elementOpacity))
                 .frame(width: 24, height: 24)
                 .padding(
                     .trailing,
-                    padding.trailing
+                    8
                 )
         }
     }

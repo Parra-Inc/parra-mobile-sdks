@@ -67,6 +67,11 @@ struct FeedbackFormWidget: ParraContainer {
                             isMaxWidth: true
                         ),
                         content: contentObserver.content.submitButton,
+                        localAttributes: ParraAttributes.ContainedButton(
+                            normal: ParraAttributes.ContainedButton.StatefulAttributes(
+                                padding: .zero
+                            )
+                        ),
                         onPress: {
                             contentObserver.submit()
                         }
