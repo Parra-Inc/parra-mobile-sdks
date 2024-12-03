@@ -39,11 +39,12 @@ extension Storefront.QueryRootQuery {
             .edges { $0
                 .node { $0
                     .id()
-                    .description()
                     .title()
+                    .description()
+                    .descriptionHtml()
+                    .handle()
                     .availableForSale()
                     .createdAt()
-                    .descriptionHtml()
                     .featuredImage { $0
                         .id()
                         .altText()
@@ -71,6 +72,12 @@ extension Storefront.QueryRootQuery {
                         .optionValues { $0
                             .id()
                             .name()
+                            .firstSelectableVariant { $0
+                                .title()
+                            }
+                            .swatch { $0
+                                .color()
+                            }
                         }
                     }
                     .variants(first: 10) { $0
