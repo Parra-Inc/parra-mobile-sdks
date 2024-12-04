@@ -25,6 +25,7 @@ struct UserSettingsGroupView<Footer>: View where Footer: View {
         } header: {
             VStack(alignment: .leading) {
                 Text(group.title)
+                    .font(.headline)
 
                 withContent(content: group.description) { content in
                     Text(content)
@@ -34,6 +35,5 @@ struct UserSettingsGroupView<Footer>: View where Footer: View {
         } footer: {
             footer()
         }
-        .headerProminence(.increased)
     }
 }

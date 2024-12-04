@@ -14,55 +14,33 @@ struct ParraUserSettingsView: View {
     let onValueChanged: (_ key: String, _ value: ParraSettingsItemDataWithValue) -> Void
 
     var body: some View {
-        VStack {
-            withContent(content: layout.description) { content in
-                componentFactory.buildLabel(
-                    text: content,
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            style: .subheadline
-                        ),
-                        background: parraTheme.palette.primaryBackground.toParraColor()
-                    )
-                )
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-                .safeAreaPadding(.horizontal)
-                .padding(.bottom, 16)
-            }
-
-            List {
-                ForEach(
-                    Array(layout.groups.enumerated()),
-                    id: \.element
-                ) { index, group in
-                    UserSettingsGroupView(
-                        group: group
-                    ) {
-                        if index == layout.groups.count - 1 {
-                            withContent(content: layout.footerLabel) { content in
-                                componentFactory.buildLabel(
-                                    text: content,
-                                    localAttributes: .default(with: .footnote)
-                                )
-                            }
+        List {
+            ForEach(
+                Array(layout.groups.enumerated()),
+                id: \.element
+            ) { index, group in
+                UserSettingsGroupView(
+                    group: group
+                ) {
+                    if index == layout.groups.count - 1 {
+                        withContent(content: layout.footerLabel) { content in
+                            componentFactory.buildLabel(
+                                text: content,
+                                localAttributes: .default(with: .footnote)
+                            )
                         }
-                    } onValueChanged: { key, value in
-                        onValueChanged(key, value)
                     }
+                } onValueChanged: { key, value in
+                    onValueChanged(key, value)
                 }
             }
-            .background(
-                parraTheme.palette.primaryBackground.toParraColor()
-            )
-            .scrollContentBackground(.hidden)
         }
         .background(
             parraTheme.palette.primaryBackground.toParraColor()
         )
+        .scrollContentBackground(.hidden)
         .navigationTitle(layout.title)
+        .navigationBarTitleDisplayMode(.automatic)
     }
 
     // MARK: - Private
