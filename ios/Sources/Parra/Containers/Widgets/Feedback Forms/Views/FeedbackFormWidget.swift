@@ -77,6 +77,7 @@ struct FeedbackFormWidget: ParraContainer {
                         }
                     )
                     .disabled(!contentObserver.content.canSubmit)
+                    .safeAreaPadding(.horizontal)
                 },
                 secondaryActionBuilder: nil,
                 contentPadding: .padding(

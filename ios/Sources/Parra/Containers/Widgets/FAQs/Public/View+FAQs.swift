@@ -1,35 +1,31 @@
 //
-//  View+Settings.swift
+//  View+FAQs.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 11/1/24.
+//  Created by Mick MacCallum on 12/3/24.
 //
 
 import SwiftUI
 
 public extension View {
-    /// Automatically fetches the settings view with the provided layout id and
-    /// presents it in a sheet based on the value of the `isPresented` binding.
+    /// Automatically fetches FAQs and presents them in a sheet based on the
+    /// value of the `isPresented` binding.
     @MainActor
-    func presentParraSettingsView(
-        layoutId: String,
+    func presentParraFAQView(
         isPresented: Binding<Bool>,
-        config: ParraUserSettingsConfiguration = .default,
+        config: ParraFAQConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
-        let transformParams = SettingsTransformParams(layoutId: layoutId)
+        let transformParams = FAQsTransformParams()
 
         let transformer: ParraViewDataLoader<
-            SettingsTransformParams,
-            SettingsParams,
+            FAQsTransformParams,
+            FAQsParams,
             UserSettingsWidget
         >.Transformer = { parra, _ in
-            let layout = try await parra.parraInternal.api.getSettingsLayout(
-                layoutId: layoutId
-            )
+            let layout = try await parra.parraInternal.api.getFAQLayout()
 
-            return SettingsParams(
-                layoutId: layoutId,
+            return FAQsParams(
                 layout: layout
             )
         }
@@ -49,7 +45,7 @@ public extension View {
                     }
                 }
             ),
-            with: .settingsLoader(
+            with: .faqsLoader(
                 config: config
             ),
             onDismiss: onDismiss

@@ -61,6 +61,9 @@ enum ApiEndpoint: Endpoint {
     case putUpdateSingleUserProperty(propertyKey: String)
     case deleteSingleUserProperty(propertyKey: String)
 
+    // FAQs
+    case getFaqs
+
     // Purchases
     case getPaywall
     case postPurchases
@@ -75,7 +78,7 @@ enum ApiEndpoint: Endpoint {
         switch self {
         case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
-             .getUserProperties, .getPaginateFeed,
+             .getUserProperties, .getPaginateFeed, .getFaqs,
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
@@ -155,6 +158,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/applications/:applicationId/paywall"
         case .postPurchases:
             return "tenants/:tenantId/applications/:applicationId/purchases"
+        case .getFaqs:
+            return "tenants/:tenantId/applications/:applicationId/faqs"
         }
     }
 

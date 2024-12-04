@@ -196,6 +196,8 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/applications/\(applicationId)/paywall"
         case .postPurchases:
             return "tenants/\(tenantId)/applications/\(applicationId)/purchases"
+        case .getFaqs:
+            return "tenants/\(tenantId)/applications/\(applicationId)/faqs"
         }
     }
 

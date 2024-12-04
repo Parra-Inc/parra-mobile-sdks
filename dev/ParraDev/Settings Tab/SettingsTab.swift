@@ -37,6 +37,7 @@ struct SettingsTab: View {
                     FeedbackCell()
                     RoadmapCell()
                     ChangelogCell()
+                    FaqCell()
                     LatestReleaseCell()
                 }
 

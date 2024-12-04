@@ -113,10 +113,16 @@ struct ReleaseWidget: ParraContainer {
                     content: content.withLoading(
                         changelogContentObserver.releasePaginator.isLoading
                     ),
+                    localAttributes: ParraAttributes.ContainedButton(
+                        normal: ParraAttributes.ContainedButton.StatefulAttributes(
+                            padding: .zero
+                        )
+                    ),
                     onPress: {
                         navigationState.navigationPath.append("changelog")
                     }
                 )
+                .safeAreaPadding(.horizontal)
             }
         }
     }

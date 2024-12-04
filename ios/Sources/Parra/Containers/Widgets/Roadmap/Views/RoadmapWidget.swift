@@ -29,23 +29,27 @@ struct RoadmapWidget: ParraContainer {
     }
 
     var footer: some View {
-        WidgetFooter { () -> ParraContainedButtonComponent? in
-            guard contentObserver.canAddRequests else {
-                return nil
+        WidgetFooter {
+            if contentObserver.canAddRequests {
+                componentFactory.buildContainedButton(
+                    config: ParraTextButtonConfig(
+                        type: .primary,
+                        size: .large,
+                        isMaxWidth: true
+                    ),
+                    content: contentObserver.content
+                        .addRequestButton,
+                    localAttributes: ParraAttributes.ContainedButton(
+                        normal: ParraAttributes.ContainedButton.StatefulAttributes(
+                            padding: .zero
+                        )
+                    ),
+                    onPress: {
+                        contentObserver.addRequest()
+                    }
+                )
+                .safeAreaPadding(.horizontal)
             }
-
-            return componentFactory.buildContainedButton(
-                config: ParraTextButtonConfig(
-                    type: .primary,
-                    size: .large,
-                    isMaxWidth: true
-                ),
-                content: contentObserver.content
-                    .addRequestButton,
-                onPress: {
-                    contentObserver.addRequest()
-                }
-            )
         }
     }
 

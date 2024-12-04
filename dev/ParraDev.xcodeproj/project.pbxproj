@@ -18,6 +18,7 @@
 		0094EA342CD53E6100D6C32D /* ListItemLoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0094EA332CD53E6100D6C32D /* ListItemLoadingButton.swift */; };
 		0094EA362CD5592800D6C32D /* AppNavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0094EA352CD5592800D6C32D /* AppNavigationState.swift */; };
 		0094EA382CD5A73D00D6C32D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0094EA372CD5A73D00D6C32D /* AppDelegate.swift */; };
+		00A679572CFF73AA009DC710 /* FaqCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A679562CFF73A9009DC710 /* FaqCell.swift */; };
 		00C9B3542CE2A30500211346 /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 00C9B3532CE2A30500211346 /* Configuration.storekit */; };
 		092DB0526E9A9D1C2D71B152 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD565978366682F0A1B0B253 /* AccountView.swift */; };
 		09E53E8AD7AC9849558E80CF /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223D9A5112046030C8998F8D /* SettingsTab.swift */; };
@@ -56,6 +57,7 @@
 		0094EA332CD53E6100D6C32D /* ListItemLoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemLoadingButton.swift; sourceTree = "<group>"; };
 		0094EA352CD5592800D6C32D /* AppNavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigationState.swift; sourceTree = "<group>"; };
 		0094EA372CD5A73D00D6C32D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		00A679562CFF73A9009DC710 /* FaqCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaqCell.swift; sourceTree = "<group>"; };
 		00C9B3532CE2A30500211346 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		0442101DFDE5D666D1260CD8 /* SettingsFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFooter.swift; sourceTree = "<group>"; };
 		11F0F465823A871B75DCAEB2 /* ChangePasswordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordCell.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 		82F912C47C31C1346C1E00C7 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				00A679562CFF73A9009DC710 /* FaqCell.swift */,
 				00612BE02CEE34B500AB8865 /* SubscriptionUpsellCell.swift */,
 				0083B4A82CE7A7EF0045EB63 /* TipJarCell.swift */,
 				007930452CBD842900D693E5 /* FeedCell.swift */,
@@ -302,6 +305,7 @@
 				E4C1C50BA4071C1E9C8919DA /* EditProfileView.swift in Sources */,
 				8F29D4AFDC37226C8C8C530C /* EditProfileViewModel.swift in Sources */,
 				27815D4DD8F4B64CBA69C9CD /* FeedbackCell.swift in Sources */,
+				00A679572CFF73AA009DC710 /* FaqCell.swift in Sources */,
 				1338E8555C1A0126FADE07D1 /* LatestReleaseCell.swift in Sources */,
 				29B1432431F5F632BC039372 /* LogoutCell.swift in Sources */,
 				0094EA342CD53E6100D6C32D /* ListItemLoadingButton.swift in Sources */,

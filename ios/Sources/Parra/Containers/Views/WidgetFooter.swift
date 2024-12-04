@@ -12,7 +12,7 @@ struct WidgetFooter<Primary>: View where Primary: View {
     // MARK: - Lifecycle
 
     init(
-        primaryActionBuilder: @escaping () -> Primary?,
+        @ViewBuilder primaryActionBuilder: @escaping () -> Primary?,
         secondaryActionBuilder: (() -> any View)? = nil,
         contentPadding: EdgeInsets = EdgeInsets(
             vertical: 12,
@@ -45,13 +45,11 @@ struct WidgetFooter<Primary>: View where Primary: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .safeAreaPadding(.horizontal)
                 .padding([.leading, .trailing], from: contentPadding)
             }
             .ignoresSafeArea()
             .frame(maxWidth: .infinity)
             .padding([.bottom], from: contentPadding)
-            .padding(.top, contentPadding.bottom)
         }
     }
 
