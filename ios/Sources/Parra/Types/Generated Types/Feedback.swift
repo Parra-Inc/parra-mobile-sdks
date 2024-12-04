@@ -672,13 +672,11 @@ public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        id: String,
-        size: CGSize,
-        url: URL
+        q: String,
+        size: CGSize
     ) {
-        self.id = id
+        self.q = q
         self._size = _ParraSize(cgSize: size)
-        self.url = url
     }
 
     public init(from decoder: any Decoder) throws {
@@ -686,26 +684,20 @@ public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
             keyedBy: CodingKeys.self
         )
 
-        self.id = try container.decode(
+        self.q = try container.decode(
             String.self,
-            forKey: .id
+            forKey: .q
         )
 
         self._size = try container.decode(
             _ParraSize.self,
             forKey: .size
         )
-
-        self.url = try container.decode(
-            URL.self,
-            forKey: .url
-        )
     }
 
     // MARK: - Public
 
-    public let id: String
-    public let url: URL
+    public let q: String
 
     public var size: CGSize {
         return _size.toCGSize
@@ -716,17 +708,15 @@ public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
             keyedBy: CodingKeys.self
         )
 
-        try container.encode(id, forKey: .id)
-        try container.encode(url, forKey: .url)
+        try container.encode(q, forKey: .q)
         try container.encode(_size, forKey: .size)
     }
 
     // MARK: - Internal
 
     enum CodingKeys: String, CodingKey {
-        case id
+        case q
         case size
-        case url
     }
 
     // MARK: - Private
@@ -735,33 +725,67 @@ public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
 }
 
 public enum ParraImageAssetThumbnailSize {
+    case xs
     case sm
     case md
     case lg
     case xl
-    case max
+    case xxl
+
+    // MARK: - Internal
+
+    static func recommended(for size: CGSize) -> Self {
+        let minDimension = min(size.height, size.width)
+
+        if minDimension < 64 {
+            return .xs
+        }
+
+        if minDimension < 128 {
+            return .sm
+        }
+
+        if minDimension < 256 {
+            return .md
+        }
+
+        if minDimension < 512 {
+            return .lg
+        }
+
+        if minDimension < 1_024 {
+            return .xl
+        }
+
+        return .xxl
+    }
 }
 
 public struct ParraImageAssetThumbnails: Codable, Equatable, Hashable {
-    /// 128px wide
+    /// Min dimension is 64px
+    public let xs: ParraImageAssetThumbnail
+
+    /// Min dimension is 128px
     public let sm: ParraImageAssetThumbnail
 
-    /// 256px wide
+    /// Min dimension is 256px
     public let md: ParraImageAssetThumbnail
 
-    /// 512px wide
+    /// Min dimension is 512px
     public let lg: ParraImageAssetThumbnail
 
-    /// 1024px wide
+    /// Min dimension is 1024px
     public let xl: ParraImageAssetThumbnail
 
-    /// 2048px wide
-    public let max: ParraImageAssetThumbnail
+    /// Min dimension is 2048px
+    public let xxl: ParraImageAssetThumbnail
 
     public func thumbnail(
         for size: ParraImageAssetThumbnailSize
     ) -> ParraImageAssetThumbnail {
         switch size {
+        case .xs:
+            return xs
         case .sm:
             return sm
         case .md:
@@ -770,8 +794,8 @@ public struct ParraImageAssetThumbnails: Codable, Equatable, Hashable {
             return lg
         case .xl:
             return xl
-        case .max:
-            return max
+        case .xxl:
+            return xxl
         }
     }
 }
@@ -833,6 +857,50 @@ public struct ParraImageAsset: Codable, Equatable, Hashable, Identifiable {
 
     public var size: CGSize {
         return _size.toCGSize
+    }
+
+    public func thumbnailUrl(
+        for size: ParraImageAssetThumbnailSize
+    ) -> (URL, CGSize)? {
+        guard let thumbnails else {
+            return nil
+        }
+
+        let thumb = thumbnails.thumbnail(for: size)
+
+        guard var components = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: true
+        ) else {
+            return nil
+        }
+
+        let newParams = thumb.q
+            .components(separatedBy: "&")
+            .compactMap { param -> URLQueryItem? in
+                let parts = param.components(separatedBy: "=")
+
+                guard parts.count == 2 else {
+                    return nil
+                }
+
+                return URLQueryItem(
+                    name: parts[0],
+                    value: parts[1]
+                )
+            }
+
+        if let existingItems = components.queryItems {
+            components.queryItems = existingItems + newParams
+        } else {
+            components.queryItems = newParams
+        }
+
+        guard let url = components.url else {
+            return nil
+        }
+
+        return (url, thumb.size)
     }
 
     public func encode(to encoder: any Encoder) throws {

@@ -72,8 +72,9 @@ struct PhotoWell: View {
             Image(systemName: "person.crop.circle.fill")
                 .resizable()
         case .asset(let asset):
+
             CachedAsyncImage(
-                url: asset.url,
+                url: imageUrl(for: asset),
                 urlCache: URLSessionConfiguration.apiConfiguration
                     .urlCache ?? .shared,
                 transaction: Transaction(
@@ -246,6 +247,18 @@ struct PhotoWell: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.parraTheme) private var parraTheme
+
+    private var thumbSizeFittingSize: ParraImageAssetThumbnailSize {
+        return ParraImageAssetThumbnailSize.recommended(for: size)
+    }
+
+    private func imageUrl(for asset: ParraImageAsset) -> URL {
+        guard let thumb = asset.thumbnailUrl(for: thumbSizeFittingSize) else {
+            return asset.url
+        }
+
+        return thumb.0
+    }
 
     private func applyNewImage(_ image: UIImage) {
         state = .processing(image)

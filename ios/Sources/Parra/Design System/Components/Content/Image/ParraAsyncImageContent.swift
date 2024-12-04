@@ -16,11 +16,13 @@ public struct ParraAsyncImageContent: Hashable, Equatable {
         _ imageAsset: ParraImageAsset,
         preferredThumbnailSize: ParraImageAssetThumbnailSize? = nil
     ) {
-        if let preferredThumbnailSize, let thumbnails = imageAsset.thumbnails {
-            let thumb = thumbnails.thumbnail(for: preferredThumbnailSize)
-
-            self.url = thumb.url
-            self.originalSize = _ParraSize(cgSize: thumb.size)
+        if let preferredThumbnailSize,
+           let (thumbUrl, thumbSize) = imageAsset.thumbnailUrl(
+               for: preferredThumbnailSize
+           )
+        {
+            self.url = thumbUrl
+            self.originalSize = _ParraSize(cgSize: thumbSize)
         } else {
             self.url = imageAsset.url
             self.originalSize = imageAsset._size
