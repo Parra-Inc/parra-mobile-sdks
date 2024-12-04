@@ -15,12 +15,14 @@ public struct ParraMenuContent {
         title: ParraLabelContent? = nil,
         placeholder: ParraLabelContent? = nil,
         helper: ParraLabelContent? = nil,
+        errorMessage: String? = nil,
         options: [Option],
         optionSelectionChanged: ((Option?) -> Void)? = nil
     ) {
         self.title = title
         self.placeholder = placeholder
         self.helper = helper
+        self.errorMessage = errorMessage
         self.options = options
         self.optionSelectionChanged = optionSelectionChanged
     }
@@ -29,6 +31,7 @@ public struct ParraMenuContent {
         title: String? = nil,
         placeholder: String? = nil,
         helper: String? = nil,
+        errorMessage: String? = nil,
         options: [Option],
         optionSelectionChanged: ((Option?) -> Void)? = nil
     ) {
@@ -47,6 +50,7 @@ public struct ParraMenuContent {
         } else {
             nil
         }
+        self.errorMessage = errorMessage
         self.options = options
         self.optionSelectionChanged = optionSelectionChanged
     }
@@ -62,8 +66,14 @@ public struct ParraMenuContent {
     public let title: ParraLabelContent?
     public let placeholder: ParraLabelContent?
 
-    /// A string which is displayed below the menu to supply suplemental information.
+    /// A string which is displayed below the menu to supply suplemental
+    /// information.
     public let helper: ParraLabelContent?
+
+    /// A string which is displayed below the menu to indicate a validation
+    /// error. When `errorMessage` and `helper` are both present, `errorMessage`
+    /// will take precedence.
+    public let errorMessage: String?
 
     public let options: [Option]
     public let optionSelectionChanged: ((Option?) -> Void)?

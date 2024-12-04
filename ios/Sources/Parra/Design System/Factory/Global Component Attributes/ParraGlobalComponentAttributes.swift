@@ -653,6 +653,9 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
             for: theme
         )
 
+        var errorLabel = helperLabel
+        errorLabel.text.color = palette.error.toParraColor()
+
         let unselectedMenuItemLabels = ParraAttributes.Label(
             text: ParraAttributes.Text(
                 style: .body,
@@ -672,6 +675,7 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
         return ParraAttributes.Menu(
             titleLabel: titleLabel,
             helperLabel: helperLabel,
+            errorLabel: errorLabel,
             selectedMenuItemLabels: selectedMenuItems,
             unselectedMenuItemLabels: unselectedMenuItemLabels,
             tint: palette.secondaryText.toParraColor(),

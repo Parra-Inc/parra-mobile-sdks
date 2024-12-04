@@ -17,6 +17,7 @@ public extension ParraAttributes {
         public init(
             titleLabel: ParraAttributes.Label = .init(),
             helperLabel: ParraAttributes.Label = .init(),
+            errorLabel: ParraAttributes.Label = .init(),
             selectedMenuItemLabels: ParraAttributes.Label = .init(),
             unselectedMenuItemLabels: ParraAttributes.Label = .init(),
             tint: Color? = nil,
@@ -27,6 +28,7 @@ public extension ParraAttributes {
         ) {
             self.titleLabel = titleLabel
             self.helperLabel = helperLabel
+            self.errorLabel = errorLabel
             self.selectedMenuItemLabels = selectedMenuItemLabels
             self.unselectedMenuItemLabels = unselectedMenuItemLabels
             self.tint = tint
@@ -40,6 +42,7 @@ public extension ParraAttributes {
 
         public var titleLabel: ParraAttributes.Label
         public var helperLabel: ParraAttributes.Label
+        public var errorLabel: ParraAttributes.Label
         public var selectedMenuItemLabels: ParraAttributes.Label
         public var unselectedMenuItemLabels: ParraAttributes.Label
         public var tint: Color?
@@ -59,6 +62,7 @@ extension ParraAttributes.Menu: OverridableAttributes {
         return ParraAttributes.Menu(
             titleLabel: titleLabel.mergingOverrides(overrides?.titleLabel),
             helperLabel: helperLabel.mergingOverrides(overrides?.helperLabel),
+            errorLabel: errorLabel.mergingOverrides(overrides?.errorLabel),
             selectedMenuItemLabels: selectedMenuItemLabels
                 .mergingOverrides(overrides?.selectedMenuItemLabels),
             unselectedMenuItemLabels: unselectedMenuItemLabels

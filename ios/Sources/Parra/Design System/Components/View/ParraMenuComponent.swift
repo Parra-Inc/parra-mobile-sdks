@@ -62,6 +62,7 @@ public struct ParraMenuComponent: View {
     @Environment(\.parraComponentFactory) private var componentFactory
 
     @State private var selectedOption: ParraMenuContent.Option?
+    @State private var hasReceivedInput = false
 
     private var elementOpacity: Double {
         return selectedOption != nil ? 1.0 : 0.6
@@ -126,13 +127,39 @@ public struct ParraMenuComponent: View {
     }
 
     @ViewBuilder private var helperLabel: some View {
-        withContent(
-            content: content.helper
-        ) { content in
+        let (message, isError): (
+            String?,
+            Bool
+        ) = if let errorMessage = content.errorMessage {
+            // Even though we're displaying the error message, we only want to
+            // render it as an error if input has already been received. This
+            // prevents errors from being as apparent before the user has had
+            // the chance to try to enter anything.
+            (errorMessage, hasReceivedInput)
+        } else if let helperContent = content.helper {
+            (helperContent.text, false)
+        } else {
+            (nil, false)
+        }
+
+        let content = if let message {
+            ParraLabelContent(text: message)
+        } else {
+            ParraLabelContent(text: "")
+        }
+
+        if content.text.isEmpty {
+            EmptyView()
+        } else {
+            let helperAttributes = isError
+                ? attributes.errorLabel : attributes.helperLabel
+
             componentFactory.buildLabel(
                 content: content,
-                localAttributes: attributes.helperLabel
+                localAttributes: helperAttributes
             )
+            .lineLimit(1)
+            .padding(.top, 2)
         }
     }
 
@@ -153,6 +180,7 @@ public struct ParraMenuComponent: View {
 
     private func didSelect(option: ParraMenuContent.Option?) {
         selectedOption = option
+        hasReceivedInput = true
 
         content.optionSelectionChanged?(option)
     }

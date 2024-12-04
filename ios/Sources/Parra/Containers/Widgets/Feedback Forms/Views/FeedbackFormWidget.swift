@@ -107,6 +107,7 @@ struct FeedbackFormWidget: ParraContainer {
                         title: field.title,
                         placeholder: data.placeholder,
                         helper: field.helperText,
+                        errorMessage: fieldWithState.state.errorMessage,
                         options: data.options.map { fieldOption in
                             ParraMenuContent.Option(
                                 id: fieldOption.id,
