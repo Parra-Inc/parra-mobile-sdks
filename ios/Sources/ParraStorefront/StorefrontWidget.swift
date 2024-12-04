@@ -62,13 +62,13 @@ struct StorefrontWidget: ParraContainer {
             .toolbar {
                 if contentObserver.config.showDismissButton {
                     ToolbarItem(placement: .topBarLeading) {
-                        ParraDismissButton()
-                    }
-
-                    ToolbarItem(placement: .topBarTrailing) {
                         CartButton(
                             cartState: $contentObserver.cartState
                         )
+                    }
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        ParraDismissButton()
                     }
                 } else {
                     ToolbarItem(placement: .topBarTrailing) {

@@ -151,10 +151,6 @@ struct OrderReceiptView: View {
         .presentationDragIndicator(.visible)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                ParraDismissButton()
-            }
-
-            ToolbarItem(placement: .topBarTrailing) {
                 ShareLink(
                     item: Screenshot(
                         image: generateSnapshot(),
@@ -166,6 +162,10 @@ struct OrderReceiptView: View {
                         image: Image(uiImage: generateSnapshot())
                     )
                 )
+            }
+
+            ToolbarItem(placement: .topBarTrailing) {
+                ParraDismissButton()
             }
         }
     }

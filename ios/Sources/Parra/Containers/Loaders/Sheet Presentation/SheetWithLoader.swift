@@ -26,8 +26,8 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 .LoadType?
         >,
         loader: ParraViewDataLoader<TransformParams, Data, SheetContent>,
-        detents: Set<PresentationDetent> = [.large],
-        visibility: Visibility = .visible,
+        detents: Set<PresentationDetent> = [],
+        visibility: Visibility = .automatic,
         onDismiss: ((ParraSheetDismissType) -> Void)?
     ) {
         self._loadType = loadType
@@ -84,15 +84,21 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                     if case .complete(let data) = state {
                         NavigationStack(path: $navigationState.navigationPath) {
                             loader.render(Parra.default, data, dismiss)
-                                .toolbar {
-                                    ToolbarItem(placement: .topBarTrailing) {
-                                        ParraDismissButton()
+                                .if(detents.isEmpty) { ctx in
+                                    ctx.toolbar {
+                                        ToolbarItem(placement: .topBarTrailing) {
+                                            ParraDismissButton()
+                                        }
                                     }
                                 }
                         }
                         .environment(navigationState)
                         .presentationDetents(detents)
-                        .presentationDragIndicator(visibility)
+                        .presentationDragIndicator(
+                            visibility == .automatic ? (
+                                detents.isEmpty ? .hidden : .visible
+                            ) : visibility
+                        )
                     }
                 }
             )
