@@ -55,31 +55,7 @@ public struct ParraAsyncImageComponent: View {
     ) -> some View {
         switch phase {
         case .empty:
-            GeometryReader { geometry in
-                ZStack {
-                    let imageSize = content.originalSize?.toCGSize ?? geometry.size
-                    let aspectRatio = imageSize.width / imageSize.height
-
-                    let size = if imageSize.width > imageSize.height {
-                        CGSize(width: 32, height: 32 / aspectRatio)
-                    } else if imageSize.width == imageSize.height {
-                        CGSize(width: 32, height: 32)
-                    } else {
-                        CGSize(width: 32 / aspectRatio, height: 32)
-                    }
-
-                    if let blurHash = content.blurHash, let blurImage = Image(
-                        blurHash: blurHash,
-                        size: size
-                    ) {
-                        blurImage
-                    } else {
-                        Color(attributes.background ?? .clear)
-                    }
-
-                    ProgressView()
-                }
-            }
+            renderBlurHash(for: phase)
         case .success(let image):
             image
                 .resizable()
@@ -94,15 +70,84 @@ public struct ParraAsyncImageComponent: View {
                 "url": content.url.absoluteString
             ])
 
-            ZStack {
-                Color(attributes.background ?? .clear)
-
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(parraTheme.palette.error)
-            }
+            renderBlurHash(for: phase)
+                .transition(.opacity)
         @unknown default:
             EmptyView()
         }
+    }
+
+    @ViewBuilder
+    private func renderBlurHashOverlay(
+        for phase: AsyncImagePhase
+    ) -> some View {
+        switch phase {
+        case .empty:
+            ProgressView()
+        case .failure:
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(parraTheme.palette.error)
+        case .success:
+            EmptyView()
+        default:
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    private func renderBlurHash(
+        for phase: AsyncImagePhase
+    ) -> some View {
+        ZStack {
+            Color.clear
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity
+                )
+
+            GeometryReader { geometry in
+                let imageSize = content.originalSize?.toCGSize ?? geometry.size
+                let aspectRatio = imageSize.width / imageSize.height
+
+                let size = if imageSize.width > imageSize.height {
+                    CGSize(width: 32, height: 32 / aspectRatio)
+                } else if imageSize.width == imageSize.height {
+                    CGSize(width: 32, height: 32)
+                } else {
+                    CGSize(width: 32 / aspectRatio, height: 32)
+                }
+
+                if let blurHash = content.blurHash, let blurImage = Image(
+                    blurHash: blurHash,
+                    size: size
+                ) {
+                    blurImage
+                        .resizable()
+                        .aspectRatio(
+                            config.aspectRatio,
+                            contentMode: config.contentMode
+                        )
+                        .clipped()
+
+                } else if let background = attributes.background {
+                    Color(background)
+                }
+
+                VStack(alignment: .center) {
+                    Spacer()
+                    renderBlurHashOverlay(for: phase)
+                    Spacer()
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity
+                )
+            }
+        }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
     }
 }
 
