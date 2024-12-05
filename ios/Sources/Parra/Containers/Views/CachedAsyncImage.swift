@@ -30,6 +30,8 @@
 
 import SwiftUI
 
+private let logger = Logger(category: "Async Image")
+
 /// A view that asynchronously loads, cache and displays an image.
 ///
 /// This view uses a custom default
@@ -385,7 +387,6 @@ struct CachedAsyncImage<Content>: View where Content: View {
         self.transaction = transaction
         self.content = content
 
-        self._phase = State(wrappedValue: .empty)
         do {
             if let urlRequest, let image = try cachedImage(
                 from: urlRequest,
@@ -401,40 +402,53 @@ struct CachedAsyncImage<Content>: View where Content: View {
     // MARK: - Internal
 
     var body: some View {
-        content(phase)
-            .task(id: urlRequest) {
-                do {
-                    if let urlRequest {
-                        let (image, metrics) = try await remoteImage(
-                            from: urlRequest,
-                            session: urlSession
-                        )
-                        if let metrics, metrics.transactionMetrics.last?
-                            .resourceFetchType == .localCache
-                        {
-                            // WARNING: This does not behave well when the url is changed with another
-                            phase = .success(image)
-                        } else {
-                            withAnimation(transaction.animation) {
-                                phase = .success(image)
-                            }
-                        }
-                    } else {
-                        withAnimation(transaction.animation) {
-                            phase = .empty
-                        }
-                    }
-                } catch {
+        content(phase).task(
+            id: urlRequest,
+            priority: .userInitiated
+        ) {
+            guard let urlRequest, case .empty = phase else {
+                return
+            }
+
+            do {
+                logger.debug("preparing to download image", [
+                    "imageUrl": urlRequest.url?.absoluteString ?? "nil"
+                ])
+
+                let (image, metrics) = try await remoteImage(
+                    from: urlRequest,
+                    session: urlSession
+                )
+
+                logger.trace("image downloaded successfully", [
+                    "imageUrl": urlRequest.url?.absoluteString ?? "nil"
+                ])
+
+                if let metrics, metrics.transactionMetrics.last?
+                    .resourceFetchType == .localCache
+                {
+                    // WARNING: This does not behave well when the url is changed with another
+                    phase = .success(image)
+                } else {
                     withAnimation(transaction.animation) {
-                        phase = .failure(error)
+                        phase = .success(image)
                     }
                 }
+            } catch {
+                logger.warn("image download failed", error, [
+                    "imageUrl": urlRequest.url?.absoluteString ?? "nil"
+                ])
+
+                withAnimation(transaction.animation) {
+                    phase = .failure(error)
+                }
             }
+        }
     }
 
     // MARK: - Private
 
-    @State private var phase: AsyncImagePhase
+    @State private var phase: AsyncImagePhase = .empty
 
     private let urlRequest: URLRequest?
 
@@ -494,8 +508,17 @@ private extension CachedAsyncImage {
         cache: URLCache
     ) throws -> Image? {
         guard let cachedResponse = cache.cachedResponse(for: request) else {
+            logger.trace("Cache miss", [
+                "imageUrl": request.url?.absoluteString ?? "nil"
+            ])
+
             return nil
         }
+
+        logger.trace("Cache hit", [
+            "imageUrl": request.url?.absoluteString ?? "nil"
+        ])
+
         return try image(from: cachedResponse.data)
     }
 
