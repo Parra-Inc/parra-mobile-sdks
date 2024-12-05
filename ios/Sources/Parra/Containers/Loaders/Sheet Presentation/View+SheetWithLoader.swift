@@ -16,12 +16,16 @@ public extension View {
                 .LoadType?
         >,
         with loader: ParraViewDataLoader<TransformParams, Data, SheetContent>,
+        detents: Set<PresentationDetent> = [],
+        visibility: Visibility = .automatic,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         modifier(
             SheetWithLoader(
                 loadType: loadType,
                 loader: loader,
+                detents: detents,
+                visibility: visibility,
                 onDismiss: onDismiss
             )
         )

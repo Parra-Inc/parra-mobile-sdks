@@ -97,6 +97,7 @@ public extension View {
             with: .paywallLoader(
                 config: config
             ),
+            detents: [.large],
             onDismiss: nil
         )
     }
