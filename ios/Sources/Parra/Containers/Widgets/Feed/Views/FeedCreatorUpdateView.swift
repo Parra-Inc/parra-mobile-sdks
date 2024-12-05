@@ -62,7 +62,7 @@ struct FeedCreatorUpdateView: View {
                             )
                         )
                     )
-                    .lineLimit(3)
+                    .lineLimit(8)
                 }
             }
             .frame(
