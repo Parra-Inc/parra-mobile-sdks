@@ -118,7 +118,9 @@ struct PushSettingsPermissionHeader: View {
             URL(string: UIApplication.openNotificationSettingsURLString)!
         ) { accepted in
             if accepted {
-                parra.logEvent(.action(source: "open_system_settings"))
+                Task { @MainActor in
+                    parra.logEvent(.action(source: "open_system_settings"))
+                }
             }
         }
     }
