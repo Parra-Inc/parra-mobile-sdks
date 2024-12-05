@@ -11,12 +11,17 @@ public struct ParraDismissButton: View {
     // MARK: - Lifecycle
 
     // Prevent default with environment values.
-    public init() {}
+    public init(
+        onDismiss: (() -> Void)? = nil
+    ) {
+        self.onDismiss = onDismiss
+    }
 
     // MARK: - Public
 
     public var body: some View {
         Button(action: {
+            onDismiss?()
             presentationMode.wrappedValue.dismiss()
         }, label: {
             ZStack {
@@ -37,6 +42,10 @@ public struct ParraDismissButton: View {
         .buttonStyle(PlainButtonStyle())
         .accessibilityLabel(Text("Close"))
     }
+
+    // MARK: - Internal
+
+    let onDismiss: (() -> Void)?
 
     // MARK: - Private
 
