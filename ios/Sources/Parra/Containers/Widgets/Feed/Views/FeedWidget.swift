@@ -51,13 +51,6 @@ struct FeedWidget: ParraContainer {
                 contentObserver.loadInitialFeedItems()
             }
             .navigationTitle(config.navigationTitle)
-            .toolbar {
-                if config.showDismissButton {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        ParraDismissButton()
-                    }
-                }
-            }
         }
     }
 
