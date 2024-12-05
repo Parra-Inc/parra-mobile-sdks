@@ -2,7 +2,7 @@
 //  ReviewAppCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 12/02/2024.
+//  Bootstrapped with ❤️ by Parra on 12/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 

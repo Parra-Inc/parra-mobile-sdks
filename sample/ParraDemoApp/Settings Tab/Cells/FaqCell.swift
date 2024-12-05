@@ -1,5 +1,5 @@
 //
-//  NotificationSettingsCell.swift
+//  FaqCell.swift
 //  Parra Demo
 //
 //  Bootstrapped with ❤️ by Parra on 12/05/2024.
@@ -9,18 +9,15 @@
 import SwiftUI
 import Parra
 
-struct NotificationSettingsCell: View {
+struct FaqCell: View {
     @State private var isPresented = false
 
     var body: some View {
         ListItemLoadingButton(
             isLoading: $isPresented,
-            text: "Notifications",
-            symbol: "bell.badge"
+            text: "FAQs",
+            symbol: "questionmark.bubble"
         )
-        .presentParraSettingsView(
-            layoutId: "notifications",
-            isPresented: $isPresented
-        )
+        .presentParraFAQView(isPresented: $isPresented)
     }
 }
