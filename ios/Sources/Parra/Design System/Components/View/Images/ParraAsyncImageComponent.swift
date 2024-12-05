@@ -65,11 +65,7 @@ public struct ParraAsyncImageComponent: View {
                     contentMode: config.contentMode
                 )
                 .clipped()
-        case .failure(let error):
-            let _ = Logger.error("Error loading image", error, [
-                "url": content.url.absoluteString
-            ])
-
+        case .failure:
             renderBlurHash(for: phase)
                 .transition(.opacity)
         @unknown default:
@@ -98,12 +94,11 @@ public struct ParraAsyncImageComponent: View {
     private func renderBlurHash(
         for phase: AsyncImagePhase
     ) -> some View {
-        ZStack {
-            Color.clear
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity
-                )
+        ZStack(alignment: .center) {
+            Color.clear.frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity
+            )
 
             GeometryReader { geometry in
                 let imageSize = content.originalSize?.toCGSize ?? geometry.size
@@ -117,26 +112,29 @@ public struct ParraAsyncImageComponent: View {
                     CGSize(width: 32 / aspectRatio, height: 32)
                 }
 
-                if let blurHash = content.blurHash, let blurImage = Image(
-                    blurHash: blurHash,
-                    size: size
-                ) {
-                    blurImage
-                        .resizable()
-                        .aspectRatio(
-                            config.aspectRatio,
-                            contentMode: config.contentMode
-                        )
-                        .clipped()
-
-                } else if let background = attributes.background {
-                    Color(background)
-                }
-
                 VStack(alignment: .center) {
                     Spacer()
-                    renderBlurHashOverlay(for: phase)
+
+                    if let blurHash = content.blurHash, let blurImage = Image(
+                        blurHash: blurHash,
+                        size: size
+                    ) {
+                        blurImage
+                            .resizable()
+                            .aspectRatio(
+                                config.aspectRatio,
+                                contentMode: config.contentMode
+                            )
+                            .clipped()
+
+                    } else if let background = attributes.background {
+                        Color(background)
+                    }
+
                     Spacer()
+                }
+                .overlay(alignment: .center) {
+                    renderBlurHashOverlay(for: phase)
                 }
                 .frame(
                     maxWidth: .infinity,

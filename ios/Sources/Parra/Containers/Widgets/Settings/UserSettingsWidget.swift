@@ -51,7 +51,7 @@ struct UserSettingsWidget: ParraContainer {
             ) { key, value in
                 onValueChanged(for: key, value)
             }
-        case .error(let error):
+        case .error:
             componentFactory.buildEmptyState(
                 config: .errorDefault,
                 content: config.errorStateContent

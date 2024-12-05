@@ -19,7 +19,7 @@ public extension View {
         config: ParraUserNotificationSettingsConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
-        var fullConfig = ParraUserSettingsConfiguration.default
+        let fullConfig = ParraUserSettingsConfiguration.default
         fullConfig.notificationSettingsConfig = config
 
         return presentParraSettingsView(

@@ -198,7 +198,6 @@ struct FullScreenGalleryView: View {
 
     let photos: [ParraImageAsset]
     @Binding var selectedPhoto: ParraImageAsset?
-    @Binding var isShowingFullScreen: Bool
 
     var body: some View {
         TabView(selection: $selectedPhoto) {
@@ -208,17 +207,12 @@ struct FullScreenGalleryView: View {
         .ignoresSafeArea()
         .background(Color.black.edgesIgnoringSafeArea(.all))
         .overlay(alignment: .topTrailing) {
-            Button {
+            ParraDismissButton {
                 withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                    isShowingFullScreen = false
                     selectedPhoto = nil
                 }
-            } label: {
-                Image(systemName: "xmark")
-                    .font(.title2)
-                    .foregroundColor(.white)
-                    .padding()
             }
+            .safeAreaPadding([.top, .trailing])
         }
     }
 

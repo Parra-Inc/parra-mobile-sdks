@@ -110,8 +110,7 @@ struct CreatorUpdateAttachmentsView: View {
             .sheet(isPresented: $isShowingFullScreen) {
                 FullScreenGalleryView(
                     photos: layout.allImages,
-                    selectedPhoto: $selectedPhoto,
-                    isShowingFullScreen: $isShowingFullScreen
+                    selectedPhoto: $selectedPhoto
                 )
                 .transition(.opacity)
                 .presentationDragIndicator(.visible)
