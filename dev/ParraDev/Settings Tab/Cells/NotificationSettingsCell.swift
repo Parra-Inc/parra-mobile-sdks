@@ -14,13 +14,12 @@ struct NotificationSettingsCell: View {
     var body: some View {
         ListItemLoadingButton(
             isLoading: $isPresented,
-            text: "Notifications",
+            text: "Notification settings",
             symbol: "bell.badge"
         )
         // Settings view layout IDs can be either the ID or Key for a group of
         // settings definied at https://parra.io/dashboard/users/configuration
-        .presentParraSettingsView(
-            layoutId: "notifications",
+        .presentParraNotificationSettingsView(
             isPresented: $isPresented
         )
     }

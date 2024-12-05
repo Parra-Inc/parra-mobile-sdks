@@ -10,11 +10,18 @@ import SwiftUI
 struct ParraUserSettingsView: View {
     // MARK: - Internal
 
-    var layout: ParraUserSettingsLayout
+    let layout: ParraUserSettingsLayout
+    let config: ParraUserSettingsConfiguration
     let onValueChanged: (_ key: String, _ value: ParraSettingsItemDataWithValue) -> Void
 
     var body: some View {
         List {
+            if let notificationSettingsConfig = config.notificationSettingsConfig {
+                PushSettingsPermissionHeader(
+                    config: notificationSettingsConfig
+                )
+            }
+
             ForEach(
                 Array(layout.groups.enumerated()),
                 id: \.element
@@ -33,6 +40,12 @@ struct ParraUserSettingsView: View {
                 } onValueChanged: { key, value in
                     onValueChanged(key, value)
                 }
+            }
+            .emptyPlaceholder(layout.groups) {
+                componentFactory.buildEmptyState(
+                    config: .default,
+                    content: config.emptyStateContent
+                )
             }
         }
         .background(

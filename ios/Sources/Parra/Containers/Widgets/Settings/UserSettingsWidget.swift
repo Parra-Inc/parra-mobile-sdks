@@ -45,17 +45,24 @@ struct UserSettingsWidget: ParraContainer {
                 }
             }
         case .loaded(let layout):
-            ParraUserSettingsView(layout: layout) { key, value in
+            ParraUserSettingsView(
+                layout: layout,
+                config: config
+            ) { key, value in
                 onValueChanged(for: key, value)
             }
-        default:
-            EmptyView()
+        case .error(let error):
+            componentFactory.buildEmptyState(
+                config: .errorDefault,
+                content: config.errorStateContent
+            )
         }
     }
 
     // MARK: - Private
 
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraComponentFactory) private var componentFactory
 
     private func onValueChanged(
         for key: String,

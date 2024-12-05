@@ -11,6 +11,7 @@ public final class ParraUserSettingsConfiguration: ParraContainerConfig {
     public init() {
         self.emptyStateContent = ParraFeedConfiguration.defaultEmptyStateContent
         self.errorStateContent = ParraFeedConfiguration.defaultErrorStateContent
+        self.notificationSettingsConfig = nil
     }
 
     public init(
@@ -19,6 +20,7 @@ public final class ParraUserSettingsConfiguration: ParraContainerConfig {
     ) {
         self.emptyStateContent = emptyStateContent
         self.errorStateContent = errorStateContent
+        self.notificationSettingsConfig = nil
     }
 
     // MARK: - Public
@@ -44,4 +46,10 @@ public final class ParraUserSettingsConfiguration: ParraContainerConfig {
 
     public let emptyStateContent: ParraEmptyStateContent
     public let errorStateContent: ParraEmptyStateContent
+
+    // MARK: - Internal
+
+    /// This will only be used internally and its presence indicates that the
+    /// settings view is the managed notification settings view.
+    var notificationSettingsConfig: ParraUserNotificationSettingsConfiguration?
 }

@@ -8,6 +8,28 @@
 import SwiftUI
 
 public extension View {
+    /// Automatically fetches the Parra managed notification settings view and
+    /// presents it in a sheet, based on the value of the `isPresented` binding.
+    /// The settings view presented by this conveinence modifier can be found:
+    /// https://parra.io/dashboard/users/configuration
+    /// with the "notifications" key.
+    @MainActor
+    func presentParraNotificationSettingsView(
+        isPresented: Binding<Bool>,
+        config: ParraUserNotificationSettingsConfiguration = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
+    ) -> some View {
+        var fullConfig = ParraUserSettingsConfiguration.default
+        fullConfig.notificationSettingsConfig = config
+
+        return presentParraSettingsView(
+            layoutId: "notifications",
+            isPresented: isPresented,
+            config: fullConfig,
+            onDismiss: onDismiss
+        )
+    }
+
     /// Automatically fetches the settings view with the provided layout id and
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
