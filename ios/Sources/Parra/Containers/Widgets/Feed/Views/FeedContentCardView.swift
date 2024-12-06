@@ -105,23 +105,24 @@ struct FeedContentCardView: View {
             let minAspect = min(content.size.width / content.size.height, 3.75)
             let minHeight = (width / minAspect).rounded(.down)
 
-            Color.clear
-                .overlay(alignment: .center) {
-                    componentFactory.buildAsyncImage(
-                        config: ParraImageConfig(contentMode: .fill),
-                        content: ParraAsyncImageContent(
-                            content,
-                            preferredThumbnailSize: .md
-                        )
+            Color.clear.overlay(
+                alignment: .center
+            ) {
+                componentFactory.buildAsyncImage(
+                    config: ParraImageConfig(contentMode: .fill),
+                    content: ParraAsyncImageContent(
+                        content,
+                        preferredThumbnailSize: .md
                     )
-                    .scaledToFill()
-                }
-                .frame(
-                    idealWidth: width,
-                    maxWidth: .infinity,
-                    minHeight: minHeight,
-                    maxHeight: .infinity
                 )
+                .scaledToFill()
+            }
+            .frame(
+                idealWidth: width,
+                maxWidth: .infinity,
+                minHeight: minHeight,
+                maxHeight: .infinity
+            )
         }
     }
 
