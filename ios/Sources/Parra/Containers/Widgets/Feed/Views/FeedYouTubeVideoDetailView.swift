@@ -15,29 +15,7 @@ struct FeedYouTubeVideoDetailView: View {
     var body: some View {
         ScrollView {
             VStack {
-                thumbnail.overlay(
-                    alignment: .top
-                ) {
-                    HStack {
-                        Button {
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Image(systemName: "xmark")
-                        }
-                        .shadow(color: .black, radius: 1)
-                        .tint(.white)
-                        .padding()
-
-                        Spacer()
-
-                        ShareLink(item: youtubeVideo.url) {
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .shadow(color: .black, radius: 1)
-                        .tint(.white)
-                        .padding()
-                    }
-                }
+                thumbnail
 
                 VStack(alignment: .leading, spacing: 8) {
                     componentFactory.buildLabel(
@@ -141,6 +119,19 @@ struct FeedYouTubeVideoDetailView: View {
             }
         }
         .background(parraTheme.palette.secondaryBackground)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                ShareLink(item: youtubeVideo.url) {
+                    Image(systemName: "square.and.arrow.up")
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            ToolbarItem(placement: .topBarTrailing) {
+                ParraDismissButton()
+            }
+        }
     }
 
     // MARK: - Private
@@ -153,13 +144,16 @@ struct FeedYouTubeVideoDetailView: View {
     @ViewBuilder @MainActor private var thumbnail: some View {
         let thumb = youtubeVideo.thumbnails.maxAvailable
 
-        YouTubeThumbnailView(
-            thumb: thumb
-        ) {
+        Button {
             contentObserver.performActionForFeedItemData(
                 .feedItemYoutubeVideo(youtubeVideo)
             )
+        } label: {
+            YouTubeThumbnailView(
+                thumb: thumb
+            )
+            .aspectRatio(thumb.width / thumb.height, contentMode: .fit)
         }
-        .aspectRatio(thumb.width / thumb.height, contentMode: .fit)
+        .buttonStyle(.plain)
     }
 }

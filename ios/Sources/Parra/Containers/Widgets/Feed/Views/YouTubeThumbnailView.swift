@@ -8,10 +8,20 @@
 import SwiftUI
 
 struct YouTubeThumbnailView: View {
+    // MARK: - Lifecycle
+
+    init(
+        thumb: ParraYoutubeThumbnail,
+        onTapPlay: (@MainActor () -> Void)? = nil
+    ) {
+        self.thumb = thumb
+        self.onTapPlay = onTapPlay
+    }
+
     // MARK: - Internal
 
     let thumb: ParraYoutubeThumbnail
-    let onTapPlay: @MainActor () -> Void
+    let onTapPlay: (@MainActor () -> Void)?
 
     var body: some View {
         Color.clear.overlay(
@@ -30,7 +40,7 @@ struct YouTubeThumbnailView: View {
             .scaledToFill()
             .overlay(alignment: .center) {
                 Button(action: {
-                    onTapPlay()
+                    onTapPlay?()
                 }) {
                     Image(
                         uiImage: UIImage(
@@ -44,6 +54,7 @@ struct YouTubeThumbnailView: View {
                     .frame(width: 80)
                 }
                 .buttonStyle(.plain)
+                .allowsHitTesting(onTapPlay != nil)
             }
         }
     }

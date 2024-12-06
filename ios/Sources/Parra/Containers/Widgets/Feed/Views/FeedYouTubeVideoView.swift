@@ -121,8 +121,6 @@ struct FeedYouTubeVideoView: View {
                     youtubeVideo: youtubeVideo
                 )
             }
-            .presentationDetents([.large])
-            .presentationDragIndicator(.visible)
         }
         .onAppear {
             if redactionReasons.isEmpty {
