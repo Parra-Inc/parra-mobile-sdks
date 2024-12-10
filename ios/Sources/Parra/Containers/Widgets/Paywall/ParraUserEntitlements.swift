@@ -44,7 +44,9 @@ public final class ParraUserEntitlements {
         didSet {
             keyedEntitlements = current.reduce(into: [:]) { $0[$1.key] = $1 }
 
-            propagateChanges()
+            Task { @MainActor in
+                propagateChanges()
+            }
         }
     }
 
@@ -100,6 +102,7 @@ public final class ParraUserEntitlements {
 
     /// Restores any purchases the user has made and associates them with the
     /// logged in user account.
+    @MainActor
     public func restorePurchases() {
         logger.info("Restoring purchases")
 
@@ -164,6 +167,7 @@ public final class ParraUserEntitlements {
         current = []
     }
 
+    @MainActor
     func propagateChanges() {
         Task { @MainActor in
             currentPublisher.send(current)
@@ -177,6 +181,7 @@ public final class ParraUserEntitlements {
     private var updates: Task<Void, Never>?
     private var cancellables: Set<AnyCancellable> = []
 
+    @MainActor
     private func reportCurrentEntitlements() async throws {
         logger.debug("Reporting current entitlements")
 
@@ -204,7 +209,7 @@ public final class ParraUserEntitlements {
 
         logger.trace("Found \(txReceipts.count) entitlement(s) to report")
 
-        let api = await Parra.default.parraInternal.api
+        let api = Parra.default.parraInternal.api
 
         do {
             let result = try await api.reportPurchases(
@@ -220,7 +225,7 @@ public final class ParraUserEntitlements {
                 "productIds": "[\(productIds)]"
             ])
 
-            await updateEntitlements(result.entitlements)
+            updateEntitlements(result.entitlements)
         } catch {
             for (_, tx) in txReceipts.values {
                 await failTransaction(tx, with: error)
@@ -233,7 +238,7 @@ public final class ParraUserEntitlements {
     private func newTransactionListenerTask() -> Task<Void, Never> {
         return Task(
             priority: .background
-        ) {
+        ) { @MainActor in
             for await verificationResult in Transaction.updates {
                 await self.handle(
                     updatedTransaction: verificationResult
@@ -242,6 +247,7 @@ public final class ParraUserEntitlements {
         }
     }
 
+    @MainActor
     private func handle(
         updatedTransaction verificationResult: VerificationResult<StoreKit.Transaction>
     ) async {
@@ -258,7 +264,7 @@ public final class ParraUserEntitlements {
             ])
 
             do {
-                let api = await Parra.default.parraInternal.api
+                let api = Parra.default.parraInternal.api
                 let result = try await api.reportPurchase(
                     with: verificationResult.jwsRepresentation
                 )
@@ -268,7 +274,7 @@ public final class ParraUserEntitlements {
                     "transactionId": String(tx.id)
                 ])
 
-                await updateEntitlements(result.entitlements)
+                updateEntitlements(result.entitlements)
                 await finishTransaction(tx)
             } catch {
                 logger.error("Failed to report purchase", error, [
@@ -280,6 +286,7 @@ public final class ParraUserEntitlements {
         }
     }
 
+    @MainActor
     private func finishTransaction(_ tx: StoreKit.Transaction) async {
         logger.trace("Finishing transaction", [
             "transactionId": String(tx.id),
@@ -288,11 +295,10 @@ public final class ParraUserEntitlements {
 
         await tx.finish()
 
-        Task { @MainActor in
-            purchaseCompletePublisher.send((tx, nil))
-        }
+        purchaseCompletePublisher.send((tx, nil))
     }
 
+    @MainActor
     private func failTransaction(
         _ tx: StoreKit.Transaction,
         with error: Error
@@ -302,8 +308,6 @@ public final class ParraUserEntitlements {
             "productId": tx.productID
         ])
 
-        Task { @MainActor in
-            purchaseCompletePublisher.send((tx, error))
-        }
+        purchaseCompletePublisher.send((tx, error))
     }
 }
