@@ -19,6 +19,8 @@ import ObjectiveC
 //              https://forums.developer.apple.com/forums/thread/113742
 //
 
+private let logger = Logger()
+
 class MetricManager: NSObject, MXMetricManagerSubscriber {
     // MARK: - Lifecycle
 
@@ -35,6 +37,8 @@ class MetricManager: NSObject, MXMetricManagerSubscriber {
     }
 
     func readCrashes() -> Set<CrashInfo> {
+        logger.trace("Reading crashes")
+
         addCrashes(
             from: MXMetricManager.shared.pastDiagnosticPayloads
         )
@@ -49,6 +53,8 @@ class MetricManager: NSObject, MXMetricManagerSubscriber {
 
     // Receive diagnostics immediately when available.
     func didReceive(_ payloads: [MXDiagnosticPayload]) {
+        logger.trace("Received metrics payload notification")
+
         addCrashes(from: payloads)
     }
 
@@ -59,6 +65,8 @@ class MetricManager: NSObject, MXMetricManagerSubscriber {
     private func addCrashes(
         from diagnostics: [MXDiagnosticPayload]
     ) {
+        logger.trace("Adding crashes")
+
         for diagnostic in diagnostics {
             for crash in diagnostic.crashDiagnostics ?? [] {
                 crashes.insert(
