@@ -73,7 +73,7 @@ private func getParraInternalSingleton(
 public struct ParraApp<
     Content: Scene,
     SceneDelegateClass: ParraSceneDelegate
->: Scene {
+>: Scene, @preconcurrency Equatable {
     // MARK: - Lifecycle
 
     public init() {
@@ -137,16 +137,16 @@ public struct ParraApp<
     public var body: some Scene {
         makeScene()
             .environment(\.parra, Parra.default)
-            .environment(\.parraAuthState, authStateManager.current)
+            .environment(\.parraAuthState, ParraAuthStateManager.shared.current)
             .environment(\.parraComponentFactory, parraInternal.globalComponentFactory)
             .environment(\.parraConfiguration, parraInternal.configuration)
-            .environment(\.parraTheme, themeManager.current)
-            .environment(\.parraUserProperties, userProperties)
+            .environment(\.parraTheme, ParraThemeManager.shared.current)
+            .environment(\.parraUserProperties, ParraUserProperties.shared)
             .environment(
                 \.parraPreferredAppearance,
-                themeManager.preferredAppearanceBinding
+                ParraThemeManager.shared.preferredAppearanceBinding
             )
-            .environment(\.parraAlertManager, alertManager)
+            .environment(\.parraAlertManager, ParraAlertManager.shared)
             .environment(launchScreenState)
             .onChange(
                 of: launchScreenState.current,
@@ -160,7 +160,7 @@ public struct ParraApp<
                     // performAppLaunchTasks completing changes the launch
                     // screen state to transitioning, allowing this to start
                     if result.requiresAuthRefresh {
-                        authStateManager.triggerAuthRefresh(
+                        ParraAuthStateManager.shared.triggerAuthRefresh(
                             using: parraInternal.authService
                         )
                     }
@@ -169,7 +169,7 @@ public struct ParraApp<
                 }
             }
             .onChange(
-                of: authStateManager.current,
+                of: ParraAuthStateManager.shared.current,
                 onAuthStateChanged
             )
             .onChange(
@@ -187,6 +187,13 @@ public struct ParraApp<
             }
     }
 
+    public static func == (
+        lhs: ParraApp<Content, SceneDelegateClass>,
+        rhs: ParraApp<Content, SceneDelegateClass>
+    ) -> Bool {
+        return true
+    }
+
     // MARK: - Private
 
     @Environment(\.scenePhase) private var scenePhase
@@ -196,11 +203,6 @@ public struct ParraApp<
     @State private var urlHandler: ((URL) -> Void)?
 
     @State private var launchScreenState: LaunchScreenStateManager
-    @State private var alertManager: ParraAlertManager = .shared
-    @State private var authStateManager: ParraAuthStateManager = .shared
-    @State private var themeManager: ParraThemeManager = .shared
-    @State private var userProperties: ParraUserProperties = .shared
-
     @State private var parraInternal: ParraInternal!
 
     private func onAuthStateChanged(
@@ -246,10 +248,11 @@ public struct ParraApp<
             logger.debug("Post app launch actions complete")
 
             logger.debug("Performing initial auth state load")
-            let authResult = try await authStateManager.performInitialAuthCheck(
-                using: parraInternal.authService,
-                appInfo: result.appInfo
-            )
+            let authResult = try await ParraAuthStateManager.shared
+                .performInitialAuthCheck(
+                    using: parraInternal.authService,
+                    appInfo: result.appInfo
+                )
 
             result.requiresAuthRefresh = authResult.requiresRefresh
 

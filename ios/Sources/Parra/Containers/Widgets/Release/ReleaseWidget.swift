@@ -249,7 +249,7 @@ struct ReleaseWidget: ParraContainer {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraConfiguration) private var parraConfiguration
-
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(NavigationState.self) private var navigationState
+
+    @State private var navigationState = NavigationState()
 }
