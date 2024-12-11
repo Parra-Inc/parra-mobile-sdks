@@ -72,6 +72,10 @@ enum ApiEndpoint: Endpoint {
 
     case getPaginateFeed(feedId: String)
 
+    // Reactions
+    case postFeedReaction(feedItemId: String)
+    case deleteFeedReaction(feedItemId: String, reactionId: String)
+
     // MARK: - Internal
 
     var method: HttpMethod {
@@ -80,19 +84,26 @@ enum ApiEndpoint: Endpoint {
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
              .getUserProperties, .getPaginateFeed, .getFaqs,
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall:
+
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
              .postPushTokens, .postVoteForTicket,
-             .postLogin, .postLogout, .postUpdateAvatar, .postPurchases:
+             .postLogin, .postLogout, .postUpdateAvatar, .postPurchases,
+             .postFeedReaction:
+
             return .post
         case .updateUserInfo, .putReplaceUserProperties,
              .putUpdateSingleUserProperty, .putUpdateUserSetting:
+
             return .put
         case .deleteVoteForTicket, .deleteUser, .deleteAvatar,
-             .deleteAllUserProperties, .deleteSingleUserProperty:
+             .deleteAllUserProperties, .deleteSingleUserProperty,
+             .deleteFeedReaction:
+
             return .delete
         case .patchUpdateUserProperties:
+
             return .patch
         }
     }
@@ -160,6 +171,10 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/applications/:applicationId/purchases"
         case .getFaqs:
             return "tenants/:tenantId/applications/:applicationId/faqs"
+        case .postFeedReaction:
+            return "tenants/:tenantId/feed/items/:feedItemId/reactions"
+        case .deleteFeedReaction:
+            return "tenants/:tenantId/feed/items/:feedItemId/reactions/:reactionId"
         }
     }
 
@@ -169,7 +184,9 @@ enum ApiEndpoint: Endpoint {
         case .postBulkSubmitSessions, .postPushTokens,
              .postLogin, .postLogout, .getUserInfo:
             return true
+
         default:
+
             return false
         }
     }
@@ -182,7 +199,9 @@ enum ApiEndpoint: Endpoint {
              .getPaginateReleases, .getRelease, .getCards, .getFeedbackForm,
              .postSubmitFeedbackForm, .postPushTokens:
             return true
+
         default:
+
             return false
         }
     }
