@@ -38,7 +38,9 @@ extension ParraFeedItem: ParraFixture {
                     action: nil,
                     badge: "Paid Sponsorship"
                 )
-            )
+            ),
+            reactionOptions: nil,
+            reactions: nil
         )
     }
 
@@ -97,7 +99,9 @@ extension ParraFeedItem: ParraFixture {
                     publishedAt: .now.daysAgo(1),
                     liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none
                 )
-            )
+            ),
+            reactionOptions: nil,
+            reactions: nil
         )
     }
 
@@ -111,7 +115,9 @@ extension ParraFeedItem: ParraFixture {
                 type: .creatorUpdate,
                 data: .creatorUpdate(
                     ParraCreatorUpdateAppStub.validStates()[0]
-                )
+                ),
+                reactionOptions: ParraReactionOptionGroup.validStates(),
+                reactions: ParraReactionSummary.validStates()
             ),
             ParraFeedItem(
                 id: .uuid,
@@ -121,7 +127,9 @@ extension ParraFeedItem: ParraFixture {
                 type: .youtubeVideo,
                 data: .feedItemYoutubeVideo(
                     ParraFeedItemYoutubeVideoData.validStates()[0]
-                )
+                ),
+                reactionOptions: ParraReactionOptionGroup.validStates(),
+                reactions: ParraReactionSummary.validStates()
             ),
             ParraFeedItem(
                 id: .uuid,
@@ -129,7 +137,9 @@ extension ParraFeedItem: ParraFixture {
                 updatedAt: .now.daysAgo(3),
                 deletedAt: nil,
                 type: .contentCard,
-                data: .contentCard(ParraContentCard.validStates()[0])
+                data: .contentCard(ParraContentCard.validStates()[0]),
+                reactionOptions: ParraReactionOptionGroup.validStates(),
+                reactions: ParraReactionSummary.validStates()
             ),
             ParraFeedItem(
                 id: .uuid,
@@ -139,7 +149,9 @@ extension ParraFeedItem: ParraFixture {
                 type: .youtubeVideo,
                 data: .feedItemYoutubeVideo(
                     ParraFeedItemYoutubeVideoData.validStates()[1]
-                )
+                ),
+                reactionOptions: ParraReactionOptionGroup.validStates(),
+                reactions: ParraReactionSummary.validStates()
             ),
             ParraFeedItem(
                 id: .uuid,
@@ -149,7 +161,9 @@ extension ParraFeedItem: ParraFixture {
                 type: .youtubeVideo,
                 data: .feedItemYoutubeVideo(
                     ParraFeedItemYoutubeVideoData.validStates()[2]
-                )
+                ),
+                reactionOptions: ParraReactionOptionGroup.validStates(),
+                reactions: ParraReactionSummary.validStates()
             )
         ]
     }

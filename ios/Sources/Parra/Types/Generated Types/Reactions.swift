@@ -7,18 +7,62 @@
 
 import Foundation
 
-enum ReactionType: String, Codable {
+struct CreateReactionRequestBody: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    init(
+        optionId: String
+    ) {
+        self.optionId = optionId
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case optionId
+    }
+
+    let optionId: String
+}
+
+struct Reaction: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    init(
+        id: String,
+        optionId: String,
+        userId: String
+    ) {
+        self.id = id
+        self.optionId = optionId
+        self.userId = userId
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case optionId
+        case userId
+    }
+
+    let id: String
+    let optionId: String
+    let userId: String
+}
+
+public enum ParraReactionType: String, Codable {
     case emoji
     case custom
 }
 
-struct ReactionOption: Codable, Equatable, Hashable, Identifiable {
+public struct ParraReactionOption: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
         id: String,
         name: String,
-        type: ReactionType,
+        type: ParraReactionType,
         value: String
     ) {
         self.id = id
@@ -27,22 +71,22 @@ struct ReactionOption: Codable, Equatable, Hashable, Identifiable {
         self.value = value
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let id: String
-    let name: String
-    let type: ReactionType
-    let value: String
+    public let id: String
+    public let name: String
+    public let type: ParraReactionType
+    public let value: String
 }
 
-struct ReactionOptionGroup: Codable, Equatable, Hashable, Identifiable {
+public struct ParraReactionOptionGroup: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
         id: String,
         name: String,
         description: String?,
-        options: [ReactionOption]
+        options: [ParraReactionOption]
     ) {
         self.id = id
         self.name = name
@@ -50,21 +94,21 @@ struct ReactionOptionGroup: Codable, Equatable, Hashable, Identifiable {
         self.options = options
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let id: String
-    let name: String
-    let description: String?
-    let options: [ReactionOption]
+    public let id: String
+    public let name: String
+    public let description: String?
+    public let options: [ParraReactionOption]
 }
 
-struct ReactionSummary: Codable, Equatable, Hashable, Identifiable {
+public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
         id: String,
         name: String,
-        type: ReactionType,
+        type: ParraReactionType,
         value: String,
         count: Int,
         reactionId: String?
@@ -77,6 +121,15 @@ struct ReactionSummary: Codable, Equatable, Hashable, Identifiable {
         self.reactionId = reactionId
     }
 
+    // MARK: - Public
+
+    public let id: String
+    public let name: String
+    public let type: ParraReactionType
+    public let value: String
+    public let count: Int
+    public let reactionId: String?
+
     // MARK: - Internal
 
     enum CodingKeys: String, CodingKey {
@@ -87,11 +140,4 @@ struct ReactionSummary: Codable, Equatable, Hashable, Identifiable {
         case count
         case reactionId
     }
-
-    let id: String
-    let name: String
-    let type: ReactionType
-    let value: String
-    let count: Int
-    let reactionId: String?
 }

@@ -230,7 +230,10 @@ public struct ParraFeedItem: Codable, Equatable, Hashable, Identifiable {
         updatedAt: Date,
         deletedAt: Date?,
         type: ParraFeedItemType,
-        data: ParraFeedItemData
+        data: ParraFeedItemData,
+        reactionOptions: [ParraReactionOptionGroup]?,
+        reactions: [ParraReactionSummary]?
+
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -238,6 +241,8 @@ public struct ParraFeedItem: Codable, Equatable, Hashable, Identifiable {
         self.deletedAt = deletedAt
         self.type = type
         self.data = data
+        self.reactionOptions = .init(reactionOptions)
+        self.reactions = .init(reactions)
     }
 
     public init(from decoder: Decoder) throws {
@@ -271,6 +276,18 @@ public struct ParraFeedItem: Codable, Equatable, Hashable, Identifiable {
                 )
             )
         }
+
+        self.reactionOptions = try container
+            .decodeIfPresent(
+                PartiallyDecodableArray<ParraReactionOptionGroup>.self,
+                forKey: .reactionOptions
+            )
+
+        self.reactions = try container
+            .decodeIfPresent(
+                PartiallyDecodableArray<ParraReactionSummary>.self,
+                forKey: .reactions
+            )
     }
 
     // MARK: - Public
@@ -281,6 +298,8 @@ public struct ParraFeedItem: Codable, Equatable, Hashable, Identifiable {
     public let deletedAt: Date?
     public let type: ParraFeedItemType
     public let data: ParraFeedItemData
+    public let reactionOptions: PartiallyDecodableArray<ParraReactionOptionGroup>?
+    public let reactions: PartiallyDecodableArray<ParraReactionSummary>?
 
     // MARK: - Internal
 
@@ -291,6 +310,8 @@ public struct ParraFeedItem: Codable, Equatable, Hashable, Identifiable {
         case deletedAt
         case type
         case data
+        case reactionOptions
+        case reactions
     }
 }
 
