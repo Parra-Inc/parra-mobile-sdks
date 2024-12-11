@@ -24,6 +24,14 @@ public struct PartiallyDecodableArray<Element>: Codable, Equatable,
         self.elements = elements
     }
 
+    public init?(_ elements: [Element]?) {
+        guard let elements else {
+            return nil
+        }
+
+        self.elements = elements
+    }
+
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         var elements: [Element] = []
