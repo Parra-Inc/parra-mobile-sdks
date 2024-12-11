@@ -7,44 +7,11 @@
 
 import SwiftUI
 
-// enum ReactionType {
-//    case emoji
-//    case custom
-// }
-//
-// struct ReactionOption {
-//    let id: String
-//    let name: String
-//    let type: ReactionType
-//    let value: String
-// }
-//
-// struct ReactionOptionGroup {
-//    let id: String
-//    let name: String
-//    let items: [ReactionOption]
-// }
-//
-// struct Reaction: Identifiable {
-//    let id: String
-//    let type: ReactionType
-//    let value: String
-//    let reactionCount: Int // just users.count?
-//    /// The id of the current user's reaction, if they left one.
-//    let reactionId: String?
-// }
-//
-// struct ReactionGroup: Identifiable {
-//    let id: String
-//    let name: String
-//    let items: [Reaction]
-// }
-
 struct ReactionButtonView: View {
     // MARK: - Internal
 
-    let reaction: ReactionSummary
-    let onToggleReaction: (Bool, ReactionSummary) -> Void
+    let reaction: ParraReactionSummary
+    let onToggleReaction: (Bool, ParraReactionSummary) -> Void
 
     var currentUserReacted: Bool {
         return reaction.reactionId != nil
@@ -137,8 +104,8 @@ struct AddReactionButtonView: View {
 }
 
 struct ReactionView: View {
-    let reactionOptions: [ReactionOptionGroup]
-    let reactions: [ReactionSummary]
+    let reactionOptions: [ParraReactionOptionGroup]
+    let reactions: [ParraReactionSummary]
 
     var body: some View {
         LazyHStack {
@@ -151,55 +118,11 @@ struct ReactionView: View {
     }
 }
 
-// #Preview {
-//    ParraAppPreview {
-//        ReactionView(
-//            optionGroups: [
-//                ReactionOptionGroup(
-//                    id: "emojis",
-//                    name: "Emojis",
-//                    items: [
-//                        ReactionOption(
-//                            id: .uuid,
-//                            name: "smiley_face",
-//                            type: .emoji,
-//                            value: "😀"
-//                        ),
-//                        ReactionOption(
-//                            id: .uuid,
-//                            name: "frown_face",
-//                            type: .emoji,
-//                            value: "🙁"
-//                        ),
-//                        ReactionOption(
-//                            id: .uuid,
-//                            name: "thumb_down",
-//                            type: .emoji,
-//                            value: "👎"
-//                        )
-//                    ]
-//                )
-//            ],
-//            group: ReactionGroup(
-//                id: "emojis",
-//                name: "Emojis",
-//                items: [
-//                    Reaction(
-//                        id: .uuid,
-//                        type: .emoji,
-//                        value: "😀",
-//                        reactionCount: 2,
-//                        reactionId: .uuid
-//                    ),
-//                    Reaction(
-//                        id: .uuid,
-//                        type: .emoji,
-//                        value: "👎",
-//                        reactionCount: 29,
-//                        reactionId: nil
-//                    )
-//                ]
-//            )
-//        )
-//    }
-// }
+#Preview {
+    ParraAppPreview {
+        ReactionView(
+            reactionOptions: ParraReactionOptionGroup.validStates(),
+            reactions: ParraReactionSummary.validStates()
+        )
+    }
+}
