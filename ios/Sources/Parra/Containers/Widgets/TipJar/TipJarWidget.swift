@@ -51,11 +51,6 @@ struct TipJarWidget: ParraContainer {
             .safeAreaPadding(.horizontal)
         }
         .renderToast(toast: $alertManager.currentToast)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                ParraDismissButton()
-            }
-        }
         .onReceive(
             ParraUserEntitlements.shared.purchaseCompletePublisher
         ) { tx, error in
