@@ -109,6 +109,9 @@ struct FeedYouTubeVideoView: View {
             }
             .contentShape(.rect)
         }
+        // Required to prevent highlighting the button then dragging the scroll
+        // view from causing the button to be pressed.
+        .simultaneousGesture(TapGesture())
         .disabled(!redactionReasons.isEmpty)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xxxl, from: parraTheme)

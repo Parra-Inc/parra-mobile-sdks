@@ -389,6 +389,9 @@ struct CreatorUpdateAttachmentsView: View {
                 }
             }
         }
+        // Required to prevent highlighting the button then dragging the scroll
+        // view from causing the button to be pressed.
+        .simultaneousGesture(TapGesture())
         .disabled(isUnlocking)
         .buttonStyle(ContentCardButtonStyle())
     }

@@ -53,6 +53,9 @@ struct YouTubeThumbnailView: View {
                     .aspectRatio(235 / 166.0, contentMode: .fit)
                     .frame(width: 80)
                 }
+                // Required to prevent highlighting the button then dragging the scroll
+                // view from causing the button to be pressed.
+                .simultaneousGesture(TapGesture())
                 .buttonStyle(.plain)
                 .allowsHitTesting(onTapPlay != nil)
             }
