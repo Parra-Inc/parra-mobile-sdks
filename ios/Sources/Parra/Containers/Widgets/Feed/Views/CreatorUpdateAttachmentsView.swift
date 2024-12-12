@@ -130,7 +130,8 @@ struct CreatorUpdateAttachmentsView: View {
         let height = (image.size.height / image.size.width) * width
 
         renderImageButton(
-            for: image
+            for: image,
+            size: CGSize(width: width, height: height)
         )
         .frame(
             width: width,
@@ -149,7 +150,8 @@ struct CreatorUpdateAttachmentsView: View {
 
         HStack(spacing: innerSpacing) {
             renderImageButton(
-                for: leftImage
+                for: leftImage,
+                size: CGSize(width: width, height: height)
             )
             .clipped()
             .frame(
@@ -158,7 +160,8 @@ struct CreatorUpdateAttachmentsView: View {
             )
 
             renderImageButton(
-                for: rightImage
+                for: rightImage,
+                size: CGSize(width: width, height: height)
             )
             .clipped()
             .frame(
@@ -203,7 +206,8 @@ struct CreatorUpdateAttachmentsView: View {
 
         HStack(spacing: innerSpacing) {
             renderImageButton(
-                for: leftImage
+                for: leftImage,
+                size: CGSize(width: width, height: height)
             )
             .frame(
                 width: width,
@@ -218,7 +222,8 @@ struct CreatorUpdateAttachmentsView: View {
                     if index == imagesBeforeFold.count - 1, requiresShowMore {
                         renderSelectMoreButton(
                             for: image,
-                            amount: otherImages.count - imagesBeforeFold.count
+                            amount: otherImages.count - imagesBeforeFold.count,
+                            size: CGSize(width: width, height: height)
                         )
                         .id(image.id)
                         .frame(
@@ -228,7 +233,8 @@ struct CreatorUpdateAttachmentsView: View {
                         .clipped()
                     } else {
                         renderImageButton(
-                            for: image
+                            for: image,
+                            size: CGSize(width: width, height: height)
                         )
                         .id(image.id)
                         .frame(
@@ -256,7 +262,8 @@ struct CreatorUpdateAttachmentsView: View {
 
         VStack(spacing: innerSpacing) {
             renderImageButton(
-                for: topImage
+                for: topImage,
+                size: CGSize(width: width, height: height)
             )
             .frame(
                 width: width,
@@ -271,7 +278,8 @@ struct CreatorUpdateAttachmentsView: View {
                     if index == imagesBeforeFold.count - 1, requiresShowMore {
                         renderSelectMoreButton(
                             for: image,
-                            amount: otherImages.count - imagesBeforeFold.count
+                            amount: otherImages.count - imagesBeforeFold.count,
+                            size: CGSize(width: width, height: height)
                         )
                         .id(image.id)
                         .frame(
@@ -281,7 +289,8 @@ struct CreatorUpdateAttachmentsView: View {
                         .clipped()
                     } else {
                         renderImageButton(
-                            for: image
+                            for: image,
+                            size: CGSize(width: width, height: height)
                         )
                         .id(image.id)
                         .frame(
@@ -318,7 +327,8 @@ struct CreatorUpdateAttachmentsView: View {
     @Environment(\.parraTheme) private var parraTheme
 
     private func renderImageButton(
-        for image: ParraImageAsset
+        for image: ParraImageAsset,
+        size: CGSize
     ) -> some View {
         Button {
             handleSelectedImage(image)
@@ -330,7 +340,7 @@ struct CreatorUpdateAttachmentsView: View {
                     ),
                     content: ParraAsyncImageContent(
                         image,
-                        preferredThumbnailSize: .md
+                        preferredThumbnailSize: .recommended(for: size)
                     )
                 )
                 .blur(radius: paywalled ? 10 : 0, opaque: true)
@@ -339,13 +349,17 @@ struct CreatorUpdateAttachmentsView: View {
                 }
             }
         }
+        // Required to prevent highlighting the button then dragging the scroll
+        // view from causing the button to be pressed.
+        .simultaneousGesture(TapGesture())
         .buttonStyle(ContentCardButtonStyle())
         .disabled(isUnlocking)
     }
 
     private func renderSelectMoreButton(
         for image: ParraImageAsset,
-        amount: Int
+        amount: Int,
+        size: CGSize
     ) -> some View {
         Button {
             handleSelectedImage(image)
@@ -358,7 +372,7 @@ struct CreatorUpdateAttachmentsView: View {
                         ),
                         content: ParraAsyncImageContent(
                             image,
-                            preferredThumbnailSize: .md
+                            preferredThumbnailSize: .recommended(for: size)
                         )
                     )
 
