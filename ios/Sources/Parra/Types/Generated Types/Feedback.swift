@@ -735,25 +735,25 @@ public enum ParraImageAssetThumbnailSize {
     // MARK: - Internal
 
     static func recommended(for size: CGSize) -> Self {
-        let minDimension = min(size.height, size.width)
+        let maxDimension = max(size.height, size.width)
 
-        if minDimension < 64 {
+        if maxDimension < 64 {
             return .xs
         }
 
-        if minDimension < 128 {
+        if maxDimension < 128 {
             return .sm
         }
 
-        if minDimension < 256 {
+        if maxDimension < 256 {
             return .md
         }
 
-        if minDimension < 512 {
+        if maxDimension < 512 {
             return .lg
         }
 
-        if minDimension < 1_024 {
+        if maxDimension < 1_024 {
             return .xl
         }
 
