@@ -11,6 +11,17 @@ struct FeedYouTubeVideoDetailView: View {
     // MARK: - Internal
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
+    let feedItemId: String
+    let reactionOptions: [ParraReactionOptionGroup]?
+    let reactions: [ParraReactionSummary]?
+
+    var showReactions: Bool {
+        if let reactionOptions {
+            return !reactionOptions.isEmpty
+        }
+
+        return false
+    }
 
     var body: some View {
         ScrollView {
@@ -96,6 +107,23 @@ struct FeedYouTubeVideoDetailView: View {
                                 )
                             }
                         }
+                    }
+
+                    if showReactions {
+                        VStack {
+                            FeedReactionView(
+                                feedItemId: feedItemId,
+                                reactionOptionGroups: reactionOptions,
+                                reactions: reactions
+                            )
+                        }
+                        .padding(
+                            .padding(top: 8, leading: 0, bottom: 8, trailing: 0)
+                        )
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
                     }
 
                     withContent(content: youtubeVideo.description) { content in

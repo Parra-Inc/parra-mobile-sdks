@@ -24,13 +24,23 @@ public extension View {
             FeedParams,
             FeedWidget
         >.Transformer = { parra, _ in
-            let response = try await parra.parraInternal.api
-                .paginateFeed(feedId: feedId, limit: 15, offset: 0)
+            do {
+                let response = try await parra.parraInternal.api
+                    .paginateFeed(feedId: feedId, limit: 15, offset: 0)
 
-            return FeedParams(
-                feedId: feedId,
-                feedCollectionResponse: response
-            )
+                return FeedParams(
+                    feedId: feedId,
+                    feedCollectionResponse: response
+                )
+            } catch let error as ParraError {
+                if case .networkError(_, let response, _) = error {
+                    if response.statusCode == 404 {
+                        Logger.error("Can not find feed with id \(feedId)")
+                    }
+                }
+
+                throw error
+            }
         }
 
         return loadAndPresentSheet(

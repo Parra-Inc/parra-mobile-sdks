@@ -54,6 +54,9 @@ public struct ParraFeedListView: View {
             if case .feedItemYoutubeVideo(let data) = item.data {
                 FeedYouTubeVideoView(
                     youtubeVideo: data,
+                    feedItemId: item.id,
+                    reactionOptions: item.reactionOptions?.elements,
+                    reactions: item.reactions?.elements,
                     containerGeometry: containerGeometry,
                     spacing: spacing,
                     performActionForFeedItemData: performActionForFeedItemData
@@ -76,6 +79,9 @@ public struct ParraFeedListView: View {
             } else if case .creatorUpdate(let data) = item.data {
                 FeedCreatorUpdateView(
                     creatorUpdate: data,
+                    feedItemId: item.id,
+                    reactionOptions: item.reactionOptions?.elements,
+                    reactions: item.reactions?.elements,
                     containerGeometry: containerGeometry,
                     spacing: spacing,
                     performActionForFeedItemData: performActionForFeedItemData

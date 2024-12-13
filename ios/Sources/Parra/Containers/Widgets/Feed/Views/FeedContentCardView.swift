@@ -42,7 +42,7 @@ struct FeedContentCardView: View {
             }
         }
         .background(parraTheme.palette.secondaryBackground)
-        .applyCornerRadii(size: .xxxl, from: parraTheme)
+        .applyCornerRadii(size: .xl, from: parraTheme)
         .buttonStyle(ContentCardButtonStyle())
         // Required to prevent highlighting the button then dragging the scroll
         // view from causing the button to be pressed.

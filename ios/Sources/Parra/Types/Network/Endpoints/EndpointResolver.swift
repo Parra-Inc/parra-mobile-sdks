@@ -199,7 +199,7 @@ enum EndpointResolver {
         case .getFaqs:
             return "tenants//applications/\(applicationId)/faqs"
         case .postFeedReaction(let feedItemId):
-            return "tenants/\(tenantId)/feed/items/\(feedItemId)/reactions/:reactionId"
+            return "tenants/\(tenantId)/feed/items/\(feedItemId)/reactions"
         case .deleteFeedReaction(let feedItemId, let reactionId):
             return "tenants/\(tenantId)/feed/items/\(feedItemId)/reactions/\(reactionId)"
         }

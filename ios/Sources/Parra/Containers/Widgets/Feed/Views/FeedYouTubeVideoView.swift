@@ -11,9 +11,20 @@ struct FeedYouTubeVideoView: View {
     // MARK: - Internal
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
+    let feedItemId: String
+    let reactionOptions: [ParraReactionOptionGroup]?
+    let reactions: [ParraReactionSummary]?
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
+
+    var showReactions: Bool {
+        if let reactionOptions {
+            return !reactionOptions.isEmpty
+        }
+
+        return false
+    }
 
     var body: some View {
         Button(action: {
@@ -105,7 +116,24 @@ struct FeedYouTubeVideoView: View {
                 )
                 .padding(.top, 6)
                 .padding(.horizontal, 12)
-                .padding(.bottom, 16)
+                .padding(.bottom, showReactions ? 0 : 16)
+
+                if showReactions {
+                    VStack {
+                        FeedReactionView(
+                            feedItemId: feedItemId,
+                            reactionOptionGroups: reactionOptions,
+                            reactions: reactions
+                        )
+                    }
+                    .padding(
+                        .padding(top: 8, leading: 16, bottom: 16, trailing: 16)
+                    )
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+                }
             }
             .contentShape(.rect)
         }
@@ -114,14 +142,17 @@ struct FeedYouTubeVideoView: View {
         .simultaneousGesture(TapGesture())
         .disabled(!redactionReasons.isEmpty)
         .background(parraTheme.palette.secondaryBackground)
-        .applyCornerRadii(size: .xxxl, from: parraTheme)
+        .applyCornerRadii(size: .xl, from: parraTheme)
         .buttonStyle(.plain)
         .safeAreaPadding(.horizontal)
         .padding(.vertical, spacing)
         .sheet(isPresented: $isPresentingModal) {} content: {
             NavigationStack {
                 FeedYouTubeVideoDetailView(
-                    youtubeVideo: youtubeVideo
+                    youtubeVideo: youtubeVideo,
+                    feedItemId: feedItemId,
+                    reactionOptions: reactionOptions,
+                    reactions: reactions
                 )
             }
         }

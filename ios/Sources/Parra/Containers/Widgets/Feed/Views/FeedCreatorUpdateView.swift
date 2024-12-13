@@ -11,6 +11,9 @@ struct FeedCreatorUpdateView: View {
     // MARK: - Internal
 
     let creatorUpdate: ParraCreatorUpdateAppStub
+    let feedItemId: String
+    let reactionOptions: [ParraReactionOptionGroup]?
+    let reactions: [ParraReactionSummary]?
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
@@ -70,7 +73,6 @@ struct FeedCreatorUpdateView: View {
                 alignment: .leading
             )
             .padding([.horizontal, .top], 16)
-            .padding(.bottom, 8)
 
             if let attachments = creatorUpdate.attachments?.elements,
                !attachments.isEmpty
@@ -96,10 +98,24 @@ struct FeedCreatorUpdateView: View {
                         containerGeometry: containerGeometry
                     )
                 }
+                .padding(.top, 8)
             }
+
+            VStack {
+                FeedReactionView(
+                    feedItemId: feedItemId,
+                    reactionOptionGroups: reactionOptions,
+                    reactions: reactions
+                )
+            }
+            .padding()
+            .frame(
+                maxWidth: .infinity,
+                alignment: .leading
+            )
         }
         .background(parraTheme.palette.secondaryBackground)
-        .applyCornerRadii(size: .xxxl, from: parraTheme)
+        .applyCornerRadii(size: .xl, from: parraTheme)
         .padding(.vertical, spacing)
         .safeAreaPadding(.horizontal)
     }
@@ -240,10 +256,12 @@ public struct TestModel: Codable, Equatable, Hashable, Identifiable {
             VStack {
                 FeedCreatorUpdateView(
                     creatorUpdate: ParraCreatorUpdateAppStub.validStates()[0],
+                    feedItemId: .uuid,
+                    reactionOptions: ParraReactionOptionGroup.validStates(),
+                    reactions: ParraReactionSummary.validStates(),
                     containerGeometry: proxy,
                     spacing: 18,
-                    performActionForFeedItemData: { _ in
-                    }
+                    performActionForFeedItemData: { _ in }
                 )
             }
         }
