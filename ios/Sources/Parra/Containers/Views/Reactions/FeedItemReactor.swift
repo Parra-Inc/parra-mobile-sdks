@@ -189,7 +189,7 @@ class FeedItemReactor: ObservableObject {
                     name: match.name,
                     type: match.type,
                     value: match.value,
-                    count: 1,
+                    count: match.count,
                     reactionId: response.id
                 )
             }

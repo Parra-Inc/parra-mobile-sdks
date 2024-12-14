@@ -26,24 +26,24 @@ struct AddReactionButtonView: View {
                 .resizable()
                 .renderingMode(.template)
                 .frame(
-                    width: 17,
-                    height: 17
+                    width: 18,
+                    height: 18
                 )
                 .tint(
-                    theme.palette.primary.shade600
+                    theme.palette.secondaryChipText.toParraColor()
                 )
                 .aspectRatio(contentMode: .fit)
         }
         .padding(
             .padding(
-                top: 4.5,
-                leading: 11.5,
-                bottom: 3.5,
-                trailing: 9
+                top: 5.5,
+                leading: 13.5,
+                bottom: 4.5,
+                trailing: 11
             )
         )
         .background(
-            theme.palette.primary.shade300
+            theme.palette.secondaryChipBackground.toParraColor()
         )
         .applyCornerRadii(size: .full, from: theme)
     }

@@ -17,6 +17,14 @@ struct ReactionButtonView: View {
         return reaction.reactionId != nil
     }
 
+    var backgroundColor: Color {
+        if currentUserReacted {
+            return theme.palette.primaryChipBackground.toParraColor()
+        }
+
+        return theme.palette.secondaryChipBackground.toParraColor()
+    }
+
     var body: some View {
         Button {
             onToggleReaction(!currentUserReacted, reaction)
@@ -28,8 +36,8 @@ struct ReactionButtonView: View {
                         .font(.system(size: 500))
                         .minimumScaleFactor(0.01)
                         .frame(
-                            width: 17.0,
-                            height: 17.0
+                            width: 18.0,
+                            height: 18.0
                         )
                 case .custom:
                     if let url = URL(string: reaction.value) {
@@ -40,7 +48,7 @@ struct ReactionButtonView: View {
                             ),
                             content: ParraAsyncImageContent(url: url),
                             localAttributes: ParraAttributes.AsyncImage(
-                                size: CGSize(width: 17.0, height: 17.0)
+                                size: CGSize(width: 18.0, height: 18.0)
                             )
                         )
                     }
@@ -51,20 +59,20 @@ struct ReactionButtonView: View {
                 ))
                 .font(.caption)
                 .fontWeight(.medium)
-                .foregroundStyle(theme.palette.primary.shade600)
+                .foregroundStyle(
+                    currentUserReacted
+                        ? theme.palette.primaryChipText.toParraColor()
+                        : theme.palette.secondaryChipText.toParraColor()
+                )
             }
         }
         .padding(
             .padding(
-                vertical: 4,
-                horizontal: 8
+                vertical: 5,
+                horizontal: 10
             )
         )
-        .background(
-            currentUserReacted
-                ? theme.palette.primary.shade300
-                : theme.palette.primary.shade400
-        )
+        .background(backgroundColor)
         .applyCornerRadii(size: .full, from: theme)
     }
 

@@ -58,6 +58,11 @@ public struct ParraTheme: ParraConfigurationOptionType {
             primarySeparator: ParraColorPalette.defaultLight.primarySeparator,
             secondarySeparator: ParraColorPalette.defaultLight
                 .secondarySeparator,
+            primaryChipText: ParraColorPalette.defaultLight.primaryChipText,
+            secondaryChipText: ParraColorPalette.defaultLight.secondaryChipText,
+            primaryChipBackground: ParraColorPalette.defaultLight.primaryChipBackground,
+            secondaryChipBackground: ParraColorPalette.defaultLight
+                .secondaryChipBackground,
             error: ParraColorPalette.defaultLight.error,
             warning: ParraColorPalette.defaultLight.warning,
             info: ParraColorPalette.defaultLight.info,
@@ -75,6 +80,11 @@ public struct ParraTheme: ParraConfigurationOptionType {
             primarySeparator: ParraColorPalette.defaultDark.primarySeparator,
             secondarySeparator: ParraColorPalette.defaultDark
                 .secondarySeparator,
+            primaryChipText: ParraColorPalette.defaultDark.primaryChipText,
+            secondaryChipText: ParraColorPalette.defaultDark.secondaryChipText,
+            primaryChipBackground: ParraColorPalette.defaultDark.primaryChipBackground,
+            secondaryChipBackground: ParraColorPalette.defaultDark
+                .secondaryChipBackground,
             error: ParraColorPalette.defaultDark.error,
             warning: ParraColorPalette.defaultDark.warning,
             info: ParraColorPalette.defaultDark.info,

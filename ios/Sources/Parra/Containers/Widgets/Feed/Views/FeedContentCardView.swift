@@ -160,16 +160,19 @@ struct FeedContentCardView: View {
 
             if hasAction && redactionReasons.isEmpty {
                 ZStack(alignment: .center) {
-                    Color(palette.primaryBackground)
+                    Color(palette.secondaryChipBackground.toParraColor())
                         .frame(width: 20, height: 20)
                         .clipShape(
                             .circle,
                             style: .init(eoFill: true, antialiased: true)
                         )
-                        .opacity(0.8)
 
                     componentFactory.buildImage(
-                        content: .symbol("link.circle.fill", .monochrome)
+                        content: .symbol("link.circle.fill", .hierarchical),
+                        localAttributes: ParraAttributes.Image(
+                            tint: palette.secondaryChipText.toParraColor(),
+                            background: .clear
+                        )
                     )
                     .frame(width: 20, height: 20)
                 }
