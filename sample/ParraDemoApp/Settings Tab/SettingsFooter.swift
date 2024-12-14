@@ -2,7 +2,7 @@
 //  SettingsFooter.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 12/13/2024.
+//  Bootstrapped with ❤️ by Parra on 12/14/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
