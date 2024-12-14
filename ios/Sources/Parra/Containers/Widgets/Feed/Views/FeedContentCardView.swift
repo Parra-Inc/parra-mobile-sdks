@@ -189,8 +189,8 @@ struct FeedContentCardView: View {
                         text: content,
                         localAttributes: ParraAttributes.Label(
                             text: ParraAttributes.Text(
-                                style: .callout,
-                                color: palette.primaryText.toParraColor(),
+                                style: .headline,
+                                color: palette.secondaryChipText.toParraColor(),
                                 alignment: .leading
                             )
                         )
@@ -204,8 +204,8 @@ struct FeedContentCardView: View {
                         text: content,
                         localAttributes: ParraAttributes.Label(
                             text: ParraAttributes.Text(
-                                style: .callout,
-                                color: palette.secondaryText.toParraColor(),
+                                style: .subheadline,
+                                color: palette.secondaryChipText.toParraColor(),
                                 alignment: .leading
                             )
                         )
@@ -224,9 +224,9 @@ struct FeedContentCardView: View {
                     gradient: Gradient(
                         colors: [
                             .clear,
-                            .black.opacity(0.3),
-                            .black.opacity(0.7),
-                            .black.opacity(0.7)
+                            palette.secondaryChipBackground.toParraColor().opacity(0.7),
+                            palette.secondaryChipBackground.toParraColor().opacity(0.85),
+                            palette.secondaryChipBackground.toParraColor().opacity(1.0)
                         ]
                     ),
                     startPoint: .top,
