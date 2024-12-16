@@ -199,20 +199,39 @@ struct FullScreenGalleryView: View {
     let photos: [ParraImageAsset]
     @Binding var selectedPhoto: ParraImageAsset?
 
+    var title: String? {
+        guard let selectedPhoto else {
+            return nil
+        }
+
+        guard let idx = photos.firstIndex(of: selectedPhoto) else {
+            return nil
+        }
+
+        return "\(idx + 1)/\(photos.count)"
+    }
+
     var body: some View {
         TabView(selection: $selectedPhoto) {
             photoViews
+                .ignoresSafeArea(.container, edges: [.horizontal, .bottom])
         }
         .tabViewStyle(.page)
         .ignoresSafeArea()
         .background(Color.black.edgesIgnoringSafeArea(.all))
-        .overlay(alignment: .topTrailing) {
-            ParraDismissButton {
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                    selectedPhoto = nil
+        .toolbarBackground(.visible, for: .navigationBar)
+        .navigationBarTitleDisplayMode(.inline)
+        .if(title != nil) { ctx in
+            ctx.navigationTitle(title ?? "")
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                ParraDismissButton {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                        selectedPhoto = nil
+                    }
                 }
             }
-            .safeAreaPadding([.top, .trailing])
         }
     }
 
