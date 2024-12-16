@@ -34,7 +34,12 @@ struct FeedReactionView: View {
     let feedItemId: String
 
     var body: some View {
-        HStack(spacing: 8) {
+        WrappingHStack(
+            alignment: .leading,
+            horizontalSpacing: 8,
+            verticalSpacing: 8,
+            fitContentWidth: true
+        ) {
             ForEach(reactor.currentReactions) { reaction in
                 ReactionButtonView(reaction: reaction) { reacted, summary in
                     if reacted {
