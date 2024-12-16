@@ -41,74 +41,9 @@ struct FeedYouTubeVideoView: View {
                     .lineLimit(2)
                     .truncationMode(.tail)
 
-                    HStack(spacing: 8) {
-                        componentFactory.buildImage(
-                            config: ParraImageConfig(),
-                            content: .resource("YouTubeIcon", .module, .original),
-                            localAttributes: ParraAttributes.Image(
-                                size: CGSize(width: 22, height: 22),
-                                cornerRadius: .full,
-                                padding: .md,
-                                background: parraTheme.palette.primaryBackground
-                            )
-                        )
-
-                        VStack(alignment: .leading, spacing: 0) {
-                            componentFactory.buildLabel(
-                                content: ParraLabelContent(
-                                    text: youtubeVideo.channelTitle
-                                ),
-                                localAttributes: ParraAttributes.Label(
-                                    text: ParraAttributes.Text(
-                                        style: .subheadline,
-                                        weight: .medium
-                                    )
-                                )
-                            )
-
-                            HStack(spacing: 4) {
-                                componentFactory.buildLabel(
-                                    content: ParraLabelContent(
-                                        text: "YouTube"
-                                    ),
-                                    localAttributes: ParraAttributes.Label(
-                                        text: ParraAttributes.Text(
-                                            style: .caption,
-                                            weight: .regular,
-                                            color: parraTheme.palette.secondaryText
-                                                .toParraColor()
-                                        )
-                                    )
-                                )
-
-                                componentFactory.buildLabel(
-                                    text: "•",
-                                    localAttributes: ParraAttributes.Label(
-                                        text: ParraAttributes.Text(
-                                            style: .caption,
-                                            weight: .light,
-                                            color: parraTheme.palette.secondaryText
-                                                .toParraColor()
-                                        )
-                                    )
-                                )
-
-                                componentFactory.buildLabel(
-                                    text: youtubeVideo.publishedAt.timeAgo(
-                                        dateTimeStyle: .named
-                                    ),
-                                    localAttributes: ParraAttributes.Label(
-                                        text: ParraAttributes.Text(
-                                            style: .caption2,
-                                            weight: .regular,
-                                            color: parraTheme.palette.secondaryText
-                                                .toParraColor()
-                                        )
-                                    )
-                                )
-                            }
-                        }
-                    }
+                    FeedYoutubeVideoChannelInfoView(
+                        youtubeVideo: youtubeVideo
+                    )
                 }
                 .frame(
                     maxWidth: .infinity,
@@ -127,7 +62,7 @@ struct FeedYouTubeVideoView: View {
                         )
                     }
                     .padding(
-                        .padding(top: 8, leading: 16, bottom: 16, trailing: 16)
+                        EdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 16)
                     )
                     .frame(
                         maxWidth: .infinity,
