@@ -50,7 +50,9 @@ public struct ParraFeedListView: View {
         ForEach(
             Array(items.enumerated()),
             id: \.element
-        ) { index, item in
+        ) {
+            index,
+                item in
             if case .feedItemYoutubeVideo(let data) = item.data {
                 FeedYouTubeVideoView(
                     youtubeVideo: data,
@@ -78,13 +80,15 @@ public struct ParraFeedListView: View {
                 }
             } else if case .creatorUpdate(let data) = item.data {
                 FeedCreatorUpdateView(
-                    creatorUpdate: data,
-                    feedItemId: item.id,
-                    reactionOptions: item.reactionOptions?.elements,
-                    reactions: item.reactions?.elements,
-                    containerGeometry: containerGeometry,
-                    spacing: spacing,
-                    performActionForFeedItemData: performActionForFeedItemData
+                    params: FeedCreatorUpdateParams(
+                        creatorUpdate: data,
+                        feedItemId: item.id,
+                        reactionOptions: item.reactionOptions?.elements,
+                        reactions: item.reactions?.elements,
+                        containerGeometry: containerGeometry,
+                        spacing: spacing,
+                        performActionForFeedItemData: performActionForFeedItemData
+                    )
                 )
             } else {
                 EmptyView()

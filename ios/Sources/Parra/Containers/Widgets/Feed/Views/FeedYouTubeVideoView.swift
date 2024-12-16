@@ -8,6 +8,33 @@
 import SwiftUI
 
 struct FeedYouTubeVideoView: View {
+    // MARK: - Lifecycle
+
+    init(
+        youtubeVideo: ParraFeedItemYoutubeVideoData,
+        feedItemId: String,
+        reactionOptions: [ParraReactionOptionGroup]?,
+        reactions: [ParraReactionSummary]?,
+        containerGeometry: GeometryProxy,
+        spacing: CGFloat,
+        performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void
+    ) {
+        self.youtubeVideo = youtubeVideo
+        self.feedItemId = feedItemId
+        self.reactionOptions = reactionOptions
+        self.reactions = reactions
+        self.containerGeometry = containerGeometry
+        self.spacing = spacing
+        self.performActionForFeedItemData = performActionForFeedItemData
+        self._reactor = ObservedObject(
+            wrappedValue: FeedItemReactor(
+                feedItemId: feedItemId,
+                reactionOptionGroups: reactionOptions ?? [],
+                reactions: reactions ?? []
+            )
+        )
+    }
+
     // MARK: - Internal
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
@@ -18,15 +45,13 @@ struct FeedYouTubeVideoView: View {
     let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
 
-    var showReactions: Bool {
-        if let reactionOptions {
-            return !reactionOptions.isEmpty
-        }
-
-        return false
-    }
-
     var body: some View {
+        let hasPaywallEntitlement = true
+        // TODO: When doing paywalled youtube videos
+//        entitlements.hasEntitlement(
+//            youtubeVideo.attachmentPaywall?.entitlement
+//        )
+
         Button(action: {
             isPresentingModal = true
         }) {
@@ -51,14 +76,13 @@ struct FeedYouTubeVideoView: View {
                 )
                 .padding(.top, 6)
                 .padding(.horizontal, 12)
-                .padding(.bottom, showReactions ? 0 : 16)
+                .padding(.bottom, reactor.showReactions ? 0 : 16)
 
-                if showReactions {
+                if reactor.showReactions {
                     VStack {
                         FeedReactionView(
                             feedItemId: feedItemId,
-                            reactionOptionGroups: reactionOptions,
-                            reactions: reactions
+                            reactor: _reactor
                         )
                     }
                     .padding(
@@ -75,7 +99,7 @@ struct FeedYouTubeVideoView: View {
         // Required to prevent highlighting the button then dragging the scroll
         // view from causing the button to be pressed.
         .simultaneousGesture(TapGesture())
-        .disabled(!redactionReasons.isEmpty)
+        .disabled(!redactionReasons.isEmpty && hasPaywallEntitlement)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
         .buttonStyle(.plain)
@@ -86,8 +110,7 @@ struct FeedYouTubeVideoView: View {
                 FeedYouTubeVideoDetailView(
                     youtubeVideo: youtubeVideo,
                     feedItemId: feedItemId,
-                    reactionOptions: reactionOptions,
-                    reactions: reactions
+                    reactor: reactor
                 )
             }
         }
@@ -108,7 +131,10 @@ struct FeedYouTubeVideoView: View {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraUserEntitlements) private var entitlements
     @Environment(\.redactionReasons) private var redactionReasons
+
+    @ObservedObject private var reactor: FeedItemReactor
 
     @State private var isPresentingModal: Bool = false
 

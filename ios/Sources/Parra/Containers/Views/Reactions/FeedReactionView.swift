@@ -12,21 +12,10 @@ struct FeedReactionView: View {
 
     init?(
         feedItemId: String,
-        reactionOptionGroups: [ParraReactionOptionGroup]?,
-        reactions: [ParraReactionSummary]?
+        reactor: ObservedObject<FeedItemReactor>
     ) {
-        guard let reactionOptionGroups, !reactionOptionGroups.isEmpty else {
-            return nil
-        }
-
         self.feedItemId = feedItemId
-        self._reactor = StateObject(
-            wrappedValue: FeedItemReactor(
-                feedItemId: feedItemId,
-                reactionOptionGroups: reactionOptionGroups,
-                reactions: reactions ?? []
-            )
-        )
+        self._reactor = reactor
     }
 
     // MARK: - Internal
@@ -60,6 +49,7 @@ struct FeedReactionView: View {
                 isReactionPickerPresented = true
             }
         }
+        .contentShape(.rect)
         .onChange(of: pickerSelectedReaction) { oldValue, newValue in
             if let newValue, oldValue == nil {
                 reactor.addNewReaction(
@@ -91,15 +81,20 @@ struct FeedReactionView: View {
 
     @State private var isReactionPickerPresented: Bool = false
     @State private var pickerSelectedReaction: ParraReactionOption?
-    @StateObject private var reactor: FeedItemReactor
+    @ObservedObject private var reactor: FeedItemReactor
 }
 
 #Preview {
     ParraAppPreview {
         FeedReactionView(
             feedItemId: .uuid,
-            reactionOptionGroups: ParraReactionOptionGroup.validStates(),
-            reactions: ParraReactionSummary.validStates()
+            reactor: ObservedObject(
+                wrappedValue: FeedItemReactor(
+                    feedItemId: .uuid,
+                    reactionOptionGroups: ParraReactionOptionGroup.validStates(),
+                    reactions: ParraReactionSummary.validStates()
+                )
+            )
         )
     }
 }

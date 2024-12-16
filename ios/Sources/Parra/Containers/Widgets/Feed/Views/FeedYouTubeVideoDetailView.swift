@@ -12,16 +12,7 @@ struct FeedYouTubeVideoDetailView: View {
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
     let feedItemId: String
-    let reactionOptions: [ParraReactionOptionGroup]?
-    let reactions: [ParraReactionSummary]?
-
-    var showReactions: Bool {
-        if let reactionOptions {
-            return !reactionOptions.isEmpty
-        }
-
-        return false
-    }
+    @ObservedObject var reactor: FeedItemReactor
 
     var body: some View {
         ScrollView {
@@ -109,12 +100,11 @@ struct FeedYouTubeVideoDetailView: View {
                         }
                     }
 
-                    if showReactions {
+                    if reactor.showReactions {
                         VStack {
                             FeedReactionView(
                                 feedItemId: feedItemId,
-                                reactionOptionGroups: reactionOptions,
-                                reactions: reactions
+                                reactor: _reactor
                             )
                         }
                         .padding(
@@ -183,5 +173,8 @@ struct FeedYouTubeVideoDetailView: View {
             .aspectRatio(thumb.width / thumb.height, contentMode: .fit)
         }
         .buttonStyle(.plain)
+        // Required to prevent highlighting the button then dragging the scroll
+        // view from causing the button to be pressed.
+        .simultaneousGesture(TapGesture())
     }
 }

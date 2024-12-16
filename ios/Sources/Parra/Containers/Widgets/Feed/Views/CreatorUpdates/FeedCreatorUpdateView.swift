@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-struct FeedCreatorUpdateView: View {
-    // MARK: - Internal
-
+struct FeedCreatorUpdateParams {
     let creatorUpdate: ParraCreatorUpdateAppStub
     let feedItemId: String
     let reactionOptions: [ParraReactionOptionGroup]?
@@ -17,67 +15,121 @@ struct FeedCreatorUpdateView: View {
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
+}
+
+struct FeedCreatorUpdateView: View {
+    // MARK: - Lifecycle
+
+    init(
+        params: FeedCreatorUpdateParams
+    ) {
+        self.params = params
+        self._reactor = ObservedObject(
+            wrappedValue: FeedItemReactor(
+                feedItemId: params.feedItemId,
+                reactionOptionGroups: params.reactionOptions ?? [],
+                reactions: params.reactions ?? []
+            )
+        )
+    }
+
+    // MARK: - Internal
+
+    let params: FeedCreatorUpdateParams
 
     var body: some View {
-        VStack(spacing: 0) {
-            FeedCreatorUpdateHeaderView(
-                creatorUpdate: creatorUpdate
-            )
-            .padding([.horizontal, .top], 16)
+        let hasPaywallEntitlement = entitlements.hasEntitlement(
+            creatorUpdate.attachmentPaywall?.entitlement
+        )
 
-            FeedCreatorUpdateContentView(
-                creatorUpdate: creatorUpdate
-            )
-            .padding(.horizontal, 16)
+        Button(action: {
+            isPresentingModal = true
+        }) {
+            VStack(spacing: 0) {
+                FeedCreatorUpdateHeaderView(
+                    creatorUpdate: creatorUpdate
+                )
+                .padding([.horizontal, .top], 16)
 
-            if let attachments = creatorUpdate.attachments?.elements,
-               !attachments.isEmpty
-            {
-                ParraPaywalledContentView(
-                    entitlement: creatorUpdate.attachmentPaywall?.entitlement,
-                    context: creatorUpdate.attachmentPaywall?.context
-                ) { requiredEntitlement, unlock in
-                    CreatorUpdateAttachmentsView(
-                        attachments: attachments,
-                        containerGeometry: containerGeometry,
-                        requiredEntitlement: requiredEntitlement
-                    ) {
-                        do {
-                            try await unlock()
-                        } catch {
-                            Logger.error("Error unlocking attachment", error)
+                FeedCreatorUpdateContentView(
+                    creatorUpdate: creatorUpdate
+                )
+                .padding(.horizontal, 16)
+
+                if let attachments = creatorUpdate.attachments?.elements,
+                   !attachments.isEmpty
+                {
+                    ParraPaywalledContentView(
+                        entitlement: creatorUpdate.attachmentPaywall?.entitlement,
+                        context: creatorUpdate.attachmentPaywall?.context
+                    ) { requiredEntitlement, unlock in
+                        CreatorUpdateAttachmentsView(
+                            attachments: attachments,
+                            containerGeometry: params.containerGeometry,
+                            requiredEntitlement: requiredEntitlement
+                        ) {
+                            do {
+                                try await unlock()
+                            } catch {
+                                Logger.error("Error unlocking attachment", error)
+                            }
                         }
+                    } unlockedContentBuilder: {
+                        CreatorUpdateAttachmentsView(
+                            attachments: attachments,
+                            containerGeometry: params.containerGeometry
+                        )
                     }
-                } unlockedContentBuilder: {
-                    CreatorUpdateAttachmentsView(
-                        attachments: attachments,
-                        containerGeometry: containerGeometry
+                    .padding(.top, 8)
+                }
+
+                if reactor.showReactions {
+                    FeedReactionView(
+                        feedItemId: params.feedItemId,
+                        reactor: _reactor
+                    )
+                    .padding()
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
                     )
                 }
-                .padding(.top, 8)
             }
-
-            FeedReactionView(
-                feedItemId: feedItemId,
-                reactionOptionGroups: reactionOptions,
-                reactions: reactions
-            )
-            .padding()
-            .frame(
-                maxWidth: .infinity,
-                alignment: .leading
-            )
         }
+        // Required to prevent highlighting the button then dragging the scroll
+        // view from causing the button to be pressed.
+        .simultaneousGesture(TapGesture())
+        .disabled(!redactionReasons.isEmpty && hasPaywallEntitlement)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
-        .padding(.vertical, spacing)
+        .buttonStyle(.plain)
+        .padding(.vertical, params.spacing)
         .safeAreaPadding(.horizontal)
+        .sheet(isPresented: $isPresentingModal) {} content: {
+            NavigationStack {
+                FeedCreatorUpdateDetailView(
+                    creatorUpdate: params.creatorUpdate,
+                    feedItemId: params.feedItemId,
+                    reactor: reactor
+                )
+            }
+            .toolbarBackground(.visible, for: .navigationBar)
+        }
     }
 
     // MARK: - Private
 
+    @State private var isPresentingModal: Bool = false
+    @ObservedObject private var reactor: FeedItemReactor
+
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.redactionReasons) private var redactionReasons
+    @Environment(\.parraUserEntitlements) private var entitlements
+
+    private var creatorUpdate: ParraCreatorUpdateAppStub {
+        return params.creatorUpdate
+    }
 }
 
 public struct TestModel: Codable, Equatable, Hashable, Identifiable {
@@ -120,13 +172,15 @@ public struct TestModel: Codable, Equatable, Hashable, Identifiable {
         GeometryReader { proxy in
             VStack {
                 FeedCreatorUpdateView(
-                    creatorUpdate: ParraCreatorUpdateAppStub.validStates()[0],
-                    feedItemId: .uuid,
-                    reactionOptions: ParraReactionOptionGroup.validStates(),
-                    reactions: ParraReactionSummary.validStates(),
-                    containerGeometry: proxy,
-                    spacing: 18,
-                    performActionForFeedItemData: { _ in }
+                    params: FeedCreatorUpdateParams(
+                        creatorUpdate: ParraCreatorUpdateAppStub.validStates()[0],
+                        feedItemId: .uuid,
+                        reactionOptions: ParraReactionOptionGroup.validStates(),
+                        reactions: ParraReactionSummary.validStates(),
+                        containerGeometry: proxy,
+                        spacing: 18,
+                        performActionForFeedItemData: { _ in }
+                    )
                 )
             }
         }

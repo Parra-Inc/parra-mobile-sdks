@@ -108,13 +108,13 @@ struct CreatorUpdateAttachmentsView: View {
         content
             .background(parraTheme.palette.secondaryBackground.toParraColor())
             .sheet(isPresented: $isShowingFullScreen) {
-                FullScreenGalleryView(
-                    photos: layout.allImages,
-                    selectedPhoto: $selectedPhoto
-                )
+                NavigationStack {
+                    FullScreenGalleryView(
+                        photos: layout.allImages,
+                        selectedPhoto: $selectedPhoto
+                    )
+                }
                 .transition(.opacity)
-                .presentationDragIndicator(.visible)
-                .presentationDetents([.large])
             }
     }
 
@@ -126,8 +126,15 @@ struct CreatorUpdateAttachmentsView: View {
     func renderSingle(
         _ image: ParraImageAsset
     ) -> some View {
-        let width = containerGeometry.size.width - outerSpacing * 2
-        let height = (image.size.height / image.size.width) * width
+        let width = max(
+            containerGeometry.size.width - outerSpacing * 2,
+            0.0
+        )
+
+        let height = max(
+            (image.size.height / image.size.width) * width,
+            0.0
+        )
 
         renderImageButton(
             for: image,
@@ -176,7 +183,10 @@ struct CreatorUpdateAttachmentsView: View {
         _ leftImage: ParraImageAsset,
         _ rightImage: ParraImageAsset
     ) -> some View {
-        let width = (containerGeometry.size.width - outerSpacing * 2 - innerSpacing) / 2
+        let width = max(
+            (containerGeometry.size.width - outerSpacing * 2 - innerSpacing) / 2,
+            0.0
+        )
 
         renderDouble(leftImage, rightImage, width, width)
     }
@@ -186,8 +196,15 @@ struct CreatorUpdateAttachmentsView: View {
         _ leftImage: ParraImageAsset,
         _ rightImage: ParraImageAsset
     ) -> some View {
-        let width = (containerGeometry.size.width - outerSpacing * 2 - innerSpacing) / 2
-        let height = (leftImage.size.height / leftImage.size.width) * width
+        let width = max(
+            (containerGeometry.size.width - outerSpacing * 2 - innerSpacing) / 2,
+            0.0
+        )
+
+        let height = max(
+            (leftImage.size.height / leftImage.size.width) * width,
+            0.0
+        )
 
         renderDouble(leftImage, rightImage, width, height)
     }
@@ -199,10 +216,17 @@ struct CreatorUpdateAttachmentsView: View {
     ) -> some View {
         let imagesBeforeFold = otherImages.prefix(maxToDisplay - 1)
         let requiresShowMore = otherImages.count > maxToDisplay - 1
-        let width = (containerGeometry.size.width - outerSpacing * 2 - innerSpacing) / 2
-        let height = CGFloat(imagesBeforeFold.count) * width + CGFloat(
-            imagesBeforeFold.count - 1
-        ) * innerSpacing
+        let width = max(
+            (containerGeometry.size.width - outerSpacing * 2 - innerSpacing) / 2,
+            0.0
+        )
+
+        let height = max(
+            CGFloat(imagesBeforeFold.count) * width + CGFloat(
+                imagesBeforeFold.count - 1
+            ) * innerSpacing,
+            0.0
+        )
 
         HStack(spacing: innerSpacing) {
             renderImageButton(
@@ -255,10 +279,19 @@ struct CreatorUpdateAttachmentsView: View {
     ) -> some View {
         let imagesBeforeFold = otherImages.prefix(maxToDisplay - 1)
         let requiresShowMore = otherImages.count > maxToDisplay - 1
-        let width = containerGeometry.size.width - outerSpacing * 2
-        let height = (topImage.size.height / topImage.size.width) * width
-        let smallSize = (width - CGFloat(imagesBeforeFold.count - 1) * innerSpacing) /
-            CGFloat(imagesBeforeFold.count)
+        let width = max(
+            containerGeometry.size.width - outerSpacing * 2,
+            0.0
+        )
+        let height = max(
+            (topImage.size.height / topImage.size.width) * width,
+            0.0
+        )
+        let smallSize = max(
+            (width - CGFloat(imagesBeforeFold.count - 1) * innerSpacing) /
+                CGFloat(imagesBeforeFold.count),
+            0.0
+        )
 
         VStack(spacing: innerSpacing) {
             renderImageButton(

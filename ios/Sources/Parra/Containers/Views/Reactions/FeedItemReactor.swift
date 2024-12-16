@@ -39,7 +39,11 @@ class FeedItemReactor: ObservableObject {
     @Published var currentReactions: [ParraReactionSummary]
 
     let feedItemId: String
-    let reactionOptionGroups: [ParraReactionOptionGroup]
+    @Published var reactionOptionGroups: [ParraReactionOptionGroup]
+
+    var showReactions: Bool {
+        return !reactionOptionGroups.isEmpty
+    }
 
     func addNewReaction(
         option: ParraReactionOption,
