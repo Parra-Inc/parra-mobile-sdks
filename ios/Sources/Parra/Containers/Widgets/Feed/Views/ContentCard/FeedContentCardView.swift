@@ -8,9 +8,35 @@
 import SwiftUI
 
 struct FeedContentCardView: View {
+    // MARK: - Lifecycle
+
+    init(
+        contentCard: ParraContentCard,
+        feedItemId: String,
+        reactionOptions: [ParraReactionOptionGroup]?,
+        reactions: [ParraReactionSummary]?,
+        containerGeometry: GeometryProxy,
+        spacing: CGFloat,
+        performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void
+    ) {
+        self.contentCard = contentCard
+        self.feedItemId = feedItemId
+        self.containerGeometry = containerGeometry
+        self.spacing = spacing
+        self.performActionForFeedItemData = performActionForFeedItemData
+        self._reactor = ObservedObject(
+            wrappedValue: FeedItemReactor(
+                feedItemId: feedItemId,
+                reactionOptionGroups: reactionOptions ?? [],
+                reactions: reactions ?? []
+            )
+        )
+    }
+
     // MARK: - Internal
 
     let contentCard: ParraContentCard
+    let feedItemId: String
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
@@ -84,6 +110,8 @@ struct FeedContentCardView: View {
     // MARK: - Private
 
     @State private var isConfirmationPresented: Bool = false
+
+    @ObservedObject private var reactor: FeedItemReactor
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
@@ -212,6 +240,22 @@ struct FeedContentCardView: View {
                     )
                     .lineLimit(3)
                     .truncationMode(.tail)
+                }
+
+                if reactor.showReactions {
+                    VStack {
+                        FeedReactionView(
+                            feedItemId: feedItemId,
+                            reactor: _reactor
+                        )
+                    }
+                    .padding(
+                        EdgeInsets(top: 8, leading: 0, bottom: 16, trailing: 0)
+                    )
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
                 }
             }
             .padding()
