@@ -40,7 +40,8 @@ extension ParraFeedItem: ParraFixture {
                 )
             ),
             reactionOptions: nil,
-            reactions: nil
+            reactions: nil,
+            comments: ParraCommentSummary(disabled: false, commentCount: 444)
         )
     }
 
@@ -101,7 +102,8 @@ extension ParraFeedItem: ParraFixture {
                 )
             ),
             reactionOptions: nil,
-            reactions: nil
+            reactions: nil,
+            comments: ParraCommentSummary(disabled: false, commentCount: 12)
         )
     }
 
@@ -117,7 +119,8 @@ extension ParraFeedItem: ParraFixture {
                     ParraCreatorUpdateAppStub.validStates()[0]
                 ),
                 reactionOptions: ParraReactionOptionGroup.validStates(),
-                reactions: ParraReactionSummary.validStates()
+                reactions: ParraReactionSummary.validStates(),
+                comments: ParraCommentSummary(disabled: true, commentCount: 0)
             ),
             ParraFeedItem(
                 id: .uuid,
@@ -129,7 +132,8 @@ extension ParraFeedItem: ParraFixture {
                     ParraFeedItemYoutubeVideoData.validStates()[0]
                 ),
                 reactionOptions: ParraReactionOptionGroup.validStates(),
-                reactions: ParraReactionSummary.validStates()
+                reactions: ParraReactionSummary.validStates(),
+                comments: ParraCommentSummary(disabled: false, commentCount: 200)
             ),
             ParraFeedItem(
                 id: .uuid,
@@ -139,7 +143,8 @@ extension ParraFeedItem: ParraFixture {
                 type: .contentCard,
                 data: .contentCard(ParraContentCard.validStates()[0]),
                 reactionOptions: ParraReactionOptionGroup.validStates(),
-                reactions: ParraReactionSummary.validStates()
+                reactions: ParraReactionSummary.validStates(),
+                comments: ParraCommentSummary(disabled: false, commentCount: 1)
             ),
             ParraFeedItem(
                 id: .uuid,
@@ -151,7 +156,8 @@ extension ParraFeedItem: ParraFixture {
                     ParraFeedItemYoutubeVideoData.validStates()[1]
                 ),
                 reactionOptions: ParraReactionOptionGroup.validStates(),
-                reactions: ParraReactionSummary.validStates()
+                reactions: ParraReactionSummary.validStates(),
+                comments: ParraCommentSummary(disabled: false, commentCount: 1_337)
             ),
             ParraFeedItem(
                 id: .uuid,
@@ -163,7 +169,8 @@ extension ParraFeedItem: ParraFixture {
                     ParraFeedItemYoutubeVideoData.validStates()[2]
                 ),
                 reactionOptions: ParraReactionOptionGroup.validStates(),
-                reactions: ParraReactionSummary.validStates()
+                reactions: ParraReactionSummary.validStates(),
+                comments: ParraCommentSummary(disabled: false, commentCount: 6)
             )
         ]
     }
