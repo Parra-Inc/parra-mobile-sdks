@@ -376,6 +376,7 @@ struct CreatorUpdateAttachmentsView: View {
                         preferredThumbnailSize: .recommended(for: size)
                     )
                 )
+                .equatable()
                 .blur(radius: paywalled ? 10 : 0, opaque: true)
                 .overlay(alignment: .center) {
                     renderPaywallOverlay()
@@ -408,6 +409,7 @@ struct CreatorUpdateAttachmentsView: View {
                             preferredThumbnailSize: .recommended(for: size)
                         )
                     )
+                    .equatable()
 
                     Color.black.opacity(0.5)
 

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ParraAsyncImageComponent: View {
+public struct ParraAsyncImageComponent: View, Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -38,6 +38,13 @@ public struct ParraAsyncImageComponent: View {
             content: imageContent
         )
         .applyAsyncImageAttributes(attributes, using: parraTheme)
+    }
+
+    public static func == (
+        lhs: ParraAsyncImageComponent,
+        rhs: ParraAsyncImageComponent
+    ) -> Bool {
+        return lhs.config == rhs.config && lhs.content == rhs.content
     }
 
     // MARK: - Internal

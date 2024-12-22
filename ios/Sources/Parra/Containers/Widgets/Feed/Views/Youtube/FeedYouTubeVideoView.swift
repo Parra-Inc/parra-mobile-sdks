@@ -27,10 +27,24 @@ struct FeedYouTubeVideoView: View {
         self.spacing = spacing
         self.performActionForFeedItemData = performActionForFeedItemData
         self._reactor = ObservedObject(
-            wrappedValue: FeedItemReactor(
+            wrappedValue: Reactor(
                 feedItemId: feedItemId,
                 reactionOptionGroups: reactionOptions ?? [],
-                reactions: reactions ?? []
+                reactions: reactions ?? [],
+                submitReaction: { api, itemId, reactionOptionId in
+                    let response = try await api.addFeedReaction(
+                        feedItemId: itemId,
+                        reactionOptionId: reactionOptionId
+                    )
+
+                    return response.id
+                },
+                removeReaction: { api, itemId, reactionId in
+                    try await api.removeFeedReaction(
+                        feedItemId: itemId,
+                        reactionId: reactionId
+                    )
+                }
             )
         )
     }
@@ -134,7 +148,7 @@ struct FeedYouTubeVideoView: View {
     @Environment(\.parraUserEntitlements) private var entitlements
     @Environment(\.redactionReasons) private var redactionReasons
 
-    @ObservedObject private var reactor: FeedItemReactor
+    @ObservedObject private var reactor: Reactor
 
     @State private var isPresentingModal: Bool = false
 

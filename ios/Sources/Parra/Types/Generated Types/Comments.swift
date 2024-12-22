@@ -12,31 +12,48 @@ public struct ParraUserStub: Codable, Equatable, Hashable, Identifiable {
 
     init(
         id: String,
-        createdAt: String,
-        updatedAt: String,
-        deletedAt: String?,
         tenantId: String,
         name: String?,
-        avatar: ParraImageAsset?
+        avatar: ParraImageAsset?,
+        verified: Bool?,
+        roles: [ParraUserRoleStub]?
     ) {
         self.id = id
-        self.createdAt = createdAt
-        self.updatedAt = updatedAt
-        self.deletedAt = deletedAt
         self.tenantId = tenantId
         self.name = name
         self.avatar = avatar
+        self.verified = verified
+        self.roles = .init(roles)
     }
 
     // MARK: - Public
 
     public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
     public let tenantId: String
     public let name: String?
     public let avatar: ParraImageAsset?
+    public let verified: Bool?
+    public let roles: PartiallyDecodableArray<ParraUserRoleStub>?
+}
+
+public struct ParraUserRoleStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    init(
+        id: String,
+        name: String,
+        key: String
+    ) {
+        self.id = id
+        self.name = name
+        self.key = key
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let name: String
+    public let key: String
 }
 
 struct CreateCommentRequestBody: Codable, Equatable, Hashable {
@@ -75,14 +92,14 @@ public struct ParraComment: Codable, Equatable, Hashable, Identifiable {
 
     public init(
         id: String,
-        createdAt: String,
-        updatedAt: String,
-        deletedAt: String?,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
         body: String,
         userId: String,
+        feedItemId: String?,
         user: ParraUserStub,
-        reactions: [ParraReactionSummary]?,
-        comments: ParraCommentSummary?
+        reactions: [ParraReactionSummary]?
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -90,22 +107,22 @@ public struct ParraComment: Codable, Equatable, Hashable, Identifiable {
         self.deletedAt = deletedAt
         self.body = body
         self.userId = userId
+        self.feedItemId = feedItemId
         self.user = user
         self.reactions = .init(reactions)
-        self.comments = comments
     }
 
     // MARK: - Public
 
     public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
     public let body: String
     public let userId: String
+    public let feedItemId: String?
     public let user: ParraUserStub
     public let reactions: PartiallyDecodableArray<ParraReactionSummary>?
-    public let comments: ParraCommentSummary?
 }
 
 struct UpdateCommentRequestBody: Codable, Equatable, Hashable {
@@ -143,7 +160,7 @@ struct PaginateCommentsForFeedItemQuery: Codable, Equatable, Hashable {
         limit: Int,
         offset: Int,
         sort: String,
-        createdAt: String
+        createdAt: Date
     ) {
         self.limit = limit
         self.offset = offset
@@ -156,7 +173,7 @@ struct PaginateCommentsForFeedItemQuery: Codable, Equatable, Hashable {
     let limit: Int
     let offset: Int
     let sort: String
-    let createdAt: String
+    let createdAt: Date
 }
 
 struct PaginateCommentsCollectionResponse: Codable, Equatable, Hashable {

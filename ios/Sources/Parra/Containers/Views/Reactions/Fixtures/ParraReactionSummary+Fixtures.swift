@@ -12,6 +12,7 @@ extension ParraReactionSummary: ParraFixture {
         return [
             ParraReactionSummary(
                 id: .uuid,
+                firstReactionAt: .now,
                 name: "smiley_face",
                 type: .emoji,
                 value: "😀",
@@ -20,6 +21,7 @@ extension ParraReactionSummary: ParraFixture {
             ),
             ParraReactionSummary(
                 id: .uuid,
+                firstReactionAt: .now,
                 name: "thumbs_down",
                 type: .emoji,
                 value: "👎",

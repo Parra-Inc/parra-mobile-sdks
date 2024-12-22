@@ -11,26 +11,39 @@ struct FeedCreatorUpdateDetailView: View {
     // MARK: - Internal
 
     let creatorUpdate: ParraCreatorUpdateAppStub
-    let feedItemId: String
-    @ObservedObject var reactor: FeedItemReactor
+    let feedItem: ParraFeedItem
+    @ObservedObject var reactor: Reactor
 
     var body: some View {
         GeometryReader { geometry in
-            ScrollView {
-                FeedCreatorUpdateDetailHeaderView(
-                    creatorUpdate: creatorUpdate,
-                    feedItemId: feedItemId,
-                    containerGeometry: geometry,
-                    reactor: reactor
+            let container: FeedCommentWidget = parra.parraInternal
+                .containerRenderer.renderContainer(
+                    params: FeedCommentWidget.ContentObserver.InitialParams(
+                        feedItem: feedItem,
+                        config: .default,
+                        commentsResponse: nil,
+                        api: parra.parraInternal.api
+                    ),
+                    config: FeedCommentWidgetConfig(
+                        headerViewBuilder: {
+                            FeedCreatorUpdateDetailHeaderView(
+                                creatorUpdate: creatorUpdate,
+                                feedItemId: feedItem.id,
+                                containerGeometry: geometry,
+                                reactor: reactor
+                            )
+                        }
+                    ),
+                    contentTransformer: nil
                 )
-            }
-            .background(parraTheme.palette.secondaryBackground)
-        }
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                ParraDismissButton()
-            }
+
+            container
+                .toolbarBackground(.visible, for: .navigationBar)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        ParraDismissButton()
+                    }
+                }
         }
     }
 
@@ -38,6 +51,7 @@ struct FeedCreatorUpdateDetailView: View {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parra) private var parra
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
     @Environment(\.presentationMode) private var presentationMode
 }

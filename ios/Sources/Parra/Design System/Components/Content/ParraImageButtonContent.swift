@@ -23,4 +23,12 @@ public struct ParraImageButtonContent: Hashable, Equatable, Sendable {
 
     public let image: ParraImageContent
     public internal(set) var isDisabled: Bool
+
+    // MARK: - Internal
+
+    func disabled(
+        _ disabled: Bool
+    ) -> ParraImageButtonContent {
+        return .init(image: image, isDisabled: disabled)
+    }
 }

@@ -85,7 +85,7 @@ public struct ParraFeedListView: View {
                 FeedCreatorUpdateView(
                     params: FeedCreatorUpdateParams(
                         creatorUpdate: data,
-                        feedItemId: item.id,
+                        feedItem: item,
                         reactionOptions: item.reactionOptions?.elements,
                         reactions: item.reactions?.elements,
                         containerGeometry: containerGeometry,

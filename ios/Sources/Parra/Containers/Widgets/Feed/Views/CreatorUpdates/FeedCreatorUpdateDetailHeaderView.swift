@@ -12,7 +12,7 @@ struct FeedCreatorUpdateDetailHeaderView: View {
     let creatorUpdate: ParraCreatorUpdateAppStub
     let feedItemId: String
     let containerGeometry: GeometryProxy
-    @ObservedObject var reactor: FeedItemReactor
+    @ObservedObject var reactor: Reactor
 
     var body: some View {
         VStack(spacing: 0) {

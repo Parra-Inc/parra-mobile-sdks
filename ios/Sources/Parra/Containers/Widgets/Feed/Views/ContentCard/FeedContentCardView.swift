@@ -25,10 +25,24 @@ struct FeedContentCardView: View {
         self.spacing = spacing
         self.performActionForFeedItemData = performActionForFeedItemData
         self._reactor = ObservedObject(
-            wrappedValue: FeedItemReactor(
+            wrappedValue: Reactor(
                 feedItemId: feedItemId,
                 reactionOptionGroups: reactionOptions ?? [],
-                reactions: reactions ?? []
+                reactions: reactions ?? [],
+                submitReaction: { api, itemId, reactionOptionId in
+                    let response = try await api.addFeedReaction(
+                        feedItemId: itemId,
+                        reactionOptionId: reactionOptionId
+                    )
+
+                    return response.id
+                },
+                removeReaction: { api, itemId, reactionId in
+                    try await api.removeFeedReaction(
+                        feedItemId: itemId,
+                        reactionId: reactionId
+                    )
+                }
             )
         )
     }
@@ -111,8 +125,9 @@ struct FeedContentCardView: View {
 
     @State private var isConfirmationPresented: Bool = false
 
-    @ObservedObject private var reactor: FeedItemReactor
+    @ObservedObject private var reactor: Reactor
 
+    @Environment(\.parra) private var parra
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.redactionReasons) private var redactionReasons

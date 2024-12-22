@@ -1,5 +1,5 @@
 //
-//  FeedItemReactor.swift
+//  Reactor.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 12/11/24.
@@ -11,15 +11,27 @@ import SwiftUI
 private let logger = Logger()
 
 @MainActor
-class FeedItemReactor: ObservableObject {
+class Reactor: ObservableObject {
     // MARK: - Lifecycle
 
     init(
         feedItemId: String,
         reactionOptionGroups: [ParraReactionOptionGroup],
-        reactions: [ParraReactionSummary]
+        reactions: [ParraReactionSummary],
+        submitReaction: @escaping (
+            _ api: API,
+            _ itemId: String,
+            _ reactionOptionId: String
+        ) async throws -> String,
+        removeReaction: @escaping (
+            _ api: API,
+            _ itemId: String,
+            _ reactionId: String
+        ) async throws -> Void
     ) {
         self.feedItemId = feedItemId
+        self.submitReaction = submitReaction
+        self.removeReaction = removeReaction
         self.reactionOptionGroups = reactionOptionGroups
         self.currentReactions = reactions
 
@@ -32,13 +44,28 @@ class FeedItemReactor: ObservableObject {
             .asyncMap(submitUpdatedReaction)
             .sink(receiveValue: { _ in })
             .store(in: &reactionBag)
+
+        applyReactionsUpdate(currentReactions)
     }
 
     // MARK: - Internal
 
     @Published var currentReactions: [ParraReactionSummary]
 
+    @Published var totalReactions: Int = 0
+
     let feedItemId: String
+    let submitReaction: (
+        _ api: API,
+        _ itemId: String,
+        _ reactionOptionId: String
+    ) async throws -> String
+    let removeReaction: (
+        _ api: API,
+        _ itemId: String,
+        _ reactionId: String
+    ) async throws -> Void
+
     @Published var reactionOptionGroups: [ParraReactionOptionGroup]
 
     var showReactions: Bool {
@@ -88,12 +115,34 @@ class FeedItemReactor: ObservableObject {
 
     @Published private var latestReaction: ReactionUpdate?
 
+    private func applyReactionsUpdate(
+        _ reactions: [ParraReactionSummary]
+    ) {
+        totalReactions = reactions.reduce(0) { partialResult, summary in
+            return partialResult + summary.count
+        }
+
+        currentReactions = reactions.sorted(by: { l, r in
+            if l.count == r.count {
+                return l.firstReactionAt > r.firstReactionAt
+            } else {
+                return l.count > r.count
+            }
+        })
+    }
+
     @MainActor
     private func submitUpdatedReaction(
         _ update: ReactionUpdate?
     ) async -> ReactionUpdate? {
         guard let update else {
             return nil
+        }
+
+        var copiedReactions = currentReactions
+
+        defer {
+            applyReactionsUpdate(copiedReactions)
         }
 
         switch update {
@@ -123,18 +172,20 @@ class FeedItemReactor: ObservableObject {
             logger.info("Removing reaction")
 
             do {
-                try await api.removeFeedReaction(
-                    feedItemId: feedItemId,
-                    reactionId: reactionId
+                try await removeReaction(
+                    api,
+                    feedItemId,
+                    reactionId
                 )
             } catch {
-                if let idx = currentReactions.firstIndex(where: { reaction in
+                if let idx = copiedReactions.firstIndex(where: { reaction in
                     reaction.reactionId == reactionId
                 }) {
-                    let matching = currentReactions[idx]
+                    let matching = copiedReactions[idx]
 
-                    currentReactions[idx] = ParraReactionSummary(
+                    copiedReactions[idx] = ParraReactionSummary(
                         id: matching.id,
+                        firstReactionAt: matching.firstReactionAt,
                         name: matching.name,
                         type: matching.type,
                         value: matching.value,
@@ -156,17 +207,24 @@ class FeedItemReactor: ObservableObject {
         reactionOptionId: String,
         api: API
     ) async {
-        let findAnyRemove = { [self] in
-            if let idx = currentReactions.firstIndex(where: { reaction in
+        var copiedReactions = currentReactions
+
+        defer {
+            applyReactionsUpdate(copiedReactions)
+        }
+
+        let findAndRemove = {
+            if let idx = copiedReactions.firstIndex(where: { reaction in
                 reaction.id == reactionOptionId
             }) {
-                let match = currentReactions[idx]
+                let match = copiedReactions[idx]
 
                 if match.count <= 1 {
-                    currentReactions.remove(at: idx)
+                    copiedReactions.remove(at: idx)
                 } else {
-                    currentReactions[idx] = ParraReactionSummary(
+                    copiedReactions[idx] = ParraReactionSummary(
                         id: match.id,
+                        firstReactionAt: match.firstReactionAt,
                         name: match.name,
                         type: match.type,
                         value: match.value,
@@ -178,23 +236,25 @@ class FeedItemReactor: ObservableObject {
         }
 
         do {
-            let response = try await api.addFeedReaction(
-                feedItemId: feedItemId,
-                reactionOptionId: reactionOptionId
+            let reactionId = try await submitReaction(
+                api,
+                feedItemId,
+                reactionOptionId
             )
 
-            if let idx = currentReactions.firstIndex(where: { reaction in
+            if let idx = copiedReactions.firstIndex(where: { reaction in
                 reaction.id == reactionOptionId
             }) {
-                let match = currentReactions[idx]
+                let match = copiedReactions[idx]
 
-                currentReactions[idx] = ParraReactionSummary(
+                copiedReactions[idx] = ParraReactionSummary(
                     id: reactionOptionId,
+                    firstReactionAt: match.firstReactionAt,
                     name: match.name,
                     type: match.type,
                     value: match.value,
                     count: match.count,
-                    reactionId: response.id
+                    reactionId: reactionId
                 )
             }
         } catch let error as ParraError {
@@ -205,12 +265,12 @@ class FeedItemReactor: ObservableObject {
             } else {
                 logger.error("Error adding new reaction", error)
 
-                findAnyRemove()
+                findAndRemove()
             }
         } catch {
             logger.error("Error adding new reaction", error)
 
-            findAnyRemove()
+            findAndRemove()
         }
     }
 
@@ -220,11 +280,18 @@ class FeedItemReactor: ObservableObject {
             return nil
         }
 
+        var copiedReactions = currentReactions
+
+        defer {
+            applyReactionsUpdate(copiedReactions)
+        }
+
         switch update {
         case .addedNew(let option, _):
-            currentReactions.append(
+            copiedReactions.append(
                 ParraReactionSummary(
                     id: option.id,
+                    firstReactionAt: .now,
                     name: option.name,
                     type: option.type,
                     value: option.value,
@@ -238,13 +305,13 @@ class FeedItemReactor: ObservableObject {
             // If this flow is entered, we know the new reaction is one that
             // already existed in the summary. The filtering for this happens
             // in the previous step.
-            guard let idx = currentReactions.firstIndex(where: { reaction in
+            guard let idx = copiedReactions.firstIndex(where: { reaction in
                 reaction.id == summary.id
             }) else {
                 return nil
             }
 
-            let matching = currentReactions[idx]
+            let matching = copiedReactions[idx]
 
             if matching.reactionId != nil {
                 // The user already did this reaction
@@ -252,8 +319,9 @@ class FeedItemReactor: ObservableObject {
             }
 
             // This user hadn't previously reacted
-            currentReactions[idx] = ParraReactionSummary(
+            copiedReactions[idx] = ParraReactionSummary(
                 id: matching.id,
+                firstReactionAt: matching.firstReactionAt,
                 name: matching.name,
                 type: matching.type,
                 value: matching.value,
@@ -263,19 +331,20 @@ class FeedItemReactor: ObservableObject {
 
             return update
         case .removedExisting(let reactionId, _):
-            guard let idx = currentReactions.firstIndex(where: { reaction in
+            guard let idx = copiedReactions.firstIndex(where: { reaction in
                 reaction.reactionId == reactionId
             }) else {
                 return nil
             }
 
-            let matching = currentReactions[idx]
+            let matching = copiedReactions[idx]
 
             if matching.count <= 1 {
-                currentReactions.remove(at: idx)
+                copiedReactions.remove(at: idx)
             } else {
-                currentReactions[idx] = ParraReactionSummary(
+                copiedReactions[idx] = ParraReactionSummary(
                     id: matching.id,
+                    firstReactionAt: matching.firstReactionAt,
                     name: matching.name,
                     type: matching.type,
                     value: matching.value,

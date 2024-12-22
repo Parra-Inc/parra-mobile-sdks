@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FeedCreatorUpdateParams {
     let creatorUpdate: ParraCreatorUpdateAppStub
-    let feedItemId: String
+    let feedItem: ParraFeedItem
     let reactionOptions: [ParraReactionOptionGroup]?
     let reactions: [ParraReactionSummary]?
     let containerGeometry: GeometryProxy
@@ -25,10 +25,24 @@ struct FeedCreatorUpdateView: View {
     ) {
         self.params = params
         self._reactor = ObservedObject(
-            wrappedValue: FeedItemReactor(
-                feedItemId: params.feedItemId,
+            wrappedValue: Reactor(
+                feedItemId: params.feedItem.id,
                 reactionOptionGroups: params.reactionOptions ?? [],
-                reactions: params.reactions ?? []
+                reactions: params.reactions ?? [],
+                submitReaction: { api, itemId, reactionOptionId in
+                    let response = try await api.addFeedReaction(
+                        feedItemId: itemId,
+                        reactionOptionId: reactionOptionId
+                    )
+
+                    return response.id
+                },
+                removeReaction: { api, itemId, reactionId in
+                    try await api.removeFeedReaction(
+                        feedItemId: itemId,
+                        reactionId: reactionId
+                    )
+                }
             )
         )
     }
@@ -85,7 +99,7 @@ struct FeedCreatorUpdateView: View {
 
                 if reactor.showReactions {
                     FeedReactionView(
-                        feedItemId: params.feedItemId,
+                        feedItemId: params.feedItem.id,
                         reactor: _reactor
                     )
                     .padding()
@@ -109,7 +123,7 @@ struct FeedCreatorUpdateView: View {
             NavigationStack {
                 FeedCreatorUpdateDetailView(
                     creatorUpdate: params.creatorUpdate,
-                    feedItemId: params.feedItemId,
+                    feedItem: params.feedItem,
                     reactor: reactor
                 )
             }
@@ -120,7 +134,7 @@ struct FeedCreatorUpdateView: View {
     // MARK: - Private
 
     @State private var isPresentingModal: Bool = false
-    @ObservedObject private var reactor: FeedItemReactor
+    @ObservedObject private var reactor: Reactor
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
@@ -174,7 +188,7 @@ public struct TestModel: Codable, Equatable, Hashable, Identifiable {
                 FeedCreatorUpdateView(
                     params: FeedCreatorUpdateParams(
                         creatorUpdate: ParraCreatorUpdateAppStub.validStates()[0],
-                        feedItemId: .uuid,
+                        feedItem: .validStates()[0],
                         reactionOptions: ParraReactionOptionGroup.validStates(),
                         reactions: ParraReactionSummary.validStates(),
                         containerGeometry: proxy,

@@ -1,35 +1,33 @@
 //
-//  FeedReactionView.swift
+//  FeedCommentReactionView.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 12/9/24.
+//  Created by Mick MacCallum on 12/18/24.
 //
 
 import SwiftUI
 
-struct FeedReactionView: View {
+struct FeedCommentReactionView: View {
     // MARK: - Lifecycle
 
-    init?(
-        feedItemId: String,
+    init(
+        comment: ParraComment,
+        isReactionPickerPresented: Binding<Bool>,
         reactor: ObservedObject<Reactor>
     ) {
-        self.feedItemId = feedItemId
+        self.comment = comment
+        self._isReactionPickerPresented = isReactionPickerPresented
         self._reactor = reactor
     }
 
     // MARK: - Internal
 
-    let feedItemId: String
-
     var body: some View {
-        WrappingHStack(
-            alignment: .leading,
-            horizontalSpacing: 8,
-            verticalSpacing: 8,
-            fitContentWidth: true
-        ) {
-            ForEach(reactor.currentReactions) { reaction in
+        HStack(alignment: .center, spacing: 8) {
+            // Show the 3 most popular reactions, then the add reaction button,
+            // then if there are more reactions, show the total reaction count.
+
+            ForEach(reactor.currentReactions.prefix(3)) { reaction in
                 ReactionButtonView(reaction: reaction) { reacted, summary in
                     if reacted {
                         reactor.addExistingReaction(
@@ -48,6 +46,17 @@ struct FeedReactionView: View {
             AddReactionButtonView {
                 isReactionPickerPresented = true
             }
+
+            if reactor.currentReactions.count > 3 {
+                componentFactory.buildLabel(
+                    text: reactor.totalReactions.formatted(
+                        .number
+                    ),
+                    localAttributes: ParraAttributes.Label(
+                        text: .default(with: .caption2)
+                    )
+                )
+            }
         }
         .contentShape(.rect)
         .onChange(of: pickerSelectedReaction) { oldValue, newValue in
@@ -62,32 +71,36 @@ struct FeedReactionView: View {
         .sheet(
             isPresented: $isReactionPickerPresented
         ) {
-            NavigationStack {
-                ReactionPickerView(
-                    selectedOption: $pickerSelectedReaction,
-                    optionGroups: reactor.reactionOptionGroups,
-                    showLabels: false,
-                    searchEnabled: false
-                )
-                .presentationDetents([.large, .fraction(0.33)])
-                .presentationDragIndicator(.visible)
-            }
+            FeedCommentReactionPickerView(
+                comment: comment,
+                selectedOption: $pickerSelectedReaction,
+                optionGroups: reactor.reactionOptionGroups,
+                reactor: _reactor,
+                showLabels: false,
+                searchEnabled: false
+            )
+            .presentationDetents([.large, .fraction(0.6)])
+            .presentationDragIndicator(.visible)
         }
     }
 
     // MARK: - Private
 
     @Environment(\.parra) private var parra
+    @Environment(\.parraComponentFactory) private var componentFactory
 
-    @State private var isReactionPickerPresented: Bool = false
+    @Binding private var isReactionPickerPresented: Bool
     @State private var pickerSelectedReaction: ParraReactionOption?
+
+    private let comment: ParraComment
     @ObservedObject private var reactor: Reactor
 }
 
 #Preview {
     ParraAppPreview {
-        FeedReactionView(
-            feedItemId: .uuid,
+        FeedCommentReactionView(
+            comment: .validStates()[0],
+            isReactionPickerPresented: .constant(false),
             reactor: ObservedObject(
                 wrappedValue: Reactor(
                     feedItemId: .uuid,

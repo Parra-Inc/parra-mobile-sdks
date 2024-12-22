@@ -1,26 +1,22 @@
 //
-//  FeedReactionView.swift
+//  PickerInlineReactionView.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 12/9/24.
+//  Created by Mick MacCallum on 12/17/24.
 //
 
 import SwiftUI
 
-struct FeedReactionView: View {
+struct PickerInlineReactionView: View {
     // MARK: - Lifecycle
 
-    init?(
-        feedItemId: String,
+    init(
         reactor: ObservedObject<Reactor>
     ) {
-        self.feedItemId = feedItemId
         self._reactor = reactor
     }
 
     // MARK: - Internal
-
-    let feedItemId: String
 
     var body: some View {
         WrappingHStack(
@@ -31,6 +27,7 @@ struct FeedReactionView: View {
         ) {
             ForEach(reactor.currentReactions) { reaction in
                 ReactionButtonView(reaction: reaction) { reacted, summary in
+                    print("Reacting: \(reacted) with \(summary.value)")
                     if reacted {
                         reactor.addExistingReaction(
                             option: summary,
@@ -44,43 +41,13 @@ struct FeedReactionView: View {
                     }
                 }
             }
-
-            AddReactionButtonView {
-                isReactionPickerPresented = true
-            }
         }
         .contentShape(.rect)
-        .onChange(of: pickerSelectedReaction) { oldValue, newValue in
-            if let newValue, oldValue == nil {
-                reactor.addNewReaction(
-                    option: newValue,
-                    api: parra.parraInternal.api
-                )
-                pickerSelectedReaction = nil
-            }
-        }
-        .sheet(
-            isPresented: $isReactionPickerPresented
-        ) {
-            NavigationStack {
-                ReactionPickerView(
-                    selectedOption: $pickerSelectedReaction,
-                    optionGroups: reactor.reactionOptionGroups,
-                    showLabels: false,
-                    searchEnabled: false
-                )
-                .presentationDetents([.large, .fraction(0.33)])
-                .presentationDragIndicator(.visible)
-            }
-        }
     }
 
     // MARK: - Private
 
     @Environment(\.parra) private var parra
-
-    @State private var isReactionPickerPresented: Bool = false
-    @State private var pickerSelectedReaction: ParraReactionOption?
     @ObservedObject private var reactor: Reactor
 }
 

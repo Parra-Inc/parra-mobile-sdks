@@ -296,6 +296,14 @@ public class ParraPaginator<Item, Context>: ObservableObject
         items[index] = item
     }
 
+    public func appendItem(_ item: Item) {
+        if isShowingPlaceholders {
+            return
+        }
+
+        items.append(item)
+    }
+
     public func currentData() -> Data {
         return Data(
             items: items,
