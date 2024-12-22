@@ -69,12 +69,21 @@ enum ApiEndpoint: Endpoint {
     case postPurchases
 
     // Feeds
-
     case getPaginateFeed(feedId: String)
 
     // Reactions
     case postFeedReaction(feedItemId: String)
     case deleteFeedReaction(feedItemId: String, reactionId: String)
+
+    case postFeedCommentReaction(commentId: String)
+    case deleteFeedCommentReaction(commentId: String, reactionId: String)
+
+    // Comments
+    case getPaginateComments(feedItemId: String)
+    case createFeedComment(feedItemId: String)
+    case updateComment(commentId: String)
+    case deleteComment(commentId: String)
+    case flagComment(commentId: String)
 
     // MARK: - Internal
 
@@ -83,23 +92,26 @@ enum ApiEndpoint: Endpoint {
         case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
              .getUserProperties, .getPaginateFeed, .getFaqs,
-             .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall:
+             .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall,
+             .getPaginateComments:
 
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
              .postPushTokens, .postVoteForTicket,
              .postLogin, .postLogout, .postUpdateAvatar, .postPurchases,
-             .postFeedReaction:
+             .postFeedReaction, .flagComment, .createFeedComment,
+             .postFeedCommentReaction:
 
             return .post
         case .updateUserInfo, .putReplaceUserProperties,
-             .putUpdateSingleUserProperty, .putUpdateUserSetting:
+             .putUpdateSingleUserProperty, .putUpdateUserSetting,
+             .updateComment:
 
             return .put
         case .deleteVoteForTicket, .deleteUser, .deleteAvatar,
              .deleteAllUserProperties, .deleteSingleUserProperty,
-             .deleteFeedReaction:
+             .deleteFeedReaction, .deleteComment, .deleteFeedCommentReaction:
 
             return .delete
         case .patchUpdateUserProperties:
@@ -175,6 +187,20 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/feed/items/:feedItemId/reactions"
         case .deleteFeedReaction:
             return "tenants/:tenantId/feed/items/:feedItemId/reactions/:reactionId"
+        case .getPaginateComments:
+            return "tenants/:tenantId/feed/items/:feedItemId/comments"
+        case .createFeedComment:
+            return "tenants/:tenantId/feed/items/:feedItemId/comments"
+        case .updateComment:
+            return "tenants/:tenantId/comments/:commentId"
+        case .deleteComment:
+            return "tenants/:tenantId/comments/:commentId"
+        case .flagComment:
+            return "tenants/:tenantId/comments/:commentId/flag"
+        case .postFeedCommentReaction:
+            return "tenants/:tenantId/comments/:commentId/reactions"
+        case .deleteFeedCommentReaction:
+            return "tenants/:tenantId/comments/:commentId/reactions/:reactionId"
         }
     }
 

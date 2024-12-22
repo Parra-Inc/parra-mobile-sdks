@@ -202,6 +202,20 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/feed/items/\(feedItemId)/reactions"
         case .deleteFeedReaction(let feedItemId, let reactionId):
             return "tenants/\(tenantId)/feed/items/\(feedItemId)/reactions/\(reactionId)"
+        case .getPaginateComments(let feedItemId):
+            return "tenants/\(tenantId)/feed/items/\(feedItemId)/comments"
+        case .createFeedComment(let feedItemId):
+            return "tenants/\(tenantId)/feed/items/\(feedItemId)/comments"
+        case .updateComment(let commentId):
+            return "tenants/\(tenantId)/comments/\(commentId)"
+        case .deleteComment(let commentId):
+            return "tenants/\(tenantId)/comments/\(commentId)"
+        case .flagComment(let commentId):
+            return "tenants/\(tenantId)/comments/\(commentId)/flag"
+        case .postFeedCommentReaction(let commentId):
+            return "tenants/\(tenantId)/comments/\(commentId)/reactions"
+        case .deleteFeedCommentReaction(let commentId, let reactionId):
+            return "tenants/\(tenantId)/comments/\(commentId)/reactions/\(reactionId)"
         }
     }
 

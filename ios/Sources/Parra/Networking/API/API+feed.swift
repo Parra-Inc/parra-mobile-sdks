@@ -7,8 +7,6 @@
 
 import Foundation
 
-private let logger = Logger()
-
 extension API {
     func paginateFeed(
         feedId: String,
