@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     @ViewBuilder
-    func applyCommonViewAttributes(
+    internal func applyCommonViewAttributes(
         _ attributes: ParraCommonViewAttributes,
         from theme: ParraTheme
     ) -> some View {
@@ -120,7 +120,7 @@ extension View {
     }
 
     @ViewBuilder
-    func applyFrame(
+    internal func applyFrame(
         _ attributes: FrameAttributes?
     ) -> some View {
         switch attributes {
