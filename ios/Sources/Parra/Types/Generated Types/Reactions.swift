@@ -107,6 +107,7 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
 
     init(
         id: String,
+        firstReactionAt: Date,
         name: String,
         type: ParraReactionType,
         value: String,
@@ -114,6 +115,7 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
         reactionId: String?
     ) {
         self.id = id
+        self.firstReactionAt = firstReactionAt
         self.name = name
         self.type = type
         self.value = value
@@ -124,6 +126,7 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Public
 
     public let id: String
+    public let firstReactionAt: Date
     public let name: String
     public let type: ParraReactionType
     public let value: String
@@ -134,6 +137,7 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
 
     enum CodingKeys: String, CodingKey {
         case id
+        case firstReactionAt
         case name
         case type
         case value
