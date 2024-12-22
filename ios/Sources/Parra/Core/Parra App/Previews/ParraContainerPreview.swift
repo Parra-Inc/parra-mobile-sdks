@@ -62,7 +62,7 @@ public struct ParraContainerPreview<ContainerType>: View
         // individual containers.
         AnyView(content(parra, factory, config))
             .environment(config)
-            .environment(factory)
+            .environment(\.parraComponentFactory, factory)
             .environment(\.parraAlertManager, alertManager)
             .environment(\.parra, parra)
             .environment(\.parraAuthState, authStateManager.current)

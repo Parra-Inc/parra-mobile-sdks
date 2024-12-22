@@ -44,7 +44,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
     // MARK: - Lifecycle
 
     public init(
-        configuration: ParraConfiguration = .init(),
+        configuration: ParraConfiguration = .default,
         authState: ParraAuthState = .undetermined,
         previewContent: @MainActor @escaping () -> Content
     ) {
@@ -72,6 +72,11 @@ public struct ParraAppPreview<Content, DelegateType>: View
             parraInternal: parraInternal
         )
 
+        self.factory = ParraComponentFactory(
+            attributes: ParraGlobalComponentAttributes.default,
+            theme: parraInternal.configuration.theme
+        )
+
         ParraThemeManager.shared.current = parraInternal.configuration.theme
     }
 
@@ -86,6 +91,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
         .environment(\.parraTheme, themeManager.current)
         .environment(\.parraPreferredAppearance, themeManager.preferredAppearanceBinding)
         .environment(\.parraAlertManager, alertManager)
+        .environment(\.parraComponentFactory, factory)
         .environment(
             LaunchScreenStateManager(
                 state: .complete(
@@ -103,6 +109,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
     private let configuration: ParraConfiguration
     private let previewContent: () -> Content
     private let parra: Parra
+    private let factory: ParraComponentFactory
 
     @State private var alertManager: ParraAlertManager = .shared
     @State private var authStateManager: ParraAuthStateManager

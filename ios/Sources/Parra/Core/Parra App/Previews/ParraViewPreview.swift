@@ -57,7 +57,7 @@ struct ParraViewPreview<Content>: View where Content: View {
         .environment(\.parraTheme, themeManager.current)
         .environment(\.parraPreferredAppearance, themeManager.preferredAppearanceBinding)
         .environment(\.parraAlertManager, alertManager)
-        .environment(factory)
+        .environment(\.parraComponentFactory, factory)
         .environment(
             LaunchScreenStateManager(
                 state: .complete(
