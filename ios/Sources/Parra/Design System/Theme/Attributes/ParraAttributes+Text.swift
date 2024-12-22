@@ -195,6 +195,8 @@ extension ParraAttributes.Text.FontType: OverridableAttributes {
             )
         case (.custom, .custom(let font)):
             return .custom(font)
+        case (.custom(let font), .style):
+            return .custom(font)
         case (_, .style(let style, let width, let weight, let design)):
             // If a style font type was provided but it's in its initial state
             // defer to the current attributes
