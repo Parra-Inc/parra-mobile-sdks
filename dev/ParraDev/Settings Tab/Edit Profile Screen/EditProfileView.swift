@@ -55,7 +55,7 @@ struct EditProfileView: View {
         .interactiveDismissDisabled(dataModel.isDirty)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button("Cancel") {
+                Button(dataModel.isDirty ? "Cancel" : "Close") {
                     presentationMode.wrappedValue.dismiss()
                 }
             }
