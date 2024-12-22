@@ -435,12 +435,14 @@ struct CachedAsyncImage<Content>: View where Content: View {
                     }
                 }
             } catch {
-                logger.warn("image download failed", error, [
-                    "imageUrl": urlRequest.url?.absoluteString ?? "nil"
-                ])
+                if !Task.isCancelled {
+                    logger.warn("image download failed", error, [
+                        "imageUrl": urlRequest.url?.absoluteString ?? "nil"
+                    ])
 
-                withAnimation(transaction.animation) {
-                    phase = .failure(error)
+                    withAnimation(transaction.animation) {
+                        phase = .failure(error)
+                    }
                 }
             }
         }
