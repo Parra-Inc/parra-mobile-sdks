@@ -16,6 +16,12 @@ public protocol ParraFixture {
     static func invalidStates() -> [Self]
 }
 
+extension ParraFixture {
+    static func invalidStates() -> [Self] {
+        return []
+    }
+}
+
 public extension ParraFixture {
     @ViewBuilder
     static func renderValidStates(
