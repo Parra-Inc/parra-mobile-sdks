@@ -24,7 +24,7 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                         id: .uuid,
                         size: CGSize(width: 4_284, height: 4_284),
                         url: URL(
-                            string: "https://image-asset-bucket-production.s3.amazonaws.com/users/9a311ff4-6af9-445e-a3df-6900787e2198/avatar/075b05ea-999d-49b9-a48e-0e5bcc427e44.jpg"
+                            string: "https://parra-cdn.com/users/9a311ff4-6af9-445e-a3df-6900787e2198/avatar/807a9033-0d1b-41d8-9102-3dc47f0c3e32.jpg"
                         )!
                     ),
                     verified: true
@@ -34,9 +34,9 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                         id: .uuid,
                         image: ParraImageAsset(
                             id: .uuid,
-                            size: CGSize(width: 660, height: 300),
+                            size: CGSize(width: 1_075, height: 2_048),
                             url: URL(
-                                string: "https://image-asset-bucket-production.s3.amazonaws.com/tenants/0c6583c7-a1ed-4c8e-8373-d728986e6d53/creator-update-attachment/af444818-5f4b-4b14-94ff-14153a1daa55.png"
+                                string: "https://parra-cdn.com/tenants/201cbcf0-b5d6-4079-9e4d-177ae04cc9f4/creator-updates/0815cbd2-8168-46f0-8881-fac8e7fd9661/attachments/e5296c9c-abaa-429f-af89-61b4cb02dd57.png"
                             )!
                         )
                     ),
@@ -44,9 +44,9 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                         id: .uuid,
                         image: ParraImageAsset(
                             id: .uuid,
-                            size: CGSize(width: 560, height: 560),
+                            size: CGSize(width: 1_075, height: 2_048),
                             url: URL(
-                                string: "https://image-asset-bucket-production.s3.amazonaws.com/tenants/0c6583c7-a1ed-4c8e-8373-d728986e6d53/creator-update-attachment/ddf7d09e-5e3c-452e-ab65-8504b68de604.jpg"
+                                string: "https://parra-cdn.com/tenants/201cbcf0-b5d6-4079-9e4d-177ae04cc9f4/creator-updates/0815cbd2-8168-46f0-8881-fac8e7fd9661/attachments/afe3eaf7-b7f5-48df-96d3-a1ea3471419a.png"
                             )!
                         )
                     ),
