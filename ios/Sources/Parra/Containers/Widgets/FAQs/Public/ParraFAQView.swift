@@ -15,11 +15,7 @@ struct ParraFAQView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                withContent(
-                    content: layout
-                        .description ??
-                        "Test description that I should remove later probably"
-                ) { content in
+                withContent(content: layout.description) { content in
                     componentFactory.buildLabel(
                         text: content,
                         localAttributes: ParraAttributes.Label(
