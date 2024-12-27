@@ -1,5 +1,5 @@
 //
-//  PhotoWell.swift
+//  ParraPhotoWell.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 4/24/24.
@@ -9,10 +9,10 @@
 import PhotosUI
 import SwiftUI
 
-struct PhotoWell: View {
+public struct ParraPhotoWell: View {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         asset: ParraImageAsset? = nil,
         size: CGSize = CGSize(width: 100, height: 100),
         onSelectionChanged: ((UIImage?) async -> Void)? = nil
@@ -27,7 +27,22 @@ struct PhotoWell: View {
         self.onSelectionChanged = onSelectionChanged
     }
 
-    init(
+    public init(
+        url: URL? = nil,
+        size: CGSize = CGSize(width: 100, height: 100),
+        onSelectionChanged: ((UIImage?) async -> Void)? = nil
+    ) {
+        if let url {
+            self.state = .url(url)
+        } else {
+            self.state = .empty
+        }
+
+        self.size = size
+        self.onSelectionChanged = onSelectionChanged
+    }
+
+    public init(
         image: UIImage,
         size: CGSize = CGSize(width: 100, height: 100),
         onSelectionChanged: ((UIImage?) async -> Void)? = nil
@@ -37,60 +52,9 @@ struct PhotoWell: View {
         self.onSelectionChanged = onSelectionChanged
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let size: CGSize
-
-    // Invoked when user action changes the photo. So not when a pre-provided
-    // url finishes loading, or when an image is provided initially. If this is
-    // called with a nil image parameter, it means the user has opted to remove
-    // their existing photo.
-    var onSelectionChanged: ((UIImage?) async -> Void)?
-
-    @Environment(\.isEnabled) var isEnabled
-
-    var failureImage: some View {
-        Image(systemName: "network.slash")
-            .resizable()
-            .frame(width: size.width / 2, height: size.height / 2)
-    }
-
-    var emptyImage: some View {
-        Image(systemName: "person.crop.circle.fill")
-            .resizable()
-    }
-
-    var loadingView: some View {
-        ProgressView()
-            .progressViewStyle(CircularProgressViewStyle())
-            .foregroundStyle(ParraColorSwatch.gray.shade300)
-    }
-
-    @ViewBuilder var currentImageElement: some View {
-        switch state {
-        case .empty, .loadingFromLibrary, .error:
-            Image(systemName: "person.crop.circle.fill")
-                .resizable()
-        case .asset(let asset):
-
-            CachedAsyncImage(
-                url: imageUrl(for: asset),
-                urlCache: URLSessionConfiguration.apiConfiguration
-                    .urlCache ?? .shared,
-                transaction: Transaction(
-                    animation: .easeIn(duration: 0.35)
-                ),
-                content: imageContent
-            )
-            .scaledToFill()
-        case .loaded(let image), .processing(let image):
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-        }
-    }
-
-    var body: some View {
+    public var body: some View {
         let longSide = max(size.width, size.height)
         let palette = parraTheme.palette
         let mainColor = colorScheme == .light
@@ -236,6 +200,69 @@ struct PhotoWell: View {
         }
     }
 
+    // MARK: - Internal
+
+    let size: CGSize
+
+    // Invoked when user action changes the photo. So not when a pre-provided
+    // url finishes loading, or when an image is provided initially. If this is
+    // called with a nil image parameter, it means the user has opted to remove
+    // their existing photo.
+    var onSelectionChanged: ((UIImage?) async -> Void)?
+
+    @Environment(\.isEnabled) var isEnabled
+
+    var failureImage: some View {
+        Image(systemName: "network.slash")
+            .resizable()
+            .frame(width: size.width / 2, height: size.height / 2)
+    }
+
+    var emptyImage: some View {
+        Image(systemName: "person.crop.circle.fill")
+            .resizable()
+    }
+
+    var loadingView: some View {
+        ProgressView()
+            .progressViewStyle(CircularProgressViewStyle())
+            .foregroundStyle(ParraColorSwatch.gray.shade300)
+    }
+
+    @ViewBuilder var currentImageElement: some View {
+        switch state {
+        case .empty, .loadingFromLibrary, .error:
+            Image(systemName: "person.crop.circle.fill")
+                .resizable()
+        case .url(let url):
+            CachedAsyncImage(
+                url: url,
+                urlCache: URLSessionConfiguration.apiConfiguration
+                    .urlCache ?? .shared,
+                transaction: Transaction(
+                    animation: .easeIn(duration: 0.35)
+                ),
+                content: imageContent
+            )
+            .scaledToFill()
+        case .asset(let asset):
+            CachedAsyncImage(
+                url: imageUrl(for: asset),
+                urlCache: URLSessionConfiguration.apiConfiguration
+                    .urlCache ?? .shared,
+                transaction: Transaction(
+                    animation: .easeIn(duration: 0.35)
+                ),
+                content: imageContent
+            )
+            .scaledToFill()
+        case .loaded(let image), .processing(let image):
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+        }
+    }
+
     // MARK: - Private
 
     @State private var state: WellState
@@ -312,9 +339,9 @@ struct PhotoWell: View {
 #Preview {
     ParraViewPreview { _ in
         VStack {
-            PhotoWell(asset: nil)
+            ParraPhotoWell(asset: nil)
 
-            PhotoWell(
+            ParraPhotoWell(
                 asset: ParraImageAsset(
                     id: UUID().uuidString,
                     size: CGSize(width: 640, height: 480),
@@ -323,12 +350,12 @@ struct PhotoWell: View {
                 onSelectionChanged: { _ in }
             )
 
-            PhotoWell(
+            ParraPhotoWell(
                 image: UIImage(systemName: "swift")!,
                 onSelectionChanged: { _ in }
             )
 
-            PhotoWell(
+            ParraPhotoWell(
                 asset: ParraImageAsset(
                     id: UUID().uuidString,
                     size: CGSize(width: 640, height: 480),

@@ -8,10 +8,11 @@
 
 import SwiftUI
 
-extension PhotoWell {
+extension ParraPhotoWell {
     enum WellState: Equatable {
         case empty
         case asset(ParraImageAsset)
+        case url(URL)
         case loadingFromLibrary
         case loaded(UIImage)
         case processing(UIImage)
@@ -29,8 +30,8 @@ extension PhotoWell {
         }
 
         static func == (
-            lhs: PhotoWell.WellState,
-            rhs: PhotoWell.WellState
+            lhs: ParraPhotoWell.WellState,
+            rhs: ParraPhotoWell.WellState
         ) -> Bool {
             switch (lhs, rhs) {
             case (.empty, .empty):
@@ -39,6 +40,8 @@ extension PhotoWell {
                 return true
             case (.asset(let lhsAsset), .asset(let rhsAsset)):
                 return lhsAsset == rhsAsset
+            case (.url(let lhsUrl), .url(let rhsUrl)):
+                return lhsUrl == rhsUrl
             case (.loaded, .loaded):
                 return true
             case (.error(let lhsError), .error(let rhsError)):
