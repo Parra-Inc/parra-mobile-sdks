@@ -115,7 +115,12 @@ struct FeedContentCardView: View {
                     config: ParraImageConfig(contentMode: .fill),
                     content: ParraAsyncImageContent(
                         content,
-                        preferredThumbnailSize: .md
+                        preferredThumbnailSize: .recommended(
+                            for: CGSize(
+                                width: width,
+                                height: minHeight
+                            )
+                        )
                     )
                 )
                 .scaledToFill()
