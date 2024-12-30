@@ -257,7 +257,7 @@ workflows:
     jobs:
       - release-ios-sdk:
           filters:
-            branches:
-              ignore: /.*/
+            # branches:
+            #   ignore: /.*/
             tags:
               only: /^(?:refs\/tags\/)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)/
