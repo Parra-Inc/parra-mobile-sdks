@@ -2,7 +2,7 @@
 //  EditProfileView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 12/17/2024.
+//  Bootstrapped with ❤️ by Parra on 12/30/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -55,7 +55,7 @@ struct EditProfileView: View {
         .interactiveDismissDisabled(dataModel.isDirty)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button("Cancel") {
+                Button(dataModel.isDirty ? "Cancel" : "Close") {
                     presentationMode.wrappedValue.dismiss()
                 }
             }
