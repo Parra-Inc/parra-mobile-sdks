@@ -94,6 +94,12 @@ public struct ParraApp<
     ///   https://docs.parra.io/sdks/ios/configuration#using-a-custom-app-or-scene-delegate
     ///   - configuration: An object allowing for the configuration of various
     ///   Parra modules.
+    ///   - performLaunchPrerequisite: A closure where you can perform additional
+    ///   actions before Parra dismisses the launch screen. If an error is thrown
+    ///   from this function, it will result in the user seeing the system error
+    ///   boundary, so only serious errors that prevent app launch should be thrown.
+    ///   - urlHandler: Invoked whenever openURL is used to open a URL. Use this
+    ///   to intercept URL open events.
     ///   - makeScene: A closure that results in your Scene. This is usually a
     ///   WindowGroup wrapping a Parra auth window wrapping your content view.
     @MainActor
@@ -102,8 +108,11 @@ public struct ParraApp<
         applicationId: String,
         appDelegate: ParraAppDelegate<SceneDelegateClass>,
         configuration: ParraConfiguration = .init(),
-        urlHandler: ((URL) -> Void)? = nil,
-        @SceneBuilder makeScene: @MainActor @escaping () -> Content
+        @SceneBuilder makeScene: @MainActor @escaping () -> Content,
+        performLaunchPrerequisite: (
+            (ParraAuthState, ParraAppInfo) async throws -> Void
+        )? = nil,
+        urlHandler: ((URL) -> Void)? = nil
     ) {
         ParraAppState.shared = ParraAppState(
             tenantId: tenantId,
@@ -112,6 +121,7 @@ public struct ParraApp<
 
         self.makeScene = makeScene
         self._urlHandler = State(initialValue: urlHandler)
+        self._performLaunchPrerequisite = State(initialValue: performLaunchPrerequisite)
 
         let parraInternal = getParraInternalSingleton(
             configuration: configuration
@@ -201,6 +211,10 @@ public struct ParraApp<
 
     @SceneBuilder private let makeScene: @MainActor () -> Content
     @State private var urlHandler: ((URL) -> Void)?
+    @State private var performLaunchPrerequisite: ((
+        ParraAuthState,
+        ParraAppInfo
+    ) async throws -> Void)?
 
     @State private var launchScreenState: LaunchScreenStateManager
     @State private var parraInternal: ParraInternal!
@@ -269,6 +283,14 @@ public struct ParraApp<
             }
 
             logger.info("Parra SDK Initialized")
+
+            if let performLaunchPrerequisite {
+                logger.info("Performing app specific launch prerequisites")
+
+                try await performLaunchPrerequisite(authResult.state, result.appInfo)
+
+                logger.info("Completed performing app specific launch prerequisites")
+            }
 
             launchScreenState.dismiss(
                 with: result,
