@@ -84,11 +84,23 @@ extension ParraAttributes.Label: OverridableAttributes {
 
 extension ParraAttributes.Label {
     public static func `default`(
-        with style: Font.TextStyle
+        with style: Font.TextStyle,
+        width: Font.Width? = nil,
+        weight: Font.Weight? = nil,
+        design: Font.Design? = nil,
+        color: Color? = nil,
+        alignment: TextAlignment? = nil,
+        shadow: ParraAttributes.Shadow = .init()
     ) -> ParraAttributes.Label {
         return ParraAttributes.Label(
             text: ParraAttributes.Text(
-                style: style
+                style: style,
+                width: width,
+                weight: weight,
+                design: design,
+                color: color,
+                alignment: alignment,
+                shadow: shadow
             )
         )
     }

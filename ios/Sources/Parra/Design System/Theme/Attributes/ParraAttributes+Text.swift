@@ -213,10 +213,22 @@ extension ParraAttributes.Text.FontType: OverridableAttributes {
 
 public extension ParraAttributes.Text {
     static func `default`(
-        with style: Font.TextStyle
+        with style: Font.TextStyle,
+        width: Font.Width? = nil,
+        weight: Font.Weight? = nil,
+        design: Font.Design? = nil,
+        color: Color? = nil,
+        alignment: TextAlignment? = nil,
+        shadow: ParraAttributes.Shadow = .init()
     ) -> ParraAttributes.Text {
         return ParraAttributes.Text(
-            style: style
+            style: style,
+            width: width,
+            weight: weight,
+            design: design,
+            color: color,
+            alignment: alignment,
+            shadow: shadow
         )
     }
 }
