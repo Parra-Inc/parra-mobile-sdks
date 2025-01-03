@@ -66,6 +66,15 @@ public class ParraLogger {
 
     // MARK: - Public
 
+    /// A backend for all the methods for different verbosities provided by the Parra
+    /// Logger. The logger backend is the place where log events should be written
+    /// to console, disk, network, etc.
+    public static var loggerBackend: ParraLoggerBackend? {
+        didSet {
+            loggerBackendDidChange()
+        }
+    }
+
     /// Whether or not logging is enabled on this logger instance. Logging is enabled
     /// by default. If you disable logging, logs are ignored until re-enabling. Changing this
     /// property will not affect any logs made before enabling/disabling the logger.
@@ -84,15 +93,6 @@ public class ParraLogger {
     }
 
     // MARK: - Internal
-
-    /// A backend for all the methods for different verbosities provided by the Parra
-    /// Logger. The logger backend is the place where log events should be written
-    /// to console, disk, network, etc.
-    static var loggerBackend: ParraLoggerBackend? {
-        didSet {
-            loggerBackendDidChange()
-        }
-    }
 
     let context: ParraLoggerContext
     private(set) weak var parent: Logger?

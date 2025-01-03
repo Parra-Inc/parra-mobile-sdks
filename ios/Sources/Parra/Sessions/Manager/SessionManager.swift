@@ -431,6 +431,7 @@ class SessionManager {
 // MARK: ParraLoggerBackend
 
 extension SessionManager: ParraLoggerBackend {
+    @usableFromInline
     func log(
         data: ParraLogData
     ) {
@@ -441,6 +442,7 @@ extension SessionManager: ParraLoggerBackend {
         }
     }
 
+    @usableFromInline
     func logMultiple(
         data: [ParraLogData]
     ) {

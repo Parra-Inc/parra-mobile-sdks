@@ -26,6 +26,8 @@ public final class ParraUserEntitlements {
 
     // MARK: - Public
 
+    public static let shared = ParraUserEntitlements()
+
     /// A publisher that enables subscribing to changes to the `current`
     /// property. Use this to receive notifications when the user's entitlements
     /// are updates. You can also use an `.onChange()` modifier with `current`.
@@ -153,8 +155,6 @@ public final class ParraUserEntitlements {
     }
 
     // MARK: - Internal
-
-    static let shared = ParraUserEntitlements()
 
     @MainActor
     func updateEntitlements(_ entitlements: [ParraUserEntitlement]) {

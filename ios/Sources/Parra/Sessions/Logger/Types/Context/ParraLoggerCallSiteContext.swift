@@ -8,8 +8,7 @@
 
 import Foundation
 
-@usableFromInline
-struct ParraLoggerCallSiteContext {
+public struct ParraLoggerCallSiteContext {
     // MARK: - Lifecycle
 
     @usableFromInline
@@ -27,19 +26,21 @@ struct ParraLoggerCallSiteContext {
         self.threadInfo = threadInfo
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
     // fileId is used in place of Swift < 5.8 #file or #filePath to not
     // expose sensitive information from full file paths.
-    let fileId: String
-    let function: String
-    let line: Int
-    let column: Int
+    public let fileId: String
+    public let function: String
+    public let line: Int
+    public let column: Int
 
     /// Must be passed in from the call site to ensure that information about the correct thread
     /// is captured, and that we don't capture stack frames from within the Parra Logger, thus
     /// potentially omitting important context.
-    var threadInfo: ParraLoggerThreadInfo
+    public var threadInfo: ParraLoggerThreadInfo
+
+    // MARK: - Internal
 
     var simpleFunctionName: String {
         let components = function.split(separator: "(")

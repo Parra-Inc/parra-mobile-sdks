@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ParraLoggerBackend {
+public protocol ParraLoggerBackend {
     /// bypassEventCreation params are for case for use within Parra SessionStorage infrastructure,
     /// in places where writing console logs can not safely generate events due to recursion risks.
 

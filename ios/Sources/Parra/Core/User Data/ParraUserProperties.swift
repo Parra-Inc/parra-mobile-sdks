@@ -25,13 +25,13 @@ private let logger = ParraLogger(category: "Parra User Properties")
 public final class ParraUserProperties: ParraReadableKeyValueStore {
     // MARK: - Public
 
+    public static let shared = ParraUserProperties()
+
     public internal(set) var rawValue: [String: ParraAnyCodable] = [:]
 
     public let conflictPublisher = PassthroughSubject<MergeConflict, Never>()
 
     // MARK: - Internal
-
-    static let shared = ParraUserProperties()
 
     var cancellables: Set<AnyCancellable> = []
 

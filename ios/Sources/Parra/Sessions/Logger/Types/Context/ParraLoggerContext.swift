@@ -10,7 +10,7 @@ import Foundation
 
 /// A context object representative of the logger and the state that it's in at the
 /// time when a log is created.
-struct ParraLoggerContext {
+public struct ParraLoggerContext {
     // MARK: - Lifecycle
 
     init(

@@ -8,12 +8,10 @@
 
 import Foundation
 
-@usableFromInline
-struct ParraLoggerThreadInfo: Codable {
+public struct ParraLoggerThreadInfo: Codable {
     // MARK: - Lifecycle
 
-    @usableFromInline
-    init(
+    public init(
         thread: Thread,
         callStackSymbols: ParraLoggerStackSymbols = .none
     ) {
@@ -33,15 +31,18 @@ struct ParraLoggerThreadInfo: Codable {
         }
     }
 
+    // MARK: - Public
+
+    public let id: Int
+    public let queueName: String
+    public let stackSize: Int
+    public let priority: Double // 0.0...1.0
+    public let qualityOfService: QualityOfService
+    public let threadName: String?
+    public let threadNumber: UInt8?
+
     // MARK: - Internal
 
-    let id: Int
-    let queueName: String
-    let stackSize: Int
-    let priority: Double // 0.0...1.0
-    let qualityOfService: QualityOfService
-    let threadName: String?
-    let threadNumber: UInt8?
     private(set) var callStackSymbols: ParraLoggerStackSymbols
 
     /// Demangles the call stack symbols and stores them in place of the raw symbols, if symbols

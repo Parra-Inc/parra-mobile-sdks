@@ -8,8 +8,7 @@
 
 import Foundation
 
-@usableFromInline
-enum ParraLazyLogParam {
+public enum ParraLazyLogParam {
     case string(String)
     case error(() -> Error)
 

@@ -14,6 +14,8 @@ private let logger = ParraLogger(category: "Parra User Settings")
 public final class ParraUserSettings: ParraReadableKeyValueStore {
     // MARK: - Public
 
+    public static let shared = ParraUserSettings()
+
     public let currentPublisher = PassthroughSubject<[String: ParraAnyCodable], Never>()
 
     public internal(set) var rawValue: [String: ParraAnyCodable] = [:] {
@@ -76,8 +78,6 @@ public final class ParraUserSettings: ParraReadableKeyValueStore {
     }
 
     // MARK: - Internal
-
-    static let shared = ParraUserSettings()
 
     /// Override the previous store with no conflict resolution or publishers.
     /// Only use this when initially setting the store after app launch.

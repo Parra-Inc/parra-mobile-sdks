@@ -12,11 +12,11 @@ import UIKit
 public final class ParraUserManager {
     // MARK: - Lifecycle
 
-    init(parraInternal: ParraInternal) {
-        self.parraInternal = parraInternal
-    }
+    private init() {}
 
     // MARK: - Public
+
+    public static let shared = ParraUserManager()
 
     public var settings: ParraUserSettings {
         return ParraUserSettings.shared
@@ -70,7 +70,9 @@ public final class ParraUserManager {
         try await parraInternal.authService.refreshUserInfo()
     }
 
-    // MARK: - Internal
+    // MARK: - Private
 
-    let parraInternal: ParraInternal
+    @MainActor private var parraInternal: ParraInternal {
+        return Parra.default.parraInternal
+    }
 }

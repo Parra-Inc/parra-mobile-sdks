@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension ParraLogLevel {
+public extension ParraLogLevel {
     var name: String {
         switch self {
         case .trace:

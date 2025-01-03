@@ -37,9 +37,7 @@ public final class Parra: Observable, Equatable {
 
     /// An object representing the currently logged in user, if one exists.
     /// This is only relevant to Parra Auth.
-    @MainActor public private(set) lazy var user: ParraUserManager = .init(
-        parraInternal: parraInternal
-    )
+    @MainActor public private(set) lazy var user: ParraUserManager = .shared
 
     @MainActor public private(set) lazy var push: ParraPushManager = .init(
         parraInternal: parraInternal
