@@ -13,11 +13,15 @@ struct FormFieldWithState: Identifiable {
 
     init(
         field: ParraFeedbackFormField,
+        initialValue: String?,
         shouldAutoFocus: Bool
     ) {
         self.field = field
-        self.state = Self.validateUpdate(value: nil, for: field)
-        self.value = nil
+        self.value = initialValue
+        self.state = Self.validateUpdate(
+            value: initialValue,
+            for: field
+        )
         self.shouldAutoFocus = shouldAutoFocus
     }
 
@@ -54,7 +58,7 @@ struct FormFieldWithState: Identifiable {
         case .feedbackFormTextFieldData(let data):
             var rules = [ParraTextValidatorRule]()
 
-            if let minCharacters = data.minCharacters {
+            if let minCharacters = data.minCharacters, field.required == true {
                 rules.append(.minLength(minCharacters))
             }
 

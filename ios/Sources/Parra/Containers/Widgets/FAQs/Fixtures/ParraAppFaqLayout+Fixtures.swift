@@ -62,6 +62,7 @@ extension ParraAppFaqLayout: ParraFixture {
                                 helperText: nil,
                                 type: .text,
                                 required: true,
+                                hidden: false,
                                 data: .feedbackFormTextFieldData(
                                     ParraFeedbackFormTextFieldData(
                                         placeholder: nil,

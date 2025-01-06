@@ -13,14 +13,14 @@ public struct ParraTextInputContent {
 
     public init(
         title: ParraLabelContent? = nil,
-        defaultText: String = "",
+        defaultText: String? = nil,
         placeholder: ParraLabelContent? = nil,
         helper: ParraLabelContent? = nil,
         errorMessage: String? = nil,
         textChanged: ((String?) -> Void)? = nil
     ) {
         self.title = title
-        self.defaultText = defaultText
+        self.defaultText = defaultText ?? ""
         self.placeholder = placeholder
         self.helper = helper
         self.errorMessage = errorMessage
@@ -29,7 +29,7 @@ public struct ParraTextInputContent {
 
     public init(
         title: String? = nil,
-        defaultText: String = "",
+        defaultText: String? = nil,
         placeholder: String? = nil,
         helper: String? = nil,
         errorMessage: String? = nil,
@@ -41,7 +41,7 @@ public struct ParraTextInputContent {
             nil
         }
 
-        self.defaultText = defaultText
+        self.defaultText = defaultText ?? ""
 
         self.placeholder = if let placeholder {
             ParraLabelContent(text: placeholder)
@@ -68,7 +68,7 @@ public struct ParraTextInputContent {
     /// Text that should be placed in the text field when it is first displayed.
     public let defaultText: String
 
-    /// A string which is displayed inside the text editor whenever the input
+    /// A string which is displayed inside the text field whenever the input
     /// string is empty.
     public let placeholder: ParraLabelContent?
 

@@ -10,6 +10,7 @@ import Foundation
 
 extension FeedbackFormWidget.ContentObserver {
     struct InitialParams {
+        let config: ParraFeedbackFormWidgetConfig
         let formData: ParraFeedbackFormData
     }
 }

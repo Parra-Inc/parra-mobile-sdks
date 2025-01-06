@@ -19,6 +19,7 @@ public struct ParraTextEditorComponent: View {
         self.config = config
         self.content = content
         self.attributes = attributes
+        self._text = State(initialValue: content.defaultText)
     }
 
     // MARK: - Public
@@ -80,7 +81,7 @@ public struct ParraTextEditorComponent: View {
     @Environment(\.parraComponentFactory) private var componentFactory
 
     @Environment(\.parraTheme) private var parraTheme
-    @State private var text = ""
+    @State private var text: String
     @State private var hasReceivedInput = false
 
     @FocusState private var isFocused: Bool

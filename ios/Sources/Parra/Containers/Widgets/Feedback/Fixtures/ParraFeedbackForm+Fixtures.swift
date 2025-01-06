@@ -38,6 +38,7 @@ extension ParraFeedbackForm: ParraFixture {
                             helperText: "fill this out",
                             type: .text,
                             required: true,
+                            hidden: false,
                             data: .feedbackFormTextFieldData(
                                 ParraFeedbackFormTextFieldData(
                                     placeholder: "placeholder",

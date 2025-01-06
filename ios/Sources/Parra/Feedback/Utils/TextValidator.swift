@@ -74,20 +74,20 @@ enum TextValidator {
         text: String?,
         against rules: [ParraTextValidatorRule]
     ) -> String? {
-        guard let text, !text.isEmpty else {
-            return "must not be empty"
-        }
-
         for rule in rules {
             do {
-                let valid = try isValid(text: text, against: rule)
+                let valid = try isValid(text: text ?? "", against: rule)
 
                 switch (valid, rule) {
                 case (false, .minLength(let min)):
-                    let chars = min
-                        .simplePluralized(singularString: "character")
+                    if let text, text.isEmpty {
+                        return "must not be empty"
+                    } else {
+                        let chars = min
+                            .simplePluralized(singularString: "character")
 
-                    return "must have at least \(min) \(chars)"
+                        return "must have at least \(min) \(chars)"
+                    }
                 case (false, .maxLength(let max)):
                     let chars = max
                         .simplePluralized(singularString: "character")

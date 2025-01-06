@@ -29,6 +29,14 @@ extension FeedbackFormWidget {
                 nil
             }
 
+            let contextMessage: ParraLabelContent? = if let message = initialParams.config
+                .contextMessage
+            {
+                ParraLabelContent(text: message)
+            } else {
+                nil
+            }
+
             let submitButton = ParraTextButtonContent(
                 text: ParraLabelContent(text: "Submit"),
                 isDisabled: false
@@ -39,6 +47,7 @@ extension FeedbackFormWidget {
             self.content = Content(
                 title: ParraLabelContent(text: formData.title),
                 description: description,
+                contextMessage: contextMessage,
                 fields: formData.fields.elements.map { field in
                     // We only want the first focusable field to auto-focus.
                     let isInput = field.type == .text || field.type == .input
@@ -50,6 +59,8 @@ extension FeedbackFormWidget {
 
                     return FormFieldWithState(
                         field: field,
+                        initialValue: initialParams.config
+                            .defaultValues[field.id],
                         shouldAutoFocus: shouldAutoFocus
                     )
                 },

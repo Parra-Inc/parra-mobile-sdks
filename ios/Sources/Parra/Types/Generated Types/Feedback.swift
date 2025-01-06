@@ -179,6 +179,7 @@ public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable
         helperText: String?,
         type: ParraFeedbackFormFieldType,
         required: Bool?,
+        hidden: Bool?,
         data: ParraFeedbackFormFieldData
     ) {
         self.name = name
@@ -186,6 +187,7 @@ public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable
         self.helperText = helperText
         self.type = type
         self.required = required
+        self.hidden = hidden
         self.data = data
     }
 
@@ -201,7 +203,9 @@ public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable
             ParraFeedbackFormFieldType.self,
             forKey: .type
         )
-        self.required = try container.decode(Bool.self, forKey: .required)
+        self.required = try container.decodeIfPresent(Bool.self, forKey: .required)
+        self.hidden = try container
+            .decodeIfPresent(Bool.self, forKey: .hidden)
         switch type {
         case .input:
             self.data = try .feedbackFormInputFieldData(
@@ -231,6 +235,7 @@ public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable
     public let helperText: String?
     public let type: ParraFeedbackFormFieldType
     public let required: Bool?
+    public let hidden: Bool?
     public let data: ParraFeedbackFormFieldData
 
     public var id: String {
@@ -245,6 +250,7 @@ public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable
         case helperText
         case type
         case required
+        case hidden
         case data
     }
 }
@@ -732,7 +738,7 @@ public enum ParraImageAssetThumbnailSize {
     case xl
     case xxl
 
-    // MARK: - Internal
+    // MARK: - Public
 
     public static func recommended(for size: CGSize) -> Self {
         let maxDimension = max(size.height, size.width)

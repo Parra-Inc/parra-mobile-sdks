@@ -15,11 +15,13 @@ extension FeedbackFormWidget.ContentObserver {
         init(
             title: ParraLabelContent,
             description: ParraLabelContent?,
+            contextMessage: ParraLabelContent?,
             fields: [FormFieldWithState],
             submitButton: ParraTextButtonContent
         ) {
             self.title = title
             self.description = description
+            self.contextMessage = contextMessage
             self.fields = fields
             // Additional call on init to handle the case where there none of the fields
             // are marked as required, so their default state is valid.
@@ -36,6 +38,7 @@ extension FeedbackFormWidget.ContentObserver {
 
         let title: ParraLabelContent
         let description: ParraLabelContent?
+        let contextMessage: ParraLabelContent?
 
         var fields: [FormFieldWithState]
 
@@ -49,6 +52,7 @@ extension FeedbackFormWidget.ContentObserver {
             Content(
                 title: title,
                 description: description,
+                contextMessage: contextMessage,
                 fields: fields,
                 submitButton: submitButton
             )

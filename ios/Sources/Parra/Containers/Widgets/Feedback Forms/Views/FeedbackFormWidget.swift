@@ -47,6 +47,18 @@ struct FeedbackFormWidget: ParraContainer {
                     )
                 }
 
+                if let contextMessage = contentObserver.content.contextMessage {
+                    componentFactory.buildLabel(
+                        content: contextMessage,
+                        localAttributes: .default(with: .subheadline)
+                    )
+                    .padding(.bottom, 16)
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+                }
+
                 fieldViews
             }
             .contentMargins(
@@ -98,7 +110,15 @@ struct FeedbackFormWidget: ParraContainer {
 
     var fieldViews: some View {
         VStack(alignment: .leading, spacing: 20) {
-            ForEach(contentObserver.content.fields) { fieldWithState in
+            let visibleFields = contentObserver.content.fields.filter { field in
+                guard let hidden = field.field.hidden else {
+                    return true
+                }
+
+                return !hidden
+            }
+
+            ForEach(visibleFields) { fieldWithState in
                 let field = fieldWithState.field
 
                 switch field.data {
@@ -132,6 +152,7 @@ struct FeedbackFormWidget: ParraContainer {
                 case .feedbackFormTextFieldData(let data):
                     let content = ParraTextEditorContent(
                         title: field.title,
+                        defaultText: fieldWithState.value,
                         placeholder: data.placeholder,
                         helper: field.helperText,
                         errorMessage: fieldWithState.state.errorMessage
@@ -144,7 +165,7 @@ struct FeedbackFormWidget: ParraContainer {
 
                     componentFactory.buildTextEditor(
                         config: ParraTextEditorConfig(
-                            maxCharacters: 30,
+                            maxCharacters: config.maxTextFieldCharacters,
                             shouldAutoFocus: fieldWithState.shouldAutoFocus
                         ),
                         content: content,
@@ -155,6 +176,7 @@ struct FeedbackFormWidget: ParraContainer {
                 case .feedbackFormInputFieldData(let data):
                     let content = ParraTextInputContent(
                         title: field.title,
+                        defaultText: fieldWithState.value,
                         placeholder: data.placeholder,
                         helper: field.helperText,
                         errorMessage: fieldWithState.state.errorMessage
@@ -203,6 +225,7 @@ struct FeedbackFormWidget: ParraContainer {
             config: config,
             contentObserver: .init(
                 initialParams: .init(
+                    config: config,
                     formData: .init(
                         title: "Leave feedback",
                         description: "We'd love to hear from you. Your input helps us make our product better.",

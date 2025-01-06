@@ -17,6 +17,7 @@ extension ParraFeedbackFormField: ParraFixture {
                 helperText: "Select one, please!",
                 type: .select,
                 required: true,
+                hidden: false,
                 data: .feedbackFormSelectFieldData(
                     ParraFeedbackFormSelectFieldData(
                         placeholder: "Please select an option",
@@ -56,6 +57,7 @@ extension ParraFeedbackFormField: ParraFixture {
                 helperText: nil,
                 type: .input,
                 required: true,
+                hidden: nil,
                 data: .feedbackFormInputFieldData(
                     ParraFeedbackFormInputFieldData(
                         placeholder: "placeholder"
@@ -68,6 +70,7 @@ extension ParraFeedbackFormField: ParraFixture {
                 helperText: nil,
                 type: .text,
                 required: true,
+                hidden: nil,
                 data: .feedbackFormTextFieldData(
                     ParraFeedbackFormTextFieldData(
                         placeholder: "placeholder",

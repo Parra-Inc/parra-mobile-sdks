@@ -86,6 +86,7 @@ final class LaunchShortcutManager {
 
             let contentObserver = FeedbackFormWidget.ContentObserver(
                 initialParams: FeedbackFormWidget.ContentObserver.InitialParams(
+                    config: .default,
                     formData: formData.data
                 )
             )

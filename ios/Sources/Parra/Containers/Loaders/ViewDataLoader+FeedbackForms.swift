@@ -20,6 +20,7 @@ extension ParraViewDataLoader {
                 let container: FeedbackFormWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         params: .init(
+                            config: config,
                             formData: form.data
                         ),
                         config: config
