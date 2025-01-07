@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     @ViewBuilder
     func applyDefaultWidgetAttributes(
         using theme: ParraTheme

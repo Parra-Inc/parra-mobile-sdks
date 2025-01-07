@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     @ViewBuilder
     func applyLabelAttributes(
         _ attributes: ParraAttributes.Label,

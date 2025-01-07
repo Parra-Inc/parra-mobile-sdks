@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     @ViewBuilder
     func applyTextAttributes(
         _ attributes: ParraAttributes.Text,
