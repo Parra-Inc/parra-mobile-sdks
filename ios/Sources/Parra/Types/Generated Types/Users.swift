@@ -164,7 +164,7 @@ struct AuthChallengesRequestBody: Codable, Equatable, Hashable {
             self.phoneNumber = nil
             self.username = identity
             self.unknownIdentity = nil
-        case .uknownIdentity, .anonymous:
+        case .uknownIdentity, .anonymous, .externalId:
             self.email = nil
             self.phoneNumber = nil
             self.username = nil
@@ -264,6 +264,7 @@ public enum ParraIdentityType: String, Codable {
     case phoneNumber = "phone_number"
     case anonymous
     case uknownIdentity = "unknown_identity"
+    case externalId = "external_id"
 }
 
 struct AuthChallengeResponse: Codable, Equatable, Hashable {
@@ -917,7 +918,7 @@ struct PasswordResetChallengeRequestBody: Codable, Equatable, Hashable,
             self.phoneNumber = nil
             self.username = identity
             self.unknownIdentity = nil
-        case .uknownIdentity, .anonymous:
+        case .uknownIdentity, .anonymous, .externalId:
             self.email = nil
             self.phoneNumber = nil
             self.username = nil

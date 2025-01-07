@@ -210,6 +210,8 @@ public struct ParraIdentity: Codable, Equatable, Hashable, Identifiable {
             return "Phone"
         case .anonymous:
             return "Anonymous"
+        case .externalId:
+            return "External ID"
         case .uknownIdentity:
             return "Unknown"
         }
@@ -225,6 +227,8 @@ public struct ParraIdentity: Codable, Equatable, Hashable, Identifiable {
             return phoneNumber
         case .anonymous:
             return "N/A"
+        case .externalId:
+            return externalId
         case .uknownIdentity:
             return "N/A"
         }
