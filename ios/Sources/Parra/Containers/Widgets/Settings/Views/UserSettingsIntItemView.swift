@@ -37,8 +37,9 @@ struct UserSettingsIntItemView: View {
 
             ParraStepper(
                 value: $currentValue,
-                minQuantity: value.minValue,
-                maxQuantity: value.maxValue
+                minQuantity: value.minValue ?? 1,
+                maxQuantity: value.maxValue ?? .max,
+                step: 1
             )
             .buttonStyle(BorderlessButtonStyle())
         }

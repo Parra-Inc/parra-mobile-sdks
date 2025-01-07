@@ -7,18 +7,20 @@
 
 import SwiftUI
 
-public struct ParraStepper: View {
+public struct ParraStepper<T: Strideable>: View {
     // MARK: - Lifecycle
 
     public init(
-        value: Binding<Int>,
-        minQuantity: Int? = 1,
-        maxQuantity: Int? = .max,
+        value: Binding<T>,
+        minQuantity: T,
+        maxQuantity: T,
+        step: T.Stride,
         isLoading: Bool = false
     ) {
         self._value = value
-        self.minQuantity = minQuantity ?? 1
-        self.maxQuantity = maxQuantity ?? .max
+        self.minQuantity = minQuantity
+        self.maxQuantity = maxQuantity
+        self.step = step
         self.isLoading = isLoading
     }
 
@@ -27,7 +29,7 @@ public struct ParraStepper: View {
     public var body: some View {
         HStack(spacing: 8) {
             Button {
-                value -= 1
+                value = value.advanced(by: -step)
             } label: {
                 Text("－")
                     .foregroundStyle(
@@ -45,10 +47,12 @@ public struct ParraStepper: View {
                 ProgressView()
                     .frame(width: 16, height: 16, alignment: .center)
             } else {
-                Text(value.formatted())
+                Text("\(value)")
                     .foregroundStyle(Color(UIColor.darkText))
+                    .font(.caption)
+                    .fontDesign(.monospaced)
                     .frame(
-                        minWidth: 16
+                        width: 28
                     )
                     .layoutPriority(15)
                     .lineLimit(1)
@@ -56,7 +60,7 @@ public struct ParraStepper: View {
             }
 
             Button {
-                value += 1
+                value = value.advanced(by: step)
             } label: {
                 Text("＋")
                     .foregroundStyle(
@@ -76,19 +80,20 @@ public struct ParraStepper: View {
         .background {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(
-                    parraTheme.palette.primary.shade400.opacity(0.4)
+                    parraTheme.palette.primary.opacity(0.25)
                 )
         }
     }
 
     // MARK: - Internal
 
-    @Binding var value: Int
-    let minQuantity: Int
-    let maxQuantity: Int
+    @Binding var value: T
+    let minQuantity: T
+    let maxQuantity: T
+    let step: T.Stride
     let isLoading: Bool
 
-    var allowedRange: ClosedRange<Int> {
+    var allowedRange: ClosedRange<T> {
         minQuantity ... maxQuantity
     }
 
