@@ -51,7 +51,8 @@ extension FeedbackFormWidget {
                 fields: formData.fields.elements.map { field in
                     // We only want the first focusable field to auto-focus.
                     let isInput = field.type == .text || field.type == .input
-                    let shouldAutoFocus = isInput && !hasSetAutoFocusField
+                    let shouldAutoFocus = isInput && !hasSetAutoFocusField && !UIDevice
+                        .isIpad
 
                     if shouldAutoFocus {
                         hasSetAutoFocusField = true
