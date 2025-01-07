@@ -18,7 +18,8 @@ private var parraInternalSingleton: ParraInternal?
 // if multiple instances exist at once.
 @MainActor
 private func getParraInternalSingleton(
-    configuration: ParraConfiguration
+    configuration: ParraConfiguration,
+    authenticationMethod: ParraAuthType
 ) -> ParraInternal {
     if let parraInternalSingleton {
         return parraInternalSingleton
@@ -26,7 +27,7 @@ private func getParraInternalSingleton(
 
     let instance = ParraInternal.createParraInstance(
         appState: ParraAppState.shared,
-        authenticationMethod: .parra,
+        authenticationMethod: authenticationMethod,
         configuration: configuration
     )
 
@@ -108,6 +109,7 @@ public struct ParraApp<
         applicationId: String,
         appDelegate: ParraAppDelegate<SceneDelegateClass>,
         configuration: ParraConfiguration = .init(),
+        authenticationMethod: ParraAuthType = .parra,
         @SceneBuilder makeScene: @MainActor @escaping () -> Content,
         performLaunchPrerequisite: (
             (ParraAuthState, ParraAppInfo) async throws -> Void
@@ -121,10 +123,13 @@ public struct ParraApp<
 
         self.makeScene = makeScene
         self._urlHandler = State(initialValue: urlHandler)
-        self._performLaunchPrerequisite = State(initialValue: performLaunchPrerequisite)
+        self._performLaunchPrerequisite = State(
+            initialValue: performLaunchPrerequisite
+        )
 
         let parraInternal = getParraInternalSingleton(
-            configuration: configuration
+            configuration: configuration,
+            authenticationMethod: authenticationMethod
         )
 
         self._parraInternal = State(
