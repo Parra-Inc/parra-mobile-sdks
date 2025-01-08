@@ -125,11 +125,11 @@ public struct ParraColorPalette {
 
     public static let defaultLight = ParraColorPalette(
         primary: ParraColorSwatch(
-            primary: Color.accentColor,
+            primary: .accentColor,
             name: "Primary"
         ),
         secondary: ParraColorSwatch(
-            primary: Color.secondary,
+            primary: .secondary,
             name: "Secondary"
         ),
         primaryBackground: Color(UIColor.systemBackground),
@@ -151,7 +151,7 @@ public struct ParraColorPalette {
             name: "Secondary Separator"
         ),
         primaryChipText: ParraColorSwatch(
-            primary: Color.accentColor,
+            primary: .accentColor,
             name: "Primary Chip Text"
         ).shade700.toSwatch(),
         secondaryChipText: ParraColorSwatch(
@@ -159,7 +159,7 @@ public struct ParraColorPalette {
             name: "Secondary Chip Text"
         ),
         primaryChipBackground: ParraColorSwatch(
-            primary: Color.accentColor,
+            primary: .accentColor,
             name: "Primary Chip Background"
         ).shade400.toSwatch(),
         secondaryChipBackground: ParraColorSwatch(
@@ -174,11 +174,11 @@ public struct ParraColorPalette {
 
     public static let defaultDark = ParraColorPalette(
         primary: ParraColorSwatch(
-            primary: Color.accentColor,
+            primary: .accentColor,
             name: "Primary"
         ),
         secondary: ParraColorSwatch(
-            primary: Color.secondary,
+            primary: .secondary,
             name: "Secondary"
         ),
         primaryBackground: Color(UIColor.systemBackground),
@@ -208,7 +208,7 @@ public struct ParraColorPalette {
             name: "Secondary Chip Text"
         ),
         primaryChipBackground: ParraColorSwatch(
-            primary: Color.accentColor,
+            primary: .accentColor,
             name: "Primary Chip Background"
         ).shade600.toSwatch(),
         secondaryChipBackground: ParraColorSwatch(

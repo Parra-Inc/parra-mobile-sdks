@@ -42,7 +42,7 @@ struct ReactionButtonView: View {
                 case .custom:
                     if let url = URL(string: reaction.value) {
                         componentFactory.buildAsyncImage(
-                            config: ParraImageConfig(
+                            config: ParraAsyncImageConfig(
                                 aspectRatio: 1.0,
                                 contentMode: .fit
                             ),

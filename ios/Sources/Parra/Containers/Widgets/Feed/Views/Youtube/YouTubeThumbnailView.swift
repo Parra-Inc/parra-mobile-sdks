@@ -28,7 +28,7 @@ struct YouTubeThumbnailView: View {
             alignment: .center
         ) {
             componentFactory.buildAsyncImage(
-                config: ParraImageConfig(contentMode: .fill),
+                config: ParraAsyncImageConfig(contentMode: .fill),
                 content: ParraAsyncImageContent(
                     url: thumb.url,
                     originalSize: CGSize(

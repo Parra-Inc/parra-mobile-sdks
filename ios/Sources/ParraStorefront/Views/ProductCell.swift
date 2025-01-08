@@ -83,7 +83,7 @@ struct ProductCell: View {
                     )
 
                     parraComponentFactory.buildAsyncImage(
-                        config: ParraImageConfig(
+                        config: ParraAsyncImageConfig(
                             contentMode: .fill
                         ),
                         content: ParraAsyncImageContent(

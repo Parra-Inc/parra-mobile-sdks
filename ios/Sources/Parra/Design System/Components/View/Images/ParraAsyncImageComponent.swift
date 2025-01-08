@@ -12,7 +12,7 @@ public struct ParraAsyncImageComponent: View, Equatable {
     // MARK: - Lifecycle
 
     init(
-        config: ParraImageConfig,
+        config: ParraAsyncImageConfig,
         content: ParraAsyncImageContent,
         attributes: ParraAttributes.AsyncImage
     ) {
@@ -23,21 +23,33 @@ public struct ParraAsyncImageComponent: View, Equatable {
 
     // MARK: - Public
 
-    public let config: ParraImageConfig
+    public let config: ParraAsyncImageConfig
     public let content: ParraAsyncImageContent
     public let attributes: ParraAttributes.AsyncImage
 
     public var body: some View {
         CachedAsyncImage(
-            url: content.url,
+            urlRequest: URLRequest(
+                url: content.url,
+                cachePolicy: config.cachePolicy,
+                timeoutInterval: config.timeoutInterval
+            ),
             urlCache: URLSessionConfiguration.apiConfiguration
                 .urlCache ?? .shared,
             transaction: Transaction(
                 animation: .easeIn(duration: 0.35)
             ),
-            content: imageContent
+            content: { phase in
+                imageContent(for: phase)
+                    .transition(.opacity)
+                    .aspectRatio(
+                        config.aspectRatio,
+                        contentMode: config.contentMode
+                    )
+            }
         )
         .applyAsyncImageAttributes(attributes, using: parraTheme)
+        .clipped()
     }
 
     public static func == (
@@ -66,12 +78,6 @@ public struct ParraAsyncImageComponent: View, Equatable {
         case .success(let image):
             image
                 .resizable()
-                .transition(.opacity)
-                .aspectRatio(
-                    config.aspectRatio,
-                    contentMode: config.contentMode
-                )
-                .clipped()
         case .failure:
             renderBlurHash(for: phase)
                 .transition(.opacity)
@@ -158,49 +164,57 @@ public struct ParraAsyncImageComponent: View, Equatable {
 
 #Preview {
     ParraViewPreview { componentFactory in
-        VStack {
-            Spacer()
-
-            componentFactory.buildAsyncImage(
-                config: .init(contentMode: .fill),
-                content: ParraAsyncImageContent(
-                    url: URL(
-                        string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
-                    )!
-                ),
-                localAttributes: .init(
-                    size: CGSize(width: 320, height: 140)
+        ScrollView {
+            VStack(spacing: 24) {
+                componentFactory.buildAsyncImage(
+                    content: ParraAsyncImageContent(
+                        url: URL(
+                            string: "https://parra-cdn.com/tenants/201cbcf0-b5d6-4079-9e4d-177ae04cc9f4/creator-updates/0815cbd2-8168-46f0-8881-fac8e7fd9661/attachments/afe3eaf7-b7f5-48df-96d3-a1ea3471419a.png"
+                        )!,
+                        blurHash: "UhBzFdXS?dX8eDWXnQWCtTjGWWjIaPj?fkj?",
+                        originalSize: CGSize(width: 1_075, height: 2_048)
+                    )
                 )
-            )
+                .background(.red)
 
-            Spacer()
-
-            componentFactory.buildAsyncImage(
-                config: .init(contentMode: .fill),
-                content: ParraAsyncImageContent(
-                    url: URL(
-                        string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100"
-                    )!
-                ),
-                localAttributes: .init(
-                    size: CGSize(width: 320, height: 140)
+                componentFactory.buildAsyncImage(
+                    config: .init(contentMode: .fill),
+                    content: ParraAsyncImageContent(
+                        url: URL(
+                            string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
+                        )!
+                    ),
+                    localAttributes: .init(
+                        size: CGSize(width: 320, height: 140)
+                    )
                 )
-            )
+                .background(.green)
 
-            Spacer()
-
-            componentFactory.buildAsyncImage(
-                content: ParraAsyncImageContent(
-                    url: URL(
-                        string: "https://images.unsplash.com/photo-1636819488524-1f019c4efsdfsd"
-                    )!
-                ),
-                localAttributes: .init(
-                    size: CGSize(width: 320, height: 140)
+                componentFactory.buildAsyncImage(
+                    config: .init(contentMode: .fill),
+                    content: ParraAsyncImageContent(
+                        url: URL(
+                            string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100"
+                        )!
+                    ),
+                    localAttributes: .init(
+                        size: CGSize(width: 320, height: 140)
+                    )
                 )
-            )
+                .background(.blue)
 
-            Spacer()
+                componentFactory.buildAsyncImage(
+                    content: ParraAsyncImageContent(
+                        url: URL(
+                            string: "https://images.unsplash.com/photo-1636819488524-1f019c4efsdfsd"
+                        )!
+                    ),
+                    localAttributes: .init(
+                        size: CGSize(width: 320, height: 140)
+                    )
+                )
+                .background(.purple)
+            }
         }
     }
 }

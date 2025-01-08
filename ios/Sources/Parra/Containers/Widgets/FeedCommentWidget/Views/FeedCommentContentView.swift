@@ -19,7 +19,6 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
         HStack(alignment: .top, spacing: mainPadding.width) {
             withContent(content: comment.user.avatar) { avatar in
                 componentFactory.buildAsyncImage(
-                    config: ParraImageConfig(),
                     content: ParraAsyncImageContent(
                         avatar,
                         preferredThumbnailSize: .sm

@@ -38,7 +38,7 @@ struct CartLineItemView: View {
             if let image = lineItem.image {
                 NavigationLink(value: lineItem) {
                     componentFactory.buildAsyncImage(
-                        config: ParraImageConfig(
+                        config: ParraAsyncImageConfig(
                             aspectRatio: 1.0,
                             contentMode: .fit
                         ),

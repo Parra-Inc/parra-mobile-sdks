@@ -50,6 +50,9 @@ struct FeedCreatorUpdateHeaderView: View {
         HStack(spacing: 12) {
             if let avatar = sender.avatar {
                 componentFactory.buildAsyncImage(
+                    config: ParraAsyncImageConfig(
+                        cachePolicy: .returnCacheDataElseLoad
+                    ),
                     content: ParraAsyncImageContent(
                         avatar,
                         preferredThumbnailSize: .sm

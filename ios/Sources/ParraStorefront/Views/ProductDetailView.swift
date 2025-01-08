@@ -38,7 +38,7 @@ struct ProductDetailView: View {
                     )
 
                     componentFactory.buildAsyncImage(
-                        config: ParraImageConfig(
+                        config: ParraAsyncImageConfig(
                             aspectRatio: 1.0,
                             contentMode: .fill
                         ),

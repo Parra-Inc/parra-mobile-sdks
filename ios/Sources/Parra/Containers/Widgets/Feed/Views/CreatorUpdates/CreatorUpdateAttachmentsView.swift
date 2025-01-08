@@ -368,7 +368,7 @@ struct CreatorUpdateAttachmentsView: View {
         } label: {
             Color.clear.background {
                 componentFactory.buildAsyncImage(
-                    config: ParraImageConfig(
+                    config: ParraAsyncImageConfig(
                         contentMode: .fill
                     ),
                     content: ParraAsyncImageContent(
@@ -401,7 +401,7 @@ struct CreatorUpdateAttachmentsView: View {
             Color.clear.background {
                 ZStack {
                     componentFactory.buildAsyncImage(
-                        config: ParraImageConfig(
+                        config: ParraAsyncImageConfig(
                             contentMode: .fill
                         ),
                         content: ParraAsyncImageContent(

@@ -155,7 +155,7 @@ struct FeedContentCardView: View {
                 alignment: .center
             ) {
                 componentFactory.buildAsyncImage(
-                    config: ParraImageConfig(contentMode: .fill),
+                    config: ParraAsyncImageConfig(contentMode: .fill),
                     content: ParraAsyncImageContent(
                         content,
                         preferredThumbnailSize: .recommended(
