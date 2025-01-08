@@ -54,6 +54,12 @@ class _LegalInfoView: UIView, UITextViewDelegate {
         )
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        textView.center = center
+    }
+
     func updatedLegalInfo(
         _ legalInfo: ParraLegalInfo,
         with theme: ParraTheme
