@@ -33,7 +33,7 @@ public struct ParraStepper<T: Strideable>: View {
             } label: {
                 Text("－")
                     .foregroundStyle(
-                        Color(UIColor.darkGray)
+                        theme.palette.primaryChipText.toParraColor()
                             .opacity(value <= allowedRange.lowerBound ? 0.3 : 1)
                     )
                     .font(.system(size: 22))
@@ -48,7 +48,9 @@ public struct ParraStepper<T: Strideable>: View {
                     .frame(width: 16, height: 16, alignment: .center)
             } else {
                 Text("\(value)")
-                    .foregroundStyle(Color(UIColor.darkText))
+                    .foregroundStyle(
+                        theme.palette.primaryChipText.toParraColor()
+                    )
                     .font(.caption)
                     .fontDesign(.monospaced)
                     .frame(
@@ -64,7 +66,7 @@ public struct ParraStepper<T: Strideable>: View {
             } label: {
                 Text("＋")
                     .foregroundStyle(
-                        Color(UIColor.darkGray)
+                        theme.palette.primaryChipText.toParraColor()
                             .opacity(value >= allowedRange.upperBound ? 0.3 : 1)
                     )
                     .font(.system(size: 22))
@@ -80,7 +82,7 @@ public struct ParraStepper<T: Strideable>: View {
         .background {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(
-                    parraTheme.palette.primary.opacity(0.25)
+                    theme.palette.primary.opacity(0.25)
                 )
         }
     }
@@ -99,5 +101,5 @@ public struct ParraStepper<T: Strideable>: View {
 
     // MARK: - Private
 
-    @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraTheme) private var theme
 }
