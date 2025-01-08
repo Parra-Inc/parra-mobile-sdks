@@ -562,6 +562,18 @@ private extension URLSession {
     ) async throws -> (Data, URLResponse, URLSessionTaskMetrics?) {
         let controller = URLSessionTaskController()
 
+        var request = request
+        request.setValue(
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            forHTTPHeaderField: "User-Agent"
+        )
+//        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", forHTTPHeaderField: "Accept")
+//        request.setValue("en-US,en;q=0.5", forHTTPHeaderField: "Accept-Language")
+//        request.setValue("keep-alive", forHTTPHeaderField: "Connection")
+
+        // Some sites may also require referrer
+//        request.setValue("https://example.com", forHTTPHeaderField: "Referer")
+
         let (data, response) = try await data(
             for: request,
             delegate: controller
