@@ -16,34 +16,40 @@ struct FeedCreatorUpdateDetailView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let container: FeedCommentWidget = parra.parraInternal
-                .containerRenderer.renderContainer(
-                    params: FeedCommentWidget.ContentObserver.InitialParams(
-                        feedItem: feedItem,
-                        config: .default,
-                        commentsResponse: nil,
-                        api: parra.parraInternal.api
-                    ),
-                    config: FeedCommentWidgetConfig(
-                        headerViewBuilder: {
-                            FeedCreatorUpdateDetailHeaderView(
-                                creatorUpdate: creatorUpdate,
-                                feedItemId: feedItem.id,
-                                containerGeometry: geometry,
-                                reactor: reactor
-                            )
-                        }
-                    ),
-                    contentTransformer: nil
-                )
-
-            container
-                .toolbarBackground(.visible, for: .navigationBar)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        ParraDismissButton()
-                    }
+//            let container: FeedCommentWidget = parra.parraInternal
+//                .containerRenderer.renderContainer(
+//                    params: FeedCommentWidget.ContentObserver.InitialParams(
+//                        feedItem: feedItem,
+//                        config: .default,
+//                        commentsResponse: nil,
+//                        api: parra.parraInternal.api
+//                    ),
+//                    config: FeedCommentWidgetConfig(
+//                        headerViewBuilder: {
+//                            FeedCreatorUpdateDetailHeaderView(
+//                                creatorUpdate: creatorUpdate,
+//                                feedItemId: feedItem.id,
+//                                containerGeometry: geometry,
+//                                reactor: reactor
+//                            )
+//                        }
+//                    ),
+//                    contentTransformer: nil
+//                )
+//
+//            container
+            FeedCreatorUpdateDetailHeaderView(
+                creatorUpdate: creatorUpdate,
+                feedItemId: feedItem.id,
+                containerGeometry: geometry,
+                reactor: reactor
+            )
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    ParraDismissButton()
                 }
+            }
         }
     }
 
