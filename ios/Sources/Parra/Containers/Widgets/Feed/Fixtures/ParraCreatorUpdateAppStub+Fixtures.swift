@@ -69,6 +69,28 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                     ),
                     context: "ctx"
                 )
+            ),
+            ParraCreatorUpdateAppStub(
+                id: .uuid,
+                createdAt: .now,
+                updatedAt: .now,
+                deletedAt: nil,
+                title: "Week 8 Picks",
+                body: "I couldn't believe we landed so many great picks last week. This week is going to be wild.",
+                sender: ParraCreatorUpdateSenderStub(
+                    id: .uuid,
+                    name: "Mick M.",
+                    avatar: ParraImageAsset(
+                        id: .uuid,
+                        size: CGSize(width: 4_284, height: 4_284),
+                        url: URL(
+                            string: "https://parra-cdn.com/users/9a311ff4-6af9-445e-a3df-6900787e2198/avatar/807a9033-0d1b-41d8-9102-3dc47f0c3e32.jpg"
+                        )!
+                    ),
+                    verified: true
+                ),
+                attachments: [],
+                attachmentPaywall: nil
             )
         ]
     }

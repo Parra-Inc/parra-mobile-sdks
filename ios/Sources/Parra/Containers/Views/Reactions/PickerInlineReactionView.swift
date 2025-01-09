@@ -55,7 +55,7 @@ struct PickerInlineReactionView: View {
     ParraAppPreview {
         FeedReactionView(
             feedItemId: .uuid,
-            reactor: ObservedObject(
+            reactor: StateObject(
                 wrappedValue: Reactor(
                     feedItemId: .uuid,
                     reactionOptionGroups: ParraReactionOptionGroup.validStates(),

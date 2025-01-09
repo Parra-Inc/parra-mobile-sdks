@@ -24,7 +24,7 @@ struct FeedContentCardView: View {
         self.containerGeometry = containerGeometry
         self.spacing = spacing
         self.performActionForFeedItemData = performActionForFeedItemData
-        self._reactor = ObservedObject(
+        self._reactor = StateObject(
             wrappedValue: Reactor(
                 feedItemId: feedItemId,
                 reactionOptionGroups: reactionOptions ?? [],
@@ -125,7 +125,7 @@ struct FeedContentCardView: View {
 
     @State private var isConfirmationPresented: Bool = false
 
-    @ObservedObject private var reactor: Reactor
+    @StateObject private var reactor: Reactor
 
     @Environment(\.parra) private var parra
     @Environment(\.parraComponentFactory) private var componentFactory

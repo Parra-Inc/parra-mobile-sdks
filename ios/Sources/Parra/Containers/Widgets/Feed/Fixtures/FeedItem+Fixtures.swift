@@ -116,6 +116,45 @@ extension ParraFeedItem: ParraFixture {
                 deletedAt: nil,
                 type: .creatorUpdate,
                 data: .creatorUpdate(
+                    ParraCreatorUpdateAppStub.validStates()[1]
+                ),
+                reactionOptions: ParraReactionOptionGroup.validStates(),
+                reactions: ParraReactionSummary.validStates(),
+                comments: ParraCommentSummary(disabled: true, commentCount: 0)
+            ),
+            ParraFeedItem(
+                id: .uuid,
+                createdAt: .now.daysAgo(0.5),
+                updatedAt: .now.daysAgo(0.5),
+                deletedAt: nil,
+                type: .creatorUpdate,
+                data: .creatorUpdate(
+                    ParraCreatorUpdateAppStub.validStates()[1]
+                ),
+                reactionOptions: nil,
+                reactions: nil,
+                comments: nil
+            ),
+            ParraFeedItem(
+                id: .uuid,
+                createdAt: .now.daysAgo(0.5),
+                updatedAt: .now.daysAgo(0.5),
+                deletedAt: nil,
+                type: .creatorUpdate,
+                data: .creatorUpdate(
+                    ParraCreatorUpdateAppStub.validStates()[0]
+                ),
+                reactionOptions: [],
+                reactions: [],
+                comments: ParraCommentSummary(disabled: true, commentCount: 0)
+            ),
+            ParraFeedItem(
+                id: .uuid,
+                createdAt: .now.daysAgo(0.5),
+                updatedAt: .now.daysAgo(0.5),
+                deletedAt: nil,
+                type: .creatorUpdate,
+                data: .creatorUpdate(
                     ParraCreatorUpdateAppStub.validStates()[0]
                 ),
                 reactionOptions: ParraReactionOptionGroup.validStates(),

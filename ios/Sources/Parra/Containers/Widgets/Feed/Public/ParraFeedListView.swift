@@ -93,6 +93,10 @@ public struct ParraFeedListView: View {
                         performActionForFeedItemData: performActionForFeedItemData
                     )
                 )
+                .id(item.id)
+                .onAppear {
+                    itemAtIndexDidAppear(index)
+                }
             } else {
                 EmptyView()
                     .id(item.id)

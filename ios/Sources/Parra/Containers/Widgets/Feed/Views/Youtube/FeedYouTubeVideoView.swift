@@ -26,7 +26,7 @@ struct FeedYouTubeVideoView: View {
         self.containerGeometry = containerGeometry
         self.spacing = spacing
         self.performActionForFeedItemData = performActionForFeedItemData
-        self._reactor = ObservedObject(
+        self._reactor = StateObject(
             wrappedValue: Reactor(
                 feedItemId: feedItemId,
                 reactionOptionGroups: reactionOptions ?? [],
@@ -148,7 +148,7 @@ struct FeedYouTubeVideoView: View {
     @Environment(\.parraUserEntitlements) private var entitlements
     @Environment(\.redactionReasons) private var redactionReasons
 
-    @ObservedObject private var reactor: Reactor
+    @StateObject private var reactor: Reactor
 
     @State private var isPresentingModal: Bool = false
 

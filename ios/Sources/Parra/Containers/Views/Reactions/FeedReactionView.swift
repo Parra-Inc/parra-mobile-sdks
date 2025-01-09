@@ -12,7 +12,7 @@ struct FeedReactionView: View {
 
     init?(
         feedItemId: String,
-        reactor: ObservedObject<Reactor>
+        reactor: StateObject<Reactor>
     ) {
         self.feedItemId = feedItemId
         self._reactor = reactor
@@ -81,14 +81,14 @@ struct FeedReactionView: View {
 
     @State private var isReactionPickerPresented: Bool = false
     @State private var pickerSelectedReaction: ParraReactionOption?
-    @ObservedObject private var reactor: Reactor
+    @StateObject private var reactor: Reactor
 }
 
 #Preview {
     ParraAppPreview {
         FeedReactionView(
             feedItemId: .uuid,
-            reactor: ObservedObject(
+            reactor: StateObject(
                 wrappedValue: Reactor(
                     feedItemId: .uuid,
                     reactionOptionGroups: ParraReactionOptionGroup.validStates(),

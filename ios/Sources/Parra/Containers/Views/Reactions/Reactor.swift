@@ -139,6 +139,8 @@ class Reactor: ObservableObject {
             return nil
         }
 
+        logger.trace("Submitting reaction")
+
         var copiedReactions = currentReactions
 
         defer {
@@ -279,6 +281,8 @@ class Reactor: ObservableObject {
         guard let update else {
             return nil
         }
+
+        logger.trace("Updating reaction")
 
         var copiedReactions = currentReactions
 

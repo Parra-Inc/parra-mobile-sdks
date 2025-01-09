@@ -24,7 +24,7 @@ struct FeedCreatorUpdateView: View {
         params: FeedCreatorUpdateParams
     ) {
         self.params = params
-        self._reactor = ObservedObject(
+        self._reactor = StateObject(
             wrappedValue: Reactor(
                 feedItemId: params.feedItem.id,
                 reactionOptionGroups: params.reactionOptions ?? [],
@@ -134,7 +134,7 @@ struct FeedCreatorUpdateView: View {
     // MARK: - Private
 
     @State private var isPresentingModal: Bool = false
-    @ObservedObject private var reactor: Reactor
+    @StateObject private var reactor: Reactor
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme

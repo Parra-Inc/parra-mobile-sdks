@@ -12,7 +12,7 @@ struct FeedYouTubeVideoDetailView: View {
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
     let feedItemId: String
-    @ObservedObject var reactor: Reactor
+    @StateObject var reactor: Reactor
 
     var body: some View {
         ScrollView {
