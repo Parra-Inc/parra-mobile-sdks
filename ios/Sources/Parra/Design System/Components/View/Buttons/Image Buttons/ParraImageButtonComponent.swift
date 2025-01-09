@@ -36,7 +36,7 @@ public struct ParraImageButtonComponent: View {
         }, label: {
             EmptyView()
         })
-        .disabled(content.isDisabled)
+        .disabled(content.isDisabled || content.isLoading)
         .buttonStyle(style)
     }
 
