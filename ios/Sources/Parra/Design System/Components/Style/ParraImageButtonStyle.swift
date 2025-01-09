@@ -25,11 +25,7 @@ public struct ParraImageButtonStyle: ButtonStyle {
             attributes.normal
         }
 
-        componentFactory.buildImage(
-            content: content.image,
-            localAttributes: currentAttributes.image
-        )
-        .applyImageButtonAttributes(
+        innerContent(with: currentAttributes).applyImageButtonAttributes(
             currentAttributes,
             using: parraTheme
         )
@@ -39,4 +35,18 @@ public struct ParraImageButtonStyle: ButtonStyle {
 
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.parraComponentFactory) private var componentFactory
+
+    @ViewBuilder
+    private func innerContent(
+        with attributes: ParraAttributes.ImageButton.StatefulAttributes
+    ) -> some View {
+        if content.isLoading {
+            ProgressView()
+        } else {
+            componentFactory.buildImage(
+                content: content.image,
+                localAttributes: attributes.image
+            )
+        }
+    }
 }
