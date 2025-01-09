@@ -177,7 +177,13 @@ struct FeedContentCardView: View {
         }
     }
 
-    private var topBar: some View {
+    @ViewBuilder private var topBar: some View {
+        let color = colorScheme == .dark
+            ? palette.primaryText.shade950.toParraColor()
+            : palette.primaryText.shade200.toParraColor()
+
+        let backgroundColor = palette.secondary.toParraColor().opacity(0.8)
+
         HStack(alignment: .top) {
             if let badge = contentCard.badge, redactionReasons.isEmpty {
                 componentFactory.buildLabel(
@@ -185,18 +191,14 @@ struct FeedContentCardView: View {
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
                             style: .caption2,
-                            color: colorScheme == .dark
-                                ? palette.primaryText.shade950.toParraColor()
-                                : palette.primaryText.shade200.toParraColor(),
+                            color: color,
                             alignment: .leading
                         ),
                         cornerRadius: .full,
                         padding: .custom(
                             EdgeInsets(vertical: 0, horizontal: 8)
                         ),
-                        background: palette.secondary
-                            .toParraColor()
-                            .opacity(0.8),
+                        background: backgroundColor,
                         frame: .fixed(
                             .init(height: 20, alignment: .leading)
                         )
@@ -208,7 +210,7 @@ struct FeedContentCardView: View {
 
             if hasAction && redactionReasons.isEmpty {
                 ZStack(alignment: .center) {
-                    Color(palette.secondaryChipBackground.toParraColor())
+                    backgroundColor
                         .frame(width: 20, height: 20)
                         .clipShape(
                             .circle,
@@ -216,13 +218,13 @@ struct FeedContentCardView: View {
                         )
 
                     componentFactory.buildImage(
-                        content: .symbol("link.circle.fill", .hierarchical),
+                        content: .symbol("link", .hierarchical),
                         localAttributes: ParraAttributes.Image(
-                            tint: palette.secondaryChipText.toParraColor(),
+                            tint: color,
                             background: .clear
                         )
                     )
-                    .frame(width: 20, height: 20)
+                    .frame(width: 11, height: 11)
                 }
             }
         }
