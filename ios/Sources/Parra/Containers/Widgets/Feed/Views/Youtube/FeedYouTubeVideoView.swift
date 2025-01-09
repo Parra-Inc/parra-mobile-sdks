@@ -117,7 +117,7 @@ struct FeedYouTubeVideoView: View {
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
         .buttonStyle(.plain)
-        .safeAreaPadding(.horizontal)
+        .safeAreaPadding(.horizontal, 16)
         .padding(.vertical, spacing)
         .sheet(isPresented: $isPresentingModal) {} content: {
             NavigationStack {
@@ -154,7 +154,7 @@ struct FeedYouTubeVideoView: View {
 
     @ViewBuilder private var thumbnail: some View {
         let thumb = youtubeVideo.thumbnails.maxAvailable
-        let width = containerGeometry.size.width
+        let width = containerGeometry.size.width - 32
         let minHeight = (width / (thumb.width / thumb.height)).rounded(.down)
 
         YouTubeThumbnailView(
@@ -165,10 +165,8 @@ struct FeedYouTubeVideoView: View {
             )
         }
         .frame(
-            idealWidth: width,
-            maxWidth: .infinity,
-            minHeight: minHeight,
-            maxHeight: .infinity
+            width: width,
+            height: minHeight
         )
     }
 }
