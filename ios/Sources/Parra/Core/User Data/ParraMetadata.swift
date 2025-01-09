@@ -63,9 +63,9 @@ public final class ParraMetadata: Codable, Equatable, Hashable,
     }
 
     public func `as`<T>(_ type: T.Type) throws -> T where T: Decodable & Equatable {
-        let data = try JSONEncoder.parraEncoder.encode(rawValue)
+        let data = try JSONEncoder().encode(rawValue)
 
-        return try JSONDecoder.parraDecoder.decode(T.self, from: data)
+        return try JSONDecoder().decode(T.self, from: data)
     }
 
     public func hasValue(for key: String) -> Bool {
