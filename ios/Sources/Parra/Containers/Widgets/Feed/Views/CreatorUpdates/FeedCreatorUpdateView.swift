@@ -69,7 +69,9 @@ struct FeedCreatorUpdateView: View {
                     creatorUpdate: creatorUpdate
                 )
                 .padding(.horizontal, 16)
+                .padding(.bottom, hasAttachments || !hasReactions ? 12 : 0)
 
+                var requiresPad = true
                 if let attachments = creatorUpdate.attachments?.elements,
                    !attachments.isEmpty
                 {
@@ -94,15 +96,15 @@ struct FeedCreatorUpdateView: View {
                             containerGeometry: params.containerGeometry
                         )
                     }
-                    .padding(.top, 8)
                 }
 
-                if reactor.showReactions {
+                if hasReactions {
                     FeedReactionView(
                         feedItemId: params.feedItem.id,
                         reactor: _reactor
                     )
-                    .padding()
+                    .padding(.top, hasAttachments ? 16 : 8)
+                    .padding([.horizontal, .bottom], 16)
                     .frame(
                         maxWidth: .infinity,
                         alignment: .leading
@@ -140,6 +142,18 @@ struct FeedCreatorUpdateView: View {
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.redactionReasons) private var redactionReasons
     @Environment(\.parraUserEntitlements) private var entitlements
+
+    private var hasAttachments: Bool {
+        guard let attachments = creatorUpdate.attachments?.elements else {
+            return false
+        }
+
+        return !attachments.isEmpty
+    }
+
+    private var hasReactions: Bool {
+        return reactor.showReactions
+    }
 
     private var creatorUpdate: ParraCreatorUpdateAppStub {
         return params.creatorUpdate
@@ -184,18 +198,25 @@ public struct TestModel: Codable, Equatable, Hashable, Identifiable {
 #Preview {
     ParraAppPreview {
         GeometryReader { proxy in
-            VStack {
-                FeedCreatorUpdateView(
-                    params: FeedCreatorUpdateParams(
-                        creatorUpdate: ParraCreatorUpdateAppStub.validStates()[0],
-                        feedItem: .validStates()[0],
-                        reactionOptions: ParraReactionOptionGroup.validStates(),
-                        reactions: ParraReactionSummary.validStates(),
-                        containerGeometry: proxy,
-                        spacing: 18,
-                        performActionForFeedItemData: { _ in }
-                    )
-                )
+            ScrollView {
+                ForEach(ParraFeedItem.validStates()) { feedItem in
+                    switch feedItem.data {
+                    case .creatorUpdate(let creatorUpdate):
+                        FeedCreatorUpdateView(
+                            params: FeedCreatorUpdateParams(
+                                creatorUpdate: creatorUpdate,
+                                feedItem: feedItem,
+                                reactionOptions: feedItem.reactionOptions?.elements,
+                                reactions: feedItem.reactions?.elements,
+                                containerGeometry: proxy,
+                                spacing: 18.0,
+                                performActionForFeedItemData: { _ in }
+                            )
+                        )
+                    default:
+                        EmptyView()
+                    }
+                }
             }
         }
     }
