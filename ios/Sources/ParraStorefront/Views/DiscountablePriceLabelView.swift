@@ -11,22 +11,14 @@ struct DiscountablePriceLabelView: View {
     // MARK: - Lifecycle
 
     init(
-        product: ParraProduct,
-        location: Location
+        product: ParraProduct
     ) {
         self.product = product
-        self.location = location
     }
 
     // MARK: - Internal
 
-    enum Location {
-        case productList
-        case productDetail
-    }
-
     let product: ParraProduct
-    let location: Location
 
     var body: some View {
         HStack(spacing: 3) {
@@ -43,7 +35,7 @@ struct DiscountablePriceLabelView: View {
             )
 
             Text(minPriceString)
-                .font(location == .productList ? .callout : .subheadline)
+                .font(.callout)
                 .fontWeight(.medium)
                 .foregroundStyle(
                     isDiscounted ? parraTheme.palette.error.toParraColor() : .secondary
@@ -51,7 +43,7 @@ struct DiscountablePriceLabelView: View {
 
             if isDiscounted {
                 Text(maxPriceString)
-                    .font(location == .productList ? .callout : .subheadline)
+                    .font(.callout)
                     .foregroundStyle(
                         .secondary
                     )

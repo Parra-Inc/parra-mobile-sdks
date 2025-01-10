@@ -129,8 +129,7 @@ struct ProductCell: View {
             .lineLimit(1)
 
             DiscountablePriceLabelView(
-                product: product,
-                location: .productList
+                product: product
             )
         }
         .padding(.vertical, 12)

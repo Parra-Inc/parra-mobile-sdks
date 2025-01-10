@@ -12,16 +12,16 @@ struct ProductDetailOptionsView: View {
     // MARK: - Lifecycle
 
     init(
-        product: ParraProduct
+        product: ParraProduct,
+        selectedVariant: Binding<ParraProductVariant>
     ) {
         self.product = product
-
-        self._selectedVariant = State(
-            wrappedValue: product.variants[0]
-        )
+        self._selectedVariant = selectedVariant
     }
 
     // MARK: - Internal
+
+    @Binding var selectedVariant: ParraProductVariant
 
     let product: ParraProduct
 
@@ -82,7 +82,6 @@ struct ProductDetailOptionsView: View {
     // MARK: - Private
 
     @State private var selectedQuantity: UInt = 1
-    @State private var selectedVariant: ParraProductVariant
     @State private var availableQuantity: UInt = .max
 
     @State private var isAlteringCart = false

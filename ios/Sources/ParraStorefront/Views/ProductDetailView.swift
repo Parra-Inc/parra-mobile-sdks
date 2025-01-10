@@ -11,14 +11,100 @@ import UIKit
 
 @MainActor
 struct ProductDetailView: View {
+    // MARK: - Lifecycle
+
+    init(product: ParraProduct) {
+        self.product = product
+
+        _selectedVariant = State(
+            wrappedValue: product.variants[0]
+        )
+    }
+
+    // MARK: - Internal
+
+    let product: ParraProduct
+
+    @State var footerHeight: CGFloat = 0
+
+    var body: some View {
+        @Bindable var dataModel = dataModel
+
+        ScrollView {
+            VStack(alignment: .leading, spacing: 5) {
+                images
+                    .padding(.bottom, 15)
+
+                HStack(alignment: .top) {
+                    Text(product.name)
+                        .font(.title3)
+                        .fontWeight(.bold)
+
+                    Spacer()
+
+                    if let onlineStoreUrl = product.onlineStoreUrl {
+                        ShareLink(item: onlineStoreUrl) {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                    }
+                }
+
+                ProductVariantPriceLabelView(
+                    selectedVariant: $selectedVariant
+                )
+                .padding(.bottom, 5)
+
+                ProductDetailOptionsView(
+                    product: product,
+                    selectedVariant: $selectedVariant
+                )
+                .padding(.bottom, 16)
+
+                description
+
+                Spacer()
+            }
+            .padding([.horizontal, .top])
+        }
+        .background(parraTheme.palette.primaryBackground)
+        .navigationTitle(product.name)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                CartButton(
+                    cartState: $dataModel.cartState
+                )
+            }
+        }
+        .onReceive(
+            NotificationCenter.default
+                .publisher(for: UIApplication.userDidTakeScreenshotNotification)
+        ) { _ in
+            guard let topVc = UIViewController.topMostViewController() else {
+                return
+            }
+
+            let activityVC = UIActivityViewController(
+                activityItems: [product.onlineStoreUrl as Any],
+                applicationActivities: nil
+            )
+
+            Task { @MainActor in
+                try! await Task.sleep(for: .seconds(1))
+
+                topVc.present(activityVC, animated: true)
+            }
+        }
+    }
+
+    // MARK: - Private
+
     @Environment(\.parra) private var parra
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(StorefrontWidget.ContentObserver.self) private var dataModel
 
-    let product: ParraProduct
-
-    @State var footerHeight: CGFloat = 0
+    @State private var selectedVariant: ParraProductVariant
 
     private var images: some View {
         TabView {
@@ -112,76 +198,6 @@ struct ProductDetailView: View {
         } else {
             Text(product.description)
                 .font(.body)
-        }
-    }
-
-    var body: some View {
-        @Bindable var dataModel = dataModel
-
-        ScrollView {
-            VStack(alignment: .leading, spacing: 5) {
-                images
-                    .padding(.bottom, 15)
-
-                HStack(alignment: .top) {
-                    Text(product.name)
-                        .font(.title3)
-                        .fontWeight(.bold)
-
-                    Spacer()
-
-                    if let onlineStoreUrl = product.onlineStoreUrl {
-                        ShareLink(item: onlineStoreUrl) {
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                    }
-                }
-
-                DiscountablePriceLabelView(
-                    product: product,
-                    location: .productDetail
-                )
-                .padding(.bottom, 5)
-
-                ProductDetailOptionsView(
-                    product: product
-                )
-                .padding(.bottom, 16)
-
-                description
-
-                Spacer()
-            }
-            .padding([.horizontal, .top])
-        }
-        .background(parraTheme.palette.primaryBackground)
-        .navigationTitle(product.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                CartButton(
-                    cartState: $dataModel.cartState
-                )
-            }
-        }
-        .onReceive(
-            NotificationCenter.default
-                .publisher(for: UIApplication.userDidTakeScreenshotNotification)
-        ) { _ in
-            guard let topVc = UIViewController.topMostViewController() else {
-                return
-            }
-
-            let activityVC = UIActivityViewController(
-                activityItems: [product.onlineStoreUrl as Any],
-                applicationActivities: nil
-            )
-
-            Task { @MainActor in
-                try! await Task.sleep(for: .seconds(1))
-
-                topVc.present(activityVC, animated: true)
-            }
         }
     }
 }
