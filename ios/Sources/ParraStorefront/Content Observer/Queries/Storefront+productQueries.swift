@@ -13,12 +13,14 @@ extension Storefront.QueryRootQuery {
         count: Int32,
         startCursor: String? = nil,
         endCursor: String? = nil,
+        reverse: Bool? = nil,
         sortKey: Storefront.ProductSortKeys? = nil
     ) -> Storefront.QueryRootQuery {
         return Storefront.buildQuery { $0
             .products(
                 first: count,
                 after: startCursor,
+                reverse: reverse,
                 sortKey: sortKey
             ) { products in
                 appendProductFields(to: products)
@@ -45,6 +47,8 @@ extension Storefront.QueryRootQuery {
                     .handle()
                     .availableForSale()
                     .createdAt()
+                    .updatedAt()
+                    .publishedAt()
                     .featuredImage { $0
                         .id()
                         .altText()
@@ -62,7 +66,6 @@ extension Storefront.QueryRootQuery {
                         }
                     }
                     .onlineStoreUrl()
-                    .publishedAt()
                     .requiresSellingPlan()
                     .tags()
                     .totalInventory()

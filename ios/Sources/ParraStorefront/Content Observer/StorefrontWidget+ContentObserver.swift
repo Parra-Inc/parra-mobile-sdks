@@ -22,6 +22,58 @@ private let logger = ParraLogger(category: "Parra Storefront Content Observer")
 
 // MARK: - StorefrontWidget.ContentObserver
 
+enum ProductSortOrder: CaseIterable {
+    case bestSelling
+    case oldestToNewest
+    case newestToOldest
+    case lowestToHighest
+    case highestToLowest
+    case alphabeticalAToZ
+    case alphabeticalZToA
+
+    // MARK: - Internal
+
+    var shopifySort: (Bool, Storefront.ProductSortKeys) {
+        switch self {
+        case .bestSelling:
+            return (false, .bestSelling)
+        case .oldestToNewest:
+            return (false, .createdAt)
+        case .newestToOldest:
+            return (true, .createdAt)
+        case .lowestToHighest:
+            return (false, .price)
+        case .highestToLowest:
+            return (true, .price)
+        case .alphabeticalAToZ:
+            return (false, .title)
+        case .alphabeticalZToA:
+            return (true, .title)
+        }
+    }
+
+    var name: String {
+        switch self {
+        case .bestSelling:
+            return "Best Selling"
+        case .oldestToNewest:
+            return "Date, old to new"
+        case .newestToOldest:
+            return "Date, new to old"
+        case .lowestToHighest:
+            return "Price, low to high"
+        case .highestToLowest:
+            return "Price, high to low"
+        case .alphabeticalAToZ:
+            return "Alphabetically, A-Z"
+        case .alphabeticalZToA:
+            return "Alphabetically, Z-A"
+        }
+    }
+}
+
+// MARK: - StorefrontWidget.ContentObserver
+
 extension StorefrontWidget {
     @Observable
     @MainActor
@@ -77,8 +129,15 @@ extension StorefrontWidget {
         // MARK: - Internal
 
         private(set) var content: Content
+
         let config: ParraStorefrontWidgetConfig
         nonisolated let delegate: ParraStorefrontWidgetDelegate?
+
+        var sortOrder: ProductSortOrder = .newestToOldest {
+            didSet {
+                productPaginator.refresh()
+            }
+        }
 
         var cartState: CartState = .loading {
             didSet {
@@ -497,12 +556,16 @@ extension StorefrontWidget {
                 try await Task.sleep(for: .seconds(0.5))
             }
 
+            let (reverse, sortKey) = sortOrder.shopifySort
+
             let shopifyService = try ParraStorefront.getShopifyService()
             let result = try await shopifyService.performQuery(
                 .productsQuery(
                     count: Int32(pageSize),
                     startCursor: cursor.startCursor,
-                    endCursor: cursor.endCursor
+                    endCursor: cursor.endCursor,
+                    reverse: reverse,
+                    sortKey: sortKey
                 )
             )
 

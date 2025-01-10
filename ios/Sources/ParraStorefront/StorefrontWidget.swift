@@ -5,6 +5,7 @@
 //  Created by Mick MacCallum on 10/12/24.
 //
 
+import Buy
 import Parra
 import ShopifyCheckoutSheetKit
 import SwiftUI
@@ -67,10 +68,18 @@ struct StorefrontWidget: ParraContainer {
                         )
                     }
 
+                    ToolbarItem(placement: .topBarLeading) {
+                        SortButton(sortOrder: $contentObserver.sortOrder)
+                    }
+
                     ToolbarItem(placement: .topBarTrailing) {
                         ParraDismissButton()
                     }
                 } else {
+                    ToolbarItem(placement: .topBarLeading) {
+                        SortButton(sortOrder: $contentObserver.sortOrder)
+                    }
+
                     ToolbarItem(placement: .topBarTrailing) {
                         CartButton(
                             cartState: $contentObserver.cartState
