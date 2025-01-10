@@ -14,10 +14,6 @@ extension JSONEncoder {
         encoder.keyEncodingStrategy = .convertToSnakeCase
         encoder.dateEncodingStrategy = .custom(dateEncoder)
 
-        #if DEBUG
-        encoder.outputFormatting = .prettyPrinted
-        #endif
-
         return encoder
     }()
 
