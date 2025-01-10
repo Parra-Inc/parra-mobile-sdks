@@ -44,7 +44,11 @@ public extension ParraComponentFactory {
             if let originalSize = content.originalSize, config.aspectRatio == nil {
                 ParraAsyncImageConfig(
                     aspectRatio: originalSize.width / originalSize.height,
-                    contentMode: config.contentMode
+                    contentMode: config.contentMode,
+                    blurContent: config.blurContent,
+                    showFailureIndicator: config.showFailureIndicator,
+                    cachePolicy: config.cachePolicy,
+                    timeoutInterval: config.timeoutInterval
                 )
             } else {
                 config

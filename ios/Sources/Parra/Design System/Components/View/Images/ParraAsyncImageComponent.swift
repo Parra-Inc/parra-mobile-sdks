@@ -78,6 +78,7 @@ public struct ParraAsyncImageComponent: View, Equatable {
         case .success(let image):
             image
                 .resizable()
+                .blur(radius: config.blurContent ? 10 : 0, opaque: true)
         case .failure:
             renderBlurHash(for: phase)
                 .transition(.opacity)
@@ -94,8 +95,10 @@ public struct ParraAsyncImageComponent: View, Equatable {
         case .empty:
             ProgressView()
         case .failure:
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(parraTheme.palette.error)
+            if config.showFailureIndicator {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.white)
+            }
         case .success:
             EmptyView()
         default:

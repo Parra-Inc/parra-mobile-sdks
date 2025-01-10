@@ -71,7 +71,6 @@ struct FeedCreatorUpdateView: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, hasAttachments || !hasReactions ? 12 : 0)
 
-                var requiresPad = true
                 if let attachments = creatorUpdate.attachments?.elements,
                    !attachments.isEmpty
                 {

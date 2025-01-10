@@ -369,7 +369,9 @@ struct CreatorUpdateAttachmentsView: View {
             Color.clear.background {
                 componentFactory.buildAsyncImage(
                     config: ParraAsyncImageConfig(
-                        contentMode: .fill
+                        contentMode: .fill,
+                        blurContent: paywalled,
+                        showFailureIndicator: false
                     ),
                     content: ParraAsyncImageContent(
                         image,
@@ -377,7 +379,6 @@ struct CreatorUpdateAttachmentsView: View {
                     )
                 )
                 .equatable()
-                .blur(radius: paywalled ? 10 : 0, opaque: true)
                 .overlay(alignment: .center) {
                     renderPaywallOverlay()
                 }
@@ -402,7 +403,9 @@ struct CreatorUpdateAttachmentsView: View {
                 ZStack {
                     componentFactory.buildAsyncImage(
                         config: ParraAsyncImageConfig(
-                            contentMode: .fill
+                            contentMode: .fill,
+                            blurContent: paywalled,
+                            showFailureIndicator: false
                         ),
                         content: ParraAsyncImageContent(
                             image,
