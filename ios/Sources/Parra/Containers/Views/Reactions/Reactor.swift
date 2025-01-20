@@ -122,13 +122,7 @@ class Reactor: ObservableObject {
             return partialResult + summary.count
         }
 
-        currentReactions = reactions.sorted(by: { l, r in
-            if l.count == r.count {
-                return l.firstReactionAt > r.firstReactionAt
-            } else {
-                return l.count > r.count
-            }
-        })
+        currentReactions = reactions
     }
 
     @MainActor
