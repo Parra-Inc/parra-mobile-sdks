@@ -57,7 +57,8 @@ struct FeedCreatorUpdateDetailHeaderView: View {
             if reactor.showReactions {
                 FeedReactionView(
                     feedItemId: feedItemId,
-                    reactor: _reactor
+                    reactor: _reactor,
+                    attachmentPaywall: creatorUpdate.attachmentPaywall
                 )
                 .padding()
                 .frame(

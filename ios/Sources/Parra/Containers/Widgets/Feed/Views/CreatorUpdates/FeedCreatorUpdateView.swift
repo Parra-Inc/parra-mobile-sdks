@@ -100,7 +100,8 @@ struct FeedCreatorUpdateView: View {
                 if hasReactions {
                     FeedReactionView(
                         feedItemId: params.feedItem.id,
-                        reactor: _reactor
+                        reactor: _reactor,
+                        attachmentPaywall: creatorUpdate.attachmentPaywall
                     )
                     .padding(.top, hasAttachments ? 16 : 8)
                     .padding([.horizontal, .bottom], 16)
