@@ -166,6 +166,10 @@ struct FeedbackFormWidget: ParraContainer {
                     componentFactory.buildTextEditor(
                         config: ParraTextEditorConfig(
                             maxCharacters: config.maxTextFieldCharacters,
+                            keyboardType: UIKeyboardType.default,
+                            textInputAutocapitalization: TextInputAutocapitalization
+                                .sentences,
+                            autocorrectionDisabled: false,
                             shouldAutoFocus: fieldWithState.shouldAutoFocus
                         ),
                         content: content,
@@ -189,6 +193,8 @@ struct FeedbackFormWidget: ParraContainer {
 
                     componentFactory.buildTextInput(
                         config: ParraTextInputConfig(
+                            textInputAutocapitalization: .sentences,
+                            autocorrectionDisabled: false,
                             shouldAutoFocus: fieldWithState.shouldAutoFocus
                         ),
                         content: content,
