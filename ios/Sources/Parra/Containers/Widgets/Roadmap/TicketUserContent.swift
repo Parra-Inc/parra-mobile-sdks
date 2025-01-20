@@ -18,9 +18,12 @@ struct TicketUserContent: Identifiable, Hashable {
         self.id = userTicket.id
         self.ticketNumber = userTicket.ticketNumber
         self.createdAt = ParraLabelContent(
+            text: userTicket.createdAt.timeAgoAbbreviated()
+        )
+        self.createdAtVerbose = ParraLabelContent(
             text: userTicket.createdAt.timeAgo(
                 dateTimeStyle: .numeric,
-                unitStyle: .short
+                unitStyle: .full
             )
         )
         self.type = userTicket.type.value
@@ -74,6 +77,7 @@ struct TicketUserContent: Identifiable, Hashable {
     let id: String
     let ticketNumber: String
     let createdAt: ParraLabelContent
+    let createdAtVerbose: ParraLabelContent
     let type: ParraTicketType?
     let title: ParraLabelContent
     let description: ParraLabelContent?

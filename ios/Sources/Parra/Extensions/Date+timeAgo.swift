@@ -34,6 +34,24 @@ extension Date {
         )
     }
 
+    func timeAgoAbbreviated() -> String {
+        let now = Date()
+
+        if timeIntervalSince(now) >= -2 {
+            return "now"
+        }
+
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.year, .month, .day, .hour, .minute, .second]
+        formatter.unitsStyle = .abbreviated
+        formatter.maximumUnitCount = 1
+
+        return formatter.string(
+            from: self,
+            to: now
+        ) ?? timeAgo(dateTimeStyle: .named, unitStyle: .abbreviated)
+    }
+
     func daysAgo(_ daysAgo: TimeInterval) -> Date {
         return addingTimeInterval(-(day * daysAgo))
     }

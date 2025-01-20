@@ -66,7 +66,7 @@ struct RoadmapDetailView: View {
 
                 componentFactory.buildLabel(
                     content: ParraLabelContent(
-                        text: "Created \(ticketContent.createdAt.text)"
+                        text: "Created \(ticketContent.createdAtVerbose.text)"
                     ),
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(

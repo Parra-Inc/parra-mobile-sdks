@@ -34,13 +34,6 @@ struct RoadmapListItem: View {
             }
 
             Spacer()
-
-            componentFactory.buildLabel(
-                content: ticketContent.createdAt,
-                localAttributes: .default(with: .caption)
-            )
-            .foregroundStyle(parraTheme.palette.secondaryText)
-            .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity)
     }
@@ -60,11 +53,22 @@ struct RoadmapListItem: View {
                 }
 
                 VStack(alignment: .leading) {
-                    componentFactory.buildLabel(
-                        content: ticketContent.title,
-                        localAttributes: .default(with: .headline)
-                    )
-                    .multilineTextAlignment(.leading)
+                    HStack(alignment: .firstTextBaseline) {
+                        componentFactory.buildLabel(
+                            content: ticketContent.title,
+                            localAttributes: .default(with: .headline)
+                        )
+                        .multilineTextAlignment(.leading)
+
+                        Spacer()
+
+                        componentFactory.buildLabel(
+                            content: ticketContent.createdAt,
+                            localAttributes: .default(with: .caption)
+                        )
+                        .foregroundStyle(parraTheme.palette.secondaryText)
+                        .minimumScaleFactor(0.8)
+                    }
 
                     if let description = ticketContent.description {
                         componentFactory.buildLabel(
