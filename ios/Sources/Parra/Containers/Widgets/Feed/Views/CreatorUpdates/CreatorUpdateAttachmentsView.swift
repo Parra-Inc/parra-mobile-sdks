@@ -15,7 +15,7 @@ struct CreatorUpdateAttachmentsView: View {
         containerGeometry: GeometryProxy,
         innerSpacing: CGFloat = 4.0,
         outerSpacing: CGFloat = 16.0,
-        maxToDisplay: Int = 4,
+        maxToDisplay: Int = 3,
         requiredEntitlement: ParraEntitlement? = nil,
         attemptUnlock: (() async -> Void)? = nil,
         didSelectAsset: ((ParraImageAsset) -> Void)? = nil
@@ -153,8 +153,6 @@ struct CreatorUpdateAttachmentsView: View {
         _ width: CGFloat,
         _ height: CGFloat
     ) -> some View {
-        // TODO: Need to define min and max aspect ratios
-
         HStack(spacing: innerSpacing) {
             renderImageButton(
                 for: leftImage,
@@ -163,7 +161,7 @@ struct CreatorUpdateAttachmentsView: View {
             .clipped()
             .frame(
                 width: width,
-                height: height
+                height: min(width * 2, height)
             )
 
             renderImageButton(
@@ -173,7 +171,7 @@ struct CreatorUpdateAttachmentsView: View {
             .clipped()
             .frame(
                 width: width,
-                height: height
+                height: min(width * 2, height)
             )
         }
     }
