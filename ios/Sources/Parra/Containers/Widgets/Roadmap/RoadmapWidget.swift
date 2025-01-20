@@ -65,6 +65,9 @@ struct RoadmapWidget: ParraContainer {
                     RoadmapListItem(ticketContent: ticket)
                 }
             )
+            // Required to prevent highlighting the button then dragging the scroll
+            // view from causing the button to be pressed.
+            .simultaneousGesture(TapGesture())
             .disabled(
                 contentObserver.ticketPaginator
                     .isShowingPlaceholders
