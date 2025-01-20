@@ -170,7 +170,10 @@ final class OAuth2Service {
             data["code"] = code
 
         case .signInWithApple(let payload):
-            data = payload.dictionary
+            data.merge(
+                payload.dictionary,
+                uniquingKeysWith: { orig, _ in return orig }
+            )
 
         default:
             break

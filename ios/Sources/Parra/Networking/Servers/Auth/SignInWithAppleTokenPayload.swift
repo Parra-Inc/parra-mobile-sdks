@@ -46,7 +46,8 @@ struct SignInWithAppleTokenPayload {
     var dictionary: [String: String] {
         var dict: [String: String] = name.dictionary
 
-        dict["auth_code"] = authCode
+        dict["grant_type"] = "sign_in_with_apple"
+        dict["code"] = authCode
         dict["id_token"] = idToken
 
         if let email {
