@@ -412,14 +412,15 @@ struct CreatorUpdateAttachmentsView: View {
                     )
                     .equatable()
 
-                    Color.black.opacity(0.5)
+                    if !paywalled {
+                        Color.black.opacity(0.5)
 
-                    Text("\(amount) more")
-                        .font(.callout)
-                        .bold()
-                        .foregroundStyle(.white)
+                        Text("+\(amount) more")
+                            .font(.callout)
+                            .bold()
+                            .foregroundStyle(.white)
+                    }
                 }
-                .blur(radius: paywalled ? 10 : 0, opaque: true)
                 .overlay(alignment: .center) {
                     renderPaywallOverlay()
                 }
