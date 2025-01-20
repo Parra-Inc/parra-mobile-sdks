@@ -204,6 +204,10 @@ struct FullScreenGalleryView: View {
             return nil
         }
 
+        if photos.isEmpty || photos.count == 1 {
+            return nil
+        }
+
         guard let idx = photos.firstIndex(of: selectedPhoto) else {
             return nil
         }
