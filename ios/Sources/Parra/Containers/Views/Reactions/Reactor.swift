@@ -34,6 +34,7 @@ class Reactor: ObservableObject {
         self.removeReaction = removeReaction
         self.reactionOptionGroups = reactionOptionGroups
         self.currentReactions = reactions
+        self.firstReactions = Array(reactions.prefix(3))
 
         $latestReaction
             .map(updateReaction)
@@ -51,6 +52,7 @@ class Reactor: ObservableObject {
     // MARK: - Internal
 
     @Published var currentReactions: [ParraReactionSummary]
+    @Published var firstReactions: [ParraReactionSummary]
 
     @Published var totalReactions: Int = 0
 
@@ -123,6 +125,7 @@ class Reactor: ObservableObject {
         }
 
         currentReactions = reactions
+        firstReactions = Array(reactions.prefix(3))
     }
 
     @MainActor
@@ -139,6 +142,10 @@ class Reactor: ObservableObject {
 
         defer {
             applyReactionsUpdate(copiedReactions)
+        }
+
+        if UIDevice.isPreview {
+            return nil
         }
 
         switch update {

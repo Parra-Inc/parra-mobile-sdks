@@ -53,7 +53,7 @@ public final class Parra: Observable, Equatable {
     /// Need a common instance that will never be nil to provide as an
     /// envrionment object. It wraps a nullable ``ParraInternal`` instance that
     /// will actually never be nil in the context of a ``ParraApp``.
-    static let `default` = Parra()
+    static var `default` = Parra()
 
     @MainActor
     @usableFromInline var parraInternal: ParraInternal! {

@@ -10,7 +10,7 @@ import SwiftUI
 struct ReactionButtonView: View {
     // MARK: - Internal
 
-    let reaction: ParraReactionSummary
+    @Binding var reaction: ParraReactionSummary
     let onToggleReaction: (Bool, ParraReactionSummary) -> Void
 
     var currentUserReacted: Bool {
@@ -27,7 +27,12 @@ struct ReactionButtonView: View {
 
     var body: some View {
         Button {
+            toggleAnimation = true
             onToggleReaction(!currentUserReacted, reaction)
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                toggleAnimation = false
+            }
         } label: {
             HStack(alignment: .center, spacing: 3) {
                 switch reaction.type {
@@ -39,6 +44,10 @@ struct ReactionButtonView: View {
                             width: 18.0,
                             height: 18.0
                         )
+                        .scaleEffect(toggleAnimation ? 1.35 : 1.0)
+                        .animation(toggleAnimation ? Animation.easeInOut(
+                            duration: 0.1
+                        ) : Animation.easeInOut, value: toggleAnimation)
                 case .custom:
                     if let url = URL(string: reaction.value) {
                         componentFactory.buildAsyncImage(
@@ -77,6 +86,8 @@ struct ReactionButtonView: View {
     }
 
     // MARK: - Private
+
+    @State private var toggleAnimation: Bool = .init()
 
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory

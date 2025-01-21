@@ -48,19 +48,16 @@ struct RoadmapWidget: ParraContainer {
                         contentObserver.addRequest()
                     }
                 )
-                .safeAreaPadding(.horizontal)
             }
         }
     }
 
     @ViewBuilder var cells: some View {
-        let tickets = items.wrappedValue
-
-        ForEach(tickets.indices, id: \.self) { index in
-            let ticket = tickets[index]
+        ForEach(items.indices, id: \.self) { index in
+            let ticket = items[index]
 
             NavigationLink(
-                value: ticket,
+                value: ticket.wrappedValue,
                 label: {
                     RoadmapListItem(ticketContent: ticket)
                 }

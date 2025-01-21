@@ -27,8 +27,8 @@ struct FeedCommentReactionView: View {
             // Show the 3 most popular reactions, then the add reaction button,
             // then if there are more reactions, show the total reaction count.
 
-            ForEach(reactor.currentReactions.prefix(3)) { reaction in
-                ReactionButtonView(reaction: reaction) { reacted, summary in
+            ForEach($reactor.currentReactions) { $reaction in
+                ReactionButtonView(reaction: $reaction) { reacted, summary in
                     if reacted {
                         reactor.addExistingReaction(
                             option: summary,

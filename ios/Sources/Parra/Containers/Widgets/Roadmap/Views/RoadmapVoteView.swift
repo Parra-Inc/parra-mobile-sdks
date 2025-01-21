@@ -11,7 +11,7 @@ import SwiftUI
 struct RoadmapVoteView: View {
     // MARK: - Internal
 
-    let ticketContent: TicketUserContent
+    @Binding var ticketContent: TicketUserContent
 
     var body: some View {
         let palette = parraTheme.palette
@@ -57,7 +57,6 @@ struct RoadmapVoteView: View {
                     }
                 }
             )
-
             .contentShape(.rect)
             .symbolEffect(
                 .bounce.up,

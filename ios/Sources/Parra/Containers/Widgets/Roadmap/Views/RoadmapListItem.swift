@@ -11,7 +11,7 @@ import SwiftUI
 struct RoadmapListItem: View {
     // MARK: - Internal
 
-    let ticketContent: TicketUserContent
+    @Binding var ticketContent: TicketUserContent
 
     @ViewBuilder var info: some View {
         HStack(alignment: .center, spacing: 4) {
@@ -48,7 +48,7 @@ struct RoadmapListItem: View {
         VStack(spacing: 12) {
             HStack(alignment: alignment, spacing: 8) {
                 if ticketContent.votingEnabled {
-                    RoadmapVoteView(ticketContent: ticketContent)
+                    RoadmapVoteView(ticketContent: $ticketContent)
                         .frame(width: 48)
                 }
 

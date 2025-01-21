@@ -32,11 +32,11 @@ struct FeedReactionView: View {
             verticalSpacing: 8,
             fitContentWidth: true
         ) {
-            ForEach(reactor.currentReactions) { reaction in
-                ReactionButtonView(reaction: reaction) { reacted, summary in
+            ForEach($reactor.currentReactions) { $reaction in
+                ReactionButtonView(reaction: $reaction) { reacted, summary in
                     if !userEntitlements.hasEntitlement(attachmentPaywall?.entitlement) {
                         isShowingPaywall = true
-                    } else if authState.isLoggedIn {
+                    } else if authState.isLoggedIn || UIDevice.isPreview {
                         if reacted {
                             reactor.addExistingReaction(
                                 option: summary,
@@ -55,7 +55,11 @@ struct FeedReactionView: View {
             }
 
             AddReactionButtonView {
-                if !userEntitlements.hasEntitlement(attachmentPaywall?.entitlement) {
+                if UIDevice.isPreview {
+                    isReactionPickerPresented = true
+                } else if !userEntitlements
+                    .hasEntitlement(attachmentPaywall?.entitlement)
+                {
                     isShowingPaywall = true
                 } else if authState.isLoggedIn {
                     isReactionPickerPresented = true
@@ -71,7 +75,6 @@ struct FeedReactionView: View {
                     option: newValue,
                     api: parra.parraInternal.api
                 )
-                pickerSelectedReaction = nil
             }
         }
         .presentParraPaywall(

@@ -61,14 +61,13 @@ public struct ParraAppPreview<Content, DelegateType>: View
             applicationId: ParraInternal.Demo.applicationId
         )
 
-        let parraInternal = ParraInternal
-            .createParraSwiftUIPreviewsInstance(
-                appState: ParraAppState.shared,
-                authenticationMethod: .preview,
-                configuration: configuration
-            )
+        let parraInternal = ParraInternal.createParraSwiftUIPreviewsInstance(
+            appState: ParraAppState.shared,
+            authenticationMethod: .preview,
+            configuration: configuration
+        )
 
-        self.parra = Parra(
+        Parra.default = Parra(
             parraInternal: parraInternal
         )
 
@@ -86,7 +85,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
         ParraOptionalAuthWindow {
             previewContent()
         }
-        .environment(\.parra, parra)
+        .environment(\.parra, Parra.default)
         .environment(\.parraAuthState, authStateManager.current)
         .environment(\.parraTheme, themeManager.current)
         .environment(\.parraPreferredAppearance, themeManager.preferredAppearanceBinding)
@@ -108,7 +107,6 @@ public struct ParraAppPreview<Content, DelegateType>: View
 
     private let configuration: ParraConfiguration
     private let previewContent: () -> Content
-    private let parra: Parra
     private let factory: ParraComponentFactory
 
     @State private var alertManager: ParraAlertManager = .shared

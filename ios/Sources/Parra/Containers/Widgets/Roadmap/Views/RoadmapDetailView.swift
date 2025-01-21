@@ -23,7 +23,7 @@ struct RoadmapDetailView: View {
             VStack(spacing: 10) {
                 HStack(alignment: .center, spacing: 16) {
                     if ticketContent.votingEnabled {
-                        RoadmapVoteView(ticketContent: ticketContent)
+                        RoadmapVoteView(ticketContent: $ticketContent)
                     }
 
                     componentFactory.buildLabel(
