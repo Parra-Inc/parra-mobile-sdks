@@ -92,6 +92,7 @@ public struct ParraTextInputComponent: View {
                 ) {
                     EmptyView()
                 }
+                .focusablePadding(.trailing, text.isEmpty ? 0 : 30)
                 .focused($focusState, equals: .secureRevealed)
                 .overlay {
                     if !text.isEmpty, focusState == .secureRevealed {
@@ -126,6 +127,7 @@ public struct ParraTextInputComponent: View {
                     EmptyView()
                 }
                 .focused($focusState, equals: .secure)
+                .focusablePadding(.trailing, text.isEmpty ? 0 : 30)
                 .foregroundStyle(
                     textColorOverride ?? parraTheme.palette.primaryText
                         .toParraColor()
@@ -166,6 +168,7 @@ public struct ParraTextInputComponent: View {
                 EmptyView()
             }
             .focused($focusState, equals: .normal)
+            .focusablePadding(.trailing, text.isEmpty ? 0 : 30)
             .overlay {
                 if !text.isEmpty, focusState == .normal {
                     HStack {
@@ -311,4 +314,39 @@ public struct ParraTextInputComponent: View {
         }
     }
     .padding()
+}
+
+extension View {
+    func focusablePadding(
+        _ edges: Edge.Set = .all,
+        _ size: CGFloat? = nil
+    ) -> some View {
+        modifier(FocusablePadding(edges, size))
+    }
+}
+
+private struct FocusablePadding: ViewModifier {
+    // MARK: - Lifecycle
+
+    init(_ edges: Edge.Set, _ size: CGFloat?) {
+        self.edges = edges
+        self.size = size
+        self.focused = false
+    }
+
+    // MARK: - Internal
+
+    func body(content: Content) -> some View {
+        content
+            .focused($focused)
+            .padding(edges, size)
+            .contentShape(Rectangle())
+            .onTapGesture { focused = true }
+    }
+
+    // MARK: - Private
+
+    private let edges: Edge.Set
+    private let size: CGFloat?
+    @FocusState private var focused: Bool
 }
