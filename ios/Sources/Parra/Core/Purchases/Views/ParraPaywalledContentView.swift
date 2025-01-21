@@ -86,7 +86,13 @@ public struct ParraPaywalledContentView<
             context: context,
             isPresented: $isShowingPaywall,
             config: config
-        )
+        ) { _ in
+            if let continuation {
+                continuation.resume()
+
+                self.continuation = nil
+            }
+        }
     }
 
     // MARK: - Private
@@ -98,6 +104,7 @@ public struct ParraPaywalledContentView<
 
     @State private var lockedState: LockedState = .initial
     @State private var isShowingPaywall = false
+    @State private var continuation: CheckedContinuation<Void, Never>?
 
     @ViewBuilder
     @MainActor private var content: some View {
@@ -135,6 +142,10 @@ public struct ParraPaywalledContentView<
         }
 
         isShowingPaywall = true
+
+        await withCheckedContinuation { continuation in
+            self.continuation = continuation
+        }
     }
 }
 

@@ -352,7 +352,7 @@ struct CreatorUpdateAttachmentsView: View {
 
     @State private var selectedPhoto: ParraImageAsset?
     @State private var isShowingFullScreen = false
-    @State private var isUnlocking = false
+    @State private var unlockingAsset: ParraImageAsset?
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
@@ -378,7 +378,7 @@ struct CreatorUpdateAttachmentsView: View {
                 )
                 .equatable()
                 .overlay(alignment: .center) {
-                    renderPaywallOverlay()
+                    renderPaywallOverlay(for: image)
                 }
             }
         }
@@ -386,7 +386,7 @@ struct CreatorUpdateAttachmentsView: View {
         // view from causing the button to be pressed.
         .simultaneousGesture(TapGesture())
         .buttonStyle(ContentCardButtonStyle())
-        .disabled(isUnlocking)
+        .disabled(unlockingAsset != nil)
     }
 
     private func renderSelectMoreButton(
@@ -422,23 +422,27 @@ struct CreatorUpdateAttachmentsView: View {
                     }
                 }
                 .overlay(alignment: .center) {
-                    renderPaywallOverlay()
+                    renderPaywallOverlay(for: image)
                 }
             }
         }
         // Required to prevent highlighting the button then dragging the scroll
         // view from causing the button to be pressed.
         .simultaneousGesture(TapGesture())
-        .disabled(isUnlocking)
+        .disabled(unlockingAsset != nil)
         .buttonStyle(ContentCardButtonStyle())
     }
 
     @ViewBuilder
-    private func renderPaywallOverlay() -> some View {
+    private func renderPaywallOverlay(
+        for image: ParraImageAsset
+    ) -> some View {
         if let requiredEntitlement {
             VStack(spacing: 6) {
-                if isUnlocking {
+                if image == unlockingAsset {
                     ProgressView()
+                        .controlSize(.large)
+                        .foregroundColor(parraTheme.palette.secondary.toParraColor())
                 } else {
                     componentFactory.buildImage(
                         content: .symbol("lock.circle"),
@@ -464,13 +468,13 @@ struct CreatorUpdateAttachmentsView: View {
         _ image: ParraImageAsset
     ) {
         if paywalled {
-            Task {
-                if let attemptUnlock {
-                    isUnlocking = true
+            if let attemptUnlock {
+                Task { @MainActor in
+                    unlockingAsset = image
 
                     await attemptUnlock()
 
-                    isUnlocking = false
+                    unlockingAsset = nil
                 }
             }
         } else {

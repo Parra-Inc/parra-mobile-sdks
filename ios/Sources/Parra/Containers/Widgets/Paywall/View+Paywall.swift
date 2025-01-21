@@ -18,13 +18,15 @@ public extension View {
         entitlement: ParraEntitlement,
         context: String? = nil,
         isPresented: Binding<Bool>,
-        config: ParraPaywallConfig = .default
+        config: ParraPaywallConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentParraPaywall(
             entitlement: entitlement.key,
             context: context,
             isPresented: isPresented,
-            config: config
+            config: config,
+            onDismiss: onDismiss
         )
     }
 
@@ -37,7 +39,8 @@ public extension View {
         entitlement: String,
         context: String? = nil,
         isPresented: Binding<Bool>,
-        config: ParraPaywallConfig = .default
+        config: ParraPaywallConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         let transformParams = PaywallTransformParams(
             entitlement: entitlement,
@@ -98,7 +101,7 @@ public extension View {
                 config: config
             ),
             detents: [.large],
-            onDismiss: nil
+            onDismiss: onDismiss
         )
     }
 }
