@@ -368,7 +368,6 @@ struct CreatorUpdateAttachmentsView: View {
                 componentFactory.buildAsyncImage(
                     config: ParraAsyncImageConfig(
                         contentMode: .fill,
-                        blurContent: paywalled,
                         showFailureIndicator: false
                     ),
                     content: ParraAsyncImageContent(
@@ -402,7 +401,6 @@ struct CreatorUpdateAttachmentsView: View {
                     componentFactory.buildAsyncImage(
                         config: ParraAsyncImageConfig(
                             contentMode: .fill,
-                            blurContent: paywalled,
                             showFailureIndicator: false
                         ),
                         content: ParraAsyncImageContent(
@@ -442,7 +440,7 @@ struct CreatorUpdateAttachmentsView: View {
                 if image == unlockingAsset {
                     ProgressView()
                         .controlSize(.large)
-                        .foregroundColor(parraTheme.palette.secondary.toParraColor())
+                        .foregroundStyle(.primary)
                 } else {
                     componentFactory.buildImage(
                         content: .symbol("lock.circle"),
@@ -454,13 +452,23 @@ struct CreatorUpdateAttachmentsView: View {
                             )
                         )
                     )
+                    .foregroundStyle(.primary)
                 }
 
                 componentFactory.buildLabel(
                     text: requiredEntitlement.title,
-                    localAttributes: .default(with: .callout)
+                    localAttributes: .default(
+                        with: .callout
+                    )
                 )
+                .foregroundStyle(.secondary)
             }
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity
+            )
+            .ignoresSafeArea()
+            .background(.ultraThinMaterial)
         }
     }
 
