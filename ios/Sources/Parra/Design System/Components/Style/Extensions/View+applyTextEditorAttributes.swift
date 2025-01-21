@@ -24,6 +24,7 @@ public extension View {
                 for: .automatic
             )
             .applyFrame(attributes.frame)
+            .scrollContentBackground(.hidden) // This is required before .background
             .background(attributes.background)
             .applyCornerRadii(
                 size: attributes.cornerRadius,
