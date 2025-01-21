@@ -162,6 +162,10 @@ extension ParraAttributes.Text.FontType: OverridableAttributes {
     func mergingOverrides(
         _ overrides: ParraAttributes.Text.FontType?
     ) -> ParraAttributes.Text.FontType {
+        guard let overrides else {
+            return self
+        }
+
         switch (self, overrides) {
         case (
             .style(_, let width, let weight, let design),
@@ -172,12 +176,16 @@ extension ParraAttributes.Text.FontType: OverridableAttributes {
                 let overrideDesign
             )
         ):
-            return .style(
-                style: overrideStyle,
-                width: overrideWidth ?? width,
-                weight: overrideWeight ?? weight,
-                design: overrideDesign ?? design
-            )
+            if let overrideStyle {
+                return .style(
+                    style: overrideStyle,
+                    width: overrideWidth ?? width,
+                    weight: overrideWeight ?? weight,
+                    design: overrideDesign ?? design
+                )
+            } else {
+                return self
+            }
         case (
             .size(_, let width, let weight, let design),
             .size(

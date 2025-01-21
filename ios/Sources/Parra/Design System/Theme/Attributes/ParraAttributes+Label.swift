@@ -132,12 +132,12 @@ extension ParraAttributes.Label {
 
         return ParraAttributes.Label(
             text: ParraAttributes.Text(
-                style: .caption,
+                style: .caption2,
                 color: palette.secondaryText.toParraColor(),
                 alignment: .trailing
             ),
             padding: .custom(
-                .padding(top: 3, bottom: 4, trailing: 2)
+                .padding(top: 4, bottom: 4, trailing: 2)
             ),
             frame: .flexible(
                 FlexibleFrameAttributes(
