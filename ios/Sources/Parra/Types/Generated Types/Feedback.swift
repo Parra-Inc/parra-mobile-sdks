@@ -269,14 +269,14 @@ public struct ParraFeedbackFormInputFieldData: Codable, Equatable, Hashable,
     // MARK: - Lifecycle
 
     public init(
-        placeholder: String
+        placeholder: String?
     ) {
         self.placeholder = placeholder
     }
 
     // MARK: - Public
 
-    public let placeholder: String
+    public let placeholder: String?
 }
 
 public struct ParraFeedbackFormTextFieldData: Codable, Equatable, Hashable,
