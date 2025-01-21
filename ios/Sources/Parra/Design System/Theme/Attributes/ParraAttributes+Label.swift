@@ -113,14 +113,14 @@ extension ParraAttributes.Label {
         return ParraAttributes.Label(
             text: ParraAttributes.Text(
                 fontType: .style(
-                    style: .body,
+                    style: .headline,
                     weight: .regular
                 ),
                 color: palette.primaryText.toParraColor(),
                 alignment: .leading
             ),
             padding: .custom(
-                .padding(leading: 1, bottom: 8, trailing: 2)
+                .padding(leading: 2, bottom: 6, trailing: 2)
             )
         )
     }
