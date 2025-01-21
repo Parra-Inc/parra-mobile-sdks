@@ -217,7 +217,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
                     do {
                         isSigningInWithApple = true
 
-                        try await params.signInWithApple([.email, .fullName])
+                        try await params.signInWithApple()
                     } catch {
                         alertManager.showErrorToast(
                             userFacingMessage: "Error signing in with Apple",
@@ -243,7 +243,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
                 ],
                 selectAuthMethod: { _ in },
                 attemptPasskeyLogin: {},
-                signInWithApple: { _ in }
+                signInWithApple: {}
             ),
             config: .default
         )
@@ -258,7 +258,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
                 ],
                 selectAuthMethod: { _ in },
                 attemptPasskeyLogin: {},
-                signInWithApple: { _ in }
+                signInWithApple: {}
             ),
             config: .default
         )
@@ -274,7 +274,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
                 ],
                 selectAuthMethod: { _ in },
                 attemptPasskeyLogin: {},
-                signInWithApple: { _ in }
+                signInWithApple: {}
             ),
             config: .default
         )

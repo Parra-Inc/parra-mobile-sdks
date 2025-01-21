@@ -148,7 +148,14 @@ class AuthenticationFlowManager {
                     )
                 }
             },
-            signInWithApple: authService.signInWithApple
+            signInWithApple: {
+                try await self.authService.signInWithApple(
+                    requestedScopes: appInfo.auth.sso?.apple?.appleScopes ?? [
+                        .email,
+                        .fullName
+                    ]
+                )
+            }
         )
     }
 
@@ -335,6 +342,12 @@ class AuthenticationFlowManager {
 
         if authInfo.supportsPasskeys {
             methods.append(.passkey)
+        }
+
+        if let sso = authInfo.sso {
+            if sso.apple != nil {
+                methods.append(.sso(.apple))
+            }
         }
 
         return methods

@@ -28,6 +28,11 @@ extension ParraAppAuthInfo: ParraFixture {
                     sms: ParraAuthInfoPasswordlessSmsConfig(
                         otpLength: 6
                     )
+                ),
+                sso: ParraAuthSsoConfig(
+                    apple: ParraAuthInfoSsoAppleConfig(
+                        scopes: [.fullName, .email]
+                    )
                 )
             )
         ]

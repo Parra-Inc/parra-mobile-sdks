@@ -17,9 +17,7 @@ public extension ParraAuthDefaultLandingScreen {
             availableAuthMethods: [ParraAuthenticationMethod],
             selectAuthMethod: @escaping (ParraAuthenticationType) -> Void,
             attemptPasskeyLogin: @escaping () -> Void,
-            signInWithApple: @escaping (
-                _ requestedScopes: [ASAuthorization.Scope]
-            ) async throws -> Void
+            signInWithApple: @escaping () async throws -> Void
         ) {
             self.availableAuthMethods = availableAuthMethods
             self.selectAuthMethod = selectAuthMethod
@@ -46,8 +44,6 @@ public extension ParraAuthDefaultLandingScreen {
         /// loads.
         public let attemptPasskeyLogin: () -> Void
 
-        public let signInWithApple: (
-            _ requestedScopes: [ASAuthorization.Scope]
-        ) async throws -> Void
+        public let signInWithApple: () async throws -> Void
     }
 }

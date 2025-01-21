@@ -13,7 +13,7 @@ private let logger = Logger()
 extension AuthService {
     @MainActor
     func signInWithApple(
-        requestedScopes: [ASAuthorization.Scope] = [.email, .fullName]
+        requestedScopes: [ASAuthorization.Scope]
     ) async throws {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()

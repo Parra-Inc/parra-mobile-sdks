@@ -6,6 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import AuthenticationServices
 import Foundation
 
 /// CGSize is not Codable. Do not expose this externally. We don't want users
@@ -1250,7 +1251,8 @@ public final class ParraAppInfo: Codable, Equatable,
         ),
         auth: ParraAppAuthInfo(
             database: nil,
-            passwordless: nil
+            passwordless: nil,
+            sso: nil
         ),
         legal: ParraLegalInfo(),
         application: ParraApplicationIosConfig(
@@ -1426,6 +1428,66 @@ public struct ParraAuthInfoPasswordlessConfig: Codable, Equatable, Hashable {
     )
 }
 
+public enum ParraAuthAppleSsoScope: String, Codable {
+    case fullName = "full_name"
+    case email
+}
+
+public struct ParraAuthInfoSsoAppleConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        scopes: [ParraAuthAppleSsoScope]
+    ) {
+        self.scopes = .init(scopes)
+    }
+
+    // MARK: - Public
+
+    public let scopes: PartiallyDecodableArray<ParraAuthAppleSsoScope>
+
+    public var appleScopes: [ASAuthorization.Scope] {
+        return scopes.elements.compactMap { scope in
+            switch scope {
+            case .fullName:
+                return .fullName
+            case .email:
+                return .email
+            default:
+                return nil
+            }
+        }
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case scopes
+    }
+}
+
+public struct ParraAuthSsoConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        apple: ParraAuthInfoSsoAppleConfig?
+    ) {
+        self.apple = apple
+    }
+
+    // MARK: - Public
+
+    public let apple: ParraAuthInfoSsoAppleConfig?
+
+    // MARK: - Internal
+
+    static let `default` = ParraAuthSsoConfig(
+        apple: ParraAuthInfoSsoAppleConfig(
+            scopes: [.email, .fullName]
+        )
+    )
+}
+
 public struct ParraAppInfoPasskeysConfig: Codable, Equatable, Hashable {}
 
 public struct ParraAppInfoAnonymousAuthConfig: Codable, Equatable, Hashable {}
@@ -1435,16 +1497,19 @@ public final class ParraAppAuthInfo: Codable, Equatable, Hashable {
 
     public init(
         database: ParraAppInfoDatabaseConfig?,
-        passwordless: ParraAuthInfoPasswordlessConfig?
+        passwordless: ParraAuthInfoPasswordlessConfig?,
+        sso: ParraAuthSsoConfig?
     ) {
         self.database = database
         self.passwordless = passwordless
+        self.sso = sso
     }
 
     // MARK: - Public
 
     public let database: ParraAppInfoDatabaseConfig?
     public let passwordless: ParraAuthInfoPasswordlessConfig?
+    public let sso: ParraAuthSsoConfig?
 
     public static func == (
         lhs: ParraAppAuthInfo,
