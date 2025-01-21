@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct UserSettingsGroupView<Footer>: View where Footer: View {
+    // MARK: - Internal
+
     let group: ParraUserSettingsGroup
     @ViewBuilder let footer: () -> Footer
     let onValueChanged: (
@@ -35,5 +37,10 @@ struct UserSettingsGroupView<Footer>: View where Footer: View {
         } footer: {
             footer()
         }
+        .listRowBackground(theme.palette.secondaryBackground)
     }
+
+    // MARK: - Private
+
+    @Environment(\.parraTheme) private var theme
 }
