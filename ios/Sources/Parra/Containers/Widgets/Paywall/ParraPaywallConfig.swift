@@ -31,6 +31,13 @@ public final class ParraPaywallConfig: ParraContainerConfig {
 
     public let marketingContent: (() -> (any View))?
 
+    public static func registerDefaultConfig<Key>(
+        _ config: ParraPaywallConfig,
+        for key: Key
+    ) where Key: RawRepresentable, Key.RawValue == String {
+        registerDefaultConfig(config, for: key.rawValue)
+    }
+
     public static func registerDefaultConfig(
         _ config: ParraPaywallConfig,
         for entitlement: String
@@ -38,10 +45,22 @@ public final class ParraPaywallConfig: ParraContainerConfig {
         defaultConfigs[entitlement] = config
     }
 
+    public static func removeDefaultConfig<Key>(
+        for key: Key
+    ) where Key: RawRepresentable, Key.RawValue == String {
+        removeDefaultConfig(for: key.rawValue)
+    }
+
     public static func removeDefaultConfig(
         for entitlement: String
     ) {
         defaultConfigs.removeValue(forKey: entitlement)
+    }
+
+    public static func defaultConfig<Key>(
+        for key: Key
+    ) -> ParraPaywallConfig? where Key: RawRepresentable, Key.RawValue == String {
+        return defaultConfig(for: key.rawValue)
     }
 
     public static func defaultConfig(

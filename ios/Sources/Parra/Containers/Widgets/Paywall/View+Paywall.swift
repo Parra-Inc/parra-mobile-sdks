@@ -35,6 +35,27 @@ public extension View {
     /// the content and an optional context string that allows you to remotely
     /// define the content of the paywall.
     @MainActor
+    func presentParraPaywall<Key>(
+        entitlement key: Key,
+        context: String? = nil,
+        isPresented: Binding<Bool>,
+        config: ParraPaywallConfig? = nil,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
+    ) -> some View where Key: RawRepresentable, Key.RawValue == String {
+        return presentParraPaywall(
+            entitlement: key.rawValue,
+            context: context,
+            isPresented: isPresented,
+            config: config,
+            onDismiss: onDismiss
+        )
+    }
+
+    /// Presents a sheet that is meant to block the user from accessing content
+    /// without an active subscription. Pass the required entitlement to view
+    /// the content and an optional context string that allows you to remotely
+    /// define the content of the paywall.
+    @MainActor
     func presentParraPaywall(
         entitlement: String,
         context: String? = nil,
