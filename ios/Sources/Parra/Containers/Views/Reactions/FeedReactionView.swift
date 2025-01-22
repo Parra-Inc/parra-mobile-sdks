@@ -54,7 +54,9 @@ struct FeedReactionView: View {
                 }
             }
 
-            AddReactionButtonView {
+            AddReactionButtonView(
+                attachmentPaywall: attachmentPaywall
+            ) {
                 if UIDevice.isPreview {
                     isReactionPickerPresented = true
                 } else if !userEntitlements
@@ -80,8 +82,7 @@ struct FeedReactionView: View {
         .presentParraPaywall(
             entitlement: attachmentPaywall?.entitlement.key ?? "unknown",
             context: attachmentPaywall?.context,
-            isPresented: $isShowingPaywall,
-            config: .default
+            isPresented: $isShowingPaywall
         )
         .presentParraSignInWidget(
             isPresented: $isRequiredSignInPresented,

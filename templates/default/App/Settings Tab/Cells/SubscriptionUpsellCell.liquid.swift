@@ -42,8 +42,7 @@ struct SubscriptionUpsellCell: View {
     var body: some View {
         button.presentParraPaywall(
             entitlement: PremiumEntitlementKey,
-            isPresented: $isUpsellPresented,
-            config: .default
+            isPresented: $isUpsellPresented
         )
         .manageSubscriptionsSheet(
             isPresented: $isManagePresented

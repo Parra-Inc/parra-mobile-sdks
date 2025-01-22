@@ -13,7 +13,7 @@ public struct ParraPaywallWidget: View {
 
     public init(
         paywall: ParraApplePaywall,
-        config: ParraPaywallConfig = .default
+        config: ParraPaywallConfig
     ) {
         self.paywall = paywall
         self.config = config

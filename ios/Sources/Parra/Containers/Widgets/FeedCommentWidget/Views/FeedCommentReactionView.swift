@@ -43,7 +43,7 @@ struct FeedCommentReactionView: View {
                 }
             }
 
-            AddReactionButtonView {
+            AddReactionButtonView(attachmentPaywall: nil) {
                 isReactionPickerPresented = true
             }
 

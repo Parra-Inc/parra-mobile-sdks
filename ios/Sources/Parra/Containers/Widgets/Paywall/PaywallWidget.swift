@@ -63,20 +63,48 @@ struct PaywallWidget: ParraContainer {
                 visibleRelationships: config.visibleRelationships
             )
         } else {
+            // This is necessary because you can't pass an optional marketing
+            // content builder function, and passing one that returns an empty
+            // view causes the default title to be omitted.
             switch contentObserver.initialParams.paywallProducts {
             case .groupId(let groupId):
-                SubscriptionStoreView(
-                    groupID: groupId,
-                    visibleRelationships: config.visibleRelationships
-                )
+                if let marketingContent = config.marketingContent {
+                    SubscriptionStoreView(
+                        groupID: groupId,
+                        visibleRelationships: config.visibleRelationships
+                    ) {
+                        AnyView(marketingContent())
+                    }
+                } else {
+                    SubscriptionStoreView(
+                        groupID: groupId,
+                        visibleRelationships: config.visibleRelationships
+                    )
+                }
             case .productIds(let productIds):
-                SubscriptionStoreView(
-                    productIDs: productIds
-                )
+                if let marketingContent = config.marketingContent {
+                    SubscriptionStoreView(
+                        productIDs: productIds
+                    ) {
+                        AnyView(marketingContent())
+                    }
+                } else {
+                    SubscriptionStoreView(
+                        productIDs: productIds
+                    )
+                }
             case .products(let products):
-                SubscriptionStoreView(
-                    subscriptions: products
-                )
+                if let marketingContent = config.marketingContent {
+                    SubscriptionStoreView(
+                        subscriptions: products
+                    ) {
+                        AnyView(marketingContent())
+                    }
+                } else {
+                    SubscriptionStoreView(
+                        subscriptions: products
+                    )
+                }
             }
         }
     }
@@ -103,7 +131,7 @@ private extension View {
     func versionedSubscriptionStoreControlStyle() -> some View {
         if #available(iOS 18.0, *) {
             subscriptionStoreControlStyle(
-                .prominentPicker
+                .compactPicker
             )
         } else {
             subscriptionStoreControlStyle(

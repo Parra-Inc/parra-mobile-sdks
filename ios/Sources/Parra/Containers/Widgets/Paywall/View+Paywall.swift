@@ -18,7 +18,7 @@ public extension View {
         entitlement: ParraEntitlement,
         context: String? = nil,
         isPresented: Binding<Bool>,
-        config: ParraPaywallConfig = .default,
+        config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentParraPaywall(
@@ -39,7 +39,7 @@ public extension View {
         entitlement: String,
         context: String? = nil,
         isPresented: Binding<Bool>,
-        config: ParraPaywallConfig = .default,
+        config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         let transformParams = PaywallTransformParams(
@@ -82,6 +82,12 @@ public extension View {
             )
         }
 
+        let finalConfig: ParraPaywallConfig = if let config {
+            config
+        } else {
+            ParraPaywallConfig.defaultConfig(for: entitlement) ?? .default
+        }
+
         return loadAndPresentSheet(
             loadType: .init(
                 get: {
@@ -98,7 +104,7 @@ public extension View {
                 }
             ),
             with: .paywallLoader(
-                config: config
+                config: finalConfig
             ),
             detents: [.large],
             onDismiss: onDismiss

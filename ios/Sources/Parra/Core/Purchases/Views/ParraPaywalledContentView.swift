@@ -23,7 +23,7 @@ public struct ParraPaywalledContentView<
         entitlement: ParraEntitlement?,
         /// Additional information about where the paywall will be presented from
         context: String? = nil,
-        config: ParraPaywallConfig = .default,
+        config: ParraPaywallConfig? = nil,
         @ViewBuilder lockedContentBuilder: @escaping (
             _ entitlement: ParraEntitlement,
             _ unlock: @escaping () async throws -> Void
@@ -32,7 +32,15 @@ public struct ParraPaywalledContentView<
     ) {
         self.entitlement = entitlement
         self.context = context
-        self.config = config
+        self.config = if let config {
+            config
+        } else {
+            if let entitlement {
+                ParraPaywallConfig.defaultConfig(for: entitlement.key) ?? .default
+            } else {
+                .default
+            }
+        }
         self.lockedContentBuilder = lockedContentBuilder
         self.unlockedContentBuilder = unlockedContentBuilder
     }
@@ -51,7 +59,7 @@ public struct ParraPaywalledContentView<
 
     public let entitlement: ParraEntitlement?
     public let context: String?
-    public let config: ParraPaywallConfig
+    public let config: ParraPaywallConfig?
 
     /// The state used when the user doesn't have the required entitlement.
     /// Content should be hidden or obscured when in this state. Call the
