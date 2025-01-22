@@ -22,6 +22,11 @@ struct AppReleaseStubContent: Identifiable, Hashable {
                 dateTimeStyle: .numeric
             )
         )
+        self.releasedAt = ParraLabelContent(
+            text: stub.releasedAt.timeAgo(
+                dateTimeStyle: .numeric
+            )
+        )
         self.name = ParraLabelContent(text: stub.name)
         self.version = ParraLabelContent(text: stub.version)
         if let description = stub.description {
@@ -48,6 +53,7 @@ struct AppReleaseStubContent: Identifiable, Hashable {
     let originalStub: AppReleaseStub
     let id: String
     let createdAt: ParraLabelContent
+    let releasedAt: ParraLabelContent
     let name: ParraLabelContent
     let version: ParraLabelContent
     let description: ParraLabelContent?

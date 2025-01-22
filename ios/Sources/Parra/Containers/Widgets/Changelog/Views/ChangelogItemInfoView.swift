@@ -14,20 +14,20 @@ struct ChangelogItemInfoView: View {
     init(content: AppReleaseStubContent) {
         self.version = content.version
         self.type = content.type
-        self.createdAt = content.createdAt
+        self.releasedAt = content.releasedAt ?? content.releasedAt
     }
 
     init(content: AppReleaseContent) {
         self.version = content.version
         self.type = content.type
-        self.createdAt = content.createdAt
+        self.releasedAt = content.createdAt
     }
 
     // MARK: - Internal
 
     let version: ParraLabelContent
     let type: ParraLabelContent?
-    let createdAt: ParraLabelContent
+    let releasedAt: ParraLabelContent
 
     var body: some View {
         let palette = parraTheme.palette
@@ -50,7 +50,7 @@ struct ChangelogItemInfoView: View {
             Spacer()
 
             componentFactory.buildLabel(
-                content: createdAt,
+                content: releasedAt,
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .caption,

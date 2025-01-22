@@ -750,6 +750,7 @@ struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
         createdAt: Date,
         updatedAt: Date,
         deletedAt: Date?,
+        releasedAt: Date,
         name: String,
         version: String,
         description: String?,
@@ -763,6 +764,7 @@ struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
+        self.releasedAt = releasedAt
         self.name = name
         self.version = version
         self.description = description
@@ -779,6 +781,7 @@ struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
     public let createdAt: Date
     public let updatedAt: Date
     public let deletedAt: Date?
+    public let releasedAt: Date
     public let name: String
     public let version: String
     public let description: String?
@@ -795,6 +798,7 @@ struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
         case createdAt
         case updatedAt
         case deletedAt
+        case releasedAt
         case name
         case version
         case description
