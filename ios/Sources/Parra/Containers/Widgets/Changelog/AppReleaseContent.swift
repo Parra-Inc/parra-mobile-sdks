@@ -12,7 +12,8 @@ struct AppReleaseContent: ParraContainerContent, Identifiable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        _ newInstalledAppVersion: ParraNewInstalledVersionInfo
+        _ newInstalledAppVersion: ParraNewInstalledVersionInfo,
+        emptyStateContent: ParraEmptyStateContent
     ) {
         self.id = newInstalledAppVersion.release.id
         self.title = ParraLabelContent(
@@ -56,10 +57,13 @@ struct AppReleaseContent: ParraContainerContent, Identifiable, Hashable {
         } else {
             nil
         }
+
+        self.emptyStateContent = emptyStateContent
     }
 
     init(
-        _ release: ParraAppRelease
+        _ release: ParraAppRelease,
+        emptyStateContent: ParraEmptyStateContent
     ) {
         self.id = release.id
         self.title = ParraLabelContent(text: release.name)
@@ -79,10 +83,12 @@ struct AppReleaseContent: ParraContainerContent, Identifiable, Hashable {
         self.sections = release.sections.elements.map { AppReleaseSectionContent($0) }
         self.header = ReleaseHeaderContent(release.header)
         self.otherReleasesButton = nil
+        self.emptyStateContent = emptyStateContent
     }
 
     init(
-        _ release: AppReleaseStub
+        _ release: AppReleaseStub,
+        emptyStateContent: ParraEmptyStateContent
     ) {
         self.id = release.id
         self.title = ParraLabelContent(text: release.name)
@@ -101,10 +107,10 @@ struct AppReleaseContent: ParraContainerContent, Identifiable, Hashable {
                 dateTimeStyle: .numeric
             )
         )
-        self.sections = ParraAppReleaseSection.validStates()
-            .map { AppReleaseSectionContent($0) }
+        self.sections = []
         self.header = ReleaseHeaderContent(release.header)
         self.otherReleasesButton = nil
+        self.emptyStateContent = emptyStateContent
     }
 
     // MARK: - Internal
@@ -116,7 +122,8 @@ struct AppReleaseContent: ParraContainerContent, Identifiable, Hashable {
     let type: ParraLabelContent?
     let createdAt: ParraLabelContent
     let description: ParraLabelContent?
-    let sections: [AppReleaseSectionContent]
+    var sections: [AppReleaseSectionContent]
     let header: ReleaseHeaderContent?
     let otherReleasesButton: ParraTextButtonContent?
+    let emptyStateContent: ParraEmptyStateContent
 }

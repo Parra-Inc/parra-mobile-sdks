@@ -233,9 +233,21 @@ struct ReleaseWidget: ParraContainer {
                         .multilineTextAlignment(.leading)
                     }
 
-                    sections
+                    sections.emptyPlaceholder(
+                        contentObserver.content.sections
+                    ) {
+                        componentFactory.buildEmptyState(
+                            config: ParraEmptyStateConfig.default,
+                            content: contentObserver.content.emptyStateContent
+                        )
+                    }
                 }
             }
+            // A limited number of placeholder cells will be generated.
+            // Don't allow scrolling past them while loading.
+            .scrollDisabled(
+                changelogContentObserver.releasePaginator.isShowingPlaceholders
+            )
         }
         .clipped()
         .contentMargins(
