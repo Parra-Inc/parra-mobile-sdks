@@ -50,6 +50,7 @@ struct TipJarWidget: ParraContainer {
             }
             .safeAreaPadding(.horizontal)
         }
+        .background(theme.palette.primaryBackground)
         .renderToast(toast: $alertManager.currentToast)
         .onReceive(
             ParraUserEntitlements.shared.purchaseCompletePublisher
