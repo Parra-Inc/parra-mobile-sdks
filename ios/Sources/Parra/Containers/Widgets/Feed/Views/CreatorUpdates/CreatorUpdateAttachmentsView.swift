@@ -366,21 +366,23 @@ struct CreatorUpdateAttachmentsView: View {
             handleSelectedImage(image)
         } label: {
             Color.clear.background {
-                componentFactory.buildAsyncImage(
-                    config: ParraAsyncImageConfig(
-                        contentMode: .fill,
-                        showFailureIndicator: false
-                    ),
-                    content: ParraAsyncImageContent(
-                        image,
-                        preferredThumbnailSize: .recommended(
-                            for: size,
-                            in: displayScale
+                ZStack {
+                    componentFactory.buildAsyncImage(
+                        config: ParraAsyncImageConfig(
+                            contentMode: .fill,
+                            showFailureIndicator: false
+                        ),
+                        content: ParraAsyncImageContent(
+                            image,
+                            preferredThumbnailSize: .recommended(
+                                for: size,
+                                in: displayScale
+                            )
                         )
                     )
-                )
-                .equatable()
-                .overlay(alignment: .center) {
+                    .equatable()
+                    .blur(radius: paywalled ? 10 : 0, opaque: true)
+
                     renderPaywallOverlay(for: image)
                 }
             }
@@ -416,6 +418,7 @@ struct CreatorUpdateAttachmentsView: View {
                         )
                     )
                     .equatable()
+                    .blur(radius: paywalled ? 10 : 0, opaque: true)
 
                     if !paywalled {
                         Color.black.opacity(0.5)
@@ -425,8 +428,7 @@ struct CreatorUpdateAttachmentsView: View {
                             .bold()
                             .foregroundStyle(.white)
                     }
-                }
-                .overlay(alignment: .center) {
+
                     renderPaywallOverlay(for: image)
                 }
             }
@@ -475,7 +477,6 @@ struct CreatorUpdateAttachmentsView: View {
                 maxHeight: .infinity
             )
             .ignoresSafeArea()
-            .background(.ultraThinMaterial)
         }
     }
 
