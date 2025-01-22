@@ -34,29 +34,6 @@ struct ChangelogWidget: ParraContainer {
         )
 
         VStack(spacing: 0) {
-            componentFactory.buildLabel(
-                content: contentObserver.content.title,
-                localAttributes: ParraAttributes.Label(
-                    text: ParraAttributes.Text(
-                        style: .title
-                    ),
-                    frame: .flexible(
-                        FlexibleFrameAttributes(
-                            maxWidth: .infinity,
-                            alignment: .leading
-                        )
-                    )
-                )
-            )
-            .padding([.horizontal, .top], from: contentPadding)
-            .border(
-                width: 1,
-                edges: .bottom,
-                color: showNavigationDivider
-                    ? parraTheme.palette
-                    .secondaryBackground : .clear
-            )
-
             list(with: defaultWidgetAttributes)
                 .environment(config)
                 .environment(componentFactory)
@@ -83,6 +60,7 @@ struct ChangelogWidget: ParraContainer {
                     .environment(\.parraConfiguration, parraConfiguration)
                 }
         }
+        .navigationTitle(contentObserver.content.title.text)
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: parraTheme

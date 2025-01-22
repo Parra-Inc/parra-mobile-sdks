@@ -111,6 +111,8 @@ struct RoadmapWidget: ParraContainer {
                 }
             }
         )
+        .navigationBarTitleDisplayMode(.automatic)
+        .navigationTitle(contentObserver.content.title.text)
         .navigationDestination(for: TicketUserContent.self) { ticket in
             if let index = items.firstIndex(
                 where: {
@@ -211,11 +213,6 @@ struct RoadmapWidget: ParraContainer {
         with contentPadding: EdgeInsets
     ) -> some View {
         VStack(alignment: .leading, spacing: 20) {
-            componentFactory.buildLabel(
-                content: contentObserver.content.title,
-                localAttributes: .default(with: .title)
-            )
-
             Picker(
                 "Select a tab",
                 selection: $contentObserver.selectedTab
@@ -236,7 +233,7 @@ struct RoadmapWidget: ParraContainer {
                 .lineLimit(5)
             }
         }
-        .padding([.horizontal, .top], from: contentPadding)
+        .padding(.horizontal, from: contentPadding)
         .padding(.bottom, headerSpace(
             from: contentPadding
         ))
