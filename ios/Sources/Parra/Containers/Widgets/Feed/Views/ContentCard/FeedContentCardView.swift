@@ -132,6 +132,7 @@ struct FeedContentCardView: View {
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.redactionReasons) private var redactionReasons
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.displayScale) private var displayScale
 
     private var hasAction: Bool {
         return contentCard.action != nil
@@ -162,7 +163,8 @@ struct FeedContentCardView: View {
                             for: CGSize(
                                 width: width,
                                 height: minHeight
-                            )
+                            ),
+                            in: displayScale
                         )
                     )
                 )

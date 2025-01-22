@@ -356,6 +356,7 @@ struct CreatorUpdateAttachmentsView: View {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.displayScale) private var displayScale
 
     private func renderImageButton(
         for image: ParraImageAsset,
@@ -372,7 +373,10 @@ struct CreatorUpdateAttachmentsView: View {
                     ),
                     content: ParraAsyncImageContent(
                         image,
-                        preferredThumbnailSize: .recommended(for: size)
+                        preferredThumbnailSize: .recommended(
+                            for: size,
+                            in: displayScale
+                        )
                     )
                 )
                 .equatable()
@@ -405,7 +409,10 @@ struct CreatorUpdateAttachmentsView: View {
                         ),
                         content: ParraAsyncImageContent(
                             image,
-                            preferredThumbnailSize: .recommended(for: size)
+                            preferredThumbnailSize: .recommended(
+                                for: size,
+                                in: displayScale
+                            )
                         )
                     )
                     .equatable()

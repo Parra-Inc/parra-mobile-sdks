@@ -678,7 +678,7 @@ public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        q: String,
+        q: String?,
         size: CGSize
     ) {
         self.q = q
@@ -690,7 +690,7 @@ public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
             keyedBy: CodingKeys.self
         )
 
-        self.q = try container.decode(
+        self.q = try container.decodeIfPresent(
             String.self,
             forKey: .q
         )
@@ -703,7 +703,7 @@ public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public let q: String
+    public let q: String?
 
     public var size: CGSize {
         return _size.toCGSize
@@ -740,26 +740,29 @@ public enum ParraImageAssetThumbnailSize {
 
     // MARK: - Public
 
-    public static func recommended(for size: CGSize) -> Self {
-        let maxDimension = max(size.height, size.width)
+    public static func recommended(
+        for size: CGSize,
+        in scale: CGFloat = 1.0
+    ) -> Self {
+        let maxDimension = max(size.height * scale, size.width * scale)
 
-        if maxDimension < 64 {
+        if maxDimension < 75 {
             return .xs
         }
 
-        if maxDimension < 128 {
+        if maxDimension < 150 {
             return .sm
         }
 
-        if maxDimension < 256 {
+        if maxDimension < 300 {
             return .md
         }
 
-        if maxDimension < 512 {
+        if maxDimension < 600 {
             return .lg
         }
 
-        if maxDimension < 1_024 {
+        if maxDimension < 1_200 {
             return .xl
         }
 
@@ -881,7 +884,15 @@ public struct ParraImageAsset: Codable, Equatable, Hashable, Identifiable {
             return nil
         }
 
-        let newParams = thumb.q
+        guard let url = components.url else {
+            return nil
+        }
+
+        guard let q = thumb.q else {
+            return (url, thumb.size)
+        }
+
+        let newParams = q
             .components(separatedBy: "&")
             .compactMap { param -> URLQueryItem? in
                 let parts = param.components(separatedBy: "=")
