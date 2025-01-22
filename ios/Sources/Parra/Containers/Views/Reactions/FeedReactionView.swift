@@ -110,7 +110,7 @@ struct FeedReactionView: View {
                     showLabels: false,
                     searchEnabled: false
                 )
-                .presentationDetents([.large, .fraction(0.33)])
+                .presentationDetents([.large, .fraction(0.42)])
                 .presentationDragIndicator(.visible)
             }
         }

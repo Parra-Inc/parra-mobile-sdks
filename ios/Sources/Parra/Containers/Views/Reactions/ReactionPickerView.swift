@@ -36,9 +36,13 @@ struct ReactionPickerView: View {
                 selectedOption: _selectedOption,
                 showLabels: showLabels
             )
-            .safeAreaPadding(.top)
-            .padding(.horizontal)
+            .padding()
         }
+        .contentMargins(
+            .top,
+            EdgeInsets(vertical: 16, horizontal: 0),
+            for: .automatic
+        )
         .frame(maxHeight: .infinity)
         .if(searchEnabled) { ctx in
             ctx.searchable(text: $search)
