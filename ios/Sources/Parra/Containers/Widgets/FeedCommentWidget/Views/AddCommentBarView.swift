@@ -85,6 +85,27 @@ struct AddCommentBarView: View {
 
     let submitComment: (String) async throws -> Void
 
+    var inputContent: ParraTextInputContent {
+        ParraTextInputContent(
+            title: nil,
+            defaultText: currentState.currentText,
+            placeholder: "Start chatting",
+            helper: nil,
+            errorMessage: errorMessage,
+            textChanged: { newText in
+
+                // TODO: Character limit should be 250
+                // TODO: Error should be for too long or too short
+
+                if let newText, !newText.isEmpty {
+                    currentState = .content(newText)
+                } else {
+                    currentState = .noContent
+                }
+            }
+        )
+    }
+
     var body: some View {
         VStack {
             HStack(alignment: .center) {
@@ -96,26 +117,7 @@ struct AddCommentBarView: View {
                         autocorrectionDisabled: false,
                         shouldAutoFocus: false
                     ),
-                    content: ParraTextInputContent(
-                        title: nil,
-                        defaultText: currentState.currentText,
-                        placeholder: "Start chatting",
-                        helper: nil,
-                        errorMessage: errorMessage,
-                        textChanged: { newText in
-
-                            // TODO: Character limit should be 250
-                            // TODO: Error should be for too long or too short
-
-                            if let newText, !newText.isEmpty {
-                                currentState = .content(newText)
-                            } else {
-                                currentState = .noContent
-                            }
-
-//                            errorMessage = newText
-                        }
-                    ),
+                    content: inputContent,
                     localAttributes: ParraAttributes.TextInput(
                         padding: .zero,
                         background: theme.palette.secondaryBackground
