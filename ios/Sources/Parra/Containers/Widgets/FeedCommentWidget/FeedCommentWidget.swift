@@ -70,8 +70,8 @@ struct FeedCommentWidget: ParraContainer {
                     theme.palette.primaryBackground,
                     theme.palette.secondaryBackground
                 ],
-                startPoint: UnitPoint(x: 0.5, y: 0.25),
-                endPoint: UnitPoint(x: 0.5, y: 0.3)
+                startPoint: UnitPoint(x: 0.5, y: 0.05),
+                endPoint: UnitPoint(x: 0.5, y: 0.06)
             )
         )
         .scrollContentBackground(.hidden)
