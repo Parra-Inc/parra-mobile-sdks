@@ -204,6 +204,7 @@ private struct TestContentView: View {
                     key: "test",
                     title: "something"
                 ),
+                context: "",
                 lockedContentBuilder: { _, unlock in
                     ZStack {
                         Color.purple

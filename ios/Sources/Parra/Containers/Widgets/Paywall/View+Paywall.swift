@@ -16,7 +16,7 @@ public extension View {
     @MainActor
     func presentParraPaywall(
         entitlement: ParraEntitlement,
-        context: String? = nil,
+        context: String?,
         isPresented: Binding<Bool>,
         config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
@@ -37,7 +37,7 @@ public extension View {
     @MainActor
     func presentParraPaywall<Key>(
         entitlement key: Key,
-        context: String? = nil,
+        context: String?,
         isPresented: Binding<Bool>,
         config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
@@ -58,7 +58,7 @@ public extension View {
     @MainActor
     func presentParraPaywall(
         entitlement: String,
-        context: String? = nil,
+        context: String?,
         isPresented: Binding<Bool>,
         config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil

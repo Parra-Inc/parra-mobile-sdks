@@ -10,19 +10,19 @@ import Foundation
 extension API {
     func getPaywall(
         for entitlement: String,
-        context: String? = nil
+        context: String?
     ) async throws -> ParraApplePaywall {
-        var body: [String: String] = [
+        var queryItems: [String: String] = [
             "entitlement": entitlement
         ]
 
         if let context {
-            body["context"] = context
+            queryItems["context"] = context
         }
 
         return try await hitEndpoint(
             .getPaywall,
-            body: body
+            queryItems: queryItems
         )
     }
 
