@@ -40,6 +40,7 @@ public extension ParraUser {
             deletedAt: Date?,
             tenantId: String,
             name: String?,
+            displayName: String,
             avatar: ParraImageAsset?,
             identity: String?,
             username: String?,
@@ -68,6 +69,7 @@ public extension ParraUser {
             self.deletedAt = deletedAt
             self.tenantId = tenantId
             self.name = name
+            self.displayName = displayName
             self.avatar = avatar
             self.identity = identity
             self.username = username
@@ -116,6 +118,26 @@ public extension ParraUser {
                     String.self,
                     forKey: .name
                 )
+
+            if let displayName = try container.decodeIfPresent(
+                String.self,
+                forKey: .displayName
+            ) {
+                self.displayName = displayName
+            } else {
+                if let name {
+                    self.displayName = name
+                } else {
+                    if let first = id.split(separator: "-").first,
+                       let num = Int(first, radix: 16)
+                    {
+                        self.displayName = "User \(num)"
+                    } else {
+                        self.displayName = "Unknown User"
+                    }
+                }
+            }
+
             self.avatar = try container
                 .decodeIfPresent(
                     ParraImageAsset.self,
@@ -235,6 +257,7 @@ public extension ParraUser {
         public let deletedAt: Date?
         public let tenantId: String
         public let name: String?
+        public let displayName: String
         public let avatar: ParraImageAsset?
         public let identity: String?
         public let username: String?
@@ -259,7 +282,7 @@ public extension ParraUser {
         /// Whether or not the user has an associated identity with a password.
         public let hasPassword: Bool
 
-        public var displayName: String? {
+        public var personalName: String {
             if let name {
                 return name
             }
@@ -272,7 +295,7 @@ public extension ParraUser {
                 return lastName
             }
 
-            return nil
+            return displayName
         }
 
         public var identityNames: [String] {

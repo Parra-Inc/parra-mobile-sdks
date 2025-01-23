@@ -21,6 +21,7 @@ extension ParraComment: ParraFixture {
                 id: .uuid,
                 tenantId: .uuid,
                 name: "John Appleseed",
+                displayName: "User 123456",
                 avatar: nil,
                 verified: true,
                 roles: [
@@ -45,6 +46,7 @@ extension ParraComment: ParraFixture {
                     id: .uuid,
                     tenantId: .uuid,
                     name: "Mick",
+                    displayName: "User 123456",
                     avatar: ParraImageAsset(
                         id: .uuid,
                         size: CGSize(width: 4_284, height: 4_284),
@@ -108,6 +110,7 @@ extension ParraComment: ParraFixture {
                     id: .uuid,
                     tenantId: .uuid,
                     name: "Mick",
+                    displayName: "User 123456",
                     avatar: ParraImageAsset(
                         id: .uuid,
                         size: CGSize(width: 4_284, height: 4_284),
@@ -142,6 +145,7 @@ extension ParraComment: ParraFixture {
                     id: .uuid,
                     tenantId: .uuid,
                     name: "Mick",
+                    displayName: "User 123456",
                     avatar: ParraImageAsset(
                         id: .uuid,
                         size: CGSize(width: 4_284, height: 4_284),

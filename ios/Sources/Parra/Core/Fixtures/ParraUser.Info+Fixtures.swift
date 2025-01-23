@@ -16,6 +16,7 @@ extension ParraUser.Info: ParraFixture {
         deletedAt: nil,
         tenantId: .uuid,
         name: "John Appleseed",
+        displayName: "User 123456",
         avatar: nil,
         identity: nil,
         username: "cool-user-92",

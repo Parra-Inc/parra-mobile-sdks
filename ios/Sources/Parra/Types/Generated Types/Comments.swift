@@ -14,6 +14,7 @@ public struct ParraUserStub: Codable, Equatable, Hashable, Identifiable {
         id: String,
         tenantId: String,
         name: String?,
+        displayName: String,
         avatar: ParraImageAsset?,
         verified: Bool?,
         roles: [ParraUserRoleStub]?
@@ -21,9 +22,48 @@ public struct ParraUserStub: Codable, Equatable, Hashable, Identifiable {
         self.id = id
         self.tenantId = tenantId
         self.name = name
+        self.displayName = displayName
         self.avatar = avatar
         self.verified = verified
         self.roles = .init(roles)
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.id = try container.decode(String.self, forKey: .id)
+        self.tenantId = try container.decode(String.self, forKey: .tenantId)
+
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
+
+        if let displayName = try container.decodeIfPresent(
+            String.self,
+            forKey: .displayName
+        ) {
+            self.displayName = displayName
+        } else {
+            if let name {
+                self.displayName = name
+            } else {
+                if let first = id.split(separator: "-").first,
+                   let num = Int(first, radix: 16)
+                {
+                    self.displayName = "User \(num)"
+                } else {
+                    self.displayName = "Unknown User"
+                }
+            }
+        }
+
+        self.avatar = try container
+            .decodeIfPresent(ParraImageAsset.self, forKey: .avatar)
+        self.verified = try container
+            .decodeIfPresent(Bool.self, forKey: .verified)
+        self.roles = try container
+            .decodeIfPresent(
+                PartiallyDecodableArray<ParraUserRoleStub>.self,
+                forKey: .roles
+            )
     }
 
     // MARK: - Public
@@ -31,6 +71,7 @@ public struct ParraUserStub: Codable, Equatable, Hashable, Identifiable {
     public let id: String
     public let tenantId: String
     public let name: String?
+    public let displayName: String
     public let avatar: ParraImageAsset?
     public let verified: Bool?
     public let roles: PartiallyDecodableArray<ParraUserRoleStub>?
