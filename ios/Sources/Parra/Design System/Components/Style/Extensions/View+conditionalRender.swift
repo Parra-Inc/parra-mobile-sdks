@@ -22,12 +22,29 @@ extension View {
     }
 
     @ViewBuilder
+    func `guard`(
+        _ condition: Bool,
+        @ViewBuilder elseRenderer: (Self) -> some View
+    ) -> some View {
+        if condition {
+            self
+        } else {
+            elseRenderer(self)
+        }
+    }
+
+    @ViewBuilder
     func withContent<Content>(
         content: Content?,
-        @ViewBuilder renderer: (_ content: Content) -> some View
+        @ViewBuilder renderer: (_ content: Content) -> some View,
+        @ViewBuilder elseRenderer: () -> some View = {
+            EmptyView()
+        }
     ) -> some View {
         if let content {
             renderer(content)
+        } else {
+            elseRenderer()
         }
     }
 
@@ -38,10 +55,15 @@ extension View {
         @ViewBuilder renderer: (
             _ content: Content,
             _ style: Style
-        ) -> some View
+        ) -> some View,
+        @ViewBuilder elseRenderer: () -> some View = {
+            EmptyView()
+        }
     ) -> some View {
         if let content, let style {
             renderer(content, style)
+        } else {
+            elseRenderer()
         }
     }
 }
