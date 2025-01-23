@@ -44,13 +44,13 @@ public struct ParraAlertContent: Hashable, Equatable, Sendable {
     ) -> ParraImageContent {
         let symbolName = switch style {
         case .success:
-            "checkmark.circle"
+            "checkmark.circle.fill"
         case .info:
-            "info.circle"
+            "info.circle.fill"
         case .warn:
-            "exclamationmark.triangle"
+            "exclamationmark.triangle.fill"
         case .error:
-            "xmark.circle"
+            "xmark.circle.fill"
         }
 
         return ParraImageContent.symbol(symbolName, .monochrome)

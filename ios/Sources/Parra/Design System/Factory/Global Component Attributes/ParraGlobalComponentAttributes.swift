@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-private let closeButtonSize: CGFloat = 12
+private let closeButtonSize: CGFloat = 18
 
 open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
     // MARK: - Lifecycle
@@ -1188,7 +1188,6 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
                     ),
                     padding: .custom(
                         .padding(
-                            top: cornerPadding,
                             trailing: cornerPadding
                         )
                     )
@@ -1209,7 +1208,6 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
                     ),
                     padding: .custom(
                         .padding(
-                            top: cornerPadding,
                             trailing: cornerPadding
                         )
                     )
@@ -1230,7 +1228,6 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
                     ),
                     padding: .custom(
                         .padding(
-                            top: cornerPadding,
                             trailing: cornerPadding
                         )
                     )
@@ -1246,27 +1243,7 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
         for level: ParraAlertLevel,
         with theme: ParraTheme
     ) -> ParraColor {
-        let palette = theme.palette
-
-        return switch level {
-        case .success:
-            Color(
-                lightVariant: palette.success.shade300,
-                darkVariant: palette.success.shade900
-            )
-        case .info:
-            palette.primaryBackground
-        case .warn:
-            Color(
-                lightVariant: palette.warning.shade300,
-                darkVariant: palette.warning.shade900
-            )
-        case .error:
-            Color(
-                lightVariant: palette.error.shade300,
-                darkVariant: palette.error.shade900
-            )
-        }
+        return theme.palette.secondaryBackground
     }
 
     private func defaultIcon(
@@ -1292,25 +1269,13 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
 
         return switch level {
         case .success:
-            Color(
-                lightVariant: palette.success.shade600,
-                darkVariant: palette.success.shade400
-            )
+            palette.success.toParraColor().opacity(0.9)
         case .info:
-            Color(
-                lightVariant: ParraColorSwatch.gray.shade600,
-                darkVariant: ParraColorSwatch.gray.shade400
-            )
+            palette.primary.toParraColor().opacity(0.9)
         case .warn:
-            Color(
-                lightVariant: palette.warning.shade600,
-                darkVariant: palette.warning.shade400
-            )
+            palette.warning.toParraColor().opacity(0.9)
         case .error:
-            Color(
-                lightVariant: palette.error.shade600,
-                darkVariant: palette.error.shade400
-            )
+            palette.error.toParraColor().opacity(0.9)
         }
     }
 
@@ -1322,26 +1287,17 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
 
         let color = switch level {
         case .success:
-            Color(
-                lightVariant: palette.success.shade400,
-                darkVariant: palette.success.shade950
-            )
+            palette.success.toParraColor()
         case .info:
-            palette.primarySeparator.toParraColor()
+            palette.primary.toParraColor()
         case .warn:
-            Color(
-                lightVariant: palette.warning.shade400,
-                darkVariant: palette.warning.shade950
-            )
+            palette.warning.toParraColor()
         case .error:
-            Color(
-                lightVariant: palette.error.shade400,
-                darkVariant: palette.error.shade950
-            )
+            palette.error.toParraColor()
         }
 
         return ParraAttributes.Border(
-            width: 1,
+            width: 1.25,
             color: color
         )
     }

@@ -16,11 +16,14 @@ public class ParraFeedbackFormWidgetConfig: ParraContainerConfig {
             .maxTextFieldCharacters,
         defaultValues: [String: String] = ParraFeedbackFormWidgetConfig.default
             .defaultValues,
-        contextMessage: String? = ParraFeedbackFormWidgetConfig.default.contextMessage
+        contextMessage: String? = ParraFeedbackFormWidgetConfig.default.contextMessage,
+        successToastContent: ParraAlertContent? = ParraFeedbackFormWidgetConfig.default
+            .successToastContent
     ) {
         self.maxTextFieldCharacters = maxTextFieldCharacters
         self.defaultValues = defaultValues
         self.contextMessage = contextMessage
+        self.successToastContent = successToastContent
     }
 
     // MARK: - Public
@@ -28,7 +31,15 @@ public class ParraFeedbackFormWidgetConfig: ParraContainerConfig {
     public static let `default` = ParraFeedbackFormWidgetConfig(
         maxTextFieldCharacters: 30,
         defaultValues: [:],
-        contextMessage: nil
+        contextMessage: nil,
+        successToastContent: ParraAlertContent(
+            title: ParraLabelContent(text: "Feedback Sent"),
+            subtitle: ParraLabelContent(
+                text: "Your feedback has been recorded successfully."
+            ),
+            icon: ParraAlertContent.defaultIcon(for: .success),
+            dismiss: ParraAlertContent.defaultDismiss(for: .success)
+        )
     )
 
     /// The maximum number of characters allowed in a text field input.
@@ -39,4 +50,8 @@ public class ParraFeedbackFormWidgetConfig: ParraContainerConfig {
     public let defaultValues: [String: String]
 
     public let contextMessage: String?
+
+    /// What should be displayed in the toast shown when the feedback form is
+    /// submitted. If this is set to `nil`, no toast will be shown.
+    public let successToastContent: ParraAlertContent?
 }

@@ -99,33 +99,31 @@ extension FeedbackFormWidget {
             )
         }
 
-        func submit() {
-            let data = content.fields
-                .reduce(
-                    [ParraFeedbackFormField: String]()
-                ) { accumulator, fieldWithState in
-                    guard let value = fieldWithState.value else {
-                        return accumulator
-                    }
-
-                    var next = accumulator
-                    next[fieldWithState.field] = value
-                    return next
+        @MainActor
+        func submit() async {
+            let data = content.fields.reduce(
+                [ParraFeedbackFormField: String]()
+            ) { accumulator, fieldWithState in
+                guard let value = fieldWithState.value else {
+                    return accumulator
                 }
 
-            Task { @MainActor in
-                guard let submissionHandler else {
-                    logger.warn("Feedback form has no submission handler")
-
-                    return
-                }
-
-                content.submitButton = content.submitButton.withLoading(true)
-
-                await submissionHandler(data)
-
-                content.submitButton = content.submitButton.withLoading(false)
+                var next = accumulator
+                next[fieldWithState.field] = value
+                return next
             }
+
+            guard let submissionHandler else {
+                logger.warn("Feedback form has no submission handler")
+
+                return
+            }
+
+            content.submitButton = content.submitButton.withLoading(true)
+
+            await submissionHandler(data)
+
+            content.submitButton = content.submitButton.withLoading(false)
         }
     }
 }

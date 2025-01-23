@@ -85,7 +85,16 @@ struct FeedbackFormWidget: ParraContainer {
                             )
                         ),
                         onPress: {
-                            contentObserver.submit()
+                            Task { @MainActor in
+                                await contentObserver.submit()
+
+                                if let successToastContent = config.successToastContent {
+                                    alertManager.showToast(
+                                        level: .success,
+                                        content: successToastContent
+                                    )
+                                }
+                            }
                         }
                     )
                     .disabled(!contentObserver.content.canSubmit)
@@ -211,6 +220,7 @@ struct FeedbackFormWidget: ParraContainer {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraAlertManager) private var alertManager
 
     private func onFieldValueChanged(
         field: ParraFeedbackFormField,

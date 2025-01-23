@@ -35,27 +35,28 @@ public struct ParraToastAlertComponent: View {
             onDismiss()
             primaryAction?()
         } label: {
-            VStack {
-                HStack(spacing: 11) {
-                    withContent(
-                        content: content.icon
-                    ) { content in
-                        componentFactory.buildImage(
-                            content: content,
-                            localAttributes: attributes.icon
-                        )
-                    }
+            HStack(alignment: .top, spacing: 11) {
+                withContent(
+                    content: content.icon
+                ) { content in
+                    componentFactory.buildImage(
+                        content: content,
+                        localAttributes: attributes.icon
+                    )
+                }
+
+                VStack {
                     componentFactory.buildLabel(
                         content: content.title,
                         localAttributes: attributes.title
                     )
-                }
 
-                if let subtitleContent = content.subtitle {
-                    componentFactory.buildLabel(
-                        content: subtitleContent,
-                        localAttributes: attributes.subtitle
-                    )
+                    if let subtitleContent = content.subtitle {
+                        componentFactory.buildLabel(
+                            content: subtitleContent,
+                            localAttributes: attributes.subtitle
+                        )
+                    }
                 }
             }
         }
@@ -76,6 +77,8 @@ public struct ParraToastAlertComponent: View {
 
                 if let dismissButtonContent = content.dismiss {
                     VStack {
+                        Spacer()
+
                         componentFactory.buildImageButton(
                             config: ParraImageButtonConfig(
                                 variant: .plain
@@ -84,11 +87,13 @@ public struct ParraToastAlertComponent: View {
                             localAttributes: attributes.dismissButton,
                             onPress: onDismiss
                         )
+
+                        Spacer()
                     }
                     .frame(
                         maxWidth: .infinity,
                         maxHeight: .infinity,
-                        alignment: .topTrailing
+                        alignment: .trailing
                     )
                 }
             }
