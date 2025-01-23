@@ -274,9 +274,13 @@ public struct ParraPhotoWell: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.displayScale) private var displayScale
 
     private var thumbSizeFittingSize: ParraImageAssetThumbnailSize {
-        return ParraImageAssetThumbnailSize.recommended(for: size)
+        return ParraImageAssetThumbnailSize.recommended(
+            for: size,
+            in: displayScale
+        )
     }
 
     private func imageUrl(for asset: ParraImageAsset) -> URL {

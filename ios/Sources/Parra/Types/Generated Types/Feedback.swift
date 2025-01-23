@@ -742,7 +742,7 @@ public enum ParraImageAssetThumbnailSize {
 
     public static func recommended(
         for size: CGSize,
-        in scale: CGFloat = 1.0
+        in scale: CGFloat
     ) -> Self {
         let maxDimension = max(size.height * scale, size.width * scale)
 
