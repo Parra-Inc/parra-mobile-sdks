@@ -20,19 +20,19 @@ extension AuthService {
 
         request.requestedScopes = requestedScopes
 
-        let authorization = try await beginSignInWithAppleAuthorization(
-            request: request
-        )
-
-        modalScreenManager.presentLoadingIndicatorModal(
-            content: ParraLoadingIndicatorContent(
-                title: ParraLabelContent(text: "Signing in with Apple"),
-                subtitle: nil,
-                cancel: nil
-            )
-        )
-
         do {
+            let authorization = try await beginSignInWithAppleAuthorization(
+                request: request
+            )
+
+            modalScreenManager.presentLoadingIndicatorModal(
+                content: ParraLoadingIndicatorContent(
+                    title: ParraLabelContent(text: "Signing in with Apple"),
+                    subtitle: nil,
+                    cancel: nil
+                )
+            )
+
             defer {
                 modalScreenManager.dismissLoadingIndicatorModal()
             }
@@ -57,6 +57,13 @@ extension AuthService {
             )
 
             await applyUserUpdate(authResult)
+        } catch let error as ASAuthorizationError {
+            switch error.code {
+            case .canceled:
+                return
+            default:
+                throw error
+            }
         } catch {
             throw error
         }
