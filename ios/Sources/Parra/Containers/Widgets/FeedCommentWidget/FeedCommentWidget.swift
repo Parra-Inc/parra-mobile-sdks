@@ -29,13 +29,17 @@ struct FeedCommentWidget: ParraContainer {
 
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 0) {
+            VStack(spacing: 0) {
                 AnyView(config.headerViewBuilder())
 
-                FeedCommentsView(
-                    feedItem: contentObserver.feedItem,
-                    comments: comments
-                )
+                LazyVStack(spacing: 8) {
+                    FeedCommentsView(
+                        feedItem: contentObserver.feedItem,
+                        comments: comments
+                    )
+                }
+                .padding(.vertical)
+                .background(theme.palette.secondaryBackground)
                 .redacted(
                     when: contentObserver.commentPaginator.isShowingPlaceholders
                 )
@@ -59,9 +63,18 @@ struct FeedCommentWidget: ParraContainer {
                 AnyView(config.footerViewBuilder())
             }
         }
-//        .defaultScrollAnchor(.bottom)
         .scrollDismissesKeyboard(.interactively)
-        .background(theme.palette.secondaryBackground)
+        .background(
+            LinearGradient(
+                colors: [
+                    theme.palette.primaryBackground,
+                    theme.palette.secondaryBackground
+                ],
+                startPoint: UnitPoint(x: 0.5, y: 0.25),
+                endPoint: UnitPoint(x: 0.5, y: 0.3)
+            )
+        )
+        .scrollContentBackground(.hidden)
         .keyboardToolbar(height: 120) {
             AddCommentBarView { commentText in
                 try await contentObserver.addComment(commentText)

@@ -18,6 +18,8 @@ struct KeyboardToolbar<ToolbarView: View>: ViewModifier {
     // MARK: - Internal
 
     func body(content: Content) -> some View {
+        let cornerRadius = theme.cornerRadius.value(for: .xl)
+
         ZStack(alignment: .bottom) {
             GeometryReader { geometry in
                 VStack(spacing: 0) {
@@ -32,7 +34,15 @@ struct KeyboardToolbar<ToolbarView: View>: ViewModifier {
             toolbarView
                 .frame(height: height)
                 .background(
-                    theme.palette.secondaryBackground
+                    theme.palette.primaryBackground
+                )
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: cornerRadius.topLeading,
+                        bottomLeadingRadius: 0,
+                        bottomTrailingRadius: 0,
+                        topTrailingRadius: cornerRadius.topTrailing
+                    )
                 )
         }
         .ignoresSafeArea(.container, edges: [.bottom])

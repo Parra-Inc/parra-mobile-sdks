@@ -38,6 +38,7 @@ struct ReactionPickerView: View {
             )
             .padding()
         }
+        .background(theme.palette.secondaryBackground)
         .contentMargins(
             .top,
             EdgeInsets(vertical: 16, horizontal: 0),
@@ -53,6 +54,7 @@ struct ReactionPickerView: View {
 
     @State private var search: String = ""
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraTheme) private var theme
 
     private var searchEnabled: Bool
 

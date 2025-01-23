@@ -17,37 +17,49 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: mainPadding.width) {
-            withContent(content: comment.user.avatar) { avatar in
+            withContent(
+                content: comment.user.avatar
+            ) { avatar in
                 componentFactory.buildAsyncImage(
+                    config: ParraAsyncImageConfig(
+                        contentMode: .fill
+                    ),
                     content: ParraAsyncImageContent(
                         avatar,
-                        preferredThumbnailSize: .sm
+                        preferredThumbnailSize: .md
                     ),
                     localAttributes: ParraAttributes.AsyncImage(
                         size: CGSize(width: 34, height: 34),
                         cornerRadius: .full
                     )
                 )
+            } elseRenderer: {
+                componentFactory.buildImage(
+                    config: ParraImageConfig(),
+                    content: .symbol("person.crop.circle.fill", .hierarchical),
+                    localAttributes: ParraAttributes.Image(
+                        size: CGSize(width: 34, height: 34),
+                        cornerRadius: .full
+                    )
+                )
+                .foregroundStyle(
+                    theme.palette.primary.toParraColor(),
+                    theme.palette.primaryBackground
+                )
             }
 
             VStack(alignment: .leading) {
-                HStack(alignment: .center, spacing: round(mainPadding.width / 3)) {
-                    withContent(content: comment.user.name) { name in
-                        componentFactory.buildLabel(
-                            text: name,
-                            localAttributes: ParraAttributes.Label(
-                                text: .default(with: .headline),
-                                padding: .zero
-                            )
+                HStack(alignment: .center, spacing: 8) {
+                    componentFactory.buildLabel(
+                        text: comment.user.displayName,
+                        localAttributes: ParraAttributes.Label(
+                            text: .default(with: .headline),
+                            padding: .zero
                         )
-                    }
+                    )
 
                     componentFactory.buildLabel(
-                        text: comment.createdAt.timeAgo(
-                            context: .standalone,
-                            dateTimeStyle: .numeric,
-                            unitStyle: .short
-                        ),
+                        text: comment.createdAt.timeAgoAbbreviated(),
                         localAttributes: ParraAttributes.Label(
                             text: .default(with: .caption),
                             padding: .zero
@@ -78,4 +90,5 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
     // MARK: - Private
 
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraTheme) private var theme
 }

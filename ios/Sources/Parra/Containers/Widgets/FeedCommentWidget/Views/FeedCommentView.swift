@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-private let mainPadding = CGSize(width: 12.0, height: 8.0)
+private let mainPadding = CGSize(width: 16.0, height: 6.0)
 
 struct FeedCommentView: View {
     // MARK: - Lifecycle

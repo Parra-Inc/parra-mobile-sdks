@@ -118,7 +118,7 @@ struct AddCommentBarView: View {
                     ),
                     localAttributes: ParraAttributes.TextInput(
                         padding: .zero,
-                        background: theme.palette.primaryBackground
+                        background: theme.palette.secondaryBackground
                     )
                 )
 
@@ -150,6 +150,7 @@ struct AddCommentBarView: View {
         )
         .padding(.bottom)
         .safeAreaPadding([.bottom, .horizontal])
+        .background(theme.palette.primaryBackground)
         .onChange(of: currentState) { _, newValue in
             submitButtonContent = newValue.content
         }

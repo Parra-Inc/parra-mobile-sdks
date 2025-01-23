@@ -9,6 +9,8 @@ import SwiftUI
 import UIKit
 
 struct FeedCreatorUpdateDetailHeaderView: View {
+    // MARK: - Internal
+
     let creatorUpdate: ParraCreatorUpdateAppStub
     let feedItemId: String
     let containerGeometry: GeometryProxy
@@ -67,5 +69,10 @@ struct FeedCreatorUpdateDetailHeaderView: View {
                 )
             }
         }
+        .background(theme.palette.primaryBackground)
     }
+
+    // MARK: - Private
+
+    @Environment(\.parraTheme) private var theme
 }

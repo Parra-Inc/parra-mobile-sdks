@@ -75,6 +75,7 @@ struct FeedCommentReactionPickerView: View {
             .padding(.top, 30)
             .padding(.horizontal)
         }
+        .background(theme.palette.primaryBackground)
         .frame(maxHeight: .infinity)
         .if(searchEnabled) { ctx in
             ctx.searchable(text: $search)
@@ -100,6 +101,7 @@ struct FeedCommentReactionPickerView: View {
     @State private var search: String = ""
     @State private var showingReportAlert = false
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraTheme) private var theme
 
     private var searchEnabled: Bool
 
