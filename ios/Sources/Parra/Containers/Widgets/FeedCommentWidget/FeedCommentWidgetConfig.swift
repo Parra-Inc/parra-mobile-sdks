@@ -58,11 +58,12 @@ public final class FeedCommentWidgetConfig: ParraContainerConfig {
 
     public static let defaultEmptyStateContent = ParraEmptyStateContent(
         title: ParraLabelContent(
-            text: "No comments"
+            text: "Nothing here yet"
         ),
         subtitle: ParraLabelContent(
-            text: "Check back later!"
-        )
+            text: "This is the beginning of the chat. Add your first comment!"
+        ),
+        icon: nil
     )
 
     public static let defaultErrorStateContent = ParraEmptyStateContent(

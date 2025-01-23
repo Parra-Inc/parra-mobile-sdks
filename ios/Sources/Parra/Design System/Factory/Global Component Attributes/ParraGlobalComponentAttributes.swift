@@ -405,7 +405,7 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
                 padding: .custom(
                     .padding(top: 12)
                 )
-            ),
+            ).mergingOverrides(localAttributes?.titleLabel),
             subtitleLabel: ParraAttributes.Label(
                 text: ParraAttributes.Text(
                     style: .subheadline,
@@ -414,14 +414,14 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
                 padding: .custom(
                     .padding(top: 12)
                 )
-            ),
+            ).mergingOverrides(localAttributes?.subtitleLabel),
             icon: ParraAttributes.Image(
                 tint: palette.secondary.shade400.toParraColor(),
                 size: CGSize(width: 96, height: 96),
                 padding: .custom(
                     .padding(bottom: 24)
                 )
-            ),
+            ).mergingOverrides(localAttributes?.icon),
             primaryActionButton: ParraAttributes.ContainedButton(
                 normal: ParraAttributes.ContainedButton.StatefulAttributes(
                     label: ParraAttributes.Label(
@@ -431,17 +431,17 @@ open class ParraGlobalComponentAttributes: ComponentAttributesProvider {
                         .padding(top: 36, bottom: 4)
                     )
                 )
-            ),
+            ).mergingOverrides(localAttributes?.primaryActionButton),
             secondaryActionButton: ParraAttributes.PlainButton(
                 normal: ParraAttributes.PlainButton.StatefulAttributes(
                     label: ParraAttributes.Label(
                         frame: .flexible(.init(maxWidth: 240))
                     )
                 )
-            ),
-            tint: palette.primary.toParraColor(),
-            padding: .xxl,
-            background: palette.primaryBackground
+            ).mergingOverrides(localAttributes?.secondaryActionButton),
+            tint: localAttributes?.tint ?? palette.primary.toParraColor(),
+            padding: localAttributes?.padding ?? .xxl,
+            background: localAttributes?.background ?? palette.primaryBackground
         )
     }
 

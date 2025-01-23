@@ -15,8 +15,8 @@ public extension ParraAttributes {
         // MARK: - Lifecycle
 
         public init(
-            titleLabel: ParraAttributes.Label = .default(with: .headline),
-            subtitleLabel: ParraAttributes.Label = .default(with: .subheadline),
+            titleLabel: ParraAttributes.Label = .init(),
+            subtitleLabel: ParraAttributes.Label = .init(),
             icon: ParraAttributes.Image = .init(),
             primaryActionButton: ParraAttributes.ContainedButton = .init(),
             secondaryActionButton: ParraAttributes.PlainButton = .init(),
