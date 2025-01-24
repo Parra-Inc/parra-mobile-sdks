@@ -13,7 +13,8 @@ struct FeedbackCardWidget: ParraContainer {
 
     init(
         config: ParraFeedbackCardWidgetConfig,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
 
@@ -152,7 +153,8 @@ struct FeedbackCardWidget: ParraContainer {
                                 .dataManager,
                             syncHandler: nil
                         )
-                    )
+                    ),
+                    navigationPath: .constant(.init())
                 )
             }
             .padding()

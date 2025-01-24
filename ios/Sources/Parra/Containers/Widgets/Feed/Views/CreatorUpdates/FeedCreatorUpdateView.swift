@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+struct FeedCreatorUpdateDetailParams {
+    var creatorUpdate: ParraCreatorUpdateAppStub
+    var feedItem: ParraFeedItem
+    var reactor: StateObject<Reactor>
+}
+
 struct FeedCreatorUpdateParams {
     let creatorUpdate: ParraCreatorUpdateAppStub
     let feedItem: ParraFeedItem
@@ -15,6 +21,9 @@ struct FeedCreatorUpdateParams {
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
+    let performCreatorUpdateSelection: (
+        _ detailParams: FeedCreatorUpdateDetailParams
+    ) -> Void
 }
 
 struct FeedCreatorUpdateView: View {
@@ -56,9 +65,17 @@ struct FeedCreatorUpdateView: View {
             creatorUpdate.attachmentPaywall?.entitlement
         )
 
-        Button(action: {
-            isPresentingModal = true
-        }) {
+        Button(
+            action: {
+                params.performCreatorUpdateSelection(
+                    FeedCreatorUpdateDetailParams(
+                        creatorUpdate: params.creatorUpdate,
+                        feedItem: params.feedItem,
+                        reactor: _reactor
+                    )
+                )
+            }
+        ) {
             VStack(spacing: 0) {
                 FeedCreatorUpdateHeaderView(
                     creatorUpdate: creatorUpdate
@@ -121,16 +138,6 @@ struct FeedCreatorUpdateView: View {
         .buttonStyle(.plain)
         .padding(.vertical, params.spacing)
         .safeAreaPadding(.horizontal)
-        .sheet(isPresented: $isPresentingModal) {} content: {
-            NavigationStack {
-                FeedCreatorUpdateDetailView(
-                    creatorUpdate: params.creatorUpdate,
-                    feedItem: params.feedItem,
-                    reactor: reactor
-                )
-            }
-            .toolbarBackground(.visible, for: .navigationBar)
-        }
     }
 
     // MARK: - Private
@@ -210,7 +217,8 @@ public struct TestModel: Codable, Equatable, Hashable, Identifiable {
                                 reactions: feedItem.reactions?.elements,
                                 containerGeometry: proxy,
                                 spacing: 18.0,
-                                performActionForFeedItemData: { _ in }
+                                performActionForFeedItemData: { _ in },
+                                performCreatorUpdateSelection: { _ in }
                             )
                         )
                     default:

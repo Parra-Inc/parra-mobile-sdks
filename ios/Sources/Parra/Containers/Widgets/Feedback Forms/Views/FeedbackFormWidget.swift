@@ -13,7 +13,8 @@ struct FeedbackFormWidget: ParraContainer {
 
     init(
         config: ParraFeedbackFormWidgetConfig,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self._contentObserver = StateObject(wrappedValue: contentObserver)
@@ -248,7 +249,8 @@ struct FeedbackFormWidget: ParraContainer {
                         fields: ParraFeedbackFormField.validStates()
                     )
                 )
-            )
+            ),
+            navigationPath: .constant(.init())
         )
     }
 }

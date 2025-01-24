@@ -25,7 +25,7 @@ extension ParraViewDataLoader {
             TipJarParams,
             TipJarWidget
         >(
-            renderer: { parra, params, _ in
+            renderer: { parra, params, navigationPath, _ in
                 let container: TipJarWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         params: TipJarWidget.ContentObserver
@@ -35,7 +35,8 @@ extension ParraViewDataLoader {
                                 api: parra.parraInternal.api
                             ),
                         config: config,
-                        contentTransformer: nil
+                        contentTransformer: nil,
+                        navigationPath: navigationPath
                     )
 
                 return container

@@ -13,10 +13,12 @@ public struct ParraStorefrontWidget: View {
 
     public init(
         config: ParraStorefrontWidgetConfig = .default,
-        delegate: ParraStorefrontWidgetDelegate? = nil
+        delegate: ParraStorefrontWidgetDelegate? = nil,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self.delegate = delegate
+        _navigationPath = navigationPath
     }
 
     // MARK: - Public
@@ -31,11 +33,16 @@ public struct ParraStorefrontWidget: View {
                 delegate: delegate,
                 productsResponse: ParraStorefront.cachedPreloadResponse
             ),
-            config: config
+            config: config,
+            navigationPath: $navigationPath
         )
 
         return container
     }
 
     // MARK: - Internal
+
+    // MARK: - Internal
+
+    @Binding var navigationPath: NavigationPath
 }

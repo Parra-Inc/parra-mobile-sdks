@@ -17,6 +17,7 @@ struct FeedYouTubeVideoView: View {
         reactions: [ParraReactionSummary]?,
         containerGeometry: GeometryProxy,
         spacing: CGFloat,
+        navigationPath: Binding<NavigationPath>,
         performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void
     ) {
         self.youtubeVideo = youtubeVideo
@@ -25,6 +26,7 @@ struct FeedYouTubeVideoView: View {
         self.reactions = reactions
         self.containerGeometry = containerGeometry
         self.spacing = spacing
+        _navigationPath = navigationPath
         self.performActionForFeedItemData = performActionForFeedItemData
         self._reactor = StateObject(
             wrappedValue: Reactor(
@@ -58,6 +60,8 @@ struct FeedYouTubeVideoView: View {
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
+
+    @Binding var navigationPath: NavigationPath
 
     var body: some View {
         let hasPaywallEntitlement = true

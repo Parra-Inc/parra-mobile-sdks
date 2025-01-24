@@ -15,7 +15,12 @@ public struct ParraViewDataLoader<TransformParams, Data, ViewContent>
     // MARK: - Lifecycle
 
     public init(
-        @ViewBuilder renderer: @MainActor @escaping (Parra, Data, Dismisser?)
+        @ViewBuilder renderer: @MainActor @escaping (
+            Parra,
+            Data,
+            Binding<NavigationPath>,
+            Dismisser?
+        )
             -> ViewContent
     ) {
         self.render = renderer
@@ -60,5 +65,10 @@ public struct ParraViewDataLoader<TransformParams, Data, ViewContent>
 
     // MARK: - Internal
 
-    @ViewBuilder let render: @MainActor (Parra, Data, Dismisser?) -> ViewContent
+    @ViewBuilder let render: @MainActor (
+        Parra,
+        Data,
+        Binding<NavigationPath>,
+        Dismisser?
+    ) -> ViewContent
 }

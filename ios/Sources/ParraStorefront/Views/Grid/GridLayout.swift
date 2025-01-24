@@ -11,6 +11,7 @@ enum GridLayout: String, CaseIterable {
     case oneColumn = "1"
     case twoColumn = "2"
     case threeColumn = "3"
+    case fourColumn = "4"
 
     // MARK: - Internal
 
@@ -22,6 +23,8 @@ enum GridLayout: String, CaseIterable {
             return "square.grid.2x2"
         case .threeColumn:
             return "square.grid.3x3"
+        case .fourColumn:
+            return "square.grid.4x4"
         }
     }
 
@@ -33,6 +36,8 @@ enum GridLayout: String, CaseIterable {
             return 2
         case .threeColumn:
             return 3
+        case .fourColumn:
+            return 4
         }
     }
 

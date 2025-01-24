@@ -23,7 +23,8 @@ public class ParraContainerRenderer {
     public func renderContainer<C: ParraContainer>(
         params: C.ContentObserver.InitialParams,
         config: C.Config,
-        contentTransformer: ((C.ContentObserver) -> Void)? = nil
+        contentTransformer: ((C.ContentObserver) -> Void)? = nil,
+        navigationPath: Binding<NavigationPath>
     ) -> C {
         let contentObserver = C.ContentObserver(
             initialParams: params
@@ -32,20 +33,23 @@ public class ParraContainerRenderer {
         return renderContainer(
             contentObserver: contentObserver,
             config: config,
-            contentTransformer: contentTransformer
+            contentTransformer: contentTransformer,
+            navigationPath: navigationPath
         )
     }
 
     public func renderContainer<C: ParraContainer>(
         contentObserver: C.ContentObserver,
         config: C.Config,
-        contentTransformer: ((C.ContentObserver) -> Void)? = nil
+        contentTransformer: ((C.ContentObserver) -> Void)? = nil,
+        navigationPath: Binding<NavigationPath>
     ) -> C {
         contentTransformer?(contentObserver)
 
         return C(
             config: config,
-            contentObserver: contentObserver
+            contentObserver: contentObserver,
+            navigationPath: navigationPath
         )
     }
 

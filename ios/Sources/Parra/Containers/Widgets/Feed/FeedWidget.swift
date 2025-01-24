@@ -12,15 +12,20 @@ struct FeedWidget: ParraContainer {
 
     init(
         config: ParraFeedConfiguration,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self._contentObserver = StateObject(wrappedValue: contentObserver)
+
+        _navigationPath = navigationPath
     }
 
     // MARK: - Internal
 
     @StateObject var contentObserver: ContentObserver
+    @Binding var navigationPath: NavigationPath
+
     let config: ParraFeedConfiguration
 
     var items: Binding<[ParraFeedItem]> {
@@ -36,22 +41,20 @@ struct FeedWidget: ParraContainer {
             for: defaultWidgetAttributes.contentPadding
         )
 
-        NavigationStack {
-            scrollView(
-                with: contentPadding
-            )
-            .applyWidgetAttributes(
-                attributes: defaultWidgetAttributes.withoutContentPadding(),
-                using: parraTheme
-            )
-            .environment(config)
-            .environment(componentFactory)
-            .environmentObject(contentObserver)
-            .onAppear {
-                contentObserver.loadInitialFeedItems()
-            }
-            .navigationTitle(config.navigationTitle)
+        scrollView(
+            with: contentPadding
+        )
+        .applyWidgetAttributes(
+            attributes: defaultWidgetAttributes.withoutContentPadding(),
+            using: parraTheme
+        )
+        .environment(config)
+        .environment(componentFactory)
+        .environmentObject(contentObserver)
+        .onAppear {
+            contentObserver.loadInitialFeedItems()
         }
+        .navigationTitle(config.navigationTitle)
     }
 
     func scrollView(
@@ -71,6 +74,7 @@ struct FeedWidget: ParraContainer {
                         items: items.wrappedValue,
                         itemSpacing: config.itemSpacing,
                         containerGeometry: geometry,
+                        navigationPath: $navigationPath,
                         itemAtIndexDidAppear: { index in
                             contentObserver.feedPaginator.loadMore(after: index)
                         },
@@ -179,7 +183,8 @@ struct FeedWidget: ParraContainer {
                         feedCollectionResponse: .validStates()[0],
                         api: parra.parraInternal.api
                     )
-            )
+            ),
+            navigationPath: .constant(.init())
         )
     }
 }

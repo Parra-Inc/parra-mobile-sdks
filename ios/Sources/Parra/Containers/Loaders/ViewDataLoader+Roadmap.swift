@@ -28,7 +28,7 @@ extension ParraViewDataLoader {
             ParraRoadmapInfo,
             RoadmapWidget
         >(
-            renderer: { parra, params, _ in
+            renderer: { parra, params, navigationPath, _ in
                 let container: RoadmapWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         params: RoadmapWidget.ContentObserver.InitialParams(
@@ -38,7 +38,8 @@ extension ParraViewDataLoader {
                             api: parra.parraInternal.api
                         ),
                         config: config,
-                        contentTransformer: nil
+                        contentTransformer: nil,
+                        navigationPath: navigationPath
                     )
 
                 return container

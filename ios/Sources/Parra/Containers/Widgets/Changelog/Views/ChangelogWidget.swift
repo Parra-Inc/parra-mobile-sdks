@@ -13,15 +13,18 @@ struct ChangelogWidget: ParraContainer {
 
     init(
         config: ParraChangelogWidgetConfig,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self._contentObserver = StateObject(wrappedValue: contentObserver)
+        _navigationPath = navigationPath
     }
 
     // MARK: - Internal
 
     @StateObject var contentObserver: ContentObserver
+    @Binding var navigationPath: NavigationPath
     let config: ParraChangelogWidgetConfig
 
     var body: some View {
@@ -52,10 +55,10 @@ struct ChangelogWidget: ParraContainer {
 
                     ReleaseWidget(
                         config: config,
-                        contentObserver: contentObserver
+                        contentObserver: contentObserver,
+                        navigationPath: $navigationPath
                     )
                     .padding(.top, -contentPadding.top)
-                    .environment(navigationState)
                     .environment(\.parraComponentFactory, componentFactory)
                     .environment(\.parraConfiguration, parraConfiguration)
                 }
@@ -176,7 +179,6 @@ struct ChangelogWidget: ParraContainer {
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraConfiguration) private var parraConfiguration
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(NavigationState.self) private var navigationState
 
     @State private var showNavigationDivider = false
 }
@@ -193,7 +195,8 @@ struct ChangelogWidget: ParraContainer {
                         .validStates()[0],
                     api: parra.parraInternal.api
                 )
-            )
+            ),
+            navigationPath: .constant(.init())
         )
     }
 }

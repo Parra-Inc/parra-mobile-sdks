@@ -12,7 +12,8 @@ struct UserSettingsWidget: ParraContainer {
 
     init(
         config: ParraUserSettingsConfiguration,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self._contentObserver = State(wrappedValue: contentObserver)
@@ -91,7 +92,8 @@ struct UserSettingsWidget: ParraContainer {
                     config: config,
                     api: parra.parraInternal.api
                 )
-            )
+            ),
+            navigationPath: .constant(.init())
         )
     }
 }

@@ -18,6 +18,7 @@ public protocol ParraContainer: View {
 
     init(
         config: Config,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     )
 }

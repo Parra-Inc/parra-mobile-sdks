@@ -13,7 +13,8 @@ struct PaywallWidget: ParraContainer {
 
     init(
         config: ParraPaywallConfig,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self._contentObserver = StateObject(wrappedValue: contentObserver)

@@ -32,7 +32,7 @@ extension ParraViewDataLoader {
             StorefrontParams,
             StorefrontWidget
         >(
-            renderer: { _, params, _ in
+            renderer: { _, params, navigationPath, _ in
                 let container: StorefrontWidget = Parra.containerRenderer.renderContainer(
                     params: StorefrontWidget.ContentObserver.InitialParams(
                         config: config,
@@ -40,7 +40,8 @@ extension ParraViewDataLoader {
                         productsResponse: params.productsResponse
                     ),
                     config: config,
-                    contentTransformer: nil
+                    contentTransformer: nil,
+                    navigationPath: navigationPath
                 )
 
                 return container

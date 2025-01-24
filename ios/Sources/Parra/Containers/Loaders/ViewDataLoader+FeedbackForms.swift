@@ -16,44 +16,47 @@ extension ParraViewDataLoader {
         submissionType: FeedbackFormSubmissionType
     ) -> ParraViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget> {
         return ParraViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget>(
-            renderer: { parra, form, dismisser in
+            renderer: { parra, form, navigationPath, dismisser in
                 let container: FeedbackFormWidget = parra.parraInternal
-                    .containerRenderer.renderContainer(
+                    .containerRenderer
+                    .renderContainer(
                         params: .init(
                             config: config,
                             formData: form.data
                         ),
-                        config: config
-                    ) { contentObserver in
-                        contentObserver.submissionHandler = { data in
-                            logger.info("Submitting feedback form data")
+                        config: config,
+                        contentTransformer: { contentObserver in
+                            contentObserver.submissionHandler = { data in
+                                logger.info("Submitting feedback form data")
 
-                            parra.logEvent(.submit(form: "feedback_form"), [
-                                "formId": form.id
-                            ])
+                                parra.logEvent(.submit(form: "feedback_form"), [
+                                    "formId": form.id
+                                ])
 
-                            dismisser?(.completed)
+                                dismisser?(.completed)
 
-                            switch submissionType {
-                            case .default:
-                                do {
-                                    try await parra.parraInternal
-                                        .api
-                                        .submitFeedbackForm(
-                                            with: form.id,
-                                            data: data
+                                switch submissionType {
+                                case .default:
+                                    do {
+                                        try await parra.parraInternal
+                                            .api
+                                            .submitFeedbackForm(
+                                                with: form.id,
+                                                data: data
+                                            )
+                                    } catch {
+                                        logger.error(
+                                            "Error submitting feedback form: \(form.id)",
+                                            error
                                         )
-                                } catch {
-                                    logger.error(
-                                        "Error submitting feedback form: \(form.id)",
-                                        error
-                                    )
+                                    }
+                                case .custom(let handler):
+                                    await handler(data)
                                 }
-                            case .custom(let handler):
-                                await handler(data)
                             }
-                        }
-                    }
+                        },
+                        navigationPath: navigationPath
+                    )
 
                 return container
             }

@@ -25,7 +25,7 @@ extension ParraViewDataLoader {
             ReleaseContentObserver.ReleaseContentType,
             ReleaseWidget
         >(
-            renderer: { parra, releaseContent, _ in
+            renderer: { parra, releaseContent, navigationPath, _ in
                 let container: ReleaseWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         params: ReleaseContentObserver.InitialParams(
@@ -33,7 +33,8 @@ extension ParraViewDataLoader {
                             api: parra.parraInternal.api
                         ),
                         config: config,
-                        contentTransformer: nil
+                        contentTransformer: nil,
+                        navigationPath: navigationPath
                     )
 
                 return container

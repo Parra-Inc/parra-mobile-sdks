@@ -42,6 +42,8 @@ public extension ParraUser {
             name: String?,
             displayName: String,
             avatar: ParraImageAsset?,
+            verified: Bool?,
+            roles: [ParraUserRoleStub]?,
             identity: String?,
             username: String?,
             email: String?,
@@ -71,6 +73,8 @@ public extension ParraUser {
             self.name = name
             self.displayName = displayName
             self.avatar = avatar
+            self.verified = verified
+            self.roles = .init(roles)
             self.identity = identity
             self.username = username
             self.email = email
@@ -142,6 +146,13 @@ public extension ParraUser {
                 .decodeIfPresent(
                     ParraImageAsset.self,
                     forKey: .avatar
+                )
+            self.verified = try container
+                .decodeIfPresent(Bool.self, forKey: .verified)
+            self.roles = try container
+                .decodeIfPresent(
+                    PartiallyDecodableArray<ParraUserRoleStub>.self,
+                    forKey: .roles
                 )
             self.identity = try container
                 .decodeIfPresent(
@@ -259,6 +270,9 @@ public extension ParraUser {
         public let name: String?
         public let displayName: String
         public let avatar: ParraImageAsset?
+        // If the user is a verified user on this tenant
+        public let verified: Bool?
+        public let roles: PartiallyDecodableArray<ParraUserRoleStub>?
         public let identity: String?
         public let username: String?
         public let email: String?

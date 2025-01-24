@@ -17,6 +17,7 @@ struct FeedCommentsView: View {
                 feedItem: feedItem,
                 comment: comment
             )
+            .id(comment)
         }
     }
 }

@@ -29,7 +29,7 @@ extension ParraViewDataLoader {
             PaywallParams,
             PaywallWidget
         >(
-            renderer: { parra, params, _ in
+            renderer: { parra, params, navigationPath, _ in
                 let container: PaywallWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         params: PaywallWidget.ContentObserver
@@ -42,7 +42,8 @@ extension ParraViewDataLoader {
                                 appInfo: params.appInfo
                             ),
                         config: config,
-                        contentTransformer: nil
+                        contentTransformer: nil,
+                        navigationPath: navigationPath
                     )
 
                 return container

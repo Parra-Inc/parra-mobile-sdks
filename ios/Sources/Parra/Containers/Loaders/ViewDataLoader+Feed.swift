@@ -34,7 +34,7 @@ extension ParraViewDataLoader {
             FeedParams,
             FeedWidget
         >(
-            renderer: { parra, params, _ in
+            renderer: { parra, params, navigationPath, _ in
                 let container: FeedWidget = parra.parraInternal
                     .containerRenderer
                     .renderContainer(
@@ -45,7 +45,8 @@ extension ParraViewDataLoader {
                             api: parra.parraInternal.api
                         ),
                         config: config,
-                        contentTransformer: nil
+                        contentTransformer: nil,
+                        navigationPath: navigationPath
                     )
 
                 return container

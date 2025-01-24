@@ -28,7 +28,8 @@ extension ParraComment: ParraFixture {
                     .init(id: .uuid, name: "Moderator", key: "mod")
                 ]
             ),
-            reactions: nil
+            reactions: nil,
+            isTemporary: nil
         )
     }
 
@@ -96,7 +97,8 @@ extension ParraComment: ParraFixture {
                         count: 4,
                         reactionId: .uuid
                     )
-                ]
+                ],
+                isTemporary: nil
             ),
             ParraComment(
                 id: .uuid,
@@ -131,7 +133,9 @@ extension ParraComment: ParraFixture {
                         count: 4,
                         reactionId: .uuid
                     )
-                ]
+                ],
+                isTemporary: true,
+                submissionErrorMessage: "Your message contained inappropriate content"
             ),
             ParraComment(
                 id: .uuid,
@@ -168,7 +172,8 @@ extension ParraComment: ParraFixture {
                         count: 65,
                         reactionId: .uuid
                     )
-                ]
+                ],
+                isTemporary: nil
             )
         ]
     }

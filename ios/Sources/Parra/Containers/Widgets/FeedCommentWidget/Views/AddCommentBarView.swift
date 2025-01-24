@@ -13,11 +13,14 @@ struct AddCommentBarView: View {
     // MARK: - Lifecycle
 
     init(
-        submitComment: @escaping (String) async throws -> Void
+        submitComment: @escaping (String) -> Void
     ) {
         self.submitComment = submitComment
         self._submitButtonContent = State(
-            initialValue: SubmitState.noContent.content
+            initialValue: ParraImageButtonContent(
+                image: .symbol("arrow.up.circle.fill", .monochrome),
+                isDisabled: true
+            )
         )
     }
 
@@ -26,8 +29,6 @@ struct AddCommentBarView: View {
     enum SubmitState: Equatable {
         case noContent
         case content(String)
-        case submitting(String)
-        case error(String, ParraError)
 
         // MARK: - Internal
 
@@ -37,30 +38,6 @@ struct AddCommentBarView: View {
                 return ""
             case .content(let content):
                 return content
-            case .submitting(let content):
-                return content
-            case .error(let content, _):
-                return content
-            }
-        }
-
-        var content: ParraImageButtonContent {
-            switch self {
-            case .noContent, .error:
-                ParraImageButtonContent(
-                    image: .symbol("arrow.up.circle.fill", .monochrome),
-                    isDisabled: true
-                )
-            case .content(let content):
-                ParraImageButtonContent(
-                    image: .symbol("arrow.up.circle.fill", .monochrome),
-                    isDisabled: content.isEmpty
-                )
-            case .submitting:
-                ParraImageButtonContent(
-                    image: .symbol("arrow.up.circle.fill", .monochrome),
-                    isDisabled: true
-                )
             }
         }
 
@@ -73,113 +50,115 @@ struct AddCommentBarView: View {
                 return true
             case (.content(let lhs), .content(let rhs)):
                 return lhs == rhs
-            case (.submitting(let lhs), .submitting(let rhs)):
-                return lhs == rhs
-            case (.error(let lc, let le), .error(let rc, let re)):
-                return lc == rc && le.localizedDescription == re.localizedDescription
             default:
                 return false
             }
         }
     }
 
-    let submitComment: (String) async throws -> Void
+    let submitComment: (String) -> Void
 
-    var inputContent: ParraTextInputContent {
-        ParraTextInputContent(
-            title: nil,
-            defaultText: currentState.currentText,
-            placeholder: "Start chatting",
-            helper: nil,
-            errorMessage: errorMessage,
-            textChanged: { newText in
-
-                // TODO: Character limit should be 250
-                // TODO: Error should be for too long or too short
-
-                if let newText, !newText.isEmpty {
-                    currentState = .content(newText)
-                } else {
-                    currentState = .noContent
-                }
-            }
-        )
-    }
+    // TODO: Character limit should be 250
+    // TODO: Error should be for too long or too short
 
     var body: some View {
-        VStack {
-            HStack(alignment: .center) {
-                componentFactory.buildTextInput(
-                    config: ParraTextInputConfig(
-                        resizeWhenHelperMessageIsVisible: true,
-                        keyboardType: .default,
-                        textInputAutocapitalization: .sentences,
-                        autocorrectionDisabled: false,
-                        shouldAutoFocus: false
+        let cornerRadius = theme.cornerRadius.value(for: .xxxl)
+
+        HStack(alignment: .center) {
+            TextField(
+                text: $text,
+                prompt: Text("Start chatting"),
+                axis: .vertical,
+                label: {
+                    EmptyView()
+                }
+            )
+            .lineLimit(4)
+            .tint(theme.palette.primary.toParraColor())
+            .contentMargins(
+                .all,
+                EdgeInsets(
+                    vertical: 4,
+                    horizontal: 8
+                ),
+                for: .automatic
+            )
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(theme.palette.secondaryBackground)
+            .applyCornerRadii(
+                size: .xxxl,
+                from: theme
+            )
+            .keyboardType(.default)
+            .textInputAutocapitalization(.sentences)
+            .autocorrectionDisabled(false)
+            .focused($isFocused)
+            .submitLabel(.send)
+            .onSubmit(of: .text) {
+                handleSubmission()
+
+                isFocused = false
+            }
+
+            componentFactory.buildImageButton(
+                config: ParraImageButtonConfig(
+                    type: .primary,
+                    size: .custom(
+                        CGSize(width: 30, height: 30)
                     ),
-                    content: inputContent,
-                    localAttributes: ParraAttributes.TextInput(
-                        padding: .zero,
-                        background: theme.palette.secondaryBackground
+                    variant: .plain
+                ),
+                content: submitButtonContent,
+                localAttributes: ParraAttributes.ImageButton(
+                    normal: ParraAttributes.ImageButton.StatefulAttributes(
+                        padding: .zero
                     )
                 )
-
-                if case .submitting = currentState {
-                    ProgressView()
-                } else {
-                    componentFactory.buildImageButton(
-                        config: ParraImageButtonConfig(
-                            type: .primary,
-                            size: .custom(
-                                CGSize(width: 30, height: 30)
-                            ),
-                            variant: .plain
-                        ),
-                        content: submitButtonContent,
-                        localAttributes: ParraAttributes.ImageButton(
-                            normal: ParraAttributes.ImageButton.StatefulAttributes(
-                                padding: .zero
-                            )
-                        )
-                    ) {
-                        handleSubmission()
-                    }
-                }
+            ) {
+                handleSubmission()
             }
         }
-        .frame(
-            maxWidth: .infinity
-        )
-        .padding(.bottom)
-        .safeAreaPadding([.bottom, .horizontal])
+        .safeAreaPadding(.horizontal, 10)
+        .safeAreaPadding(.top, 10)
+        .safeAreaPadding(.bottom, 16)
         .background(theme.palette.primaryBackground)
-        .onChange(of: currentState) { _, newValue in
-            submitButtonContent = newValue.content
+        .clipShape(
+            .rect(
+                topLeadingRadius: cornerRadius.topLeading,
+                bottomLeadingRadius: 0,
+                bottomTrailingRadius: 0,
+                topTrailingRadius: cornerRadius.topTrailing
+            )
+        )
+        .onChange(of: text) { _, newValue in
+            let trimmed = newValue.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+
+            submitButtonContent = ParraImageButtonContent(
+                image: .symbol("arrow.up.circle.fill", .monochrome),
+                isDisabled: trimmed.isEmpty
+            )
         }
     }
 
     // MARK: - Private
 
-    @State private var currentState: SubmitState = .noContent
-    @State private var errorMessage: String?
+    @State private var text = ""
     @State private var submitButtonContent: ParraImageButtonContent
+    @FocusState private var isFocused: Bool
 
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
 
     private func handleSubmission() {
-        Task { @MainActor in
-            let text = currentState.currentText
+        let finalText = text.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
 
-            do {
-                currentState = .submitting(text)
+        submitComment(finalText)
 
-                try await submitComment(text)
-
-                currentState = .noContent
-            } catch {
-                currentState = .error(text, ParraError.system(error))
-            }
-        }
+        text = ""
     }
 }

@@ -32,7 +32,7 @@ extension ParraViewDataLoader {
             ParraChangelogInfo,
             ChangelogWidget
         >(
-            renderer: { parra, params, _ in
+            renderer: { parra, params, navigationPath, _ in
                 let container: ChangelogWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         params: .init(
@@ -40,7 +40,8 @@ extension ParraViewDataLoader {
                             api: parra.parraInternal.api
                         ),
                         config: config,
-                        contentTransformer: nil
+                        contentTransformer: nil,
+                        navigationPath: navigationPath
                     )
 
                 return container

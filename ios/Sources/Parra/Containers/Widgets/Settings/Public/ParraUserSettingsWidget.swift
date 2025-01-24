@@ -35,13 +35,16 @@ public struct ParraUserSettingsWidget: View {
                     api: parra.parraInternal.api
                 ),
                 config: config,
-                contentTransformer: nil
+                contentTransformer: nil,
+                navigationPath: $navigationPath
             )
 
         return container
     }
 
     // MARK: - Private
+
+    @State private var navigationPath: NavigationPath = .init()
 
     @Environment(\.parra) private var parra
 }

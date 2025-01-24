@@ -83,14 +83,19 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 content: {
                     if case .complete(let data) = state {
                         NavigationStack(path: $navigationState.navigationPath) {
-                            loader.render(Parra.default, data, dismiss)
-                                .if(detents.isEmpty) { ctx in
-                                    ctx.toolbar {
-                                        ToolbarItem(placement: .topBarTrailing) {
-                                            ParraDismissButton()
-                                        }
+                            loader.render(
+                                Parra.default,
+                                data,
+                                $navigationState.navigationPath,
+                                dismiss
+                            )
+                            .if(detents.isEmpty) { ctx in
+                                ctx.toolbar {
+                                    ToolbarItem(placement: .topBarTrailing) {
+                                        ParraDismissButton()
                                     }
                                 }
+                            }
                         }
                         .environment(navigationState)
                         .presentationDetents(detents)

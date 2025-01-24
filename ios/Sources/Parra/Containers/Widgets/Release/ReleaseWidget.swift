@@ -13,10 +13,12 @@ struct ReleaseWidget: ParraContainer {
 
     init(
         config: ParraChangelogWidgetConfig,
-        contentObserver: ReleaseContentObserver
+        contentObserver: ReleaseContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self._contentObserver = StateObject(wrappedValue: contentObserver)
+        _navigationPath = navigationPath
 
         let collection: AppReleaseCollectionResponse? = if let releaseStub =
             contentObserver.releaseStub
@@ -44,6 +46,7 @@ struct ReleaseWidget: ParraContainer {
 
     // MARK: - Internal
 
+    @Binding var navigationPath: NavigationPath
     @StateObject var contentObserver: ReleaseContentObserver
     @StateObject var changelogContentObserver: ChangelogWidget
         .ContentObserver
@@ -119,7 +122,7 @@ struct ReleaseWidget: ParraContainer {
                         )
                     ),
                     onPress: {
-                        navigationState.navigationPath.append("changelog")
+                        navigationPath.append("changelog")
                     }
                 )
                 .safeAreaPadding(.horizontal)
@@ -165,11 +168,11 @@ struct ReleaseWidget: ParraContainer {
             if destination == "changelog" {
                 ChangelogWidget(
                     config: config,
-                    contentObserver: changelogContentObserver
+                    contentObserver: changelogContentObserver,
+                    navigationPath: $navigationPath
                 )
                 .padding(.top, contentPadding.top)
                 .edgesIgnoringSafeArea([.top])
-                .environment(navigationState)
                 .environment(\.parraComponentFactory, componentFactory)
                 .environment(\.parraConfiguration, parraConfiguration)
             }
@@ -262,6 +265,4 @@ struct ReleaseWidget: ParraContainer {
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraConfiguration) private var parraConfiguration
     @Environment(\.parraTheme) private var parraTheme
-
-    @State private var navigationState = NavigationState()
 }

@@ -8,11 +8,26 @@
 import SwiftUI
 
 struct FeedCreatorUpdateDetailView: View {
+    // MARK: - Lifecycle
+
+    init(
+        creatorUpdate: ParraCreatorUpdateAppStub,
+        feedItem: ParraFeedItem,
+        reactor: StateObject<Reactor>,
+        navigationPath: Binding<NavigationPath>
+    ) {
+        self.creatorUpdate = creatorUpdate
+        self.feedItem = feedItem
+        self._reactor = reactor
+        self._navigationPath = navigationPath
+    }
+
     // MARK: - Internal
 
     let creatorUpdate: ParraCreatorUpdateAppStub
     let feedItem: ParraFeedItem
-    @ObservedObject var reactor: Reactor
+    @StateObject var reactor: Reactor
+    @Binding var navigationPath: NavigationPath
 
     var body: some View {
         GeometryReader { geometry in
@@ -44,7 +59,8 @@ struct FeedCreatorUpdateDetailView: View {
                             )
                         }
                     ),
-                    contentTransformer: nil
+                    contentTransformer: nil,
+                    navigationPath: $navigationPath
                 )
 
             container
@@ -52,11 +68,6 @@ struct FeedCreatorUpdateDetailView: View {
                     theme.palette.primaryBackground,
                     for: .navigationBar
                 )
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        ParraDismissButton()
-                    }
-                }
         }
     }
 

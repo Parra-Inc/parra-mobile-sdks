@@ -13,7 +13,8 @@ struct ModalLoadingIndicatorContainer: ParraContainer {
 
     init(
         config: Config,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self.contentObserver = contentObserver
@@ -85,7 +86,8 @@ struct ModalLoadingIndicatorContainer: ParraContainer {
                         cancel: nil
                     )
                 )
-            )
+            ),
+            navigationPath: .constant(.init())
         )
     }
 }

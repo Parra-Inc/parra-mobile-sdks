@@ -12,10 +12,12 @@ public struct ParraFAQWidget: View {
 
     public init(
         layoutId: String,
-        config: ParraUserSettingsConfiguration = .default
+        config: ParraUserSettingsConfiguration = .default,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.layoutId = layoutId
         self.config = config
+        _navigationPath = navigationPath
     }
 
     // MARK: - Public
@@ -33,11 +35,16 @@ public struct ParraFAQWidget: View {
                     api: parra.parraInternal.api
                 ),
                 config: config,
-                contentTransformer: nil
+                contentTransformer: nil,
+                navigationPath: $navigationPath
             )
 
         return container
     }
+
+    // MARK: - Internal
+
+    @Binding var navigationPath: NavigationPath
 
     // MARK: - Private
 

@@ -8,6 +8,10 @@
 import Combine
 import SwiftUI
 
+private let logger = Logger(category: "Feed Comment")
+
+// MARK: - FeedCommentWidget.ContentObserver
+
 extension FeedCommentWidget {
     @Observable
     class ContentObserver: ParraContainerContentObserver {
@@ -79,7 +83,7 @@ extension FeedCommentWidget {
         }
 
         @MainActor
-        func loadInitialFeedItems() {
+        func loadComments() {
             if commentPaginator.isShowingPlaceholders {
                 commentPaginator.loadMore(after: nil)
             }
@@ -93,15 +97,89 @@ extension FeedCommentWidget {
         }
 
         @MainActor
-        func addComment(_ text: String) async throws {
-            // TODO: Handle error code "blocked"  with 403 for abusers
-            // TODO: Handle profanity_detected error code
-            let comment = try await api.addFeedItemComment(
-                with: text,
-                to: feedItem.id
+        @discardableResult
+        func addComment(
+            with text: String,
+            from user: ParraUser
+        ) -> ParraComment {
+            logger.info("Creating new comment")
+
+            let temporaryComment = ParraComment(
+                id: .uuid,
+                createdAt: .now,
+                updatedAt: .now,
+                deletedAt: nil,
+                body: text,
+                userId: user.info.id,
+                feedItemId: feedItem.id,
+                user: ParraUserStub(
+                    id: user.info.id,
+                    tenantId: user.info.tenantId,
+                    name: user.info.name,
+                    displayName: user.info.displayName,
+                    avatar: user.info.avatar,
+                    verified: user.info.verified,
+                    roles: user.info.roles?.elements
+                ),
+                reactions: [],
+                isTemporary: true,
+                submissionErrorMessage: nil
             )
 
-            commentPaginator.appendItem(comment)
+            commentPaginator.appendItem(temporaryComment)
+
+            Task {
+                do {
+                    let realComment = try await api.addFeedItemComment(
+                        with: text,
+                        to: feedItem.id
+                    )
+
+                    commentPaginator.replace(temporaryComment, with: realComment)
+                } catch let error as ParraError {
+                    var erroredComment = temporaryComment
+
+                    if case .apiError(let apiError) = error {
+                        logger.error("API error creating new comment", [
+                            "message": apiError.message
+                        ])
+
+                        switch apiError.code {
+                        case .profanityDetected, .blocked:
+                            erroredComment.submissionErrorMessage = apiError.message
+                        default:
+                            erroredComment
+                                .submissionErrorMessage =
+                                "An unexpected error occurred submitting your comment. Try again later."
+                        }
+                    } else {
+                        logger.error("Unknown API error creating new comment", [
+                            "message": error.userMessage ?? ""
+                        ])
+
+                        erroredComment
+                            .submissionErrorMessage =
+                            "An unexpected error occurred submitting your comment. Try again later."
+                    }
+
+                    commentPaginator
+                        .replace(temporaryComment, with: erroredComment)
+                } catch {
+                    logger.error("Unknown error creating new comment", [
+                        "message": error.localizedDescription
+                    ])
+
+                    var erroredComment = temporaryComment
+                    erroredComment
+                        .submissionErrorMessage =
+                        "An unknown error occurred submitting your comment. Try again later."
+
+                    commentPaginator
+                        .replace(temporaryComment, with: erroredComment)
+                }
+            }
+
+            return temporaryComment
         }
 
         // MARK: - Private

@@ -136,11 +136,20 @@ extension Server {
         )
 
         guard response.statusCode == 200 else {
-            throw ParraError.networkError(
-                request: request,
-                response: response,
-                responseData: data
-            )
+            if let apiError = try? ParraError.apiError(
+                configuration.jsonDecoder.decode(
+                    ParraApiErrorResponse.self,
+                    from: data
+                )
+            ) {
+                throw apiError
+            } else {
+                throw ParraError.networkError(
+                    request: request,
+                    response: response,
+                    responseData: data
+                )
+            }
         }
 
         return try decodeResponse(

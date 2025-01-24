@@ -73,6 +73,7 @@ public struct ParraUserStub: Codable, Equatable, Hashable, Identifiable {
     public let name: String?
     public let displayName: String
     public let avatar: ParraImageAsset?
+    // If the user is a verified user on this tenant
     public let verified: Bool?
     public let roles: PartiallyDecodableArray<ParraUserRoleStub>?
 }
@@ -140,7 +141,9 @@ public struct ParraComment: Codable, Equatable, Hashable, Identifiable {
         userId: String,
         feedItemId: String?,
         user: ParraUserStub,
-        reactions: [ParraReactionSummary]?
+        reactions: [ParraReactionSummary]?,
+        isTemporary: Bool? = nil,
+        submissionErrorMessage: String? = nil
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -151,6 +154,8 @@ public struct ParraComment: Codable, Equatable, Hashable, Identifiable {
         self.feedItemId = feedItemId
         self.user = user
         self.reactions = .init(reactions)
+        self.isTemporary = isTemporary
+        self.submissionErrorMessage = submissionErrorMessage
     }
 
     // MARK: - Public
@@ -164,6 +169,14 @@ public struct ParraComment: Codable, Equatable, Hashable, Identifiable {
     public let feedItemId: String?
     public let user: ParraUserStub
     public let reactions: PartiallyDecodableArray<ParraReactionSummary>?
+
+    // MARK: - Internal
+
+    /// The comment has been created locally for display to the user but hasn't been stored in the database yet.
+    let isTemporary: Bool?
+    /// An error that occurred while sending this comment. Should only be sent
+    /// when `isTemporary` is true
+    var submissionErrorMessage: String?
 }
 
 struct UpdateCommentRequestBody: Codable, Equatable, Hashable {

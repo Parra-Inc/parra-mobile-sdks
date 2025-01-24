@@ -30,7 +30,7 @@ extension ParraViewDataLoader {
             FAQsParams,
             FAQWidget
         >(
-            renderer: { parra, params, _ in
+            renderer: { parra, params, navigationPath, _ in
                 let container: FAQWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         params: FAQWidget.ContentObserver.InitialParams(
@@ -39,7 +39,8 @@ extension ParraViewDataLoader {
                             api: parra.parraInternal.api
                         ),
                         config: config,
-                        contentTransformer: nil
+                        contentTransformer: nil,
+                        navigationPath: navigationPath
                     )
 
                 return container

@@ -297,19 +297,34 @@ final class ApiResourceServer: Server {
                     )
                 )
             case (400 ... 499, _):
-                return (
-                    .failure(
-                        ParraError.networkError(
-                            request: request,
-                            response: response,
-                            responseData: data
-                        )
-                    ),
-                    AuthenticatedRequestResponseContext(
-                        attributes: config.attributes,
-                        statusCode: response.statusCode
+                if let apiError = try? ParraError.apiError(
+                    configuration.jsonDecoder.decode(
+                        ParraApiErrorResponse.self,
+                        from: data
                     )
-                )
+                ) {
+                    return (
+                        .failure(apiError),
+                        AuthenticatedRequestResponseContext(
+                            attributes: config.attributes,
+                            statusCode: response.statusCode
+                        )
+                    )
+                } else {
+                    return (
+                        .failure(
+                            ParraError.networkError(
+                                request: request,
+                                response: response,
+                                responseData: data
+                            )
+                        ),
+                        AuthenticatedRequestResponseContext(
+                            attributes: config.attributes,
+                            statusCode: response.statusCode
+                        )
+                    )
+                }
             case (500 ... 599, _):
                 if config.shouldRetry {
                     logger.trace("Retrying previous request")

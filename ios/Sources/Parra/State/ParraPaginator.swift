@@ -304,6 +304,16 @@ public class ParraPaginator<Item, Context>: ObservableObject
         items.append(item)
     }
 
+    public func replace(_ item: Item, with newItem: Item) {
+        if isShowingPlaceholders {
+            return
+        }
+
+        if let index = items.firstIndex(of: item) {
+            items[index] = newItem
+        }
+    }
+
     public func currentData() -> Data {
         return Data(
             items: items,

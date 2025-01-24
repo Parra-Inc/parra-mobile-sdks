@@ -36,16 +36,7 @@ struct KeyboardToolbar<ToolbarView: View>: ViewModifier {
                 .background(
                     theme.palette.primaryBackground
                 )
-                .clipShape(
-                    .rect(
-                        topLeadingRadius: cornerRadius.topLeading,
-                        bottomLeadingRadius: 0,
-                        bottomTrailingRadius: 0,
-                        topTrailingRadius: cornerRadius.topTrailing
-                    )
-                )
         }
-        .ignoresSafeArea(.container, edges: [.bottom])
     }
 
     // MARK: - Private

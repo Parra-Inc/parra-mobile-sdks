@@ -39,6 +39,16 @@ final class ModalScreenManager {
                 return
             }
 
+            let navigationState = NavigationState()
+            let navigationPath = Binding<NavigationPath>(
+                get: {
+                    navigationState.navigationPath
+                },
+                set: { path in
+                    navigationState.navigationPath = path
+                }
+            )
+
             let container: ModalLoadingIndicatorContainer = containerRenderer
                 .renderContainer(
                     contentObserver: ModalLoadingIndicatorContainer
@@ -47,7 +57,8 @@ final class ModalScreenManager {
                                 indicatorContent: content
                             )
                         ),
-                    config: .init()
+                    config: .init(),
+                    navigationPath: navigationPath
                 )
 
             let componentFactory = ParraComponentFactory(
@@ -132,21 +143,23 @@ final class ModalScreenManager {
             }
 
             let navigationState = NavigationState()
+            let navigationPath = Binding<NavigationPath>(
+                get: {
+                    navigationState.navigationPath
+                },
+                set: { path in
+                    navigationState.navigationPath = path
+                }
+            )
 
             let container: ContainerType = containerRenderer.renderContainer(
                 contentObserver: contentObserver,
-                config: config
+                config: config,
+                navigationPath: navigationPath
             )
 
             let rootView = NavigationStack(
-                path: Binding<NavigationPath>(
-                    get: {
-                        navigationState.navigationPath
-                    },
-                    set: { path in
-                        navigationState.navigationPath = path
-                    }
-                )
+                path: navigationPath
             ) {
                 container
                     .if(showsDismissalButton) { ctx in

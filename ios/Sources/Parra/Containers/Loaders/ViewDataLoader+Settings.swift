@@ -33,7 +33,7 @@ extension ParraViewDataLoader {
             SettingsParams,
             UserSettingsWidget
         >(
-            renderer: { parra, params, _ in
+            renderer: { parra, params, navigationPath, _ in
                 let container: UserSettingsWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         params: UserSettingsWidget.ContentObserver.InitialParams(
@@ -43,7 +43,8 @@ extension ParraViewDataLoader {
                             api: parra.parraInternal.api
                         ),
                         config: config,
-                        contentTransformer: nil
+                        contentTransformer: nil,
+                        navigationPath: navigationPath
                     )
 
                 return container

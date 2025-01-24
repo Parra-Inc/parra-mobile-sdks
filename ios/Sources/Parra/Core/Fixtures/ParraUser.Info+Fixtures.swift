@@ -18,6 +18,8 @@ extension ParraUser.Info: ParraFixture {
         name: "John Appleseed",
         displayName: "User 123456",
         avatar: nil,
+        verified: nil,
+        roles: nil,
         identity: nil,
         username: "cool-user-92",
         email: "swiftpreview@parra.io",

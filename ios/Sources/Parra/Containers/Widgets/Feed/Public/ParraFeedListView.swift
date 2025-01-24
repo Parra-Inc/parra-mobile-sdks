@@ -14,12 +14,14 @@ public struct ParraFeedListView: View {
         items: [ParraFeedItem],
         itemSpacing: CGFloat = 16,
         containerGeometry: GeometryProxy,
+        navigationPath: Binding<NavigationPath>,
         itemAtIndexDidAppear: @escaping (_: Int) -> Void,
         performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void
     ) {
         self.items = items
         self.itemSpacing = itemSpacing
         self.containerGeometry = containerGeometry
+        _navigationPath = navigationPath
         self.itemAtIndexDidAppear = itemAtIndexDidAppear
         self.performActionForFeedItemData = performActionForFeedItemData
     }
@@ -37,9 +39,39 @@ public struct ParraFeedListView: View {
         LazyVStack(alignment: .center, spacing: 0) {
             createCells(with: containerGeometry)
         }
+        .navigationDestination(
+            isPresented: Binding<Bool>(
+                get: {
+                    return presentedCreatorUpdate != nil
+                },
+                set: { value in
+                    if !value {
+                        presentedCreatorUpdate = nil
+                    }
+                }
+            ),
+            destination: {
+                if let presentedCreatorUpdate {
+                    FeedCreatorUpdateDetailView(
+                        creatorUpdate: presentedCreatorUpdate.creatorUpdate,
+                        feedItem: presentedCreatorUpdate.feedItem,
+                        reactor: presentedCreatorUpdate.reactor,
+                        navigationPath: $navigationPath
+                    )
+                    .environmentObject(contentObserver)
+                }
+            }
+        )
     }
 
+    // MARK: - Internal
+
+    @Binding var navigationPath: NavigationPath
+
     // MARK: - Private
+
+    @State private var presentedCreatorUpdate: FeedCreatorUpdateDetailParams?
+    @Environment(FeedWidget.ContentObserver.self) private var contentObserver
 
     @ViewBuilder
     private func createCells(
@@ -61,6 +93,7 @@ public struct ParraFeedListView: View {
                     reactions: item.reactions?.elements,
                     containerGeometry: containerGeometry,
                     spacing: spacing,
+                    navigationPath: $navigationPath,
                     performActionForFeedItemData: performActionForFeedItemData
                 )
                 .id(item.id)
@@ -75,6 +108,7 @@ public struct ParraFeedListView: View {
                     reactions: item.reactions?.elements,
                     containerGeometry: containerGeometry,
                     spacing: spacing,
+                    navigationPath: $navigationPath,
                     performActionForFeedItemData: performActionForFeedItemData
                 )
                 .id(item.id)
@@ -90,7 +124,10 @@ public struct ParraFeedListView: View {
                         reactions: item.reactions?.elements,
                         containerGeometry: containerGeometry,
                         spacing: spacing,
-                        performActionForFeedItemData: performActionForFeedItemData
+                        performActionForFeedItemData: performActionForFeedItemData,
+                        performCreatorUpdateSelection: { detailParams in
+                            presentedCreatorUpdate = detailParams
+                        }
                     )
                 )
                 .id(item.id)

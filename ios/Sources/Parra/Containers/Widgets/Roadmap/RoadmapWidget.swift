@@ -13,7 +13,8 @@ struct RoadmapWidget: ParraContainer {
 
     init(
         config: ParraRoadmapWidgetConfig,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self._contentObserver = StateObject(wrappedValue: contentObserver)
@@ -270,7 +271,8 @@ struct RoadmapWidget: ParraContainer {
                         .validStates()[0],
                     api: parra.parraInternal.api
                 )
-            )
+            ),
+            navigationPath: .constant(.init())
         )
     }
 }

@@ -28,15 +28,17 @@ public final class FeedCommentWidgetConfig: ParraContainerConfig {
             _ items: [ParraFeedItem],
             _ itemSpacing: CGFloat,
             _ containerGeometry: GeometryProxy,
+            _ navigationPath: Binding<NavigationPath>,
             _ itemAtIndexDidAppear: @escaping (_: Int) -> Void,
             _ performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void
         )
             -> some View =
-            { items, itemSpacing, containerGeometry, itemAtIndexDidAppear, performActionForFeedItemData in
+            { items, itemSpacing, containerGeometry, navigationPath, itemAtIndexDidAppear, performActionForFeedItemData in
                 return ParraFeedListView(
                     items: items,
                     itemSpacing: itemSpacing,
                     containerGeometry: containerGeometry,
+                    navigationPath: navigationPath,
                     itemAtIndexDidAppear: itemAtIndexDidAppear,
                     performActionForFeedItemData: performActionForFeedItemData
                 )

@@ -12,7 +12,8 @@ struct FAQWidget: ParraContainer {
 
     init(
         config: ParraFAQConfiguration,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self._contentObserver = State(wrappedValue: contentObserver)
@@ -66,7 +67,8 @@ struct FAQWidget: ParraContainer {
                     config: config,
                     api: parra.parraInternal.api
                 )
-            )
+            ),
+            navigationPath: .constant(.init())
         )
     }
 }

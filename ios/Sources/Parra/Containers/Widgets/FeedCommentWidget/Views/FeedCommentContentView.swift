@@ -79,11 +79,51 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
                     )
                 )
 
-                reactionView()
+                if comment.submissionErrorMessage != nil {
+                    Button {
+                        isShowingErrorAlert = true
+                    } label: {
+                        componentFactory.buildLabel(
+                            content: ParraLabelContent(
+                                text: "Not Delivered",
+                                icon: .symbol("exclamationmark.circle")
+                            ),
+                            localAttributes: ParraAttributes.Label(
+                                text: ParraAttributes.Text(
+                                    style: .caption,
+                                    color: theme.palette.error
+                                        .toParraColor()
+                                        .opacity(0.9)
+                                ),
+                                icon: ParraAttributes.Image(
+                                    tint: theme.palette.error
+                                        .toParraColor()
+                                        .opacity(0.9),
+                                    size: CGSize(width: 14, height: 14)
+                                ),
+                                padding: .zero
+                            )
+                        )
+                    }
+                } else {
+                    reactionView()
+                }
             }
             .frame(
                 maxWidth: .infinity
             )
+        }
+        .alert(
+            "Message Not Delivered",
+            isPresented: $isShowingErrorAlert
+        ) {
+            Button(role: .cancel) {} label: {
+                Text("Dismiss")
+            }
+        } message: {
+            if let error = comment.submissionErrorMessage {
+                Text(error)
+            }
         }
     }
 
@@ -91,4 +131,6 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var theme
+
+    @State private var isShowingErrorAlert = false
 }

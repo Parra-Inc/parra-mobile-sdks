@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ProductGridView: View {
     // MARK: - Internal
@@ -48,7 +49,8 @@ struct ProductGridView: View {
 
     // MARK: - Private
 
-    @State private var gridLayout: GridLayout = .twoColumn
+    @State private var gridLayout: GridLayout = UIDevice.current
+        .userInterfaceIdiom == .pad ? .fourColumn : .twoColumn
     @Environment(\.redactionReasons) private var redactionReasons
     @Environment(StorefrontWidget.ContentObserver.self) private var contentObserver
 }

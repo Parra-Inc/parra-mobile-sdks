@@ -15,7 +15,8 @@ struct StorefrontWidget: ParraContainer {
 
     init(
         config: ParraStorefrontWidgetConfig,
-        contentObserver: ContentObserver
+        contentObserver: ContentObserver,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
         self._contentObserver = StateObject(wrappedValue: contentObserver)
@@ -208,7 +209,8 @@ struct StorefrontWidget: ParraContainer {
                     delegate: nil,
                     productsResponse: nil
                 )
-            )
+            ),
+            navigationPath: .constant(.init())
         )
     }
 }

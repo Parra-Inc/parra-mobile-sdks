@@ -13,16 +13,19 @@ public struct ParraFeedWidget: View {
 
     public init(
         feedId: String,
-        config: ParraFeedConfiguration = .default
+        config: ParraFeedConfiguration = .default,
+        navigationPath: Binding<NavigationPath>
     ) {
         self.feedId = feedId
         self.config = config
+        self._navigationPath = navigationPath
     }
 
     // MARK: - Public
 
     public let feedId: String
     public let config: ParraFeedConfiguration
+    @Binding public var navigationPath: NavigationPath
 
     public var body: some View {
         let container: FeedWidget = parra.parraInternal
@@ -34,7 +37,8 @@ public struct ParraFeedWidget: View {
                     api: parra.parraInternal.api
                 ),
                 config: config,
-                contentTransformer: nil
+                contentTransformer: nil,
+                navigationPath: $navigationPath
             )
 
         return container

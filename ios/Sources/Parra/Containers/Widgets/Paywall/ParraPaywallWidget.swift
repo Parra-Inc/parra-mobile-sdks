@@ -44,13 +44,16 @@ public struct ParraPaywallWidget: View {
                     appInfo: parraAppInfo
                 ),
                 config: config,
-                contentTransformer: nil
+                contentTransformer: nil,
+                navigationPath: $navigationPath
             )
 
         return container
     }
 
     // MARK: - Private
+
+    @State private var navigationPath: NavigationPath = .init()
 
     @Environment(\.parra) private var parra
     @Environment(\.parraAppInfo) private var parraAppInfo
