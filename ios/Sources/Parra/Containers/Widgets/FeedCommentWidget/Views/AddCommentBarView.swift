@@ -97,8 +97,6 @@ struct AddCommentBarView: View {
             .submitLabel(.send)
             .onSubmit(of: .text) {
                 handleSubmission()
-
-                isFocused = false
             }
 
             componentFactory.buildImageButton(

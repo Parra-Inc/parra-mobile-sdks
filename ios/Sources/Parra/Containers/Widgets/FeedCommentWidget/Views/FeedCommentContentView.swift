@@ -50,13 +50,51 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
 
             VStack(alignment: .leading) {
                 HStack(alignment: .center, spacing: 8) {
-                    componentFactory.buildLabel(
-                        text: comment.user.displayName,
-                        localAttributes: ParraAttributes.Label(
-                            text: .default(with: .headline),
-                            padding: .zero
+                    HStack(alignment: .center, spacing: 6) {
+                        componentFactory.buildLabel(
+                            text: comment.user.displayName,
+                            localAttributes: ParraAttributes.Label(
+                                text: .default(with: .headline),
+                                padding: .zero
+                            )
                         )
-                    )
+
+                        if let verified = comment.user.verified, verified,
+                           redactionReasons.isEmpty
+                        {
+                            componentFactory.buildImage(
+                                content: .name("CheckBadgeSolid", .module, .template),
+                                localAttributes: ParraAttributes.Image(
+                                    tint: .blue,
+                                    size: CGSize(width: 20, height: 20),
+                                    padding: .zero
+                                )
+                            )
+                        }
+
+                        if let role = comment.user.roles?.elements.first,
+                           redactionReasons.isEmpty
+                        {
+                            componentFactory.buildLabel(
+                                text: role.name,
+                                localAttributes: ParraAttributes.Label(
+                                    text: .init(
+                                        style: .caption2,
+                                        color: theme.palette.primary.toParraColor()
+                                    ),
+                                    cornerRadius: .sm,
+                                    padding: .custom(
+                                        EdgeInsets(vertical: 2.5, horizontal: 7)
+                                    ),
+                                    background: theme.palette.primary
+                                        .toParraColor()
+                                        .opacity(0.2)
+                                )
+                            )
+                        }
+                    }
+
+                    Spacer()
 
                     componentFactory.buildLabel(
                         text: comment.createdAt.timeAgoAbbreviated(),
@@ -106,7 +144,9 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
                         )
                     }
                 } else {
-                    reactionView()
+                    if redactionReasons.isEmpty {
+                        reactionView()
+                    }
                 }
             }
             .frame(
@@ -131,6 +171,7 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var theme
+    @Environment(\.redactionReasons) private var redactionReasons
 
     @State private var isShowingErrorAlert = false
 }
