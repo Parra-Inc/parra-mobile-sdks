@@ -187,6 +187,8 @@ extension StorefrontWidget {
             with orderDetails: ParraOrderDetails
         ) {
             cartState = .checkoutComplete(orderDetails)
+
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
 
         @MainActor
@@ -196,6 +198,8 @@ extension StorefrontWidget {
             isRecoverable: Bool
         ) {
             cartState = .checkoutFailed(errorMessage)
+
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
 
             ParraAlertManager.shared.showErrorToast(
                 title: "Checkout error",

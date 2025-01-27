@@ -87,6 +87,18 @@ public extension ParraAlertManager {
         primaryAction: (() -> Void)? = nil,
         onDismiss: (() -> Void)? = nil
     ) {
+        let generator = UINotificationFeedbackGenerator()
+        switch level {
+        case .error:
+            generator.notificationOccurred(.error)
+        case .success:
+            generator.notificationOccurred(.success)
+        case .warn:
+            generator.notificationOccurred(.warning)
+        default:
+            break
+        }
+
         currentToast = Toast(
             level: level,
             content: content,

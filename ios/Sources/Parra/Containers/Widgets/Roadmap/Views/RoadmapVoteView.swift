@@ -53,6 +53,8 @@ struct RoadmapVoteView: View {
                             )
                         )
                     } else {
+                        toggleVoteState.toggle()
+
                         contentObserver.currentTicketToVote = ticketContent.id
                     }
                 }
@@ -63,6 +65,7 @@ struct RoadmapVoteView: View {
                 options: .speed(1.5),
                 value: ticketContent.voted
             )
+            .sensoryFeedback(.impact, trigger: toggleVoteState)
 
             componentFactory.buildLabel(
                 content: ticketContent.voteCount,
@@ -73,6 +76,8 @@ struct RoadmapVoteView: View {
     }
 
     // MARK: - Private
+
+    @State private var toggleVoteState = false
 
     @Environment(ParraRoadmapWidgetConfig.self) private var config
     @Environment(\.parraAlertManager) private var alertManager

@@ -75,6 +75,7 @@ struct ReactionButtonView: View {
                 )
             }
         }
+        .sensoryFeedback(.impact, trigger: toggleAnimation)
         .padding(
             .padding(
                 vertical: 5,
