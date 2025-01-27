@@ -61,12 +61,37 @@ struct FeedCommentWidget: ParraContainer {
         return $contentObserver.commentPaginator.items
     }
 
+    var commentsTitle: String? {
+        if comments.isEmpty {
+            return nil
+        }
+
+        if comments.count == 1 {
+            return "1 Comment"
+        }
+
+        return "\(comments.count) Comments"
+    }
+
     @ViewBuilder var scrollView: some View {
         ScrollView {
             VStack(spacing: 0) {
                 AnyView(config.headerViewBuilder())
 
                 LazyVStack(spacing: 0) {
+                    if let commentsTitle {
+                        componentFactory.buildLabel(
+                            text: commentsTitle,
+                            localAttributes: .default(with: .headline)
+                        )
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                        .padding(.bottom, 4)
+                        .padding(.leading, 16)
+                    }
+
                     FeedCommentsView(
                         feedItem: contentObserver.feedItem,
                         comments: comments

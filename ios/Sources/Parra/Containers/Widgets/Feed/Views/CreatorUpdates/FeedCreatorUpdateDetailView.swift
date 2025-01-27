@@ -41,7 +41,9 @@ struct FeedCreatorUpdateDetailView: View {
                     ),
                     config: FeedCommentWidgetConfig(
                         headerViewBuilder: {
-                            let cornerRadius = theme.cornerRadius.value(for: .xl)
+                            let cornerRadius = theme.cornerRadius.value(
+                                for: .xl
+                            )
 
                             FeedCreatorUpdateDetailHeaderView(
                                 creatorUpdate: creatorUpdate,
@@ -77,5 +79,4 @@ struct FeedCreatorUpdateDetailView: View {
     @Environment(\.parraTheme) private var theme
     @Environment(\.parra) private var parra
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
-    @Environment(\.presentationMode) private var presentationMode
 }

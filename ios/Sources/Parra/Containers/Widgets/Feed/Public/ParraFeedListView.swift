@@ -62,6 +62,29 @@ public struct ParraFeedListView: View {
                 }
             }
         )
+        .navigationDestination(
+            isPresented: Binding<Bool>(
+                get: {
+                    return presentedYouTubeVideo != nil
+                },
+                set: { value in
+                    if !value {
+                        presentedYouTubeVideo = nil
+                    }
+                }
+            ),
+            destination: {
+                if let presentedYouTubeVideo {
+                    FeedYouTubeVideoDetailView(
+                        youtubeVideo: presentedYouTubeVideo.youtubeVideo,
+                        feedItem: presentedYouTubeVideo.feedItem,
+                        reactor: presentedYouTubeVideo.reactor,
+                        navigationPath: $navigationPath
+                    )
+                    .environmentObject(contentObserver)
+                }
+            }
+        )
     }
 
     // MARK: - Internal
@@ -71,6 +94,7 @@ public struct ParraFeedListView: View {
     // MARK: - Private
 
     @State private var presentedCreatorUpdate: FeedCreatorUpdateDetailParams?
+    @State private var presentedYouTubeVideo: FeedYouTubeVideoDetailParams?
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
 
     @ViewBuilder
@@ -88,13 +112,16 @@ public struct ParraFeedListView: View {
             if case .feedItemYoutubeVideo(let data) = item.data {
                 FeedYouTubeVideoView(
                     youtubeVideo: data,
-                    feedItemId: item.id,
+                    feedItem: item,
                     reactionOptions: item.reactionOptions?.elements,
                     reactions: item.reactions?.elements,
                     containerGeometry: containerGeometry,
                     spacing: spacing,
                     navigationPath: $navigationPath,
-                    performActionForFeedItemData: performActionForFeedItemData
+                    performActionForFeedItemData: performActionForFeedItemData,
+                    performYouTubeVideoUpdateSelection: { detailParams in
+                        presentedYouTubeVideo = detailParams
+                    }
                 )
                 .id(item.id)
                 .onAppear {

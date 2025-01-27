@@ -7,30 +7,40 @@
 
 import SwiftUI
 
+struct FeedYouTubeVideoDetailParams {
+    var youtubeVideo: ParraFeedItemYoutubeVideoData
+    var feedItem: ParraFeedItem
+    var reactor: StateObject<Reactor>
+}
+
 struct FeedYouTubeVideoView: View {
     // MARK: - Lifecycle
 
     init(
         youtubeVideo: ParraFeedItemYoutubeVideoData,
-        feedItemId: String,
+        feedItem: ParraFeedItem,
         reactionOptions: [ParraReactionOptionGroup]?,
         reactions: [ParraReactionSummary]?,
         containerGeometry: GeometryProxy,
         spacing: CGFloat,
         navigationPath: Binding<NavigationPath>,
-        performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void
+        performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void,
+        performYouTubeVideoUpdateSelection: @escaping (
+            _ detailParams: FeedYouTubeVideoDetailParams
+        ) -> Void
     ) {
         self.youtubeVideo = youtubeVideo
-        self.feedItemId = feedItemId
+        self.feedItem = feedItem
         self.reactionOptions = reactionOptions
         self.reactions = reactions
         self.containerGeometry = containerGeometry
         self.spacing = spacing
         _navigationPath = navigationPath
         self.performActionForFeedItemData = performActionForFeedItemData
+        self.performYouTubeVideoUpdateSelection = performYouTubeVideoUpdateSelection
         self._reactor = StateObject(
             wrappedValue: Reactor(
-                feedItemId: feedItemId,
+                feedItemId: feedItem.id,
                 reactionOptionGroups: reactionOptions ?? [],
                 reactions: reactions ?? [],
                 submitReaction: { api, itemId, reactionOptionId in
@@ -54,12 +64,15 @@ struct FeedYouTubeVideoView: View {
     // MARK: - Internal
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
-    let feedItemId: String
+    let feedItem: ParraFeedItem
     let reactionOptions: [ParraReactionOptionGroup]?
     let reactions: [ParraReactionSummary]?
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
+    let performYouTubeVideoUpdateSelection: (
+        _ detailParams: FeedYouTubeVideoDetailParams
+    ) -> Void
 
     @Binding var navigationPath: NavigationPath
 
@@ -71,7 +84,13 @@ struct FeedYouTubeVideoView: View {
 //        )
 
         Button(action: {
-            isPresentingModal = true
+            performYouTubeVideoUpdateSelection(
+                FeedYouTubeVideoDetailParams(
+                    youtubeVideo: youtubeVideo,
+                    feedItem: feedItem,
+                    reactor: _reactor
+                )
+            )
         }) {
             VStack {
                 thumbnail
@@ -99,7 +118,7 @@ struct FeedYouTubeVideoView: View {
                 if reactor.showReactions {
                     VStack {
                         FeedReactionView(
-                            feedItemId: feedItemId,
+                            feedItemId: feedItem.id,
                             reactor: _reactor
                         )
                     }
@@ -123,15 +142,6 @@ struct FeedYouTubeVideoView: View {
         .buttonStyle(.plain)
         .safeAreaPadding(.horizontal, 16)
         .padding(.vertical, spacing)
-        .sheet(isPresented: $isPresentingModal) {} content: {
-            NavigationStack {
-                FeedYouTubeVideoDetailView(
-                    youtubeVideo: youtubeVideo,
-                    feedItemId: feedItemId,
-                    reactor: reactor
-                )
-            }
-        }
         .onAppear {
             if redactionReasons.isEmpty {
                 // Don't track impressions for placeholder cells.
@@ -153,8 +163,6 @@ struct FeedYouTubeVideoView: View {
     @Environment(\.redactionReasons) private var redactionReasons
 
     @StateObject private var reactor: Reactor
-
-    @State private var isPresentingModal: Bool = false
 
     @ViewBuilder private var thumbnail: some View {
         let thumb = youtubeVideo.thumbnails.maxAvailable
