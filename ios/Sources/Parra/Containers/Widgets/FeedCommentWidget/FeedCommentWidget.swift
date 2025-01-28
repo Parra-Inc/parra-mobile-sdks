@@ -126,6 +126,8 @@ struct FeedCommentWidget: ParraContainer {
             }
         }
         .background(theme.palette.secondaryBackground)
+        // Can't use interactive since this bug will occur
+        // https://github.com/feedback-assistant/reports/issues/437
         .scrollDismissesKeyboard(.immediately)
     }
 
