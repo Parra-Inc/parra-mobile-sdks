@@ -31,21 +31,6 @@ public struct ParraRequiredAuthWindow<
     public var body: some View {
         LaunchScreenWindow {
             content
-                .onChange(
-                    of: parraAuthState,
-                    initial: true
-                ) { oldValue, newValue in
-                    switch (oldValue, newValue) {
-                    case
-                        (.guest, .authenticated),
-                        (.undetermined, .authenticated):
-                        withAnimation {
-                            authStateMirror = newValue
-                        }
-                    default:
-                        authStateMirror = newValue
-                    }
-                }
         }
     }
 
@@ -66,7 +51,7 @@ public struct ParraRequiredAuthWindow<
     @Environment(\.parra) var parra
 
     @ViewBuilder var content: some View {
-        switch authStateMirror {
+        switch parraAuthState {
         case .undetermined:
             EmptyView()
         case .authenticated:
@@ -87,8 +72,6 @@ public struct ParraRequiredAuthWindow<
 
     private let authContent: () -> AuthenticatedContent
     private let unauthContent: () -> UnauthenticatedContent
-
-    @State private var authStateMirror: ParraAuthState = .undetermined
 }
 
 // MARK: ParraAuthenticationFlowDelegate
