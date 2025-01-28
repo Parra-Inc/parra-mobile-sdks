@@ -81,6 +81,15 @@ open class ParraAppDelegate<
         }
         #endif
 
+        if let shortcutItem =
+            launchOptions?[.shortcutItem] as? UIApplicationShortcutItem
+        {
+            launchedFromShortcut = true
+
+            Parra.default.parraInternal.launchShortcutManager
+                .registerLaunchShortcut(shortcutItem)
+        }
+
         return true
     }
 
@@ -126,8 +135,13 @@ open class ParraAppDelegate<
         _ application: UIApplication,
         performActionFor shortcutItem: UIApplicationShortcutItem
     ) async -> Bool {
+        // It was handled in didFinishLaunching
+        if launchedFromShortcut {
+            return false
+        }
+
         return Parra.default.parraInternal.launchShortcutManager
-            .handleLaunchShortcut(shortcutItem)
+            .registerLaunchShortcut(shortcutItem)
     }
 
     // MARK: UNUserNotificationCenterDelegate
@@ -196,4 +210,8 @@ open class ParraAppDelegate<
     /// ``Parra/ParraApp`` initializer as a means of passing the Parra instance
     /// for the app to the app delegate.
     let parra: Parra = .default
+
+    // MARK: - Private
+
+    private var launchedFromShortcut: Bool = false
 }

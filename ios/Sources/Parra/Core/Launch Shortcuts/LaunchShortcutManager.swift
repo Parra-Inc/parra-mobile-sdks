@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-private let logger = Logger()
+private let logger = Logger(category: "Launch Shortcuts")
 
 final class LaunchShortcutManager {
     // MARK: - Lifecycle
@@ -22,21 +22,26 @@ final class LaunchShortcutManager {
         self.modalScreenManager = modalScreenManager
         self.feedback = feedback
         self.api = api
+        self.shortcut = nil
+
+        self.launchScreenObserver = ParraNotificationCenter.default.addObserver(
+            forName: Parra.launchScreenDidDismissNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            self.hasFinishedLaunch = true
+        }
     }
 
     // MARK: - Internal
 
     @MainActor
-    func handleLaunchShortcut(_ shortcut: UIApplicationShortcutItem) -> Bool {
+    @discardableResult
+    func performLaunchShortcut(_ shortcut: UIApplicationShortcutItem) -> Bool {
         Parra.logEvent(.tap(element: "launch_shortcut"), [
             "type": shortcut.type,
             "title": shortcut.localizedTitle
         ])
-
-        guard options.enabled else {
-            logger.debug("Launch shortcuts disabled. Skipping handler.")
-            return false
-        }
 
         if shortcut.type == LaunchShortcutManager.Constants.feedbackShortcutId {
             if let appInfo = Parra.default.parraInternal.appState.appInfo,
@@ -57,23 +62,64 @@ final class LaunchShortcutManager {
                     ]
                 )
             }
-        } else {
-            logger.debug(
-                "Launch shortcut not recognized. Skipping handler.", [
-                    "type": shortcut.type
-                ]
-            )
         }
+
+        return false
+    }
+
+    @MainActor
+    func registerLaunchShortcut(_ shortcut: UIApplicationShortcutItem) -> Bool {
+        logger.debug("Registering application launch shortcut", [
+            "title": shortcut.localizedTitle,
+            "type": shortcut.type
+        ])
+
+        guard options.enabled else {
+            logger.debug("Launch shortcuts disabled. Skipping handler.")
+            return false
+        }
+
+        if hasFinishedLaunch {
+            return performLaunchShortcut(shortcut)
+        }
+
+        if shortcut.type == LaunchShortcutManager.Constants.feedbackShortcutId {
+            self.shortcut = shortcut
+
+            return true
+        }
+
+        logger.debug(
+            "Launch shortcut not recognized. Skipping handler.", [
+                "type": shortcut.type
+            ]
+        )
 
         return false
     }
 
     // MARK: - Private
 
+    private var launchScreenObserver: NSObjectProtocol?
+
+    private var shortcut: UIApplicationShortcutItem?
+
     private let options: ParraLaunchShortcutOptions
     private let modalScreenManager: ModalScreenManager
     private let feedback: ParraFeedback
     private let api: API
+
+    private var hasFinishedLaunch = false {
+        didSet {
+            if let shortcut {
+                self.shortcut = nil
+
+                Task { @MainActor in
+                    self.performLaunchShortcut(shortcut)
+                }
+            }
+        }
+    }
 
     @MainActor
     private func fetchAndPresentFeedbackForm(

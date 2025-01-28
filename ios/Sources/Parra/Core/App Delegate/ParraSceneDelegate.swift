@@ -46,6 +46,11 @@ open class ParraSceneDelegate: NSObject, UIWindowSceneDelegate {
 
             return overlayWindow
         }()
+
+        if let shortcutItem = connectionOptions.shortcutItem {
+            Parra.default.parraInternal.launchShortcutManager
+                .registerLaunchShortcut(shortcutItem)
+        }
     }
 
     open func windowScene(
@@ -53,7 +58,7 @@ open class ParraSceneDelegate: NSObject, UIWindowSceneDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem
     ) async -> Bool {
         return Parra.default.parraInternal.launchShortcutManager
-            .handleLaunchShortcut(shortcutItem)
+            .registerLaunchShortcut(shortcutItem)
     }
 
     @nonobjc

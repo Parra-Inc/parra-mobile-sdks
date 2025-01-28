@@ -43,5 +43,8 @@ public extension Parra {
     static let authenticationStateDidChangeNotification = NSNotification
         .Name("ParraAuthenticationStateDidChangeNotification")
 
+    static let launchScreenDidDismissNotification = NSNotification
+        .Name("ParraLaunchScreenDidDismissNotification")
+
     static let authenticationStateKey = "ParraAuthenticationState"
 }

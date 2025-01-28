@@ -72,6 +72,12 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                 // When the launch screen is complete, it is expected that app
                 // info be obtained at this point.
                 ParraAppState.shared.appInfo = result.appInfo
+
+                ParraNotificationCenter.default.post(
+                    name: Parra.launchScreenDidDismissNotification,
+                    object: nil,
+                    userInfo: [:]
+                )
             default:
                 break
             }
