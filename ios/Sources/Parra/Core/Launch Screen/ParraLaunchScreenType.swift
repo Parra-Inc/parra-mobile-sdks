@@ -25,7 +25,8 @@ public enum ParraLaunchScreenType: Equatable {
         case (.storyboard(let lConfig), .storyboard(let rConfig)):
             return lConfig == rConfig
         case (.custom, .custom):
-            return false
+            // This must be true or the launch screen will continuously redraw!
+            return true
         default:
             return false
         }

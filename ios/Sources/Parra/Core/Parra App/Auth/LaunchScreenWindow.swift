@@ -175,5 +175,6 @@ struct LaunchScreenWindow<Content>: View where Content: View {
         ParraLaunchScreen(
             options: launchScreenOptions
         )
+        .equatable()
     }
 }

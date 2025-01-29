@@ -10,7 +10,7 @@ import SwiftUI
 
 private let logger = Logger()
 
-public struct ParraLaunchScreen: View {
+public struct ParraLaunchScreen: View, Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -22,7 +22,7 @@ public struct ParraLaunchScreen: View {
     // MARK: - Public
 
     public var body: some View {
-        renderLaunchScreen(by: options.type)
+        renderLaunchScreen
             .opacity(shouldFade ? 1 : 0)
             .onChange(
                 of: launchScreenState.current,
@@ -38,6 +38,13 @@ public struct ParraLaunchScreen: View {
             }
     }
 
+    public static func == (
+        lhs: ParraLaunchScreen,
+        rhs: ParraLaunchScreen
+    ) -> Bool {
+        return lhs.options == rhs.options
+    }
+
     // MARK: - Private
 
     @Environment(LaunchScreenStateManager.self) private var launchScreenState
@@ -46,9 +53,8 @@ public struct ParraLaunchScreen: View {
 
     private let options: Options
 
-    @ViewBuilder
-    private func renderLaunchScreen(by type: ParraLaunchScreenType) -> some View {
-        switch type {
+    @ViewBuilder private var renderLaunchScreen: some View {
+        switch options.type {
         case .default(let config):
             ParraDefaultLaunchScreen(config: config)
         case .storyboard(let config):
