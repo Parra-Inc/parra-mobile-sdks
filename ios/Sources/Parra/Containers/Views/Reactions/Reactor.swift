@@ -18,32 +18,38 @@ class Reactor: ObservableObject {
         feedItemId: String,
         reactionOptionGroups: [ParraReactionOptionGroup],
         reactions: [ParraReactionSummary],
-        submitReaction: @escaping (
-            _ api: API,
-            _ itemId: String,
-            _ reactionOptionId: String
-        ) async throws -> String,
-        removeReaction: @escaping (
-            _ api: API,
-            _ itemId: String,
-            _ reactionId: String
-        ) async throws -> Void
+        api: API
     ) {
         self.feedItemId = feedItemId
-        self.submitReaction = submitReaction
-        self.removeReaction = removeReaction
+        self.api = api
         self.reactionOptionGroups = reactionOptionGroups
         self.currentReactions = reactions
         self.firstReactions = Array(reactions.prefix(3))
+        self.currentActiveReactionIds = reactions.reduce(
+            Set<String>()
+        ) { partialResult, summary in
+            var next = partialResult
+            if summary.reactionId != nil {
+                next.insert(summary.id)
+            }
+            return next
+        }
 
-        $latestReaction
-            .map(updateReaction)
+        // Set up the reaction update pipeline
+        $pendingUpdates
             .debounce(
-                for: .seconds(2.0),
+                for: .seconds(3.0),
                 scheduler: DispatchQueue.main
             )
-            .asyncMap(submitUpdatedReaction)
-            .sink(receiveValue: { _ in })
+            .sink { [weak self] updates in
+                guard let self else {
+                    return
+                }
+
+                Task {
+                    await self.submitBatchedUpdates(updates)
+                }
+            }
             .store(in: &reactionBag)
 
         applyReactionsUpdate(currentReactions)
@@ -51,22 +57,19 @@ class Reactor: ObservableObject {
 
     // MARK: - Internal
 
-    @Published var currentReactions: [ParraReactionSummary]
-    @Published var firstReactions: [ParraReactionSummary]
+    enum ReactionUpdate: Equatable {
+        case add(ParraReactionOption)
+        case addExisting(ParraReactionSummary)
+        case remove(ParraReactionSummary)
+    }
 
+    @Published var currentReactions: [ParraReactionSummary]
+    @Published var currentActiveReactionIds: Set<String>
+    @Published var firstReactions: [ParraReactionSummary]
     @Published var totalReactions: Int = 0
 
     let feedItemId: String
-    let submitReaction: (
-        _ api: API,
-        _ itemId: String,
-        _ reactionOptionId: String
-    ) async throws -> String
-    let removeReaction: (
-        _ api: API,
-        _ itemId: String,
-        _ reactionId: String
-    ) async throws -> Void
+    let api: API
 
     @Published var reactionOptionGroups: [ParraReactionOptionGroup]
 
@@ -74,225 +77,81 @@ class Reactor: ObservableObject {
         return !reactionOptionGroups.isEmpty
     }
 
-    func addNewReaction(
-        option: ParraReactionOption,
-        api: API
-    ) {
+    func addNewReaction(option: ParraReactionOption) {
         // In case the user selected a reaction from the picker that actually
         // already existed in the summary.
         if let existing = currentReactions.first(where: { reaction in
             reaction.id == option.id
         }) {
-            // Enter the add existing flow, regardless of if this user had made
-            // this reaction or not. They couldn't see the state from the picker
-            latestReaction = .addedExisting(existing, api)
+            if existing.reactionId == nil {
+                queueUpdate(.addExisting(existing))
+            } else {
+                queueUpdate(.remove(existing))
+            }
         } else {
-            latestReaction = .addedNew(option, api)
+            queueUpdate(.add(option))
         }
     }
 
-    func addExistingReaction(
-        option: ParraReactionSummary,
-        api: API
-    ) {
-        latestReaction = .addedExisting(option, api)
+    func addExistingReaction(option: ParraReactionSummary) {
+        queueUpdate(.addExisting(option))
     }
 
-    func removeExistingReaction(
-        option: ParraReactionSummary,
-        api: API
-    ) {
-        latestReaction = .removedExisting(option.reactionId, api)
+    func removeExistingReaction(option: ParraReactionSummary) {
+        queueUpdate(.remove(option))
+    }
+
+    func applyReactionsUpdate(_ reactions: [ParraReactionSummary]) {
+        totalReactions = reactions.reduce(0) { $0 + $1.count }
+        currentReactions = reactions
+        firstReactions = Array(reactions.prefix(3))
+        currentActiveReactionIds = reactions.reduce(into: Set<String>()) { set, summary in
+            if summary.reactionId != nil {
+                set.insert(summary.id)
+            }
+        }
     }
 
     // MARK: - Private
 
-    private enum ReactionUpdate {
-        case addedNew(ParraReactionOption, API)
-        case addedExisting(ParraReactionSummary, API)
-        case removedExisting(String?, API)
-    }
-
     private var reactionBag = Set<AnyCancellable>()
+    @Published private var pendingUpdates: [String: ReactionUpdate] = [:]
 
-    @Published private var latestReaction: ReactionUpdate?
-
-    private func applyReactionsUpdate(
-        _ reactions: [ParraReactionSummary]
-    ) {
-        totalReactions = reactions.reduce(0) { partialResult, summary in
-            return partialResult + summary.count
-        }
-
-        currentReactions = reactions
-        firstReactions = Array(reactions.prefix(3))
-    }
-
-    @MainActor
-    private func submitUpdatedReaction(
-        _ update: ReactionUpdate?
-    ) async -> ReactionUpdate? {
-        guard let update else {
-            return nil
-        }
-
-        logger.trace("Submitting reaction")
-
-        var copiedReactions = currentReactions
-
-        defer {
-            applyReactionsUpdate(copiedReactions)
-        }
-
-        if UIDevice.isPreview {
-            return nil
-        }
+    private func queueUpdate(_ update: ReactionUpdate) {
+        var updates = pendingUpdates
 
         switch update {
-        case .addedNew(let option, let api):
-            logger.info("Adding new reaction")
-
-            await submitAddedReaction(
-                reactionOptionId: option.id,
-                api: api
-            )
-        case .addedExisting(let summary, let api):
-            logger.info("Adding existing reaction")
-
-            await submitAddedReaction(
-                reactionOptionId: summary.id,
-                api: api
-            )
-        case .removedExisting(let reactionId, let api):
-            guard let reactionId else {
-                logger.warn(
-                    "Skipping removal of reaction. No reaction from user."
-                )
-
-                return nil
-            }
-
-            logger.info("Removing reaction")
-
-            do {
-                try await removeReaction(
-                    api,
-                    feedItemId,
-                    reactionId
-                )
-            } catch {
-                if let idx = copiedReactions.firstIndex(where: { reaction in
-                    reaction.reactionId == reactionId
-                }) {
-                    let matching = copiedReactions[idx]
-
-                    copiedReactions[idx] = ParraReactionSummary(
-                        id: matching.id,
-                        firstReactionAt: matching.firstReactionAt,
-                        name: matching.name,
-                        type: matching.type,
-                        value: matching.value,
-                        count: matching.count + 1,
-                        reactionId: reactionId
-                    )
-                } else {
-                    // There isn't a great way to show the reaction again
-                    // if it was removed optimistically, but this might be fine
-                    // for now.
-                }
-            }
-        }
-
-        return nil
-    }
-
-    private func submitAddedReaction(
-        reactionOptionId: String,
-        api: API
-    ) async {
-        var copiedReactions = currentReactions
-
-        defer {
-            applyReactionsUpdate(copiedReactions)
-        }
-
-        let findAndRemove = {
-            if let idx = copiedReactions.firstIndex(where: { reaction in
-                reaction.id == reactionOptionId
-            }) {
-                let match = copiedReactions[idx]
-
-                if match.count <= 1 {
-                    copiedReactions.remove(at: idx)
-                } else {
-                    copiedReactions[idx] = ParraReactionSummary(
-                        id: match.id,
-                        firstReactionAt: match.firstReactionAt,
-                        name: match.name,
-                        type: match.type,
-                        value: match.value,
-                        count: match.count - 1,
-                        reactionId: nil
-                    )
-                }
-            }
-        }
-
-        do {
-            let reactionId = try await submitReaction(
-                api,
-                feedItemId,
-                reactionOptionId
-            )
-
-            if let idx = copiedReactions.firstIndex(where: { reaction in
-                reaction.id == reactionOptionId
-            }) {
-                let match = copiedReactions[idx]
-
-                copiedReactions[idx] = ParraReactionSummary(
-                    id: reactionOptionId,
-                    firstReactionAt: match.firstReactionAt,
-                    name: match.name,
-                    type: match.type,
-                    value: match.value,
-                    count: match.count,
-                    reactionId: reactionId
-                )
-            }
-        } catch let error as ParraError {
-            if case .networkError(_, let response, _) = error,
-               response.statusCode == 409
-            {
-                logger.warn("User already had this reaction.")
+        case .add(let option):
+            if updates[option.id]?.isOpposite(of: update) == true {
+                updates.removeValue(forKey: option.id)
             } else {
-                logger.error("Error adding new reaction", error)
-
-                findAndRemove()
+                updates[option.id] = update
             }
-        } catch {
-            logger.error("Error adding new reaction", error)
 
-            findAndRemove()
+        case .addExisting(let summary):
+            if updates[summary.id]?.isOpposite(of: update) == true {
+                updates.removeValue(forKey: summary.id)
+            } else {
+                updates[summary.id] = update
+            }
+
+        case .remove(let summary):
+            if updates[summary.id]?.isOpposite(of: update) == true {
+                updates.removeValue(forKey: summary.id)
+            } else {
+                updates[summary.id] = update
+            }
         }
+
+        pendingUpdates = updates
+        applyLocalUpdate(update)
     }
 
-    /// make the immediate update locally
-    private func updateReaction(_ update: ReactionUpdate?) -> ReactionUpdate? {
-        guard let update else {
-            return nil
-        }
-
-        logger.trace("Updating reaction")
-
+    private func applyLocalUpdate(_ update: ReactionUpdate) {
         var copiedReactions = currentReactions
 
-        defer {
-            applyReactionsUpdate(copiedReactions)
-        }
-
         switch update {
-        case .addedNew(let option, _):
+        case .add(let option):
             copiedReactions.append(
                 ParraReactionSummary(
                     id: option.id,
@@ -300,66 +159,228 @@ class Reactor: ObservableObject {
                     name: option.name,
                     type: option.type,
                     value: option.value,
-                    count: 1, // it didn't exist previously so assume count is 1
-                    reactionId: "placeholder"
+                    count: 1,
+                    reactionId: "placeholder",
+                    originalReactionId: nil
                 )
             )
 
-            return update
-        case .addedExisting(let summary, _):
-            // If this flow is entered, we know the new reaction is one that
-            // already existed in the summary. The filtering for this happens
-            // in the previous step.
-            guard let idx = copiedReactions.firstIndex(where: { reaction in
-                reaction.id == summary.id
-            }) else {
-                return nil
-            }
+        case .addExisting(let summary):
+            if let idx = copiedReactions.firstIndex(
+                where: { $0.id == summary.id }
+            ) {
+                let matching = copiedReactions[idx]
 
-            let matching = copiedReactions[idx]
-
-            if matching.reactionId != nil {
-                // The user already did this reaction
-                return nil
-            }
-
-            // This user hadn't previously reacted
-            copiedReactions[idx] = ParraReactionSummary(
-                id: matching.id,
-                firstReactionAt: matching.firstReactionAt,
-                name: matching.name,
-                type: matching.type,
-                value: matching.value,
-                count: matching.count + 1,
-                reactionId: matching.reactionId ?? "placeholder"
-            )
-
-            return update
-        case .removedExisting(let reactionId, _):
-            guard let idx = copiedReactions.firstIndex(where: { reaction in
-                reaction.reactionId == reactionId
-            }) else {
-                return nil
-            }
-
-            let matching = copiedReactions[idx]
-
-            if matching.count <= 1 {
-                copiedReactions.remove(at: idx)
-            } else {
                 copiedReactions[idx] = ParraReactionSummary(
                     id: matching.id,
                     firstReactionAt: matching.firstReactionAt,
                     name: matching.name,
                     type: matching.type,
                     value: matching.value,
-                    count: matching.count - 1,
-                    // user is removing reaction
-                    reactionId: nil
+                    count: matching.count + 1,
+                    reactionId: matching.originalReactionId ?? "placeholder",
+                    originalReactionId: matching.reactionId
                 )
             }
 
-            return update
+        case .remove(let summary):
+            if let idx = copiedReactions.firstIndex(
+                where: { $0.id == summary.id }
+            ) {
+                let matching = copiedReactions[idx]
+                if matching.count <= 1 {
+                    copiedReactions.remove(at: idx)
+                } else {
+                    copiedReactions[idx] = ParraReactionSummary(
+                        id: matching.id,
+                        firstReactionAt: matching.firstReactionAt,
+                        name: matching.name,
+                        type: matching.type,
+                        value: matching.value,
+                        count: matching.count - 1,
+                        reactionId: nil,
+                        originalReactionId: matching.reactionId
+                    )
+                }
+            }
+        }
+
+        applyReactionsUpdate(copiedReactions)
+    }
+
+    private func submitBatchedUpdates(_ updates: [String: ReactionUpdate]) async {
+        guard !updates.isEmpty else {
+            return
+        }
+
+        logger.debug("Submitting batch reaction updates")
+
+        var copiedReactions = currentReactions
+
+        defer {
+            applyReactionsUpdate(copiedReactions)
+        }
+
+        for (_, update) in updates {
+            switch update {
+            case .addExisting(let summary):
+                let optionId = summary.id
+                assert(optionId != "placeholder")
+                do {
+                    let reactionResponse = try await api.addFeedReaction(
+                        feedItemId: feedItemId,
+                        reactionOptionId: optionId
+                    )
+
+                    if let idx = copiedReactions.firstIndex(
+                        where: { $0.id == optionId }
+                    ) {
+                        let match = copiedReactions[idx]
+                        copiedReactions[idx] = ParraReactionSummary(
+                            id: optionId,
+                            firstReactionAt: match.firstReactionAt,
+                            name: match.name,
+                            type: match.type,
+                            value: match.value,
+                            count: match.count,
+                            reactionId: reactionResponse.id,
+                            originalReactionId: nil
+                        )
+                    }
+                } catch let error as ParraError {
+                    if case .networkError(_, let response, let data) = error,
+                       response.statusCode == 409
+                    {
+                        logger.warn("User already had this reaction.")
+                    } else {
+                        logger.error("Error adding new reaction", error)
+                        removeReactionLocally(optionId, from: &copiedReactions)
+                    }
+                } catch {
+                    logger.error("Error adding new reaction", error)
+                    removeReactionLocally(optionId, from: &copiedReactions)
+                }
+
+            case .add(let option):
+                let optionId = option.id
+                assert(optionId != "placeholder")
+
+                do {
+                    let reactionResponse = try await api.addFeedReaction(
+                        feedItemId: feedItemId,
+                        reactionOptionId: optionId
+                    )
+
+                    if let idx = copiedReactions
+                        .firstIndex(where: { $0.id == optionId })
+                    {
+                        let match = copiedReactions[idx]
+                        copiedReactions[idx] = ParraReactionSummary(
+                            id: optionId,
+                            firstReactionAt: match.firstReactionAt,
+                            name: match.name,
+                            type: match.type,
+                            value: match.value,
+                            count: match.count,
+                            reactionId: reactionResponse.id,
+                            originalReactionId: nil
+                        )
+                    }
+                } catch let error as ParraError {
+                    if case .networkError(_, let response, _) = error,
+                       response.statusCode == 409
+                    {
+                        logger.warn("User already had this reaction.")
+                    } else {
+                        logger.error("Error adding new reaction", error)
+                        removeReactionLocally(optionId, from: &copiedReactions)
+                    }
+                } catch {
+                    logger.error("Error adding new reaction", error)
+                    removeReactionLocally(optionId, from: &copiedReactions)
+                }
+
+            case .remove(let summary):
+                guard let reactionId = summary.reactionId else {
+                    logger.warn("Skipping removal of reaction. No reaction from user.")
+                    continue
+                }
+
+                assert(reactionId != "placeholder")
+
+                do {
+                    try await api.removeFeedReaction(
+                        feedItemId: feedItemId,
+                        reactionId: reactionId
+                    )
+                } catch {
+                    logger.error("Error removing reaction", error)
+
+                    if let idx = copiedReactions
+                        .firstIndex(where: { $0.reactionId == reactionId })
+                    {
+                        let matching = copiedReactions[idx]
+                        copiedReactions[idx] = ParraReactionSummary(
+                            id: matching.id,
+                            firstReactionAt: matching.firstReactionAt,
+                            name: matching.name,
+                            type: matching.type,
+                            value: matching.value,
+                            count: matching.count + 1,
+                            reactionId: reactionId,
+                            originalReactionId: nil
+                        )
+                    }
+                }
+            }
+        }
+
+        // Clear pending updates after processing
+        await MainActor.run {
+            pendingUpdates.removeAll()
+        }
+    }
+
+    private func removeReactionLocally(
+        _ optionId: String,
+        from reactions: inout [ParraReactionSummary]
+    ) {
+        if let idx = reactions.firstIndex(where: { $0.id == optionId }) {
+            let match = reactions[idx]
+
+            if match.count <= 1 {
+                reactions.remove(at: idx)
+            } else {
+                reactions[idx] = ParraReactionSummary(
+                    id: match.id,
+                    firstReactionAt: match.firstReactionAt,
+                    name: match.name,
+                    type: match.type,
+                    value: match.value,
+                    count: match.count - 1,
+                    reactionId: nil,
+                    originalReactionId: nil
+                )
+            }
+        }
+    }
+}
+
+// MARK: - Helper Extensions
+
+private extension Reactor.ReactionUpdate {
+    func isOpposite(of other: Self) -> Bool {
+        switch (self, other) {
+        case (.add(let option1), .remove(let summary2)):
+            return option1.id == summary2.id
+        case (.remove(let summary1), .add(let option2)):
+            return summary1.id == option2.id
+        case (.addExisting(let summary1), .remove(let summary2)):
+            return summary1.id == summary2.id
+        case (.remove(let summary1), .addExisting(let summary2)):
+            return summary1.id == summary2.id
+        default:
+            return false
         }
     }
 }

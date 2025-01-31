@@ -11,29 +11,22 @@ struct ReactionPickerView: View {
     // MARK: - Lifecycle
 
     init(
-        selectedOption: Binding<ParraReactionOption?>,
-        optionGroups: [ParraReactionOptionGroup],
+        reactor: StateObject<Reactor>,
         showLabels: Bool = true,
         searchEnabled: Bool = false
     ) {
-        self._selectedOption = selectedOption
+        _reactor = reactor
         self.searchEnabled = searchEnabled
         self.showLabels = showLabels
-        self.optionGroups = optionGroups
     }
 
     // MARK: - Internal
 
-    @Binding var selectedOption: ParraReactionOption?
-
-    let optionGroups: [ParraReactionOptionGroup]
-    let showLabels: Bool
-
     var body: some View {
         ScrollView {
             ReactionPickerGridView(
+                reactor: _reactor,
                 searchResults: searchResults,
-                selectedOption: _selectedOption,
                 showLabels: showLabels
             )
             .padding()
@@ -52,17 +45,20 @@ struct ReactionPickerView: View {
 
     // MARK: - Private
 
+    @StateObject private var reactor: Reactor
+
     @State private var search: String = ""
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var theme
 
-    private var searchEnabled: Bool
+    private let showLabels: Bool
+    private let searchEnabled: Bool
 
     private var searchResults: [ParraReactionOptionGroup] {
         if search.isEmpty {
-            return optionGroups
+            return reactor.reactionOptionGroups
         } else {
-            return optionGroups.compactMap { group in
+            return reactor.reactionOptionGroups.compactMap { group in
                 let filtered = group.options.filter { option in
                     option.name.lowercased().contains(search.lowercased())
                 }
@@ -83,56 +79,19 @@ struct ReactionPickerView: View {
 }
 
 #Preview {
-    NavigationView {
-        ReactionPickerView(
-            selectedOption: .constant(nil),
-            optionGroups: [
-                ParraReactionOptionGroup(
-                    id: .uuid,
-                    name: "Emojis",
-                    description: "Standard system emojis",
-                    options: [
-                        ParraReactionOption(
-                            id: .uuid,
-                            name: "Thumbs Up",
-                            type: .emoji,
-                            value: "👍"
-                        ),
-                        ParraReactionOption(
-                            id: .uuid,
-                            name: "Thumbs Down",
-                            type: .emoji,
-                            value: "👎"
-                        )
-                    ]
+    ParraContainerPreview<FeedWidget>(config: .default) { parra, _, _ in
+        NavigationView {
+            ReactionPickerView(
+                reactor: StateObject(
+                    wrappedValue: Reactor(
+                        feedItemId: .uuid,
+                        reactionOptionGroups: ParraReactionOptionGroup.validStates(),
+                        reactions: ParraReactionSummary.validStates(),
+                        api: parra.parraInternal.api
+                    )
                 ),
-                ParraReactionOptionGroup(
-                    id: .uuid,
-                    name: "Custom Emojis",
-                    description: "Special emojis we made just for you",
-                    options: [
-                        ParraReactionOption(
-                            id: .uuid,
-                            name: "Take My Money",
-                            type: .custom,
-                            value: "https://emojis.slackmojis.com/emojis/images/1643514048/65/take_my_money.png?1643514048"
-                        ),
-                        ParraReactionOption(
-                            id: .uuid,
-                            name: "Beachball",
-                            type: .custom,
-                            value: "https://emojis.slackmojis.com/emojis/images/1643514710/7127/beach-ball.gif?1643514710"
-                        ),
-                        ParraReactionOption(
-                            id: .uuid,
-                            name: "Cool Doge",
-                            type: .custom,
-                            value: "https://emojis.slackmojis.com/emojis/images/1643514389/3643/cool-doge.gif?1643514389"
-                        )
-                    ]
-                )
-            ],
-            searchEnabled: true
-        )
+                searchEnabled: true
+            )
+        }
     }
 }

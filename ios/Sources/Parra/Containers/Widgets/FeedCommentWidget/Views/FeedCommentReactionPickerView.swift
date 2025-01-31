@@ -12,25 +12,18 @@ struct FeedCommentReactionPickerView: View {
 
     init(
         comment: ParraComment,
-        selectedOption: Binding<ParraReactionOption?>,
-        optionGroups: [ParraReactionOptionGroup],
-        reactor: ObservedObject<Reactor>,
+        reactor: StateObject<Reactor>,
         showLabels: Bool = true,
         searchEnabled: Bool = false
     ) {
         self.comment = comment
-        self._selectedOption = selectedOption
         self.searchEnabled = searchEnabled
         self.showLabels = showLabels
-        self.optionGroups = optionGroups
         self._reactor = reactor
     }
 
     // MARK: - Internal
 
-    @Binding var selectedOption: ParraReactionOption?
-
-    let optionGroups: [ParraReactionOptionGroup]
     let showLabels: Bool
     let comment: ParraComment
 
@@ -67,8 +60,8 @@ struct FeedCommentReactionPickerView: View {
                 }
 
                 ReactionPickerGridView(
+                    reactor: _reactor,
                     searchResults: searchResults,
-                    selectedOption: _selectedOption,
                     showLabels: showLabels
                 )
             }
@@ -96,7 +89,7 @@ struct FeedCommentReactionPickerView: View {
 
     // MARK: - Private
 
-    @ObservedObject private var reactor: Reactor
+    @StateObject private var reactor: Reactor
 
     @State private var search: String = ""
     @State private var showingReportAlert = false
@@ -107,9 +100,9 @@ struct FeedCommentReactionPickerView: View {
 
     private var searchResults: [ParraReactionOptionGroup] {
         if search.isEmpty {
-            return optionGroups
+            return reactor.reactionOptionGroups
         } else {
-            return optionGroups.compactMap { group in
+            return reactor.reactionOptionGroups.compactMap { group in
                 let filtered = group.options.filter { option in
                     option.name.lowercased().contains(search.lowercased())
                 }
@@ -130,25 +123,21 @@ struct FeedCommentReactionPickerView: View {
 }
 
 #Preview {
-    NavigationView {
-        FeedCommentReactionPickerView(
-            comment: .validStates()[0],
-            selectedOption: .constant(nil),
-            optionGroups: ParraReactionOptionGroup.validStates(),
-            reactor: .init(
-                wrappedValue: .init(
-                    feedItemId: .uuid,
-                    reactionOptionGroups: ParraReactionOptionGroup.validStates(),
-                    reactions: ParraReactionSummary.validStates(),
-                    submitReaction: { _, _, _ in
-                        return .uuid
-                    },
-                    removeReaction: { _, _, _ in
-                    }
-                )
-            ),
-            showLabels: false,
-            searchEnabled: false
-        )
+    ParraContainerPreview<FeedWidget>(config: .default) { parra, _, _ in
+        NavigationView {
+            FeedCommentReactionPickerView(
+                comment: .validStates()[0],
+                reactor: .init(
+                    wrappedValue: Reactor(
+                        feedItemId: .uuid,
+                        reactionOptionGroups: ParraReactionOptionGroup.validStates(),
+                        reactions: ParraReactionSummary.validStates(),
+                        api: parra.parraInternal.api
+                    )
+                ),
+                showLabels: false,
+                searchEnabled: false
+            )
+        }
     }
 }

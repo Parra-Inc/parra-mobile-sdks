@@ -27,7 +27,8 @@ struct FeedYouTubeVideoView: View {
         performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void,
         performYouTubeVideoUpdateSelection: @escaping (
             _ detailParams: FeedYouTubeVideoDetailParams
-        ) -> Void
+        ) -> Void,
+        api: API
     ) {
         self.youtubeVideo = youtubeVideo
         self.feedItem = feedItem
@@ -43,20 +44,7 @@ struct FeedYouTubeVideoView: View {
                 feedItemId: feedItem.id,
                 reactionOptionGroups: reactionOptions ?? [],
                 reactions: reactions ?? [],
-                submitReaction: { api, itemId, reactionOptionId in
-                    let response = try await api.addFeedReaction(
-                        feedItemId: itemId,
-                        reactionOptionId: reactionOptionId
-                    )
-
-                    return response.id
-                },
-                removeReaction: { api, itemId, reactionId in
-                    try await api.removeFeedReaction(
-                        feedItemId: itemId,
-                        reactionId: reactionId
-                    )
-                }
+                api: api
             )
         )
     }

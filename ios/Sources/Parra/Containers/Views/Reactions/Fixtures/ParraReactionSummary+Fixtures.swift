@@ -17,7 +17,8 @@ extension ParraReactionSummary: ParraFixture {
                 type: .emoji,
                 value: "😀",
                 count: 2,
-                reactionId: .uuid
+                reactionId: .uuid,
+                originalReactionId: nil
             ),
             ParraReactionSummary(
                 id: .uuid,
@@ -26,7 +27,8 @@ extension ParraReactionSummary: ParraFixture {
                 type: .emoji,
                 value: "👎",
                 count: 29,
-                reactionId: nil
+                reactionId: nil,
+                originalReactionId: nil
             )
         ]
     }

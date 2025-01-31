@@ -13,7 +13,7 @@ struct FeedCommentReactionView: View {
     init(
         comment: ParraComment,
         isReactionPickerPresented: Binding<Bool>,
-        reactor: ObservedObject<Reactor>
+        reactor: StateObject<Reactor>
     ) {
         self.comment = comment
         self._isReactionPickerPresented = isReactionPickerPresented
@@ -31,17 +31,17 @@ struct FeedCommentReactionView: View {
                 ReactionButtonView(reaction: $reaction) { reacted, summary in
                     if reacted {
                         reactor.addExistingReaction(
-                            option: summary,
-                            api: parra.parraInternal.api
+                            option: summary
                         )
                     } else {
                         reactor.removeExistingReaction(
-                            option: summary,
-                            api: parra.parraInternal.api
+                            option: summary
                         )
                     }
                 }
             }
+
+            // TODO: Need UI to display the other reactions or at least (+ x more) that opens the sheet or something
 
             AddReactionButtonView(attachmentPaywall: nil) {
                 isReactionPickerPresented = true
@@ -59,22 +59,11 @@ struct FeedCommentReactionView: View {
             }
         }
         .contentShape(.rect)
-        .onChange(of: pickerSelectedReaction) { oldValue, newValue in
-            if let newValue, oldValue == nil {
-                reactor.addNewReaction(
-                    option: newValue,
-                    api: parra.parraInternal.api
-                )
-                pickerSelectedReaction = nil
-            }
-        }
         .sheet(
             isPresented: $isReactionPickerPresented
         ) {
             FeedCommentReactionPickerView(
                 comment: comment,
-                selectedOption: $pickerSelectedReaction,
-                optionGroups: reactor.reactionOptionGroups,
                 reactor: _reactor,
                 showLabels: false,
                 searchEnabled: false
@@ -86,31 +75,25 @@ struct FeedCommentReactionView: View {
 
     // MARK: - Private
 
-    @Environment(\.parra) private var parra
     @Environment(\.parraComponentFactory) private var componentFactory
 
     @Binding private var isReactionPickerPresented: Bool
-    @State private var pickerSelectedReaction: ParraReactionOption?
 
     private let comment: ParraComment
-    @ObservedObject private var reactor: Reactor
+    @StateObject private var reactor: Reactor
 }
 
 #Preview {
-    ParraAppPreview {
+    ParraContainerPreview<FeedWidget>(config: .default) { parra, _, _ in
         FeedCommentReactionView(
             comment: .validStates()[0],
             isReactionPickerPresented: .constant(false),
-            reactor: ObservedObject(
+            reactor: StateObject(
                 wrappedValue: Reactor(
                     feedItemId: .uuid,
                     reactionOptionGroups: ParraReactionOptionGroup.validStates(),
                     reactions: ParraReactionSummary.validStates(),
-                    submitReaction: { _, _, _ in
-                        return .uuid
-                    },
-                    removeReaction: { _, _, _ in
-                    }
+                    api: parra.parraInternal.api
                 )
             )
         )

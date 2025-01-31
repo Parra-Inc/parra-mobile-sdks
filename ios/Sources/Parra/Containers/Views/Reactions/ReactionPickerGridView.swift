@@ -8,11 +8,19 @@
 import SwiftUI
 
 struct ReactionPickerGridView: View {
-    // MARK: - Internal
+    // MARK: - Lifecycle
 
-    var searchResults: [ParraReactionOptionGroup]
-    @Binding var selectedOption: ParraReactionOption?
-    var showLabels: Bool
+    init(
+        reactor: StateObject<Reactor>,
+        searchResults: [ParraReactionOptionGroup],
+        showLabels: Bool
+    ) {
+        self._reactor = reactor
+        self.searchResults = searchResults
+        self.showLabels = showLabels
+    }
+
+    // MARK: - Internal
 
     let columns = [
         GridItem(.adaptive(minimum: 80))
@@ -24,13 +32,13 @@ struct ReactionPickerGridView: View {
                 Section {
                     ForEach(group.options, id: \.self) { reactionOption in
                         Button {
-                            selectedOption = reactionOption
-                            dismiss()
+                            reactor.addNewReaction(option: reactionOption)
                         } label: {
                             VStack {
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill((
-                                        selectedOption == reactionOption ? .blue :
+                                        reactor.currentActiveReactionIds
+                                            .contains(reactionOption.id) ? .blue :
                                             Color
                                             .gray
                                     ).opacity(0.4))
@@ -75,8 +83,11 @@ struct ReactionPickerGridView: View {
 
     // MARK: - Private
 
+    @StateObject private var reactor: Reactor
+    private var searchResults: [ParraReactionOptionGroup]
+    private var showLabels: Bool
+
     @Environment(\.parraComponentFactory) private var componentFactory
-    @Environment(\.dismiss) private var dismiss
 
     @ViewBuilder
     private func reactionContent(

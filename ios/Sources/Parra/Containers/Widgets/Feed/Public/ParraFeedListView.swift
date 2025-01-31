@@ -96,6 +96,7 @@ public struct ParraFeedListView: View {
     @State private var presentedCreatorUpdate: FeedCreatorUpdateDetailParams?
     @State private var presentedYouTubeVideo: FeedYouTubeVideoDetailParams?
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
+    @Environment(\.parra) private var parra
 
     @ViewBuilder
     private func createCells(
@@ -121,7 +122,8 @@ public struct ParraFeedListView: View {
                     performActionForFeedItemData: performActionForFeedItemData,
                     performYouTubeVideoUpdateSelection: { detailParams in
                         presentedYouTubeVideo = detailParams
-                    }
+                    },
+                    api: parra.parraInternal.api
                 )
                 .id(item.id)
                 .onAppear {
@@ -136,7 +138,8 @@ public struct ParraFeedListView: View {
                     containerGeometry: containerGeometry,
                     spacing: spacing,
                     navigationPath: $navigationPath,
-                    performActionForFeedItemData: performActionForFeedItemData
+                    performActionForFeedItemData: performActionForFeedItemData,
+                    api: parra.parraInternal.api
                 )
                 .id(item.id)
                 .onAppear {
@@ -154,7 +157,8 @@ public struct ParraFeedListView: View {
                         performActionForFeedItemData: performActionForFeedItemData,
                         performCreatorUpdateSelection: { detailParams in
                             presentedCreatorUpdate = detailParams
-                        }
+                        },
+                        api: parra.parraInternal.api
                     )
                 )
                 .id(item.id)

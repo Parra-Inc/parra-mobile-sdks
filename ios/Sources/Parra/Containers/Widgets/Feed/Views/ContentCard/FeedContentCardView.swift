@@ -18,7 +18,8 @@ struct FeedContentCardView: View {
         containerGeometry: GeometryProxy,
         spacing: CGFloat,
         navigationPath: Binding<NavigationPath>,
-        performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void
+        performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void,
+        api: API
     ) {
         self.contentCard = contentCard
         self.feedItemId = feedItemId
@@ -31,20 +32,7 @@ struct FeedContentCardView: View {
                 feedItemId: feedItemId,
                 reactionOptionGroups: reactionOptions ?? [],
                 reactions: reactions ?? [],
-                submitReaction: { api, itemId, reactionOptionId in
-                    let response = try await api.addFeedReaction(
-                        feedItemId: itemId,
-                        reactionOptionId: reactionOptionId
-                    )
-
-                    return response.id
-                },
-                removeReaction: { api, itemId, reactionId in
-                    try await api.removeFeedReaction(
-                        feedItemId: itemId,
-                        reactionId: reactionId
-                    )
-                }
+                api: api
             )
         )
     }

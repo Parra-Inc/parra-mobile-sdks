@@ -32,27 +32,7 @@ struct FeedReactionView: View {
             verticalSpacing: 8,
             fitContentWidth: true
         ) {
-            ForEach($reactor.currentReactions) { $reaction in
-                ReactionButtonView(reaction: $reaction) { reacted, summary in
-                    if !userEntitlements.hasEntitlement(attachmentPaywall?.entitlement) {
-                        isShowingPaywall = true
-                    } else if authState.isLoggedIn || UIDevice.isPreview {
-                        if reacted {
-                            reactor.addExistingReaction(
-                                option: summary,
-                                api: parra.parraInternal.api
-                            )
-                        } else {
-                            reactor.removeExistingReaction(
-                                option: summary,
-                                api: parra.parraInternal.api
-                            )
-                        }
-                    } else {
-                        isRequiredSignInPresented = true
-                    }
-                }
-            }
+            reactionButtons
 
             AddReactionButtonView(
                 attachmentPaywall: attachmentPaywall
@@ -71,14 +51,6 @@ struct FeedReactionView: View {
             }
         }
         .contentShape(.rect)
-        .onChange(of: pickerSelectedReaction) { oldValue, newValue in
-            if let newValue, oldValue == nil {
-                reactor.addNewReaction(
-                    option: newValue,
-                    api: parra.parraInternal.api
-                )
-            }
-        }
         .presentParraPaywall(
             entitlement: attachmentPaywall?.entitlement.key ?? "unknown",
             context: attachmentPaywall?.context,
@@ -105,8 +77,7 @@ struct FeedReactionView: View {
         ) {
             NavigationStack {
                 ReactionPickerView(
-                    selectedOption: $pickerSelectedReaction,
-                    optionGroups: reactor.reactionOptionGroups,
+                    reactor: _reactor,
                     showLabels: false,
                     searchEnabled: false
                 )
@@ -118,7 +89,6 @@ struct FeedReactionView: View {
 
     // MARK: - Private
 
-    @Environment(\.parra) private var parra
     @Environment(\.parraAuthState) private var authState
     @Environment(\.parraAppInfo) private var appInfo
     @Environment(\.parraTheme) private var theme
@@ -130,6 +100,28 @@ struct FeedReactionView: View {
     @State private var isShowingPaywall: Bool = false
     @State private var pickerSelectedReaction: ParraReactionOption?
     @StateObject private var reactor: Reactor
+
+    @ViewBuilder private var reactionButtons: some View {
+        ForEach($reactor.currentReactions) { $reaction in
+            ReactionButtonView(reaction: $reaction) { reacted, summary in
+                if !userEntitlements.hasEntitlement(attachmentPaywall?.entitlement) {
+                    isShowingPaywall = true
+                } else if authState.isLoggedIn || UIDevice.isPreview {
+                    if reacted {
+                        reactor.addExistingReaction(
+                            option: summary
+                        )
+                    } else {
+                        reactor.removeExistingReaction(
+                            option: summary
+                        )
+                    }
+                } else {
+                    isRequiredSignInPresented = true
+                }
+            }
+        }
+    }
 
     @ViewBuilder private var signInTitleView: some View {
         componentFactory.buildLabel(
@@ -173,7 +165,7 @@ struct FeedReactionView: View {
 }
 
 #Preview {
-    ParraAppPreview {
+    ParraContainerPreview<FeedWidget>(config: .default) { parra, _, _ in
         FeedReactionView(
             feedItemId: .uuid,
             reactor: StateObject(
@@ -181,11 +173,7 @@ struct FeedReactionView: View {
                     feedItemId: .uuid,
                     reactionOptionGroups: ParraReactionOptionGroup.validStates(),
                     reactions: ParraReactionSummary.validStates(),
-                    submitReaction: { _, _, _ in
-                        return .uuid
-                    },
-                    removeReaction: { _, _, _ in
-                    }
+                    api: parra.parraInternal.api
                 )
             )
         )

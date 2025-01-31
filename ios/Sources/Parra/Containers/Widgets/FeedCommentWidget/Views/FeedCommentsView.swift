@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct FeedCommentsView: View {
+    // MARK: - Internal
+
     let feedItem: ParraFeedItem
     @Binding var comments: [ParraComment]
 
@@ -15,9 +17,14 @@ struct FeedCommentsView: View {
         ForEach(comments) { comment in
             FeedCommentView(
                 feedItem: feedItem,
-                comment: comment
+                comment: comment,
+                api: parra.parraInternal.api
             )
             .id(comment)
         }
     }
+
+    // MARK: - Private
+
+    @Environment(\.parra) private var parra
 }

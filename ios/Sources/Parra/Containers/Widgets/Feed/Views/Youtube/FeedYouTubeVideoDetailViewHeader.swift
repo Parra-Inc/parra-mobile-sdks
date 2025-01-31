@@ -228,11 +228,7 @@ struct FeedYouTubeVideoDetailViewHeader: View {
                     feedItemId: .uuid,
                     reactionOptionGroups: [],
                     reactions: [],
-                    submitReaction: { _, _, _ in
-                        return .uuid
-                    },
-                    removeReaction: { _, _, _ in
-                    }
+                    api: parra.parraInternal.api
                 )
             )
             .environmentObject(

@@ -112,7 +112,8 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
         type: ParraReactionType,
         value: String,
         count: Int,
-        reactionId: String?
+        reactionId: String?,
+        originalReactionId: String?
     ) {
         self.id = id
         self.firstReactionAt = firstReactionAt
@@ -121,6 +122,7 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
         self.value = value
         self.count = count
         self.reactionId = reactionId
+        self.originalReactionId = originalReactionId
     }
 
     // MARK: - Public
@@ -135,13 +137,7 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Internal
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case firstReactionAt
-        case name
-        case type
-        case value
-        case count
-        case reactionId
-    }
+    /// Used when toggling reaction state, this keeps track of what the reaction
+    /// id was while the state is toggled and a temporary reactionId is applied.
+    let originalReactionId: String?
 }

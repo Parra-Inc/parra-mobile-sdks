@@ -68,7 +68,8 @@ extension ParraComment: ParraFixture {
                         type: .emoji,
                         value: "👍",
                         count: 6,
-                        reactionId: .uuid
+                        reactionId: .uuid,
+                        originalReactionId: nil
                     ),
                     ParraReactionSummary(
                         id: .uuid,
@@ -77,7 +78,8 @@ extension ParraComment: ParraFixture {
                         type: .emoji,
                         value: "👎",
                         count: 1,
-                        reactionId: nil
+                        reactionId: nil,
+                        originalReactionId: nil
                     ),
                     ParraReactionSummary(
                         id: .uuid,
@@ -86,7 +88,8 @@ extension ParraComment: ParraFixture {
                         type: .emoji,
                         value: "❤️",
                         count: 42,
-                        reactionId: nil
+                        reactionId: nil,
+                        originalReactionId: nil
                     ),
                     ParraReactionSummary(
                         id: .uuid,
@@ -95,7 +98,8 @@ extension ParraComment: ParraFixture {
                         type: .emoji,
                         value: "🥳",
                         count: 4,
-                        reactionId: .uuid
+                        reactionId: .uuid,
+                        originalReactionId: nil
                     )
                 ],
                 isTemporary: nil
@@ -131,7 +135,8 @@ extension ParraComment: ParraFixture {
                         type: .emoji,
                         value: "❤️",
                         count: 4,
-                        reactionId: .uuid
+                        reactionId: .uuid,
+                        originalReactionId: nil
                     )
                 ],
                 isTemporary: true,
@@ -170,7 +175,8 @@ extension ParraComment: ParraFixture {
                         type: .emoji,
                         value: "🔥",
                         count: 65,
-                        reactionId: .uuid
+                        reactionId: .uuid,
+                        originalReactionId: nil
                     )
                 ],
                 isTemporary: nil

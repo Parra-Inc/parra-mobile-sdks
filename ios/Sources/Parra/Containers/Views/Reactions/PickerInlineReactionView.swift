@@ -11,7 +11,7 @@ struct PickerInlineReactionView: View {
     // MARK: - Lifecycle
 
     init(
-        reactor: ObservedObject<Reactor>
+        reactor: StateObject<Reactor>
     ) {
         self._reactor = reactor
     }
@@ -30,13 +30,11 @@ struct PickerInlineReactionView: View {
                     print("Reacting: \(reacted) with \(summary.value)")
                     if reacted {
                         reactor.addExistingReaction(
-                            option: summary,
-                            api: parra.parraInternal.api
+                            option: summary
                         )
                     } else {
                         reactor.removeExistingReaction(
-                            option: summary,
-                            api: parra.parraInternal.api
+                            option: summary
                         )
                     }
                 }
@@ -47,12 +45,11 @@ struct PickerInlineReactionView: View {
 
     // MARK: - Private
 
-    @Environment(\.parra) private var parra
-    @ObservedObject private var reactor: Reactor
+    @StateObject private var reactor: Reactor
 }
 
 #Preview {
-    ParraAppPreview {
+    ParraContainerPreview<FeedWidget>(config: .default) { parra, _, _ in
         FeedReactionView(
             feedItemId: .uuid,
             reactor: StateObject(
@@ -60,11 +57,7 @@ struct PickerInlineReactionView: View {
                     feedItemId: .uuid,
                     reactionOptionGroups: ParraReactionOptionGroup.validStates(),
                     reactions: ParraReactionSummary.validStates(),
-                    submitReaction: { _, _, _ in
-                        return .uuid
-                    },
-                    removeReaction: { _, _, _ in
-                    }
+                    api: parra.parraInternal.api
                 )
             )
         )

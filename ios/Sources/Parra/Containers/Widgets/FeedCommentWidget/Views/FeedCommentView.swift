@@ -14,29 +14,17 @@ struct FeedCommentView: View {
 
     init(
         feedItem: ParraFeedItem,
-        comment: ParraComment
+        comment: ParraComment,
+        api: API
     ) {
         self.comment = comment
         self.feedItem = feedItem
-        self._reactor = ObservedObject(
+        self._reactor = StateObject(
             wrappedValue: Reactor(
                 feedItemId: comment.id,
                 reactionOptionGroups: feedItem.reactionOptions?.elements ?? [],
                 reactions: comment.reactions?.elements ?? [],
-                submitReaction: { api, itemId, reactionOptionId in
-                    let response = try await api.addCommentReaction(
-                        commentId: itemId,
-                        reactionOptionId: reactionOptionId
-                    )
-
-                    return response.id
-                },
-                removeReaction: { api, itemId, reactionId in
-                    try await api.removeCommentReaction(
-                        commentId: itemId,
-                        reactionId: reactionId
-                    )
-                }
+                api: api
             )
         )
     }
@@ -72,6 +60,6 @@ struct FeedCommentView: View {
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
 
-    @ObservedObject private var reactor: Reactor
+    @StateObject private var reactor: Reactor
     @State private var isReactionPickerPresented = false
 }

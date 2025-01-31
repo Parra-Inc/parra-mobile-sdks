@@ -24,6 +24,7 @@ struct FeedCreatorUpdateParams {
     let performCreatorUpdateSelection: (
         _ detailParams: FeedCreatorUpdateDetailParams
     ) -> Void
+    let api: API
 }
 
 struct FeedCreatorUpdateView: View {
@@ -38,20 +39,7 @@ struct FeedCreatorUpdateView: View {
                 feedItemId: params.feedItem.id,
                 reactionOptionGroups: params.reactionOptions ?? [],
                 reactions: params.reactions ?? [],
-                submitReaction: { api, itemId, reactionOptionId in
-                    let response = try await api.addFeedReaction(
-                        feedItemId: itemId,
-                        reactionOptionId: reactionOptionId
-                    )
-
-                    return response.id
-                },
-                removeReaction: { api, itemId, reactionId in
-                    try await api.removeFeedReaction(
-                        feedItemId: itemId,
-                        reactionId: reactionId
-                    )
-                }
+                api: params.api
             )
         )
     }
@@ -203,7 +191,7 @@ public struct TestModel: Codable, Equatable, Hashable, Identifiable {
 }
 
 #Preview {
-    ParraAppPreview {
+    ParraContainerPreview<FeedWidget>(config: .default) { parra, _, _ in
         GeometryReader { proxy in
             ScrollView {
                 ForEach(ParraFeedItem.validStates()) { feedItem in
@@ -218,7 +206,8 @@ public struct TestModel: Codable, Equatable, Hashable, Identifiable {
                                 containerGeometry: proxy,
                                 spacing: 18.0,
                                 performActionForFeedItemData: { _ in },
-                                performCreatorUpdateSelection: { _ in }
+                                performCreatorUpdateSelection: { _ in },
+                                api: parra.parraInternal.api
                             )
                         )
                     default:

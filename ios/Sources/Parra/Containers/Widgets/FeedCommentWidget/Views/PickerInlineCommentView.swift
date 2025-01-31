@@ -12,7 +12,7 @@ struct PickerInlineCommentView: View {
 
     init(
         comment: ParraComment,
-        reactor: ObservedObject<Reactor>
+        reactor: StateObject<Reactor>
     ) {
         self._reactor = reactor
         self.comment = comment
@@ -39,7 +39,7 @@ struct PickerInlineCommentView: View {
     // MARK: - Private
 
     private let comment: ParraComment
-    @ObservedObject private var reactor: Reactor
+    @StateObject private var reactor: Reactor
 
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
