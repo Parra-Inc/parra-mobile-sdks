@@ -34,10 +34,13 @@ public struct ParraEmptyStateComponent: View {
     public let onSecondaryAction: (() -> Void)?
 
     public var body: some View {
-        VStack(alignment: .center) {
+        VStack(alignment: config.alignment) {
             Spacer()
 
-            VStack(spacing: 0) {
+            VStack(
+                alignment: config.alignment,
+                spacing: 0
+            ) {
                 withContent(
                     content: content.icon
                 ) { content in

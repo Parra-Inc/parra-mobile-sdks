@@ -12,11 +12,14 @@ public struct ParraEmptyStateConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(
-        primaryAction: ParraTextButtonConfig,
-        secondaryAction: ParraTextButtonConfig
+        primaryAction: ParraTextButtonConfig = ParraEmptyStateConfig.defaultPrimaryAction,
+        secondaryAction: ParraTextButtonConfig = ParraEmptyStateConfig
+            .defaultSecondaryAction,
+        alignment: HorizontalAlignment = .center
     ) {
         self.primaryAction = primaryAction
         self.secondaryAction = secondaryAction
+        self.alignment = alignment
     }
 
     // MARK: - Public
@@ -53,4 +56,5 @@ public struct ParraEmptyStateConfig: Equatable {
 
     public let primaryAction: ParraTextButtonConfig
     public let secondaryAction: ParraTextButtonConfig
+    public let alignment: HorizontalAlignment
 }
