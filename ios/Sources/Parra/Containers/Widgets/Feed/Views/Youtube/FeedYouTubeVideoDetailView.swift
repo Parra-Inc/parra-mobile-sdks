@@ -47,7 +47,7 @@ struct FeedYouTubeVideoDetailView: View {
 
                             FeedYouTubeVideoDetailViewHeader(
                                 youtubeVideo: youtubeVideo,
-                                feedItemId: feedItem.id,
+                                feedItem: feedItem,
                                 containerGeometry: geometry,
                                 reactor: reactor
                             )
@@ -78,8 +78,6 @@ struct FeedYouTubeVideoDetailView: View {
                     }
                 }
         }
-//        .background(parraTheme.palette.secondaryBackground)
-//        .toolbarBackground(.visible, for: .navigationBar)
     }
 
     // MARK: - Private

@@ -39,7 +39,21 @@ struct FeedCreatorUpdateView: View {
                 feedItemId: params.feedItem.id,
                 reactionOptionGroups: params.reactionOptions ?? [],
                 reactions: params.reactions ?? [],
-                api: params.api
+                api: params.api,
+                submitReaction: { api, itemId, reactionOptionId in
+                    let response = try await api.addFeedReaction(
+                        feedItemId: itemId,
+                        reactionOptionId: reactionOptionId
+                    )
+
+                    return response.id
+                },
+                removeReaction: { api, itemId, reactionId in
+                    try await api.removeFeedReaction(
+                        feedItemId: itemId,
+                        reactionId: reactionId
+                    )
+                }
             )
         )
     }
@@ -104,8 +118,9 @@ struct FeedCreatorUpdateView: View {
 
                 if hasReactions {
                     FeedReactionView(
-                        feedItemId: params.feedItem.id,
+                        feedItem: params.feedItem,
                         reactor: _reactor,
+                        showCommentCount: true,
                         attachmentPaywall: creatorUpdate.attachmentPaywall
                     )
                     .padding(.top, hasAttachments ? 16 : 8)

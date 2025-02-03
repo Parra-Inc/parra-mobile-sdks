@@ -105,11 +105,32 @@ struct FeedCommentWidget: ParraContainer {
                 .emptyPlaceholder(comments) {
                     if !contentObserver.commentPaginator.isLoading {
                         componentFactory.buildEmptyState(
-                            config: .default,
+                            config: .init(
+                                alignment: .center
+                            ),
                             content: contentObserver.content.emptyStateView,
                             localAttributes: ParraAttributes.EmptyState(
+                                titleLabel: .default(
+                                    with: .title3,
+                                    alignment: .leading
+                                ),
+                                subtitleLabel: .default(
+                                    with: .body,
+                                    alignment: .leading
+                                ),
+                                padding: .custom(
+                                    EdgeInsets(
+                                        top: 0,
+                                        leading: 0,
+                                        bottom: 28,
+                                        trailing: 0
+                                    )
+                                ),
                                 background: theme.palette.secondaryBackground
                             )
+                        )
+                        .frame(
+                            minHeight: 300
                         )
                     } else {
                         EmptyView()
@@ -128,7 +149,7 @@ struct FeedCommentWidget: ParraContainer {
         .background(theme.palette.secondaryBackground)
         // Can't use interactive since this bug will occur
         // https://github.com/feedback-assistant/reports/issues/437
-        .scrollDismissesKeyboard(.immediately)
+        .scrollDismissesKeyboard(.automatic)
     }
 
     var body: some View {

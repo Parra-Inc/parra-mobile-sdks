@@ -47,7 +47,7 @@ struct FeedCreatorUpdateDetailView: View {
 
                             FeedCreatorUpdateDetailHeaderView(
                                 creatorUpdate: creatorUpdate,
-                                feedItemId: feedItem.id,
+                                feedItem: feedItem,
                                 containerGeometry: geometry,
                                 reactor: reactor
                             )

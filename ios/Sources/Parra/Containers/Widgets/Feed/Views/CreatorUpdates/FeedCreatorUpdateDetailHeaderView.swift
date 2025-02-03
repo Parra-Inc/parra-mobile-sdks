@@ -12,7 +12,7 @@ struct FeedCreatorUpdateDetailHeaderView: View {
     // MARK: - Internal
 
     let creatorUpdate: ParraCreatorUpdateAppStub
-    let feedItemId: String
+    let feedItem: ParraFeedItem
     let containerGeometry: GeometryProxy
     @StateObject var reactor: Reactor
 
@@ -58,8 +58,9 @@ struct FeedCreatorUpdateDetailHeaderView: View {
 
             if reactor.showReactions {
                 FeedReactionView(
-                    feedItemId: feedItemId,
+                    feedItem: feedItem,
                     reactor: _reactor,
+                    showCommentCount: false,
                     attachmentPaywall: creatorUpdate.attachmentPaywall
                 )
                 .padding()

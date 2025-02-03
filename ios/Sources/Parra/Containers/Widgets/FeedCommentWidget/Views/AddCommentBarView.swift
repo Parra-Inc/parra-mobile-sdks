@@ -94,7 +94,10 @@ struct AddCommentBarView: View {
             .textInputAutocapitalization(.sentences)
             .autocorrectionDisabled(false)
             .focused($isFocused)
-            .submitLabel(.send)
+            .submitLabel(
+                text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    ? .done : .send
+            )
             .onSubmit(of: .text) {
                 handleSubmission()
             }
@@ -129,7 +132,21 @@ struct AddCommentBarView: View {
                 topTrailingRadius: cornerRadius.topTrailing
             )
         )
+        .shadow(
+            color: theme.palette.secondaryBackground.opacity(0.7),
+            radius: 4,
+            x: 0,
+            y: -2
+        )
         .onChange(of: text) { _, newValue in
+            if let last = newValue.last, last.isNewline {
+                text.removeLast()
+
+                isFocused = false
+
+                return
+            }
+
             let trimmed = newValue.trimmingCharacters(
                 in: .whitespacesAndNewlines
             )

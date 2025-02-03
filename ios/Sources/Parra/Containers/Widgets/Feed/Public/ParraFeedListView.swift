@@ -132,7 +132,7 @@ public struct ParraFeedListView: View {
             } else if case .contentCard(let data) = item.data {
                 FeedContentCardView(
                     contentCard: data,
-                    feedItemId: item.id,
+                    feedItem: item,
                     reactionOptions: item.reactionOptions?.elements,
                     reactions: item.reactions?.elements,
                     containerGeometry: containerGeometry,

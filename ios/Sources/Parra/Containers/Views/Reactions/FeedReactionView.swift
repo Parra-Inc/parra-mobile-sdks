@@ -11,43 +11,99 @@ struct FeedReactionView: View {
     // MARK: - Lifecycle
 
     init?(
-        feedItemId: String,
+        feedItem: ParraFeedItem,
         reactor: StateObject<Reactor>,
+        showCommentCount: Bool,
         attachmentPaywall: ParraAppPaywallConfiguration? = nil
     ) {
-        self.feedItemId = feedItemId
+        self.feedItem = feedItem
         self._reactor = reactor
+        self.showCommentCount = showCommentCount
         self.attachmentPaywall = attachmentPaywall
     }
 
     // MARK: - Internal
 
-    let feedItemId: String
+    let feedItem: ParraFeedItem
+    let showCommentCount: Bool
     let attachmentPaywall: ParraAppPaywallConfiguration?
 
     var body: some View {
-        WrappingHStack(
-            alignment: .leading,
-            horizontalSpacing: 8,
-            verticalSpacing: 8,
-            fitContentWidth: true
-        ) {
-            reactionButtons
+        let accentColor = theme.palette.primaryText
+            .toParraColor()
+            .opacity(0.7)
 
-            AddReactionButtonView(
-                attachmentPaywall: attachmentPaywall
+        HStack(alignment: .bottom, spacing: 8) {
+            WrappingHStack(
+                alignment: .leading,
+                horizontalSpacing: 8,
+                verticalSpacing: 8,
+                fitContentWidth: true
             ) {
-                if UIDevice.isPreview {
-                    isReactionPickerPresented = true
-                } else if !userEntitlements
-                    .hasEntitlement(attachmentPaywall?.entitlement)
-                {
-                    isShowingPaywall = true
-                } else if authState.isLoggedIn {
-                    isReactionPickerPresented = true
-                } else {
-                    isRequiredSignInPresented = true
+                reactionButtons
+
+                // Keep these together to prevent wrapping between them
+                HStack(spacing: 6) {
+                    AddReactionButtonView(
+                        attachmentPaywall: attachmentPaywall
+                    ) {
+                        if UIDevice.isPreview {
+                            isReactionPickerPresented = true
+                        } else if !userEntitlements
+                            .hasEntitlement(attachmentPaywall?.entitlement)
+                        {
+                            isShowingPaywall = true
+                        } else if authState.isLoggedIn {
+                            isReactionPickerPresented = true
+                        } else {
+                            isRequiredSignInPresented = true
+                        }
+                    }
+
+                    if reactor.totalReactions > 0 {
+                        componentFactory.buildLabel(
+                            text: "\(reactor.totalReactions)",
+                            localAttributes: .init(
+                                text: ParraAttributes.Text(
+                                    style: .caption,
+                                    color: accentColor
+                                )
+                            )
+                        )
+                    }
                 }
+            }
+
+            if showCommentCount {
+                Spacer()
+
+                let commentCount = feedItem.comments?.commentCount ?? 0
+                let hasComments = commentCount > 0
+
+                HStack(alignment: .center, spacing: 4) {
+                    componentFactory.buildImage(
+                        config: .init(),
+                        content: .symbol(hasComments ? "bubble.fill" : "bubble"),
+                        localAttributes: ParraAttributes.Image(
+                            tint: accentColor,
+                            size: CGSize(width: 20, height: 20)
+                        )
+                    )
+
+                    if hasComments {
+                        componentFactory.buildLabel(
+                            text: "\(commentCount)",
+                            localAttributes: .init(
+                                text: ParraAttributes.Text(
+                                    style: .caption,
+                                    color: accentColor
+                                )
+                            )
+                        )
+                        .padding(.bottom, 3)
+                    }
+                }
+                .padding(.bottom, 5)
             }
         }
         .contentShape(.rect)
@@ -167,15 +223,21 @@ struct FeedReactionView: View {
 #Preview {
     ParraContainerPreview<FeedWidget>(config: .default) { parra, _, _ in
         FeedReactionView(
-            feedItemId: .uuid,
+            feedItem: .validStates()[0],
             reactor: StateObject(
                 wrappedValue: Reactor(
                     feedItemId: .uuid,
                     reactionOptionGroups: ParraReactionOptionGroup.validStates(),
                     reactions: ParraReactionSummary.validStates(),
-                    api: parra.parraInternal.api
+                    api: parra.parraInternal.api,
+                    submitReaction: { _, _, _ in
+                        return .uuid
+                    },
+                    removeReaction: { _, _, _ in
+                    }
                 )
-            )
+            ),
+            showCommentCount: true
         )
     }
 }

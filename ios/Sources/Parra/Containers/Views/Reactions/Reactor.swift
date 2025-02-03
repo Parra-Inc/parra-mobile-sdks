@@ -18,10 +18,22 @@ class Reactor: ObservableObject {
         feedItemId: String,
         reactionOptionGroups: [ParraReactionOptionGroup],
         reactions: [ParraReactionSummary],
-        api: API
+        api: API,
+        submitReaction: @escaping (
+            _ api: API,
+            _ itemId: String,
+            _ reactionOptionId: String
+        ) async throws -> String,
+        removeReaction: @escaping (
+            _ api: API,
+            _ itemId: String,
+            _ reactionId: String
+        ) async throws -> Void
     ) {
         self.feedItemId = feedItemId
         self.api = api
+        self.submitReaction = submitReaction
+        self.removeReaction = removeReaction
         self.reactionOptionGroups = reactionOptionGroups
         self.currentReactions = reactions
         self.firstReactions = Array(reactions.prefix(3))
@@ -70,6 +82,16 @@ class Reactor: ObservableObject {
 
     let feedItemId: String
     let api: API
+    let submitReaction: (
+        _ api: API,
+        _ itemId: String,
+        _ reactionOptionId: String
+    ) async throws -> String
+    let removeReaction: (
+        _ api: API,
+        _ itemId: String,
+        _ reactionId: String
+    ) async throws -> Void
 
     @Published var reactionOptionGroups: [ParraReactionOptionGroup]
 
@@ -227,10 +249,7 @@ class Reactor: ObservableObject {
                 let optionId = summary.id
                 assert(optionId != "placeholder")
                 do {
-                    let reactionResponse = try await api.addFeedReaction(
-                        feedItemId: feedItemId,
-                        reactionOptionId: optionId
-                    )
+                    let reactionId = try await submitReaction(api, feedItemId, optionId)
 
                     if let idx = copiedReactions.firstIndex(
                         where: { $0.id == optionId }
@@ -243,7 +262,7 @@ class Reactor: ObservableObject {
                             type: match.type,
                             value: match.value,
                             count: match.count,
-                            reactionId: reactionResponse.id,
+                            reactionId: reactionId,
                             originalReactionId: nil
                         )
                     }
@@ -266,10 +285,7 @@ class Reactor: ObservableObject {
                 assert(optionId != "placeholder")
 
                 do {
-                    let reactionResponse = try await api.addFeedReaction(
-                        feedItemId: feedItemId,
-                        reactionOptionId: optionId
-                    )
+                    let reactionId = try await submitReaction(api, feedItemId, optionId)
 
                     if let idx = copiedReactions
                         .firstIndex(where: { $0.id == optionId })
@@ -282,7 +298,7 @@ class Reactor: ObservableObject {
                             type: match.type,
                             value: match.value,
                             count: match.count,
-                            reactionId: reactionResponse.id,
+                            reactionId: reactionId,
                             originalReactionId: nil
                         )
                     }
@@ -309,9 +325,10 @@ class Reactor: ObservableObject {
                 assert(reactionId != "placeholder")
 
                 do {
-                    try await api.removeFeedReaction(
-                        feedItemId: feedItemId,
-                        reactionId: reactionId
+                    try await removeReaction(
+                        api,
+                        feedItemId,
+                        reactionId
                     )
                 } catch {
                     logger.error("Error removing reaction", error)

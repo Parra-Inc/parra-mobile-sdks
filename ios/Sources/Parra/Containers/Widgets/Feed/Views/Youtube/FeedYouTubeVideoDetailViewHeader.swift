@@ -33,7 +33,7 @@ struct YouTubeDescriptionDisclosureStyle: DisclosureGroupStyle {
 
                     Spacer()
 
-                    Text(configuration.isExpanded ? "Show less" : "...more")
+                    Text(configuration.isExpanded ? "Say less" : "...more")
                         .font(.caption)
                         .foregroundColor(.accentColor)
                 }
@@ -48,7 +48,7 @@ struct FeedYouTubeVideoDetailViewHeader: View {
     // MARK: - Internal
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
-    let feedItemId: String
+    let feedItem: ParraFeedItem
     let containerGeometry: GeometryProxy
     @StateObject var reactor: Reactor
 
@@ -73,8 +73,9 @@ struct FeedYouTubeVideoDetailViewHeader: View {
                 if reactor.showReactions {
                     VStack {
                         FeedReactionView(
-                            feedItemId: feedItemId,
-                            reactor: _reactor
+                            feedItem: feedItem,
+                            reactor: _reactor,
+                            showCommentCount: false
                         )
                     }
                     .padding(
@@ -222,13 +223,18 @@ struct FeedYouTubeVideoDetailViewHeader: View {
         GeometryReader { proxy in
             FeedYouTubeVideoDetailViewHeader(
                 youtubeVideo: .validStates()[0],
-                feedItemId: .uuid,
+                feedItem: .validStates()[0],
                 containerGeometry: proxy,
                 reactor: Reactor(
                     feedItemId: .uuid,
                     reactionOptionGroups: [],
                     reactions: [],
-                    api: parra.parraInternal.api
+                    api: parra.parraInternal.api,
+                    submitReaction: { _, _, _ in
+                        return .uuid
+                    },
+                    removeReaction: { _, _, _ in
+                    }
                 )
             )
             .environmentObject(

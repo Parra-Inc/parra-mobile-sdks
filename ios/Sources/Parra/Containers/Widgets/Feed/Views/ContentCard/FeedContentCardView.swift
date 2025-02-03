@@ -12,7 +12,7 @@ struct FeedContentCardView: View {
 
     init(
         contentCard: ParraContentCard,
-        feedItemId: String,
+        feedItem: ParraFeedItem,
         reactionOptions: [ParraReactionOptionGroup]?,
         reactions: [ParraReactionSummary]?,
         containerGeometry: GeometryProxy,
@@ -22,17 +22,31 @@ struct FeedContentCardView: View {
         api: API
     ) {
         self.contentCard = contentCard
-        self.feedItemId = feedItemId
+        self.feedItem = feedItem
         self.containerGeometry = containerGeometry
         self.spacing = spacing
         _navigationPath = navigationPath
         self.performActionForFeedItemData = performActionForFeedItemData
         self._reactor = StateObject(
             wrappedValue: Reactor(
-                feedItemId: feedItemId,
+                feedItemId: feedItem.id,
                 reactionOptionGroups: reactionOptions ?? [],
                 reactions: reactions ?? [],
-                api: api
+                api: api,
+                submitReaction: { api, itemId, reactionOptionId in
+                    let response = try await api.addFeedReaction(
+                        feedItemId: itemId,
+                        reactionOptionId: reactionOptionId
+                    )
+
+                    return response.id
+                },
+                removeReaction: { api, itemId, reactionId in
+                    try await api.removeFeedReaction(
+                        feedItemId: itemId,
+                        reactionId: reactionId
+                    )
+                }
             )
         )
     }
@@ -40,7 +54,7 @@ struct FeedContentCardView: View {
     // MARK: - Internal
 
     let contentCard: ParraContentCard
-    let feedItemId: String
+    let feedItem: ParraFeedItem
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
@@ -260,8 +274,9 @@ struct FeedContentCardView: View {
                 if reactor.showReactions {
                     VStack {
                         FeedReactionView(
-                            feedItemId: feedItemId,
-                            reactor: _reactor
+                            feedItem: feedItem,
+                            reactor: _reactor,
+                            showCommentCount: true
                         )
                     }
                     .padding(

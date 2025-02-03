@@ -93,7 +93,12 @@ struct FeedCommentReactionView: View {
                     feedItemId: .uuid,
                     reactionOptionGroups: ParraReactionOptionGroup.validStates(),
                     reactions: ParraReactionSummary.validStates(),
-                    api: parra.parraInternal.api
+                    api: parra.parraInternal.api,
+                    submitReaction: { _, _, _ in
+                        return .uuid
+                    },
+                    removeReaction: { _, _, _ in
+                    }
                 )
             )
         )

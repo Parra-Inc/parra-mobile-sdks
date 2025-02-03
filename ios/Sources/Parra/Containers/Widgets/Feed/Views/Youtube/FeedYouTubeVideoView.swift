@@ -44,7 +44,21 @@ struct FeedYouTubeVideoView: View {
                 feedItemId: feedItem.id,
                 reactionOptionGroups: reactionOptions ?? [],
                 reactions: reactions ?? [],
-                api: api
+                api: api,
+                submitReaction: { api, itemId, reactionOptionId in
+                    let response = try await api.addFeedReaction(
+                        feedItemId: itemId,
+                        reactionOptionId: reactionOptionId
+                    )
+
+                    return response.id
+                },
+                removeReaction: { api, itemId, reactionId in
+                    try await api.removeFeedReaction(
+                        feedItemId: itemId,
+                        reactionId: reactionId
+                    )
+                }
             )
         )
     }
@@ -106,8 +120,9 @@ struct FeedYouTubeVideoView: View {
                 if reactor.showReactions {
                     VStack {
                         FeedReactionView(
-                            feedItemId: feedItem.id,
-                            reactor: _reactor
+                            feedItem: feedItem,
+                            reactor: _reactor,
+                            showCommentCount: true
                         )
                     }
                     .padding(

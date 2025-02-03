@@ -51,15 +51,21 @@ struct PickerInlineReactionView: View {
 #Preview {
     ParraContainerPreview<FeedWidget>(config: .default) { parra, _, _ in
         FeedReactionView(
-            feedItemId: .uuid,
+            feedItem: .validStates()[0],
             reactor: StateObject(
                 wrappedValue: Reactor(
                     feedItemId: .uuid,
                     reactionOptionGroups: ParraReactionOptionGroup.validStates(),
                     reactions: ParraReactionSummary.validStates(),
-                    api: parra.parraInternal.api
+                    api: parra.parraInternal.api,
+                    submitReaction: { _, _, _ in
+                        return .uuid
+                    },
+                    removeReaction: { _, _, _ in
+                    }
                 )
-            )
+            ),
+            showCommentCount: true
         )
     }
 }

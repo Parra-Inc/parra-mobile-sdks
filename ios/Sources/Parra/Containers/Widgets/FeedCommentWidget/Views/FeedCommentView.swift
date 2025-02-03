@@ -24,7 +24,21 @@ struct FeedCommentView: View {
                 feedItemId: comment.id,
                 reactionOptionGroups: feedItem.reactionOptions?.elements ?? [],
                 reactions: comment.reactions?.elements ?? [],
-                api: api
+                api: api,
+                submitReaction: { api, itemId, reactionOptionId in
+                    let response = try await api.addCommentReaction(
+                        commentId: itemId,
+                        reactionOptionId: reactionOptionId
+                    )
+
+                    return response.id
+                },
+                removeReaction: { api, itemId, reactionId in
+                    try await api.removeCommentReaction(
+                        commentId: itemId,
+                        reactionId: reactionId
+                    )
+                }
             )
         )
     }
