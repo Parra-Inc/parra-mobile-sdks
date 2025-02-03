@@ -12,15 +12,22 @@ struct FeedCommentsView: View {
 
     let feedItem: ParraFeedItem
     @Binding var comments: [ParraComment]
+    var itemAtIndexDidAppear: (_: Int) -> Void
 
     var body: some View {
-        ForEach(comments) { comment in
+        ForEach(
+            Array(comments.enumerated()),
+            id: \.element
+        ) { index, comment in
             FeedCommentView(
                 feedItem: feedItem,
                 comment: comment,
                 api: parra.parraInternal.api
             )
             .id(comment)
+            .onAppear {
+                itemAtIndexDidAppear(index)
+            }
         }
     }
 
