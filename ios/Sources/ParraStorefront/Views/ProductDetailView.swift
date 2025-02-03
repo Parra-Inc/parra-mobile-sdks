@@ -95,6 +95,15 @@ struct ProductDetailView: View {
                 topVc.present(activityVC, animated: true)
             }
         }
+        .onAppear {
+            Task {
+                let imageUrls = product.images.map { image in
+                    return shopifyCdnUrl(for: image.url)
+                }
+
+                await ParraImageAsset.precacheAssets(at: imageUrls)
+            }
+        }
     }
 
     // MARK: - Private
@@ -110,18 +119,7 @@ struct ProductDetailView: View {
         TabView {
             ForEach(product.images, id: \.self) { image in
                 ZStack {
-                    let cdnUrl = image.url.appending(
-                        queryItems: [
-                            URLQueryItem(
-                                name: "width",
-                                value: "\(Int(UIScreen.main.bounds.width * UIScreen.main.scale))"
-                            ),
-                            URLQueryItem(
-                                name: "crop",
-                                value: "center"
-                            )
-                        ]
-                    )
+                    let cdnUrl = shopifyCdnUrl(for: image.url)
 
                     componentFactory.buildAsyncImage(
                         config: ParraAsyncImageConfig(
@@ -199,5 +197,20 @@ struct ProductDetailView: View {
             Text(product.description)
                 .font(.body)
         }
+    }
+
+    private func shopifyCdnUrl(for url: URL) -> URL {
+        return url.appending(
+            queryItems: [
+                URLQueryItem(
+                    name: "width",
+                    value: "\(Int(UIScreen.main.bounds.width * UIScreen.main.scale))"
+                ),
+                URLQueryItem(
+                    name: "crop",
+                    value: "center"
+                )
+            ]
+        )
     }
 }

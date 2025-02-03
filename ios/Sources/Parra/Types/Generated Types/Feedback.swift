@@ -868,6 +868,20 @@ public struct ParraImageAsset: Codable, Equatable, Hashable, Identifiable {
         return _size.toCGSize
     }
 
+    public static func precacheAsset(
+        at url: URL
+    ) async {
+        await Parra.default.parraInternal.api.cacheAsset(with: url)
+    }
+
+    public static func precacheAssets(
+        at urls: [URL]
+    ) async {
+        await Parra.default.parraInternal.api.performBulkAssetCachingRequest(
+            assetUrls: urls
+        )
+    }
+
     public func thumbnailUrl(
         for size: ParraImageAssetThumbnailSize
     ) -> (URL, CGSize)? {

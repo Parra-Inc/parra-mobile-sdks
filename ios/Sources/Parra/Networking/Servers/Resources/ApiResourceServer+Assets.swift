@@ -12,12 +12,12 @@ import UIKit
 private let logger = Logger()
 
 extension ApiResourceServer {
-    func fetchAsset(asset: ParraImageAsset) async throws -> UIImage? {
-        logger.trace("Fetching asset: \(asset.id)", [
-            "url": asset.url
+    func fetchAsset(with url: URL) async throws -> UIImage? {
+        logger.trace("Fetching asset", [
+            "url": url.absoluteString
         ])
 
-        let request = try request(for: asset)
+        let request = try request(for: url)
 
         let (data, response) = try await configuration.urlSession
             .dataForRequest(
@@ -30,7 +30,9 @@ extension ApiResourceServer {
         }
 
         defer {
-            logger.trace("Caching asset: \(asset.id)")
+            logger.trace("Caching asset", [
+                "url": url.absoluteString
+            ])
 
             let cacheResponse = CachedURLResponse(
                 response: response,
@@ -46,47 +48,70 @@ extension ApiResourceServer {
         }
 
         if httpResponse.statusCode < 300 {
-            logger.trace("Successfully retreived image for asset: \(asset.id)")
+            logger.trace("Successfully retreived image for asset", [
+                "url": url.absoluteString
+            ])
 
             return UIImage(data: data)
         }
 
-        logger.warn("Failed to download image for asset: \(asset.id)")
+        logger.warn("Failed to download image for asset", [
+            "url": url.absoluteString
+        ])
 
         return nil
     }
 
-    func isAssetCached(asset: ParraImageAsset) -> Bool {
-        logger.trace("Checking if asset is cached: \(asset.id)")
+    func fetchAsset(asset: ParraImageAsset) async throws -> UIImage? {
+        logger.trace("Fetching asset: \(asset.id)", [
+            "url": asset.url
+        ])
 
+        return try await fetchAsset(with: asset.url)
+    }
+
+    func isAssetCached(with url: URL) -> Bool {
         guard let cache = configuration.urlSession.configuration.urlCache else {
             logger.trace("Cache is missing")
 
             return false
         }
 
-        guard let request = try? request(for: asset),
+        guard let request = try? request(for: url),
               let cachedResponse = cache.cachedResponse(for: request) else
         {
-            logger.trace("Cache miss for asset: \(asset.id)")
+            logger.trace("Cache miss for asset", [
+                "url": url.absoluteString
+            ])
+
             return false
         }
 
         guard cachedResponse.storagePolicy != .notAllowed else {
-            logger.trace("Storage policy disallowed for asset: \(asset.id)")
+            logger.trace("Storage policy disallowed for asset", [
+                "url": url.absoluteString
+            ])
 
             return false
         }
 
-        logger.trace("Cache hit for asset: \(asset.id)")
+        logger.trace("Cache hit for asset", [
+            "url": url.absoluteString
+        ])
 
         return true
     }
 
-    private func request(for asset: ParraImageAsset) throws -> URLRequest {
+    func isAssetCached(asset: ParraImageAsset) -> Bool {
+        logger.trace("Checking if asset is cached: \(asset.id)")
+
+        return isAssetCached(with: asset.url)
+    }
+
+    private func request(for url: URL) throws -> URLRequest {
         var request = try URLRequest(
             with: [:],
-            url: asset.url,
+            url: url,
             cachePolicy: .returnCacheDataElseLoad,
             timeout: 10.0
         )
