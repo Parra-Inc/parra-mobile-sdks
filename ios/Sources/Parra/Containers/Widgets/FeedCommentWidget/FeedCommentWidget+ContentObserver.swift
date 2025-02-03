@@ -29,6 +29,14 @@ extension FeedCommentWidget {
                 errorStateView: initialParams.config.errorStateContent
             )
 
+            let commentCount = if let count = initialParams.feedItem.comments?
+                .commentCount
+            {
+                max(count, 1)
+            } else {
+                4
+            }
+
             self.commentPaginator = if let feedCollectionResponse = initialParams
                 .commentsResponse
             {
@@ -47,7 +55,7 @@ extension FeedCommentWidget {
                     context: initialParams.feedItem.id,
                     data: .init(
                         items: [],
-                        placeholderItems: (0 ... 4)
+                        placeholderItems: (0 ... commentCount)
                             .map { _ in ParraComment.redactedComment }
                     ),
                     pageFetcher: loadMoreComments
@@ -92,8 +100,6 @@ extension FeedCommentWidget {
         @MainActor
         func refresh() {
             commentPaginator.refresh()
-
-//            feedConfig.feedDidRefresh()
         }
 
         @MainActor
