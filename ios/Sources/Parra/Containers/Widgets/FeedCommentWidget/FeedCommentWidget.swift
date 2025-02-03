@@ -7,44 +7,11 @@
 
 import SwiftUI
 
-struct KeyboardProvider: ViewModifier {
-    var keyboardHeight: Binding<CGFloat>
-
-    func body(content: Content) -> some View {
-        content
-            .onReceive(
-                NotificationCenter.default
-                    .publisher(for: UIResponder.keyboardWillShowNotification),
-                perform: { notification in
-                    guard let userInfo = notification.userInfo,
-                          let keyboardRect =
-                          userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
-                        return
-                    }
-
-                    keyboardHeight.wrappedValue = keyboardRect.height
-                }
-            ).onReceive(
-                NotificationCenter.default
-                    .publisher(for: UIResponder.keyboardWillHideNotification),
-                perform: { _ in
-                    keyboardHeight.wrappedValue = 0
-                }
-            )
-    }
-}
-
-public extension View {
-    func keyboardHeight(_ state: Binding<CGFloat>) -> some View {
-        modifier(KeyboardProvider(keyboardHeight: state))
-    }
-}
-
 struct FeedCommentWidget: ParraContainer {
     // MARK: - Lifecycle
 
     init(
-        config: FeedCommentWidgetConfig,
+        config: ParraFeedCommentWidgetConfig,
         contentObserver: ContentObserver,
         navigationPath: Binding<NavigationPath>
     ) {
@@ -55,22 +22,25 @@ struct FeedCommentWidget: ParraContainer {
     // MARK: - Internal
 
     @StateObject var contentObserver: ContentObserver
-    let config: FeedCommentWidgetConfig
+    let config: ParraFeedCommentWidgetConfig
 
     var comments: Binding<[ParraComment]> {
         return $contentObserver.commentPaginator.items
     }
 
     var commentsTitle: String? {
-        if comments.isEmpty {
+        let commentCount = contentObserver.feedItem.comments?.commentCount ?? comments
+            .count
+
+        if commentCount == 0 {
             return nil
         }
 
-        if comments.count == 1 {
+        if commentCount == 1 {
             return "1 Comment"
         }
 
-        return "\(comments.count) Comments"
+        return "\(commentCount) Comments"
     }
 
     @ViewBuilder var scrollView: some View {
@@ -95,7 +65,9 @@ struct FeedCommentWidget: ParraContainer {
                     FeedCommentsView(
                         feedItem: contentObserver.feedItem,
                         comments: comments
-                    )
+                    ) { index in
+                        contentObserver.commentPaginator.loadMore(after: index)
+                    }
                 }
                 .padding(.vertical)
                 .background(theme.palette.secondaryBackground)
