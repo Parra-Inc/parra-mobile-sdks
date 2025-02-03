@@ -103,7 +103,7 @@ struct FeedReactionView: View {
                         .padding(.bottom, 3)
                     }
                 }
-                .padding(.bottom, 5)
+                .padding(.bottom, 2)
             }
         }
         .contentShape(.rect)

@@ -10,7 +10,7 @@ import SwiftUI
 extension FeedCommentWidget.ContentObserver {
     struct InitialParams {
         let feedItem: ParraFeedItem
-        let config: FeedCommentWidgetConfig
+        let config: ParraFeedCommentWidgetConfig
         let commentsResponse: PaginateCommentsCollectionResponse?
         let api: API
     }
