@@ -132,7 +132,7 @@ extension FeedCommentWidget {
                 submissionErrorMessage: nil
             )
 
-            commentPaginator.appendItem(temporaryComment)
+            commentPaginator.preppendItem(temporaryComment)
 
             Task {
                 do {
@@ -204,10 +204,15 @@ extension FeedCommentWidget {
                 limit: limit,
                 offset: offset,
                 sort: "created_at,desc",
-                createdAt: nil // TODO: this
+                // TODO: This will be for the case where we want to specifically
+                // load more comments after a given comment. Like to see what
+                // has been added between when you loaded the comments and when
+                // you left one.
+//                createdAt: commentPaginator.items.last?.createdAt.formatted(.iso8601)
+                createdAt: nil
             )
 
-            return response.data.elements.reversed()
+            return response.data.elements
         }
     }
 }

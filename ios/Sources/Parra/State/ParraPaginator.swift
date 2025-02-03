@@ -304,6 +304,14 @@ public class ParraPaginator<Item, Context>: ObservableObject
         items.append(item)
     }
 
+    public func preppendItem(_ item: Item) {
+        if isShowingPlaceholders {
+            return
+        }
+
+        items.insert(item, at: 0)
+    }
+
     public func replace(_ item: Item, with newItem: Item) {
         if isShowingPlaceholders {
             return
