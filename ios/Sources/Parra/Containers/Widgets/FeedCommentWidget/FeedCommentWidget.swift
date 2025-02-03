@@ -112,11 +112,11 @@ struct FeedCommentWidget: ParraContainer {
                             localAttributes: ParraAttributes.EmptyState(
                                 titleLabel: .default(
                                     with: .title3,
-                                    alignment: .leading
+                                    alignment: .center
                                 ),
                                 subtitleLabel: .default(
                                     with: .body,
-                                    alignment: .leading
+                                    alignment: .center
                                 ),
                                 padding: .custom(
                                     EdgeInsets(
