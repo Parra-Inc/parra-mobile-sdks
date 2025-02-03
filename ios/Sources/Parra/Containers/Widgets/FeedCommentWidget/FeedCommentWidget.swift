@@ -24,13 +24,18 @@ struct FeedCommentWidget: ParraContainer {
     @StateObject var contentObserver: ContentObserver
     let config: ParraFeedCommentWidgetConfig
 
+    let timer = Timer.publish(
+        every: 15,
+        on: .main,
+        in: .common
+    ).autoconnect()
+
     var comments: Binding<[ParraComment]> {
         return $contentObserver.commentPaginator.items
     }
 
     var commentsTitle: String? {
-        let commentCount = contentObserver.feedItem.comments?.commentCount ?? comments
-            .count
+        let commentCount = contentObserver.totalComments
 
         if commentCount == 0 {
             return nil

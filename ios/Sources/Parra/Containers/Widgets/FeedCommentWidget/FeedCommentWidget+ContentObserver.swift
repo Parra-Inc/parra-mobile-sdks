@@ -37,6 +37,14 @@ extension FeedCommentWidget {
                 4
             }
 
+            self.totalComments = if let feedCollectionResponse = initialParams
+                .commentsResponse
+            {
+                feedCollectionResponse.totalCount
+            } else {
+                initialParams.feedItem.comments?.commentCount ?? 0
+            }
+
             self.commentPaginator = if let feedCollectionResponse = initialParams
                 .commentsResponse
             {
@@ -68,6 +76,8 @@ extension FeedCommentWidget {
         let feedItem: ParraFeedItem
 
         private(set) var content: Content
+
+        var totalComments: Int
 
         var commentPaginator: ParraPaginator<
             ParraComment,
@@ -142,6 +152,7 @@ extension FeedCommentWidget {
                     )
 
                     commentPaginator.replace(temporaryComment, with: realComment)
+                    totalComments = totalComments + 1
                 } catch let error as ParraError {
                     var erroredComment = temporaryComment
 
@@ -211,6 +222,8 @@ extension FeedCommentWidget {
 //                createdAt: commentPaginator.items.last?.createdAt.formatted(.iso8601)
                 createdAt: nil
             )
+
+            totalComments = response.totalCount
 
             return response.data.elements
         }
