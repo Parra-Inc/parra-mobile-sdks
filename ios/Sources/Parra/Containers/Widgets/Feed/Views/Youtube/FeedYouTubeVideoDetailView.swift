@@ -39,7 +39,7 @@ struct FeedYouTubeVideoDetailView: View {
                         commentsResponse: nil,
                         api: parra.parraInternal.api
                     ),
-                    config: FeedCommentWidgetConfig(
+                    config: ParraFeedCommentWidgetConfig(
                         headerViewBuilder: {
                             let cornerRadius = theme.cornerRadius.value(
                                 for: .xl

@@ -191,7 +191,7 @@ extension FeedCommentWidget {
         // MARK: - Private
 
         private let api: API
-        private let feedConfig: FeedCommentWidgetConfig
+        private let feedConfig: ParraFeedCommentWidgetConfig
         private var paginatorSink: AnyCancellable? = nil
 
         private func loadMoreComments(

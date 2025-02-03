@@ -1,5 +1,5 @@
 //
-//  FeedCommentWidgetConfig.swift
+//  ParraFeedCommentWidgetConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 12/18/24.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-public final class FeedCommentWidgetConfig: ParraContainerConfig {
+public final class ParraFeedCommentWidgetConfig: ParraContainerConfig {
     // MARK: - Lifecycle
 
     public init() {
         self.headerViewBuilder = { EmptyView() }
         self.footerViewBuilder = { EmptyView() }
-        self.emptyStateContent = FeedCommentWidgetConfig.defaultEmptyStateContent
-        self.errorStateContent = FeedCommentWidgetConfig.defaultErrorStateContent
+        self.emptyStateContent = ParraFeedCommentWidgetConfig.defaultEmptyStateContent
+        self.errorStateContent = ParraFeedCommentWidgetConfig.defaultErrorStateContent
     }
 
     public init(
@@ -43,9 +43,9 @@ public final class FeedCommentWidgetConfig: ParraContainerConfig {
                     performActionForFeedItemData: performActionForFeedItemData
                 )
             },
-        emptyStateContent: ParraEmptyStateContent = FeedCommentWidgetConfig
+        emptyStateContent: ParraEmptyStateContent = ParraFeedCommentWidgetConfig
             .defaultEmptyStateContent,
-        errorStateContent: ParraEmptyStateContent = FeedCommentWidgetConfig
+        errorStateContent: ParraEmptyStateContent = ParraFeedCommentWidgetConfig
             .defaultErrorStateContent
     ) {
         self.headerViewBuilder = headerViewBuilder
@@ -56,7 +56,7 @@ public final class FeedCommentWidgetConfig: ParraContainerConfig {
 
     // MARK: - Public
 
-    public static let `default` = FeedCommentWidgetConfig()
+    public static let `default` = ParraFeedCommentWidgetConfig()
 
     public static let defaultEmptyStateContent = ParraEmptyStateContent(
         title: ParraLabelContent(
