@@ -22,6 +22,10 @@ struct FeedCommentReactionView: View {
 
     // MARK: - Internal
 
+    var isCurrentUser: Bool {
+        return comment.user.id == authState.user?.info.id
+    }
+
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
             // Show the 3 most popular reactions, then the add reaction button,
@@ -40,11 +44,14 @@ struct FeedCommentReactionView: View {
                     }
                 }
             }
+            .disabled(isCurrentUser)
 
             // TODO: Need UI to display the other reactions or at least (+ x more) that opens the sheet or something
 
-            AddReactionButtonView(attachmentPaywall: nil) {
-                isReactionPickerPresented = true
+            if !isCurrentUser {
+                AddReactionButtonView(attachmentPaywall: nil) {
+                    isReactionPickerPresented = true
+                }
             }
 
             if reactor.currentReactions.count > 3 {
@@ -74,6 +81,8 @@ struct FeedCommentReactionView: View {
     }
 
     // MARK: - Private
+
+    @Environment(\.parraAuthState) private var authState
 
     @Environment(\.parraComponentFactory) private var componentFactory
 

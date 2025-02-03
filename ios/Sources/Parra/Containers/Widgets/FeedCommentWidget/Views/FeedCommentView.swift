@@ -48,6 +48,10 @@ struct FeedCommentView: View {
     let feedItem: ParraFeedItem
     let comment: ParraComment
 
+    var isCurrentUser: Bool {
+        return comment.user.id == authState.user?.info.id
+    }
+
     var body: some View {
         FeedCommentContentView(comment: comment) {
             FeedCommentReactionView(
@@ -62,14 +66,20 @@ struct FeedCommentView: View {
             maxWidth: .infinity
         )
         .onTapGesture {
-            isReactionPickerPresented = true
+            if !isCurrentUser {
+                isReactionPickerPresented = true
+            }
         }
         .onLongPressGesture {
-            isReactionPickerPresented = true
+            if !isCurrentUser {
+                isReactionPickerPresented = true
+            }
         }
     }
 
     // MARK: - Private
+
+    @Environment(\.parraAuthState) private var authState
 
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
