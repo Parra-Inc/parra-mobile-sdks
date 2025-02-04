@@ -159,7 +159,10 @@ struct FeedCommentWidget: ParraContainer {
 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                                     withAnimation {
-                                        proxy.scrollTo(newComment, anchor: .bottom)
+                                        proxy.scrollTo(
+                                            newComment,
+                                            anchor: .center
+                                        )
                                     }
                                 }
                             }
