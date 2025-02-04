@@ -180,6 +180,12 @@ struct FeedCommentWidget: ParraContainer {
                 contentObserver.loadComments()
             }
         }
+        .refreshable {
+            contentObserver.refresh()
+        }
+        .onReceive(timer) { _ in
+            contentObserver.checkForNewComments()
+        }
     }
 
     // MARK: - Private
