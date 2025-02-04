@@ -34,38 +34,29 @@ struct FeedCommentWidget: ParraContainer {
         return $contentObserver.commentPaginator.items
     }
 
-    var commentsTitle: String? {
-        let commentCount = contentObserver.totalComments
-
-        if commentCount == 0 {
-            return nil
-        }
-
-        if commentCount == 1 {
-            return "1 Comment"
-        }
-
-        return "\(commentCount) Comments"
-    }
-
     @ViewBuilder var scrollView: some View {
         ScrollView {
             VStack(spacing: 0) {
                 AnyView(config.headerViewBuilder())
 
                 LazyVStack(spacing: 0) {
-                    if let commentsTitle {
+                    HStack {
                         componentFactory.buildLabel(
-                            text: commentsTitle,
+                            text: "Recent Comments (\(contentObserver.totalComments))",
                             localAttributes: .default(with: .headline)
                         )
                         .frame(
                             maxWidth: .infinity,
                             alignment: .leading
                         )
-                        .padding(.bottom, 4)
-                        .padding(.leading, 16)
+
+                        Spacer()
+
+                        ProgressView()
                     }
+                    .padding(.top, 10)
+                    .padding(.bottom, 6)
+                    .padding(.horizontal, 16)
 
                     FeedCommentsView(
                         feedItem: contentObserver.feedItem,
