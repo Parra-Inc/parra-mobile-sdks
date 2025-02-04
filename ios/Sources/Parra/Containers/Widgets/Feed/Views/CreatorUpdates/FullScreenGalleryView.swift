@@ -224,6 +224,10 @@ struct FullScreenGalleryView: View {
         .ignoresSafeArea()
         .background(Color.black.edgesIgnoringSafeArea(.all))
         .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(
+            theme.palette.primaryBackground,
+            for: .navigationBar
+        )
         .navigationBarTitleDisplayMode(.inline)
         .if(title != nil) { ctx in
             ctx.navigationTitle(title ?? "")
@@ -242,6 +246,7 @@ struct FullScreenGalleryView: View {
     // MARK: - Private
 
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraTheme) private var theme
 
     @ViewBuilder private var photoViews: some View {
         ForEach(photos) { photo in
