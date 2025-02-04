@@ -56,7 +56,8 @@ extension FeedCommentWidget {
                         pageSize: feedCollectionResponse.pageSize,
                         knownCount: feedCollectionResponse.totalCount
                     ),
-                    pageFetcher: loadMoreComments
+                    pageFetcher: loadMoreComments,
+                    missingFetcher: loadMissingComments
                 )
             } else {
                 .init(
@@ -66,7 +67,8 @@ extension FeedCommentWidget {
                         placeholderItems: (0 ... commentCount)
                             .map { _ in ParraComment.redactedComment }
                     ),
-                    pageFetcher: loadMoreComments
+                    pageFetcher: loadMoreComments,
+                    missingFetcher: loadMissingComments
                 )
             }
         }
@@ -98,6 +100,21 @@ extension FeedCommentWidget {
                         self?.objectWillChange.send()
                     }
             }
+        }
+
+        @MainActor
+        func checkForNewComments() {
+            logger.trace("Checking for new comments")
+
+            let cursor = commentPaginator.items.first?.createdAt
+                .addingTimeInterval(0.01)
+                .formatted(
+                    Date.ISO8601FormatStyle(
+                        includingFractionalSeconds: true
+                    )
+                )
+
+            commentPaginator.loadMissing(since: cursor)
         }
 
         @MainActor
@@ -205,6 +222,21 @@ extension FeedCommentWidget {
         private let feedConfig: ParraFeedCommentWidgetConfig
         private var paginatorSink: AnyCancellable? = nil
 
+        private func loadMissingComments(
+            _ cursor: String?,
+            _ feedItemId: String
+        ) async throws -> [ParraComment] {
+            let response = try await api.paginateFeedItemComments(
+                feedItemId: feedItemId,
+                sort: "created_at,desc",
+                createdAt: cursor
+            )
+
+            totalComments = totalComments + response.totalCount
+
+            return response.data.elements
+        }
+
         private func loadMoreComments(
             _ limit: Int,
             _ offset: Int,
@@ -215,11 +247,6 @@ extension FeedCommentWidget {
                 limit: limit,
                 offset: offset,
                 sort: "created_at,desc",
-                // TODO: This will be for the case where we want to specifically
-                // load more comments after a given comment. Like to see what
-                // has been added between when you loaded the comments and when
-                // you left one.
-//                createdAt: commentPaginator.items.last?.createdAt.formatted(.iso8601)
                 createdAt: nil
             )
 

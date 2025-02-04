@@ -18,7 +18,8 @@ public class ParraPaginator<Item, Context>: ObservableObject
     public convenience init(
         context: Context,
         data: Data,
-        pageFetcher: PageFetcher?
+        pageFetcher: NextPageFetcher?,
+        missingFetcher: MissingPageFetcher? = nil
     ) {
         self.init(
             context: context,
@@ -26,7 +27,8 @@ public class ParraPaginator<Item, Context>: ObservableObject
             placeholderItems: data.placeholderItems,
             pageSize: data.pageSize,
             totalCount: data.knownCount,
-            pageFetcher: pageFetcher
+            pageFetcher: pageFetcher,
+            missingFetcher: missingFetcher
         )
     }
 
@@ -37,7 +39,8 @@ public class ParraPaginator<Item, Context>: ObservableObject
         pageSize: Int,
         loadMoreThreshold: Int = 2,
         totalCount: Int? = nil,
-        pageFetcher: PageFetcher?
+        pageFetcher: NextPageFetcher?,
+        missingFetcher: MissingPageFetcher? = nil
     ) {
         assert(loadMoreThreshold < pageSize)
 
@@ -45,7 +48,8 @@ public class ParraPaginator<Item, Context>: ObservableObject
         self.pageSize = pageSize
         self.loadMoreThreshold = loadMoreThreshold
         self.totalCount = totalCount
-        self.pageFetcher = pageFetcher
+        self.nextPageFetcher = pageFetcher
+        self.missingPageFetcher = missingFetcher
         self.placeholderItems = placeholderItems
         self.isLoading = false
         self.isRefreshing = false
@@ -105,9 +109,14 @@ public class ParraPaginator<Item, Context>: ObservableObject
         }
     }
 
-    public typealias PageFetcher = (
+    public typealias NextPageFetcher = (
         _ pageSize: Int,
         _ offset: Int,
+        _ context: Context
+    ) async throws -> [Item]
+
+    public typealias MissingPageFetcher = (
+        _ cursor: String?,
         _ context: Context
     ) async throws -> [Item]
 
@@ -126,7 +135,10 @@ public class ParraPaginator<Item, Context>: ObservableObject
     public private(set) var lastFetchedOffset: Int?
 
     // If omitted, there will never be an attempt to load more content.
-    public let pageFetcher: PageFetcher?
+    public let nextPageFetcher: NextPageFetcher?
+
+    // If omitted, there will be no attempts to load missing content.
+    public let missingPageFetcher: MissingPageFetcher?
 
     @Published public var items: [Item]
     @Published public private(set) var isLoading: Bool
@@ -136,7 +148,7 @@ public class ParraPaginator<Item, Context>: ObservableObject
 
     public func refresh() {
         Task { @MainActor in
-            guard let pageFetcher else {
+            guard let nextPageFetcher else {
                 return
             }
 
@@ -158,7 +170,7 @@ public class ParraPaginator<Item, Context>: ObservableObject
             error = nil
 
             do {
-                let nextPage = try await pageFetcher(pageSize, 0, context)
+                let nextPage = try await nextPageFetcher(pageSize, 0, context)
 
                 await MainActor.run {
                     lastFetchedOffset = 0
@@ -177,10 +189,51 @@ public class ParraPaginator<Item, Context>: ObservableObject
         }
     }
 
+    public func loadMissing(
+        since cursor: String?
+    ) {
+        Task { @MainActor in
+            guard let missingPageFetcher else {
+                return
+            }
+
+            guard !isRefreshing else {
+                logger.trace("Already refreshing. Skipping refresh.")
+
+                return
+            }
+
+            guard !isLoading else {
+                logger.trace("Already loading. Skipping refresh.")
+
+                return
+            }
+
+            logger.trace("Beginning refresh for \(context)")
+
+            isLoading = true
+            error = nil
+
+            do {
+                let missingPage = try await missingPageFetcher(cursor, context)
+
+                await MainActor.run {
+                    items.insert(contentsOf: missingPage, at: 0)
+                    isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.error = error
+                    isLoading = false
+                }
+            }
+        }
+    }
+
     public func loadMore(
         after index: Int?
     ) {
-        guard let pageFetcher else {
+        guard let nextPageFetcher else {
             logger.trace("pageFetcher unset. Skipping load.")
             return
         }
@@ -215,7 +268,7 @@ public class ParraPaginator<Item, Context>: ObservableObject
                     "Fetching page size: \(self.pageSize) from offset: \(offset)."
                 )
 
-                let nextPage = try await pageFetcher(pageSize, offset, context)
+                let nextPage = try await nextPageFetcher(pageSize, offset, context)
                 logger.trace(
                     "Found \(nextPage.count) new record(s)"
                 )
