@@ -26,43 +26,11 @@ struct AddCommentBarView: View {
 
     // MARK: - Internal
 
-    enum SubmitState: Equatable {
-        case noContent
-        case content(String)
-
-        // MARK: - Internal
-
-        var currentText: String {
-            switch self {
-            case .noContent:
-                return ""
-            case .content(let content):
-                return content
-            }
-        }
-
-        static func == (
-            lhs: AddCommentBarView.SubmitState,
-            rhs: AddCommentBarView.SubmitState
-        ) -> Bool {
-            switch (lhs, rhs) {
-            case (.noContent, .noContent):
-                return true
-            case (.content(let lhs), .content(let rhs)):
-                return lhs == rhs
-            default:
-                return false
-            }
-        }
-    }
-
     let submitComment: (String) -> Void
-
-    // TODO: Character limit should be 250
-    // TODO: Error should be for too long or too short
 
     var body: some View {
         let cornerRadius = theme.cornerRadius.value(for: .xxxl)
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
 
         HStack(alignment: .center) {
             TextField(
@@ -95,29 +63,48 @@ struct AddCommentBarView: View {
             .autocorrectionDisabled(false)
             .focused($isFocused)
             .submitLabel(
-                text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                trimmed.isEmpty
                     ? .done : .send
             )
             .onSubmit(of: .text) {
                 handleSubmission()
             }
 
-            componentFactory.buildImageButton(
-                config: ParraImageButtonConfig(
-                    type: .primary,
-                    size: .custom(
-                        CGSize(width: 30, height: 30)
+            ZStack(alignment: .center) {
+                componentFactory.buildImageButton(
+                    config: ParraImageButtonConfig(
+                        type: .primary,
+                        size: .custom(
+                            CGSize(width: 30, height: 30)
+                        ),
+                        variant: .plain
                     ),
-                    variant: .plain
-                ),
-                content: submitButtonContent,
-                localAttributes: ParraAttributes.ImageButton(
-                    normal: ParraAttributes.ImageButton.StatefulAttributes(
-                        padding: .zero
+                    content: submitButtonContent,
+                    localAttributes: ParraAttributes.ImageButton(
+                        normal: ParraAttributes.ImageButton.StatefulAttributes(
+                            padding: .zero
+                        )
                     )
-                )
-            ) {
-                handleSubmission()
+                ) {
+                    handleSubmission()
+                }
+
+                if trimmed.count > characterLimit {
+                    componentFactory.buildLabel(
+                        text: "\(characterLimit - trimmed.count)",
+                        localAttributes: ParraAttributes.Label(
+                            text: .default(
+                                with: .caption,
+                                weight: .semibold,
+                                color: theme.palette.error.toParraColor(),
+                                alignment: .center
+                            )
+                        )
+                    )
+                    .padding(.top, 52)
+                    .padding(.leading, 9)
+                    .padding(.trailing, 12)
+                }
             }
         }
         .safeAreaPadding(.horizontal, 10)
@@ -153,7 +140,7 @@ struct AddCommentBarView: View {
 
             submitButtonContent = ParraImageButtonContent(
                 image: .symbol("arrow.up.circle.fill", .monochrome),
-                isDisabled: trimmed.isEmpty
+                isDisabled: trimmed.isEmpty || trimmed.count > characterLimit
             )
         }
     }
