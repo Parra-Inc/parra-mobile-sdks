@@ -31,23 +31,18 @@ struct FeedCommentReactionPickerView: View {
         ScrollView {
             VStack(spacing: 16) {
                 HStack {
-                    PickerInlineCommentView(
-                        comment: comment,
-                        reactor: _reactor
-                    )
-
                     Spacer()
 
                     componentFactory.buildImageButton(
                         config: ParraImageButtonConfig(
                             type: .primary,
                             size: .custom(
-                                CGSize(width: 16, height: 16)
+                                CGSize(width: 20, height: 20)
                             ),
                             variant: .plain
                         ),
                         content: ParraImageButtonContent(
-                            image: .symbol("flag", .monochrome)
+                            image: .symbol("flag.circle", .monochrome)
                         ),
                         localAttributes: ParraAttributes.ImageButton(
                             normal: ParraAttributes.ImageButton.StatefulAttributes(
@@ -58,6 +53,11 @@ struct FeedCommentReactionPickerView: View {
                         showingReportAlert = true
                     }
                 }
+
+                PickerInlineCommentView(
+                    comment: comment,
+                    reactor: _reactor
+                )
 
                 ReactionPickerGridView(
                     reactor: _reactor,
