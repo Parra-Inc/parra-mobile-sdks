@@ -464,6 +464,15 @@ final class AuthService {
                 info: response.user
             )
 
+            await ParraUserProperties.shared
+                .forceSetStore(response.user.properties)
+
+            await ParraUserSettings.shared
+                .updateSettings(response.user.settings)
+
+            await ParraUserEntitlements.shared
+                .updateEntitlements(response.user.entitlements)
+
             if response.user.isAnonymous {
                 return .anonymous(user)
             } else {
