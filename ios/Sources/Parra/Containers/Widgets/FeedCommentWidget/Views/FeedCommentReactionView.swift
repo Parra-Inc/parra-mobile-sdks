@@ -31,7 +31,7 @@ struct FeedCommentReactionView: View {
             // Show the 3 most popular reactions, then the add reaction button,
             // then if there are more reactions, show the total reaction count.
 
-            ForEach($reactor.currentReactions) { $reaction in
+            ForEach($reactor.firstReactions) { $reaction in
                 ReactionButtonView(reaction: $reaction) { reacted, summary in
                     if reacted {
                         reactor.addExistingReaction(
@@ -45,8 +45,6 @@ struct FeedCommentReactionView: View {
                 }
             }
             .disabled(isCurrentUser)
-
-            // TODO: Need UI to display the other reactions or at least (+ x more) that opens the sheet or something
 
             if !isCurrentUser {
                 AddReactionButtonView(attachmentPaywall: nil) {

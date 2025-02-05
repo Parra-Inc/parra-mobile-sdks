@@ -25,7 +25,7 @@ struct PickerInlineReactionView: View {
             verticalSpacing: 8,
             fitContentWidth: true
         ) {
-            ForEach($reactor.firstReactions) { $reaction in
+            ForEach($reactor.currentReactions) { $reaction in
                 ReactionButtonView(reaction: $reaction) { reacted, summary in
                     print("Reacting: \(reacted) with \(summary.value)")
                     if reacted {
