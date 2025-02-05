@@ -125,8 +125,8 @@ extension FeedCommentWidget {
         }
 
         @MainActor
-        func refresh() {
-            commentPaginator.refresh()
+        func refresh() async {
+            await commentPaginator.refresh()
         }
 
         @MainActor

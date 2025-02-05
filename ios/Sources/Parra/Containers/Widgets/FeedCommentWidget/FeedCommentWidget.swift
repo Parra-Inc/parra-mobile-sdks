@@ -51,8 +51,6 @@ struct FeedCommentWidget: ParraContainer {
                         )
 
                         Spacer()
-
-                        ProgressView()
                     }
                     .padding(.top, 10)
                     .padding(.bottom, 6)
@@ -123,42 +121,43 @@ struct FeedCommentWidget: ParraContainer {
     var body: some View {
         VStack(spacing: 0) {
             ScrollViewReader { proxy in
-                scrollView
-                    .contentMargins(
-                        .bottom,
-                        EdgeInsets(top: 0, leading: 0, bottom: 65, trailing: 0),
-                        for: .scrollContent
-                    )
-                    .contentMargins(
-                        .bottom,
-                        EdgeInsets(top: 0, leading: 0, bottom: 70, trailing: 0),
-                        for: .scrollIndicators
-                    )
-                    .overlay(alignment: .bottom) {
-                        AddCommentBarView { text in
-                            guard let user = authState.user else {
-                                Logger.error("Tried to submit a comment without a user")
+                scrollView.contentMargins(
+                    .bottom,
+                    EdgeInsets(top: 0, leading: 0, bottom: 65, trailing: 0),
+                    for: .scrollContent
+                )
+                .contentMargins(
+                    .bottom,
+                    EdgeInsets(top: 0, leading: 0, bottom: 70, trailing: 0),
+                    for: .scrollIndicators
+                )
+                .overlay(
+                    alignment: .bottom
+                ) {
+                    AddCommentBarView { text in
+                        guard let user = authState.user else {
+                            Logger.error("Tried to submit a comment without a user")
 
-                                return
-                            }
+                            return
+                        }
 
-                            withAnimation {
-                                let newComment = contentObserver.addComment(
-                                    with: text,
-                                    from: user
-                                )
+                        withAnimation {
+                            let newComment = contentObserver.addComment(
+                                with: text,
+                                from: user
+                            )
 
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                                    withAnimation {
-                                        proxy.scrollTo(
-                                            newComment,
-                                            anchor: .center
-                                        )
-                                    }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                                withAnimation {
+                                    proxy.scrollTo(
+                                        newComment,
+                                        anchor: .center
+                                    )
                                 }
                             }
                         }
                     }
+                }
             }
 
             Color(theme.palette.primaryBackground)
@@ -175,7 +174,7 @@ struct FeedCommentWidget: ParraContainer {
             }
         }
         .refreshable {
-            contentObserver.refresh()
+            await contentObserver.refresh()
         }
         .onReceive(timer) { _ in
             contentObserver.checkForNewComments()

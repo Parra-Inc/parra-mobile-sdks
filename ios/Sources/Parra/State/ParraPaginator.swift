@@ -146,46 +146,51 @@ public class ParraPaginator<Item, Context>: ObservableObject
     @Published public private(set) var error: Error?
     @Published public private(set) var isShowingPlaceholders: Bool
 
+    @MainActor
+    public func refresh() async {
+        guard let nextPageFetcher else {
+            return
+        }
+
+        guard !isRefreshing else {
+            logger.trace("Already refreshing. Skipping refresh.")
+
+            return
+        }
+
+        guard !isLoading else {
+            logger.trace("Already loading. Skipping refresh.")
+
+            return
+        }
+
+        logger.trace("Beginning refresh for \(context)")
+
+        isRefreshing = true
+        error = nil
+
+        do {
+            let nextPage = try await nextPageFetcher(pageSize, 0, context)
+
+            await MainActor.run {
+                lastFetchedOffset = 0
+                items = nextPage
+                isRefreshing = false
+                isShowingPlaceholders = false
+            }
+        } catch {
+            await MainActor.run {
+                self.error = error
+                items = []
+                isShowingPlaceholders = false
+                isRefreshing = false
+            }
+        }
+    }
+
     public func refresh() {
         Task { @MainActor in
-            guard let nextPageFetcher else {
-                return
-            }
-
-            guard !isRefreshing else {
-                logger.trace("Already refreshing. Skipping refresh.")
-
-                return
-            }
-
-            guard !isLoading else {
-                logger.trace("Already loading. Skipping refresh.")
-
-                return
-            }
-
-            logger.trace("Beginning refresh for \(context)")
-
-            isRefreshing = true
-            error = nil
-
-            do {
-                let nextPage = try await nextPageFetcher(pageSize, 0, context)
-
-                await MainActor.run {
-                    lastFetchedOffset = 0
-                    items = nextPage
-                    isRefreshing = false
-                    isShowingPlaceholders = false
-                }
-            } catch {
-                await MainActor.run {
-                    self.error = error
-                    items = []
-                    isShowingPlaceholders = false
-                    isRefreshing = false
-                }
-            }
+            await refresh()
         }
     }
 
