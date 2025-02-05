@@ -23,6 +23,7 @@ extension FeedCommentWidget {
             self.feedItem = initialParams.feedItem
             self.feedConfig = initialParams.config
             self.api = initialParams.api
+            self.attachmentPaywall = initialParams.attachmentPaywall
 
             self.content = Content(
                 emptyStateView: initialParams.config.emptyStateContent,
@@ -80,6 +81,8 @@ extension FeedCommentWidget {
         private(set) var content: Content
 
         var totalComments: Int
+
+        let attachmentPaywall: ParraAppPaywallConfiguration?
 
         var commentPaginator: ParraPaginator<
             ParraComment,

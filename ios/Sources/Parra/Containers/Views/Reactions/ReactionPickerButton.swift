@@ -24,12 +24,16 @@ struct ReactionPickerButton: View {
 
     var body: some View {
         Button {
-            toggleAnimation = true
+            if authState.isLoggedIn {
+                toggleAnimation = true
 
-            reactor.addNewReaction(option: reactionOption)
+                reactor.addNewReaction(option: reactionOption)
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                toggleAnimation = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    toggleAnimation = false
+                }
+            } else {
+                isRequiredSignInPresented = true
             }
         } label: {
             VStack {
@@ -63,17 +67,78 @@ struct ReactionPickerButton: View {
         .simultaneousGesture(TapGesture())
         .buttonStyle(.plain)
         .sensoryFeedback(.impact, trigger: toggleAnimation)
+        .presentParraSignInWidget(
+            isPresented: $isRequiredSignInPresented,
+            config: ParraAuthenticationFlowConfig(
+                landingScreen: .default(
+                    .init(
+                        background: theme.palette.primaryBackground.toParraColor(),
+                        logoView: signInLogoView,
+                        titleView: signInTitleView,
+                        bottomView: nil
+                    )
+                )
+            ),
+            onDismiss: { type in
+                print("Dismissed \(type)")
+            }
+        )
     }
 
     // MARK: - Private
 
     @State private var toggleAnimation: Bool = .init()
+    @State private var isRequiredSignInPresented: Bool = false
 
     private var reactionOption: ParraReactionOption
     private var showLabels: Bool
     @StateObject private var reactor: Reactor
 
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraTheme) private var theme
+    @Environment(\.parraUserEntitlements) private var userEntitlements
+    @Environment(\.parraAppInfo) private var appInfo
+    @Environment(\.parraAuthState) private var authState
+
+    @ViewBuilder private var signInTitleView: some View {
+        componentFactory.buildLabel(
+            content: ParraLabelContent(
+                text: "Sign in First"
+            ),
+            localAttributes: ParraAttributes.Label(
+                text: ParraAttributes.Text(
+                    font: .systemFont(ofSize: 50, weight: .heavy),
+                    alignment: .center
+                ),
+                padding: .md
+            )
+        )
+        .minimumScaleFactor(0.5)
+        .lineLimit(2)
+
+        componentFactory.buildLabel(
+            content: ParraLabelContent(text: "You must be signed in to add reactions"),
+            localAttributes: ParraAttributes.Label(
+                text: .default(with: .subheadline),
+                padding: .zero
+            )
+        )
+    }
+
+    @ViewBuilder private var signInLogoView: some View {
+        if let logo = appInfo.tenant.logo {
+            componentFactory.buildAsyncImage(
+                content: ParraAsyncImageContent(
+                    logo,
+                    preferredThumbnailSize: .lg
+                ),
+                localAttributes: ParraAttributes.AsyncImage(
+                    size: CGSize(width: 200, height: 200),
+                    padding: .zero
+                )
+            )
+        }
+    }
 
     @ViewBuilder
     private func reactionContent(

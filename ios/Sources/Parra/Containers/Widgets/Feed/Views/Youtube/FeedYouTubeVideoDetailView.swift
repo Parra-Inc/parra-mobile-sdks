@@ -37,6 +37,7 @@ struct FeedYouTubeVideoDetailView: View {
                         feedItem: feedItem,
                         config: .default,
                         commentsResponse: nil,
+                        attachmentPaywall: nil,
                         api: parra.parraInternal.api
                     ),
                     config: ParraFeedCommentWidgetConfig(

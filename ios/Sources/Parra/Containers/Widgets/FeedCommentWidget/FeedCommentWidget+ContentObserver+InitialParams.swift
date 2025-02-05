@@ -12,6 +12,7 @@ extension FeedCommentWidget.ContentObserver {
         let feedItem: ParraFeedItem
         let config: ParraFeedCommentWidgetConfig
         let commentsResponse: PaginateCommentsCollectionResponse?
+        let attachmentPaywall: ParraAppPaywallConfiguration?
         let api: API
     }
 }

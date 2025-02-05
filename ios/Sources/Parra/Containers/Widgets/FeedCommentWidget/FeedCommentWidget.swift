@@ -40,9 +40,13 @@ struct FeedCommentWidget: ParraContainer {
                 AnyView(config.headerViewBuilder())
 
                 LazyVStack(spacing: 0) {
+                    let recentMessage = userEntitlements.hasEntitlement(
+                        contentObserver.attachmentPaywall?.entitlement
+                    ) ? "Recent Comments (\(contentObserver.totalComments))" : ""
+
                     HStack {
                         componentFactory.buildLabel(
-                            text: "Recent Comments (\(contentObserver.totalComments))",
+                            text: recentMessage,
                             localAttributes: .default(with: .headline)
                         )
                         .frame(
@@ -56,11 +60,31 @@ struct FeedCommentWidget: ParraContainer {
                     .padding(.bottom, 6)
                     .padding(.horizontal, 16)
 
-                    FeedCommentsView(
-                        feedItem: contentObserver.feedItem,
-                        comments: comments
-                    ) { index in
-                        contentObserver.commentPaginator.loadMore(after: index)
+                    ParraPaywalledContentView(
+                        entitlement: contentObserver.attachmentPaywall?.entitlement,
+                        context: contentObserver.attachmentPaywall?.context
+                    ) { requiredEntitlement, _ in
+                        FeedCommentsView(
+                            feedItem: contentObserver.feedItem,
+                            comments: comments,
+                            requiredEntitlement: requiredEntitlement,
+                            context: contentObserver.attachmentPaywall?.context
+                        ) { index in
+                            contentObserver.commentPaginator.loadMore(
+                                after: index
+                            )
+                        }
+                    } unlockedContentBuilder: {
+                        FeedCommentsView(
+                            feedItem: contentObserver.feedItem,
+                            comments: comments,
+                            requiredEntitlement: nil,
+                            context: nil
+                        ) { index in
+                            contentObserver.commentPaginator.loadMore(
+                                after: index
+                            )
+                        }
                     }
                 }
                 .padding(.vertical)
@@ -191,6 +215,7 @@ struct FeedCommentWidget: ParraContainer {
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraAuthState) private var authState
+    @Environment(\.parraUserEntitlements) private var userEntitlements
 }
 
 #Preview {
@@ -215,6 +240,7 @@ struct FeedCommentWidget: ParraContainer {
                         feedItem: .validStates()[0],
                         config: .default,
                         commentsResponse: .validStates()[0],
+                        attachmentPaywall: nil,
                         api: parra.parraInternal.api
                     )
                 ),

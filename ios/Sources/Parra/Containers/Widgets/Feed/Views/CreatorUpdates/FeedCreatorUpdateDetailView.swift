@@ -37,6 +37,7 @@ struct FeedCreatorUpdateDetailView: View {
                         feedItem: feedItem,
                         config: .default,
                         commentsResponse: nil,
+                        attachmentPaywall: creatorUpdate.attachmentPaywall,
                         api: parra.parraInternal.api
                     ),
                     config: ParraFeedCommentWidgetConfig(
