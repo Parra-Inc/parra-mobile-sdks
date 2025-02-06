@@ -20,7 +20,7 @@ public extension ParraDeviceInfoManager {
 
             self.systemName = device.systemName
             self.systemVersion = device.systemVersion
-            self.modelCode = device.model
+            self.modelCode = device.modelCode
             self.manufacturer = "Apple"
             self.timeZoneAbbreviation = TimeZone.current.abbreviation()
             self.timeZoneOffset = String(TimeZone.current.secondsFromGMT())

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension UIDevice {
-    static var modelCode: String {
+    var modelCode: String {
         if let simulatorModelIdentifier = ProcessInfo.processInfo.environment[
             "SIMULATOR_MODEL_IDENTIFIER"
         ] {
