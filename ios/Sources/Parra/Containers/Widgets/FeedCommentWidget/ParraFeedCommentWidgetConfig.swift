@@ -73,7 +73,7 @@ public final class ParraFeedCommentWidgetConfig: ParraContainerConfig {
         subtitle: ParraLabelContent(
             text: "Failed to load comments. Please try again later."
         ),
-        icon: .symbol("network.slash", .monochrome)
+        icon: nil
     )
 
     public let headerViewBuilder: @MainActor () -> any View

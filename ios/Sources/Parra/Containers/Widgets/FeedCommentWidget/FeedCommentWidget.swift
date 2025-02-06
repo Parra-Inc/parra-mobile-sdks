@@ -35,103 +35,101 @@ struct FeedCommentWidget: ParraContainer {
         return $contentObserver.commentPaginator.items
     }
 
+    @ViewBuilder var commentStack: some View {
+        LazyVStack(spacing: 0) {
+            let recentMessage = userEntitlements.hasEntitlement(
+                contentObserver.attachmentPaywall?.entitlement
+            ) ? "Recent Comments (\(contentObserver.totalComments))" : ""
+
+            HStack {
+                componentFactory.buildLabel(
+                    text: recentMessage,
+                    localAttributes: .default(with: .headline)
+                )
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+
+                Spacer()
+            }
+            .padding(.top, 10)
+            .padding(.bottom, 6)
+            .padding(.horizontal, 16)
+
+            ParraPaywalledContentView(
+                entitlement: contentObserver.attachmentPaywall?.entitlement,
+                context: contentObserver.attachmentPaywall?.context
+            ) { requiredEntitlement, _ in
+                FeedCommentsView(
+                    feedItem: contentObserver.feedItem,
+                    comments: comments,
+                    requiredEntitlement: requiredEntitlement,
+                    context: contentObserver.attachmentPaywall?.context
+                ) { index in
+                    contentObserver.commentPaginator.loadMore(
+                        after: index
+                    )
+                }
+            } unlockedContentBuilder: {
+                FeedCommentsView(
+                    feedItem: contentObserver.feedItem,
+                    comments: comments,
+                    requiredEntitlement: nil,
+                    context: nil
+                ) { index in
+                    contentObserver.commentPaginator.loadMore(
+                        after: index
+                    )
+                }
+            }
+        }
+        .padding(.vertical)
+        .background(theme.palette.secondaryBackground)
+        .redacted(
+            when: contentObserver.commentPaginator.isShowingPlaceholders
+        )
+        .emptyPlaceholder(comments) {
+            if !contentObserver.commentPaginator.isLoading {
+                componentFactory.buildEmptyState(
+                    config: .init(
+                        alignment: .center
+                    ),
+                    content: contentObserver.content.emptyStateView,
+                    localAttributes: emptyStateAttributes
+                )
+                .frame(
+                    minHeight: 300
+                )
+            } else {
+                EmptyView()
+            }
+        }
+        .errorPlaceholder(contentObserver.commentPaginator.error) {
+            componentFactory.buildEmptyState(
+                config: .init(
+                    alignment: .center
+                ),
+                content: contentObserver.content.errorStateView,
+                localAttributes: emptyStateAttributes
+            )
+            .frame(
+                minHeight: 300
+            )
+        }
+    }
+
     @ViewBuilder var scrollView: some View {
         ScrollView {
             VStack(spacing: 0) {
                 AnyView(config.headerViewBuilder())
 
-                LazyVStack(spacing: 0) {
-                    let recentMessage = userEntitlements.hasEntitlement(
-                        contentObserver.attachmentPaywall?.entitlement
-                    ) ? "Recent Comments (\(contentObserver.totalComments))" : ""
-
-                    HStack {
-                        componentFactory.buildLabel(
-                            text: recentMessage,
-                            localAttributes: .default(with: .headline)
-                        )
-                        .frame(
-                            maxWidth: .infinity,
-                            alignment: .leading
-                        )
-
-                        Spacer()
+                if let commentInfo = contentObserver.feedItem.comments {
+                    if !commentInfo.disabled {
+                        commentStack
                     }
-                    .padding(.top, 10)
-                    .padding(.bottom, 6)
-                    .padding(.horizontal, 16)
-
-                    ParraPaywalledContentView(
-                        entitlement: contentObserver.attachmentPaywall?.entitlement,
-                        context: contentObserver.attachmentPaywall?.context
-                    ) { requiredEntitlement, _ in
-                        FeedCommentsView(
-                            feedItem: contentObserver.feedItem,
-                            comments: comments,
-                            requiredEntitlement: requiredEntitlement,
-                            context: contentObserver.attachmentPaywall?.context
-                        ) { index in
-                            contentObserver.commentPaginator.loadMore(
-                                after: index
-                            )
-                        }
-                    } unlockedContentBuilder: {
-                        FeedCommentsView(
-                            feedItem: contentObserver.feedItem,
-                            comments: comments,
-                            requiredEntitlement: nil,
-                            context: nil
-                        ) { index in
-                            contentObserver.commentPaginator.loadMore(
-                                after: index
-                            )
-                        }
-                    }
-                }
-                .padding(.vertical)
-                .background(theme.palette.secondaryBackground)
-                .redacted(
-                    when: contentObserver.commentPaginator.isShowingPlaceholders
-                )
-                .emptyPlaceholder(comments) {
-                    if !contentObserver.commentPaginator.isLoading {
-                        componentFactory.buildEmptyState(
-                            config: .init(
-                                alignment: .center
-                            ),
-                            content: contentObserver.content.emptyStateView,
-                            localAttributes: ParraAttributes.EmptyState(
-                                titleLabel: .default(
-                                    with: .title3,
-                                    alignment: .center
-                                ),
-                                subtitleLabel: .default(
-                                    with: .body,
-                                    alignment: .center
-                                ),
-                                padding: .custom(
-                                    EdgeInsets(
-                                        top: 0,
-                                        leading: 0,
-                                        bottom: 28,
-                                        trailing: 0
-                                    )
-                                ),
-                                background: theme.palette.secondaryBackground
-                            )
-                        )
-                        .frame(
-                            minHeight: 300
-                        )
-                    } else {
-                        EmptyView()
-                    }
-                }
-                .errorPlaceholder(contentObserver.commentPaginator.error) {
-                    componentFactory.buildEmptyState(
-                        config: .errorDefault,
-                        content: contentObserver.content.errorStateView
-                    )
+                } else {
+                    commentStack
                 }
 
                 AnyView(config.footerViewBuilder())
@@ -270,6 +268,28 @@ struct FeedCommentWidget: ParraContainer {
     @Environment(\.parraAuthState) private var authState
     @Environment(\.parraUserEntitlements) private var userEntitlements
     @Environment(\.parraAppInfo) private var appInfo
+
+    private var emptyStateAttributes: ParraAttributes.EmptyState {
+        ParraAttributes.EmptyState(
+            titleLabel: .default(
+                with: .title3,
+                alignment: .center
+            ),
+            subtitleLabel: .default(
+                with: .body,
+                alignment: .center
+            ),
+            padding: .custom(
+                EdgeInsets(
+                    top: 0,
+                    leading: 0,
+                    bottom: 28,
+                    trailing: 0
+                )
+            ),
+            background: theme.palette.secondaryBackground
+        )
+    }
 }
 
 #Preview {

@@ -179,11 +179,15 @@ public class ParraPaginator<Item, Context>: ObservableObject
                 isShowingPlaceholders = false
             }
         } catch {
-            await MainActor.run {
-                self.error = error
-                items = []
-                isShowingPlaceholders = false
-                isRefreshing = false
+            if !Task.isCancelled {
+                logger.error("Error performing refresh", error)
+
+                await MainActor.run {
+                    self.error = error
+                    items = []
+                    isShowingPlaceholders = false
+                    isRefreshing = false
+                }
             }
         }
     }
