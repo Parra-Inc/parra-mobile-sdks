@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct FeedCommentWidget: ParraContainer {
     // MARK: - Lifecycle
@@ -162,24 +163,52 @@ struct FeedCommentWidget: ParraContainer {
                         guard let user = authState.user else {
                             Logger.error("Tried to submit a comment without a user")
 
-                            return
+                            return false
                         }
 
-                        withAnimation {
-                            let newComment = contentObserver.addComment(
-                                with: text,
-                                from: user
-                            )
+                        if !userEntitlements.hasEntitlement(
+                            contentObserver.attachmentPaywall?.entitlement
+                        ) {
+                            Task { @MainActor in
+                                await UIApplication.dismissKeyboard()
+                            }
 
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                                withAnimation {
-                                    proxy.scrollTo(
-                                        newComment,
-                                        anchor: .center
-                                    )
+                            DispatchQueue.main.asyncAfter(
+                                deadline: .now() + 0.1
+                            ) {
+                                isShowingPaywall = true
+                            }
+                        } else if authState.isLoggedIn {
+                            withAnimation {
+                                let newComment = contentObserver.addComment(
+                                    with: text,
+                                    from: user
+                                )
+
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                                    withAnimation {
+                                        proxy.scrollTo(
+                                            newComment,
+                                            anchor: .center
+                                        )
+                                    }
                                 }
                             }
+
+                            return true
+                        } else {
+                            Task { @MainActor in
+                                await UIApplication.dismissKeyboard()
+                            }
+
+                            DispatchQueue.main.asyncAfter(
+                                deadline: .now() + 0.1
+                            ) {
+                                isRequiredSignInPresented = true
+                            }
                         }
+
+                        return false
                     }
                 }
             }
@@ -203,6 +232,28 @@ struct FeedCommentWidget: ParraContainer {
         .onReceive(timer) { _ in
             contentObserver.checkForNewComments()
         }
+        .presentParraPaywall(
+            entitlement: contentObserver.attachmentPaywall?.entitlement.key ?? "unknown",
+            context: contentObserver.attachmentPaywall?.context,
+            isPresented: $isShowingPaywall
+        )
+        .presentParraSignInWidget(
+            isPresented: $isRequiredSignInPresented,
+            config: ParraAuthenticationFlowConfig(
+                landingScreen: .default(
+                    .defaultWith(
+                        title: "Sign in First",
+                        subtitle: "You must be signed in to add comments",
+                        using: theme,
+                        componentFactory: componentFactory,
+                        appInfo: appInfo
+                    )
+                )
+            ),
+            onDismiss: { type in
+                print("Dismissed \(type)")
+            }
+        )
     }
 
     // MARK: - Private
@@ -211,11 +262,14 @@ struct FeedCommentWidget: ParraContainer {
 
     @State private var headerHeight: CGFloat = 0
     @State private var footerHeight: CGFloat = 0
+    @State private var isRequiredSignInPresented: Bool = false
+    @State private var isShowingPaywall: Bool = false
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraAuthState) private var authState
     @Environment(\.parraUserEntitlements) private var userEntitlements
+    @Environment(\.parraAppInfo) private var appInfo
 }
 
 #Preview {

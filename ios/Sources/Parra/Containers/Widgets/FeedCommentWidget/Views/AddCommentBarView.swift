@@ -13,7 +13,7 @@ struct AddCommentBarView: View {
     // MARK: - Lifecycle
 
     init(
-        submitComment: @escaping (String) -> Void
+        submitComment: @escaping (String) -> Bool
     ) {
         self.submitComment = submitComment
         self._submitButtonContent = State(
@@ -26,7 +26,7 @@ struct AddCommentBarView: View {
 
     // MARK: - Internal
 
-    let submitComment: (String) -> Void
+    let submitComment: (String) -> Bool
 
     var body: some View {
         let cornerRadius = theme.cornerRadius.value(for: .xxxl)
@@ -159,8 +159,10 @@ struct AddCommentBarView: View {
             in: .whitespacesAndNewlines
         )
 
-        submitComment(finalText)
+        let shouldClear = submitComment(finalText)
 
-        text = ""
+        if shouldClear {
+            text = ""
+        }
     }
 }

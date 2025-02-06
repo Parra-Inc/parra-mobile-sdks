@@ -26,7 +26,7 @@ public extension ParraAuthDefaultLandingScreen {
 
         // MARK: - Public
 
-        public static var `default` = Config(
+        public static let `default` = Config(
             background: nil,
             logoView: nil,
             titleView: nil,
@@ -48,5 +48,60 @@ public extension ParraAuthDefaultLandingScreen {
         /// A view to be displayed on the bottom portion of the screen, below
         /// any buttons for login methods. By default, this is an EmptyView.
         public let bottomView: (any View)?
+
+        // MARK: - Internal
+
+        static func defaultWith(
+            title: String,
+            subtitle: String,
+            using theme: ParraTheme,
+            componentFactory: ParraComponentFactory,
+            appInfo: ParraAppInfo
+        ) -> Config {
+            return Config(
+                background: theme.palette.primaryBackground.toParraColor(),
+                logoView: {
+                    if let logo = appInfo.tenant.logo {
+                        componentFactory.buildAsyncImage(
+                            content: ParraAsyncImageContent(
+                                logo,
+                                preferredThumbnailSize: .lg
+                            ),
+                            localAttributes: ParraAttributes.AsyncImage(
+                                size: CGSize(width: 200, height: 200),
+                                padding: .zero
+                            )
+                        )
+                    } else {
+                        EmptyView()
+                    }
+                }(),
+                titleView: Group {
+                    componentFactory.buildLabel(
+                        content: ParraLabelContent(
+                            text: title
+                        ),
+                        localAttributes: ParraAttributes.Label(
+                            text: ParraAttributes.Text(
+                                font: .systemFont(ofSize: 50, weight: .heavy),
+                                alignment: .center
+                            ),
+                            padding: .md
+                        )
+                    )
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(2)
+
+                    componentFactory.buildLabel(
+                        content: ParraLabelContent(text: subtitle),
+                        localAttributes: ParraAttributes.Label(
+                            text: .default(with: .subheadline),
+                            padding: .zero
+                        )
+                    )
+                },
+                bottomView: nil
+            )
+        }
     }
 }

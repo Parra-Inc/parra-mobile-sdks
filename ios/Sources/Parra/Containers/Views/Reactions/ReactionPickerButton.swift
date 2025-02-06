@@ -71,11 +71,12 @@ struct ReactionPickerButton: View {
             isPresented: $isRequiredSignInPresented,
             config: ParraAuthenticationFlowConfig(
                 landingScreen: .default(
-                    .init(
-                        background: theme.palette.primaryBackground.toParraColor(),
-                        logoView: signInLogoView,
-                        titleView: signInTitleView,
-                        bottomView: nil
+                    .defaultWith(
+                        title: "Sign in First",
+                        subtitle: "You must be signed in to add reactions",
+                        using: theme,
+                        componentFactory: componentFactory,
+                        appInfo: appInfo
                     )
                 )
             ),
@@ -99,46 +100,6 @@ struct ReactionPickerButton: View {
     @Environment(\.parraUserEntitlements) private var userEntitlements
     @Environment(\.parraAppInfo) private var appInfo
     @Environment(\.parraAuthState) private var authState
-
-    @ViewBuilder private var signInTitleView: some View {
-        componentFactory.buildLabel(
-            content: ParraLabelContent(
-                text: "Sign in First"
-            ),
-            localAttributes: ParraAttributes.Label(
-                text: ParraAttributes.Text(
-                    font: .systemFont(ofSize: 50, weight: .heavy),
-                    alignment: .center
-                ),
-                padding: .md
-            )
-        )
-        .minimumScaleFactor(0.5)
-        .lineLimit(2)
-
-        componentFactory.buildLabel(
-            content: ParraLabelContent(text: "You must be signed in to add reactions"),
-            localAttributes: ParraAttributes.Label(
-                text: .default(with: .subheadline),
-                padding: .zero
-            )
-        )
-    }
-
-    @ViewBuilder private var signInLogoView: some View {
-        if let logo = appInfo.tenant.logo {
-            componentFactory.buildAsyncImage(
-                content: ParraAsyncImageContent(
-                    logo,
-                    preferredThumbnailSize: .lg
-                ),
-                localAttributes: ParraAttributes.AsyncImage(
-                    size: CGSize(width: 200, height: 200),
-                    padding: .zero
-                )
-            )
-        }
-    }
 
     @ViewBuilder
     private func reactionContent(
