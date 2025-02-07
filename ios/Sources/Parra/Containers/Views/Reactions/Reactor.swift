@@ -267,7 +267,7 @@ class Reactor: ObservableObject {
                         )
                     }
                 } catch let error as ParraError {
-                    if case .networkError(_, let response, let data) = error,
+                    if case .networkError(_, let response, _) = error,
                        response.statusCode == 409
                     {
                         logger.warn("User already had this reaction.")

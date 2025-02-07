@@ -12,28 +12,32 @@ protocol WebSocketMessage: Encodable {
 }
 
 struct SendChatMessageRequest: WebSocketMessage {
-    let type = "chat:send_message"
-    let channelId: String
-    let content: String
-
     enum CodingKeys: String, CodingKey {
         case type
         case channelId = "channel_id"
         case content
     }
 
+    let type = "chat:send_message"
+    let channelId: String
+    let content: String
+
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.type, forKey: .type)
-        try container.encode(self.channelId, forKey: .channelId)
-        try container.encode(self.content, forKey: .content)
+        try container.encode(type, forKey: .type)
+        try container.encode(channelId, forKey: .channelId)
+        try container.encode(content, forKey: .content)
     }
 }
 
 class WebSocketManager: ObservableObject {
-    @Published private(set) var channelMessages: [String: [Message]] = [:]
-    @Published private(set) var directMessages: [String: [Message]] = [:]
-    @Published private(set) var connectionStatus: ConnectionStatus = .disconnected
+    // MARK: - Lifecycle
+
+    init(authToken: String) {
+        self.authToken = authToken
+    }
+
+    // MARK: - Internal
 
     enum ConnectionStatus: Equatable {
         case connected
@@ -41,20 +45,21 @@ class WebSocketManager: ObservableObject {
         case error(String)
     }
 
-    private var webSocket: URLSessionWebSocketTask?
-    private let authToken: String
-
-    init(authToken: String) {
-        self.authToken = authToken
-    }
+    @Published private(set) var channelMessages: [String: [Message]] = [:]
+    @Published private(set) var directMessages: [String: [Message]] = [:]
+    @Published private(set) var connectionStatus: ConnectionStatus = .disconnected
 
     func connect(channels: [String]) {
-        guard var urlComponents = URLComponents(string: "wss://ws.parra.io") else { return }
+        guard var urlComponents = URLComponents(string: "wss://ws.parra.io") else {
+            return
+        }
         urlComponents.queryItems = [
-            URLQueryItem(name: "token", value: authToken),
+            URLQueryItem(name: "token", value: authToken)
         ]
 
-        guard let url = urlComponents.url else { return }
+        guard let url = urlComponents.url else {
+            return
+        }
 
         let session = URLSession(configuration: .default)
         webSocket = session.webSocketTask(with: url)
@@ -68,10 +73,31 @@ class WebSocketManager: ObservableObject {
         connectionStatus = .connected
     }
 
+    func sendChannelMessage(_ text: String, to channel: String) {
+        let message = SendChatMessageRequest(channelId: channel, content: text)
+        send(message)
+    }
+
+    func sendDirectMessage(_ text: String, to userId: String) {
+        let message = SendChatMessageRequest(channelId: "user:\(userId)", content: text)
+        send(message)
+    }
+
+    func disconnect() {
+        webSocket?.cancel()
+        connectionStatus = .disconnected
+    }
+
+    // MARK: - Private
+
+    private var webSocket: URLSessionWebSocketTask?
+    private let authToken: String
 
     private func receiveMessage() {
         webSocket?.receive { [weak self] result in
-            guard let self = self else { return }
+            guard let self else {
+                return
+            }
 
             DispatchQueue.main.async {
                 switch result {
@@ -102,52 +128,38 @@ class WebSocketManager: ObservableObject {
 
     private func handleMessage(_ text: String) {
         guard let data = text.data(using: .utf8),
-              let message = try? JSONDecoder().decode(Message.self, from: data) else {
+              let message = try? JSONDecoder().decode(Message.self, from: data) else
+        {
             return
         }
 
-        var messages = self.channelMessages[message.channelId] ?? []
+        var messages = channelMessages[message.channelId] ?? []
         messages.append(message)
-        self.channelMessages[message.channelId] = messages
+        channelMessages[message.channelId] = messages
     }
 
-    func sendChannelMessage(_ text: String, to channel: String) {
-        let message = SendChatMessageRequest(channelId: channel, content: text)
-        send(message)
-    }
-
-    func sendDirectMessage(_ text: String, to userId: String) {
-        let message = SendChatMessageRequest(channelId: "user:\(userId)", content: text)
-        send(message)
-    }
-
-    private func send<T: Encodable>(_ message: T) {
+    private func send(_ message: some Encodable) {
         guard let data = try? JSONEncoder().encode(message),
-              let jsonString = String(data: data, encoding: .utf8) else {
+              let jsonString = String(data: data, encoding: .utf8) else
+        {
             return
         }
 
         webSocket?.send(.string(jsonString)) { [weak self] error in
-            if let error = error {
+            if let error {
                 print("WebSocket send error: \(error)")
                 DispatchQueue.main.async {
                     self?.connectionStatus = .error(error.localizedDescription)
                 }
-
             }
         }
-    }
-
-    func disconnect() {
-        webSocket?.cancel()
-        connectionStatus = .disconnected
     }
 
     private func reconnect() {
         disconnect()
         // Reconnect with same channels
-        if let channels = try? channelMessages.keys.map({ String($0) }) {
-            connect(channels: channels)
-        }
+        let channels = channelMessages.keys.map { String($0) }
+
+        connect(channels: channels)
     }
 }

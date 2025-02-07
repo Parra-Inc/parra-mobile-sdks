@@ -68,6 +68,7 @@ final class LaunchShortcutManager {
     }
 
     @MainActor
+    @discardableResult
     func registerLaunchShortcut(_ shortcut: UIApplicationShortcutItem) -> Bool {
         logger.debug("Registering application launch shortcut", [
             "title": shortcut.localizedTitle,

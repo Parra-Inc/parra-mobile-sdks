@@ -13,7 +13,7 @@ struct RoadmapParams: Equatable {
     let offset: Int
 }
 
-public struct ParraRoadmapInfo: Equatable {
+public struct ParraRoadmapInfo: Equatable, Sendable {
     public let roadmapConfig: ParraAppRoadmapConfiguration
     public let selectedTab: ParraRoadmapConfigurationTab
     public let ticketResponse: ParraUserTicketCollectionResponse
