@@ -216,6 +216,9 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/comments/\(commentId)/reactions"
         case .deleteFeedCommentReaction(let commentId, let reactionId):
             return "tenants/\(tenantId)/comments/\(commentId)/reactions/\(reactionId)"
+        // Chat
+        case .postCreateChannel, .getPaginateChannels:
+            return "tenants/\(tenantId)/chat/channels"
         }
     }
 

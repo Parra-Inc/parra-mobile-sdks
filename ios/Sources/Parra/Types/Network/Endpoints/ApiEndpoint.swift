@@ -85,6 +85,10 @@ enum ApiEndpoint: Endpoint {
     case deleteComment(commentId: String)
     case flagComment(commentId: String)
 
+    // Chat
+    case getPaginateChannels
+    case postCreateChannel
+
     // MARK: - Internal
 
     var method: HttpMethod {
@@ -93,7 +97,7 @@ enum ApiEndpoint: Endpoint {
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
              .getUserProperties, .getPaginateFeed, .getFaqs,
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall,
-             .getPaginateComments:
+             .getPaginateComments, .getPaginateChannels:
 
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
@@ -101,7 +105,7 @@ enum ApiEndpoint: Endpoint {
              .postPushTokens, .postVoteForTicket,
              .postLogin, .postLogout, .postUpdateAvatar, .postPurchases,
              .postFeedReaction, .flagComment, .createFeedComment,
-             .postFeedCommentReaction:
+             .postFeedCommentReaction, .postCreateChannel:
 
             return .post
         case .updateUserInfo, .putReplaceUserProperties,
@@ -201,6 +205,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/comments/:commentId/reactions"
         case .deleteFeedCommentReaction:
             return "tenants/:tenantId/comments/:commentId/reactions/:reactionId"
+        case .postCreateChannel, .getPaginateChannels:
+            return "tenants/:tenantId/chat/channels"
         }
     }
 
