@@ -26,37 +26,35 @@ struct StorefrontWidget: ParraContainer {
 
     public var body: some View {
         NavigationStack(path: $navigationPath) {
-            VStack {
-                ProductGridView(
-                    products: contentObserver.productPaginator.items
-                )
-                .redacted(
-                    when: contentObserver.productPaginator.isShowingPlaceholders
-                )
-                .emptyPlaceholder(products) {
-                    if !contentObserver.productPaginator.isLoading {
-                        componentFactory.buildEmptyState(
-                            config: .default,
-                            content: contentObserver.content.emptyStateView
-                        )
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity
-                        )
-                    } else {
-                        EmptyView()
-                    }
-                }
-                .errorPlaceholder(contentObserver.productPaginator.error) {
+            ProductGridView(
+                products: contentObserver.productPaginator.items
+            )
+            .redacted(
+                when: contentObserver.productPaginator.isShowingPlaceholders
+            )
+            .emptyPlaceholder(products) {
+                if !contentObserver.productPaginator.isLoading {
                     componentFactory.buildEmptyState(
-                        config: .errorDefault,
-                        content: contentObserver.content.errorStateView
+                        config: .default,
+                        content: contentObserver.content.emptyStateView
                     )
                     .frame(
                         maxWidth: .infinity,
                         maxHeight: .infinity
                     )
+                } else {
+                    EmptyView()
                 }
+            }
+            .errorPlaceholder(contentObserver.productPaginator.error) {
+                componentFactory.buildEmptyState(
+                    config: .errorDefault,
+                    content: contentObserver.content.errorStateView
+                )
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity
+                )
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(parraTheme.palette.primaryBackground)

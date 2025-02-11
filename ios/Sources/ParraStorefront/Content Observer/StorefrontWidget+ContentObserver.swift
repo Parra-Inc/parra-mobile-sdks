@@ -171,8 +171,8 @@ extension StorefrontWidget {
         }
 
         @MainActor
-        func refresh() {
-            productPaginator.refresh()
+        func refresh() async {
+            await productPaginator.refresh()
         }
 
         @MainActor
