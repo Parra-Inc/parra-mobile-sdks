@@ -108,7 +108,7 @@ public final class ParraUserEntitlements {
     public func getPaywall(
         for entitlement: String,
         in context: String?
-    ) async throws -> ParraApplePaywall {
+    ) async throws -> ParraAppPaywall {
         return try await Parra.default.parraInternal.api.getPaywall(
             for: entitlement,
             context: context

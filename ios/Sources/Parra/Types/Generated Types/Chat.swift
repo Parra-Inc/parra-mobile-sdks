@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Chat.swift
 //  Parra
 //
 //  Created by Ian MacCallum on 2/4/25.
@@ -8,8 +8,7 @@
 import Foundation
 
 public struct CreatePaidDmChannelRequestBody: Codable, Equatable, Hashable {
-    public let type: String
-    public let key: String
+    // MARK: - Lifecycle
 
     public init(
         type: String,
@@ -18,34 +17,45 @@ public struct CreatePaidDmChannelRequestBody: Codable, Equatable, Hashable {
         self.type = type
         self.key = key
     }
+
+    // MARK: - Public
+
+    public let type: String
+    public let key: String
 }
 
 public enum CreateChatChannelRequestBody: Codable, Equatable, Hashable {
     case createPaidDmChannelRequestBody(CreatePaidDmChannelRequestBody)
+
+    // MARK: - Public
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case .createPaidDmChannelRequestBody(let body):
+            try container.encode(body)
+        }
+    }
 }
 
 public enum ChatChannelType: String, Codable {
-    case dm = "dm"
+    case dm
     case paidDm = "paid_dm"
-    case `default` = "default"
-    case app = "app"
-    case group = "group"
-    case user = "user"
+    case `default`
+    case app
+    case group
+    case user
 }
 
 public enum ChatChannelStatus: String, Codable {
-    case active = "active"
-    case closed = "closed"
-    case archived = "archived"
+    case active
+    case closed
+    case archived
 }
 
 public struct TenantUserStub: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let tenantId: String
-    public let name: String?
-    public let avatar: ParraImageAsset?
-    public let verified: Bool?
-    public let roles: Array<ParraUserRoleStub>?
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -53,46 +63,40 @@ public struct TenantUserStub: Codable, Equatable, Hashable, Identifiable {
         name: String?,
         avatar: ParraImageAsset?,
         verified: Bool?,
-        roles: Array<ParraUserRoleStub>?
+        roles: [ParraUserRoleStub]?
     ) {
         self.id = id
         self.tenantId = tenantId
         self.name = name
         self.avatar = avatar
         self.verified = verified
-        self.roles = roles
+        self.roles = .init(roles)
     }
 
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case tenantId = "tenant_id"
-        case name
-        case avatar
-        case verified
-        case roles
-    }
+    // MARK: - Public
+
+    public let id: String
+    public let tenantId: String
+    public let name: String?
+    public let avatar: ParraImageAsset?
+    public let verified: Bool?
+    public let roles: PartiallyDecodableArray<ParraUserRoleStub>?
 }
 
 public enum ChannelMemberType: String, Codable {
     case tenantUser = "tenant_user"
-    case user = "user"
-    case bot = "bot"
+    case user
+    case bot
 }
 
 public enum ChannelMemberRole: String, Codable {
-    case admin = "admin"
-    case member = "member"
-    case guest = "guest"
+    case admin
+    case member
+    case guest
 }
 
 public struct ChannelMember: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let user: TenantUserStub?
-    public let type: ChannelMemberType
-    public let roles: Array<ChannelMemberRole>
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -101,7 +105,7 @@ public struct ChannelMember: Codable, Equatable, Hashable, Identifiable {
         deletedAt: String?,
         user: TenantUserStub?,
         type: ChannelMemberType,
-        roles: Array<ChannelMemberRole>
+        roles: [ChannelMemberRole]
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -109,29 +113,24 @@ public struct ChannelMember: Codable, Equatable, Hashable, Identifiable {
         self.deletedAt = deletedAt
         self.user = user
         self.type = type
-        self.roles = roles
+        self.roles = .init(roles)
     }
 
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
-        case user
-        case type
-        case roles
-    }
-}
+    // MARK: - Public
 
-public struct Channel: Codable, Equatable, Hashable, Identifiable {
     public let id: String
     public let createdAt: String
     public let updatedAt: String
     public let deletedAt: String?
-    public let tenantId: String
-    public let type: ChatChannelType
-    public let status: ChatChannelStatus
-    public let members: Array<ChannelMember>?
+    public let user: TenantUserStub?
+    public let type: ChannelMemberType
+    public let roles: PartiallyDecodableArray<ChannelMemberRole>
+}
+
+public typealias ChannelResponse = Channel
+
+public struct Channel: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -141,7 +140,7 @@ public struct Channel: Codable, Equatable, Hashable, Identifiable {
         tenantId: String,
         type: ChatChannelType,
         status: ChatChannelStatus,
-        members: Array<ChannelMember>?
+        members: [ChannelMember]?
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -150,70 +149,63 @@ public struct Channel: Codable, Equatable, Hashable, Identifiable {
         self.tenantId = tenantId
         self.type = type
         self.status = status
-        self.members = members
+        self.members = .init(members)
     }
 
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
-        case tenantId = "tenant_id"
-        case type
-        case status
-        case members
-    }
+    // MARK: - Public
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let tenantId: String
+    public let type: ChatChannelType
+    public let status: ChatChannelStatus
+    public let members: PartiallyDecodableArray<ChannelMember>?
 }
 
 public struct ChannelCollectionResponse: Codable, Equatable, Hashable {
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: Array<Channel>
+    // MARK: - Lifecycle
 
     public init(
         page: Int,
         pageCount: Int,
         pageSize: Int,
         totalCount: Int,
-        data: Array<Channel>
+        data: [Channel]
     ) {
         self.page = page
         self.pageCount = pageCount
         self.pageSize = pageSize
         self.totalCount = totalCount
-        self.data = data
+        self.data = .init(data)
     }
 
-    public enum CodingKeys: String, CodingKey {
-        case page
-        case pageCount = "page_count"
-        case pageSize = "page_size"
-        case totalCount = "total_count"
-        case data
-    }
+    // MARK: - Public
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: PartiallyDecodableArray<Channel>
 }
 
 public struct UpdateChatChannelRequestBody: Codable, Equatable, Hashable {
-    public let status: ChatChannelStatus
+    // MARK: - Lifecycle
 
     public init(
         status: ChatChannelStatus
     ) {
         self.status = status
     }
+
+    // MARK: - Public
+
+    public let status: ChatChannelStatus
 }
 
 public struct MessageCollectionStub: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let tenantId: String
-    public let channelId: String
-    public let memberId: String
-    public let content: String
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -235,59 +227,8 @@ public struct MessageCollectionStub: Codable, Equatable, Hashable, Identifiable 
         self.content = content
     }
 
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
-        case tenantId = "tenant_id"
-        case channelId = "channel_id"
-        case memberId = "member_id"
-        case content
-    }
-}
+    // MARK: - Public
 
-public struct MessageCollectionResponse: Codable, Equatable, Hashable {
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: Array<MessageCollectionStub>
-
-    public init(
-        page: Int,
-        pageCount: Int,
-        pageSize: Int,
-        totalCount: Int,
-        data: Array<MessageCollectionStub>
-    ) {
-        self.page = page
-        self.pageCount = pageCount
-        self.pageSize = pageSize
-        self.totalCount = totalCount
-        self.data = data
-    }
-
-    public enum CodingKeys: String, CodingKey {
-        case page
-        case pageCount = "page_count"
-        case pageSize = "page_size"
-        case totalCount = "total_count"
-        case data
-    }
-}
-
-public struct CreateMessageRequestBody: Codable, Equatable, Hashable {
-    public let content: String
-
-    public init(
-        content: String
-    ) {
-        self.content = content
-    }
-}
-
-public struct Message: Codable, Equatable, Hashable, Identifiable {
     public let id: String
     public let createdAt: String
     public let updatedAt: String
@@ -295,8 +236,51 @@ public struct Message: Codable, Equatable, Hashable, Identifiable {
     public let tenantId: String
     public let channelId: String
     public let memberId: String
-    public let user: TenantUserStub?
     public let content: String
+}
+
+public struct MessageCollectionResponse: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        page: Int,
+        pageCount: Int,
+        pageSize: Int,
+        totalCount: Int,
+        data: [MessageCollectionStub]
+    ) {
+        self.page = page
+        self.pageCount = pageCount
+        self.pageSize = pageSize
+        self.totalCount = totalCount
+        self.data = .init(data)
+    }
+
+    // MARK: - Public
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: PartiallyDecodableArray<MessageCollectionStub>
+}
+
+public struct CreateMessageRequestBody: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        content: String
+    ) {
+        self.content = content
+    }
+
+    // MARK: - Public
+
+    public let content: String
+}
+
+public struct Message: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -320,26 +304,29 @@ public struct Message: Codable, Equatable, Hashable, Identifiable {
         self.content = content
     }
 
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
-        case tenantId = "tenant_id"
-        case channelId = "channel_id"
-        case memberId = "member_id"
-        case user
-        case content
-    }
+    // MARK: - Public
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let tenantId: String
+    public let channelId: String
+    public let memberId: String
+    public let user: TenantUserStub?
+    public let content: String
 }
 
 public struct FlagMessageRequestBody: Codable, Equatable, Hashable {
-    public let reason: String?
+    // MARK: - Lifecycle
 
     public init(
         reason: String?
     ) {
         self.reason = reason
     }
-}
 
+    // MARK: - Public
+
+    public let reason: String?
+}
