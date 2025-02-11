@@ -14,6 +14,7 @@ public struct ParraAsyncImageConfig: Equatable, Hashable, Sendable {
         aspectRatio: CGFloat? = nil,
         contentMode: ContentMode = .fit,
         blurContent: Bool = false,
+        showBlurHash: Bool = true,
         showFailureIndicator: Bool = true,
         cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy,
         timeoutInterval: TimeInterval = 60.0
@@ -21,6 +22,7 @@ public struct ParraAsyncImageConfig: Equatable, Hashable, Sendable {
         self.aspectRatio = aspectRatio
         self.contentMode = contentMode
         self.blurContent = blurContent
+        self.showBlurHash = showBlurHash
         self.showFailureIndicator = showFailureIndicator
         self.cachePolicy = cachePolicy
         self.timeoutInterval = timeoutInterval
@@ -31,6 +33,7 @@ public struct ParraAsyncImageConfig: Equatable, Hashable, Sendable {
     public let aspectRatio: CGFloat?
     public let contentMode: ContentMode
     public let blurContent: Bool
+    public let showBlurHash: Bool
     public let showFailureIndicator: Bool
     public let cachePolicy: URLRequest.CachePolicy
     public let timeoutInterval: TimeInterval
