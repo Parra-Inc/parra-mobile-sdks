@@ -566,8 +566,7 @@ extension StorefrontWidget {
             let result = try await shopifyService.performQuery(
                 .productsQuery(
                     count: Int32(pageSize),
-                    startCursor: cursor.startCursor,
-                    endCursor: cursor.endCursor,
+                    startCursor: cursor.endCursor,
                     reverse: reverse,
                     sortKey: sortKey
                 )
