@@ -65,9 +65,13 @@ struct FeedContentCardView: View {
             if let message = contentCard.action?.confirmationMessage, !message.isEmpty {
                 isConfirmationPresented = true
             } else {
-                performActionForFeedItemData(
-                    .contentCard(contentCard)
-                )
+                if let action = contentCard.action, let form = action.form {
+                    feedbackForm = form
+                } else {
+                    performActionForFeedItemData(
+                        .contentCard(contentCard)
+                    )
+                }
             }
         }) {
             ZStack(alignment: .center) {
@@ -95,6 +99,9 @@ struct FeedContentCardView: View {
         .safeAreaPadding(.horizontal, 16)
         .padding(.vertical, spacing)
         .disabled(!hasAction || !redactionReasons.isEmpty)
+        .presentParraFeedbackFormWidget(
+            with: $feedbackForm
+        )
         .onAppear {
             if redactionReasons.isEmpty {
                 // Don't track impressions for placeholder cells.
@@ -127,6 +134,8 @@ struct FeedContentCardView: View {
     }
 
     // MARK: - Private
+
+    @State private var feedbackForm: ParraFeedbackFormDataStub?
 
     @State private var isConfirmationPresented: Bool = false
 
@@ -215,7 +224,9 @@ struct FeedContentCardView: View {
 
             Spacer()
 
-            if hasAction && redactionReasons.isEmpty {
+            if let action = contentCard.action,
+               action.type == .link && redactionReasons.isEmpty
+            {
                 ZStack(alignment: .center) {
                     backgroundColor
                         .frame(width: 20, height: 20)

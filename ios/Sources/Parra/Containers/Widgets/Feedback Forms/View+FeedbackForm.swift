@@ -53,6 +53,32 @@ public extension View {
         )
     }
 
+    @MainActor
+    internal func presentParraFeedbackFormWidget(
+        with formBinding: Binding<ParraFeedbackFormDataStub?>,
+        config: ParraFeedbackFormWidgetConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
+    ) -> some View {
+        return presentParraFeedbackFormWidget(
+            with: .init(
+                get: {
+                    if let stub = formBinding.wrappedValue {
+                        return ParraFeedbackForm(from: stub)
+                    }
+
+                    return nil
+                },
+                set: { form in
+                    if form == nil {
+                        formBinding.wrappedValue = nil
+                    }
+                }
+            ),
+            config: config,
+            onDismiss: onDismiss
+        )
+    }
+
     /// Automatically displays a Feedback Form in a sheet when the `formBinding`
     /// parameter becomes non-nil.
     @MainActor

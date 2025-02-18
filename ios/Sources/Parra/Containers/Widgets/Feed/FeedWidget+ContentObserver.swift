@@ -176,7 +176,9 @@ extension FeedWidget {
                 ParraLinkManager.shared.open(url: video.url)
             case .contentCard(let contentCard):
                 if let action = contentCard.action {
-                    ParraLinkManager.shared.open(url: action.url)
+                    if let url = action.url {
+                        ParraLinkManager.shared.open(url: url)
+                    }
                 }
             case .creatorUpdate:
                 break

@@ -29,13 +29,13 @@ public class ParraFeedbackFormWidgetConfig: ParraContainerConfig {
     // MARK: - Public
 
     public static let `default` = ParraFeedbackFormWidgetConfig(
-        maxTextFieldCharacters: 30,
+        maxTextFieldCharacters: 250,
         defaultValues: [:],
         contextMessage: nil,
         successToastContent: ParraAlertContent(
-            title: ParraLabelContent(text: "Feedback Sent"),
+            title: ParraLabelContent(text: "Success!"),
             subtitle: ParraLabelContent(
-                text: "Your feedback has been recorded successfully."
+                text: "We've successfully recorded your response."
             ),
             icon: ParraAlertContent.defaultIcon(for: .success),
             dismiss: ParraAlertContent.defaultDismiss(for: .success)

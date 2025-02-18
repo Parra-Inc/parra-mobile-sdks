@@ -122,20 +122,31 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
     }
 }
 
+public enum ParraContentCardActionType: String, Codable, Equatable, Hashable {
+    case link
+    case feedbackForm = "feedback_form"
+}
+
 public struct ParraContentCardAction: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        url: URL,
+        type: ParraContentCardActionType,
+        url: URL?,
+        form: ParraFeedbackFormDataStub?,
         confirmationMessage: String?
     ) {
+        self.type = type
+        self.form = form
         self.url = url
         self.confirmationMessage = confirmationMessage
     }
 
     // MARK: - Public
 
-    public let url: URL
+    public let type: ParraContentCardActionType
+    public let url: URL?
+    public let form: ParraFeedbackFormDataStub?
     public let confirmationMessage: String?
 }
 
