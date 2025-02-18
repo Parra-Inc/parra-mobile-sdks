@@ -281,11 +281,19 @@ struct FeedContentCardView: View {
                 }
 
                 if reactor.showReactions {
+                    let showCommentCount = if let comments = feedItem.comments,
+                                              !comments.disabled
+                    {
+                        true
+                    } else {
+                        false
+                    }
+
                     VStack {
                         FeedReactionView(
                             feedItem: feedItem,
                             reactor: _reactor,
-                            showCommentCount: true
+                            showCommentCount: showCommentCount
                         )
                     }
                     .padding(

@@ -116,11 +116,19 @@ struct FeedCreatorUpdateView: View {
                     }
                 }
 
+                let showCommentCount = if let comments = params.feedItem.comments,
+                                          !comments.disabled
+                {
+                    true
+                } else {
+                    false
+                }
+
                 if hasReactions {
                     FeedReactionView(
                         feedItem: params.feedItem,
                         reactor: _reactor,
-                        showCommentCount: true,
+                        showCommentCount: showCommentCount,
                         attachmentPaywall: creatorUpdate.attachmentPaywall
                     )
                     .padding(.top, hasAttachments ? 16 : 8)
