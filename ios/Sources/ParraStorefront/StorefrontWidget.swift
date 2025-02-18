@@ -25,81 +25,111 @@ struct StorefrontWidget: ParraContainer {
     // MARK: - Public
 
     public var body: some View {
-        NavigationStack(path: $navigationPath) {
-            VStack {
-                ProductGridView(
-                    products: contentObserver.productPaginator.items
-                )
-                .redacted(
-                    when: contentObserver.productPaginator.isShowingPlaceholders
-                )
-                .emptyPlaceholder(products) {
-                    if !contentObserver.productPaginator.isLoading {
-                        componentFactory.buildEmptyState(
-                            config: .default,
-                            content: contentObserver.content.emptyStateView
-                        )
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity
-                        )
-                    } else {
-                        EmptyView()
-                    }
-                }
-                .errorPlaceholder(contentObserver.productPaginator.error) {
+        VStack {
+            ProductGridView(
+                products: contentObserver.productPaginator.items
+            )
+            .redacted(
+                when: contentObserver.productPaginator.isShowingPlaceholders
+            )
+            .emptyPlaceholder(products) {
+                if !contentObserver.productPaginator.isLoading {
                     componentFactory.buildEmptyState(
-                        config: .errorDefault,
-                        content: contentObserver.content.errorStateView
+                        config: .default,
+                        content: contentObserver.content.emptyStateView
                     )
                     .frame(
                         maxWidth: .infinity,
                         maxHeight: .infinity
                     )
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(parraTheme.palette.primaryBackground)
-            .navigationTitle(contentObserver.config.navigationTitle)
-            .toolbar {
-                if contentObserver.config.showDismissButton {
-                    ToolbarItem(placement: .topBarLeading) {
-                        CartButton(
-                            cartState: $contentObserver.cartState
-                        )
-                    }
-
-                    ToolbarItem(placement: .topBarLeading) {
-                        SortButton(sortOrder: $contentObserver.sortOrder)
-                    }
-
-                    ToolbarItem(placement: .topBarTrailing) {
-                        ParraDismissButton()
-                    }
                 } else {
-                    ToolbarItem(placement: .topBarLeading) {
-                        SortButton(sortOrder: $contentObserver.sortOrder)
-                    }
-
-                    ToolbarItem(placement: .topBarTrailing) {
-                        CartButton(
-                            cartState: $contentObserver.cartState
-                        )
-                    }
+                    EmptyView()
                 }
             }
-            .navigationDestination(
-                for: ParraProduct.self
-            ) { product in
+            .errorPlaceholder(contentObserver.productPaginator.error) {
+                componentFactory.buildEmptyState(
+                    config: .errorDefault,
+                    content: contentObserver.content.errorStateView
+                )
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity
+                )
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(parraTheme.palette.primaryBackground)
+        .navigationTitle(contentObserver.config.navigationTitle)
+        .toolbar {
+            if contentObserver.config.showDismissButton {
+                ToolbarItem(placement: .topBarLeading) {
+                    CartButton(
+                        cartState: $contentObserver.cartState
+                    )
+                }
+
+                ToolbarItem(placement: .topBarLeading) {
+                    SortButton(sortOrder: $contentObserver.sortOrder)
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    ParraDismissButton()
+                }
+            } else {
+                ToolbarItem(placement: .topBarLeading) {
+                    SortButton(sortOrder: $contentObserver.sortOrder)
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    CartButton(
+                        cartState: $contentObserver.cartState
+                    )
+                }
+            }
+        }
+        .navigationDestination(
+            for: ParraProduct.self
+        ) { product in
+            ProductDetailView(product: product)
+                .environment(contentObserver)
+        }
+        .navigationDestination(
+            for: ParraCartLineItem.self
+        ) { lineItem in
+            if let product = contentObserver.findProduct(for: lineItem) {
                 ProductDetailView(product: product)
                     .environment(contentObserver)
+            } else {
+                componentFactory.buildEmptyState(
+                    config: .default,
+                    content: contentObserver.content.productMissingView
+                )
             }
-            .navigationDestination(
-                for: ParraCartLineItem.self
-            ) { lineItem in
-                if let product = contentObserver.findProduct(for: lineItem) {
-                    ProductDetailView(product: product)
+        }
+        .navigationDestination(
+            for: String.self
+        ) { path in
+            let components = path.split(separator: "/")
+
+            if let location = components.first {
+                if location == "cart" {
+                    CartView()
                         .environment(contentObserver)
+
+                } else if location == "product", let productId = components[safe: 1],
+                          !productId.isEmpty
+                {
+                    if let product = contentObserver.queryProduct(
+                        by: String(productId)
+                    ) {
+                        ProductDetailView(product: product)
+                            .environment(contentObserver)
+                    } else {
+                        componentFactory.buildEmptyState(
+                            config: .default,
+                            content: contentObserver.content.productMissingView
+                        )
+                    }
                 } else {
                     componentFactory.buildEmptyState(
                         config: .default,
@@ -107,16 +137,7 @@ struct StorefrontWidget: ParraContainer {
                     )
                 }
             }
-            .navigationDestination(
-                for: String.self
-            ) { location in
-                if location == "cart" {
-                    CartView()
-                        .environment(contentObserver)
-                }
-            }
-        }
-        // inject data model instance into env for child views
+        } // inject data model instance into env for child views
         .environment(contentObserver)
         .onChange(
             of: parraAuthState,
