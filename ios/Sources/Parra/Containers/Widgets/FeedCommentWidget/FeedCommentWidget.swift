@@ -215,7 +215,6 @@ struct FeedCommentWidget: ParraContainer {
                 .frame(height: 1)
                 .ignoresSafeArea()
         }
-        .keyboardHeight($keyboardHeight)
         .background(theme.palette.primaryBackground)
         .onAppear {
             // This is a slightly nicer visual since they load in too quickly
@@ -255,8 +254,6 @@ struct FeedCommentWidget: ParraContainer {
     }
 
     // MARK: - Private
-
-    @State private var keyboardHeight: CGFloat = 0
 
     @State private var headerHeight: CGFloat = 0
     @State private var footerHeight: CGFloat = 0
