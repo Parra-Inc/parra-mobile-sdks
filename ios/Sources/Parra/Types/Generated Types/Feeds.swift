@@ -148,6 +148,17 @@ public struct ParraContentCardAction: Codable, Equatable, Hashable {
     public let url: URL?
     public let form: ParraFeedbackFormDataStub?
     public let confirmationMessage: String?
+
+    // MARK: - Internal
+
+    var symbol: String {
+        switch type {
+        case .link:
+            "link"
+        case .feedbackForm:
+            "arrow.up.message.fill"
+        }
+    }
 }
 
 public struct ParraContentCardBackground: Codable, Equatable, Hashable {

@@ -224,9 +224,7 @@ struct FeedContentCardView: View {
 
             Spacer()
 
-            if let action = contentCard.action,
-               action.type == .link && redactionReasons.isEmpty
-            {
+            if let action = contentCard.action, redactionReasons.isEmpty {
                 ZStack(alignment: .center) {
                     backgroundColor
                         .frame(width: 20, height: 20)
@@ -236,7 +234,7 @@ struct FeedContentCardView: View {
                         )
 
                     componentFactory.buildImage(
-                        content: .symbol("link", .hierarchical),
+                        content: .symbol(action.symbol, .hierarchical),
                         localAttributes: ParraAttributes.Image(
                             tint: color,
                             background: .clear
