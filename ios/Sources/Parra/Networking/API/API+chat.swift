@@ -15,7 +15,7 @@ extension API {
             .postCreateChannel,
             body: CreateChatChannelRequestBody.createPaidDmChannelRequestBody(
                 CreatePaidDmChannelRequestBody(
-                    type: ChatChannelType.paidDm.rawValue,
+                    type: ParraChatChannelType.paidDm.rawValue,
                     key: key
                 )
             )
@@ -23,12 +23,13 @@ extension API {
     }
 
     func paginateChannels(
-        type: ChatChannelType,
+        type: ParraChatChannelType,
         limit: Int? = nil,
         offset: Int? = nil
     ) async throws -> ChannelCollectionResponse {
-        var query: [String: String] = [:]
-        query["type"] = type.rawValue
+        var query: [String: String] = [
+            "type": type.rawValue
+        ]
 
         if let limit {
             query["limit"] = String(limit)
@@ -47,57 +48,53 @@ extension API {
     func paginateMessagesForChannel(
         channelId: String,
         limit: Int? = nil,
-        offset: Int? = nil,
-        sort: String? = nil,
-        createdAt: String? = nil
-    ) async throws -> PaginateCommentsCollectionResponse {
-        fatalError()
+        offset: Int? = nil
+    ) async throws -> MessageCollectionResponse {
+        var query: [String: String] = [:]
 
-//        var query: [String: String] = [:]
-//
-//        if let limit {
-//            query["limit"] = String(limit)
-//        }
-//
-//        if let offset {
-//            query["offset"] = String(offset)
-//        }
-//
-//        if let sort {
-//            query["sort"] = sort
-//        }
-//
-//        if let createdAt {
-//            query["created_at"] = createdAt
-//        }
-//
-//        return try await hitEndpoint(
-//            .getPaginateComments(feedItemId: feedItemId),
-//            queryItems: query
-//        )
+        if let limit {
+            query["limit"] = String(limit)
+        }
+
+        if let offset {
+            query["offset"] = String(offset)
+        }
+
+        return try await hitEndpoint(
+            .getPaginateMessages(channelId: channelId),
+            queryItems: query
+        )
     }
 
     func createMessage(
         for channelId: String,
-        body: String
-    ) async throws -> ParraComment {
-        fatalError()
-//        let body = CreateCommentRequestBody(body: body)
-//
-//        return try await hitEndpoint(
-//            .createFeedComment(feedItemId: feedItemId),
-//            body: body
-//        )
+        content: String
+    ) async throws -> Message {
+        let body = CreateMessageRequestBody(content: content)
+
+        return try await hitEndpoint(
+            .postSendMessage(channelId: channelId),
+            body: body
+        )
     }
-//
-//    func deleteMessage(
-//        messageId: String
-//    ) async throws {
-//        let body = FlagCommentRequestBody(reason: reason)
-//
-//        let _: EmptyResponseObject = try await hitEndpoint(
-//            .flagComment(commentId: commentId),
-//            body: body
-//        )
-//    }
+
+    func flagMessage(
+        messageId: String,
+        reason: String?
+    ) async throws {
+        let body = FlagMessageRequestBody(reason: reason)
+
+        let _: EmptyResponseObject = try await hitEndpoint(
+            .postFlagMessage(messageId: messageId),
+            body: body
+        )
+    }
+
+    func deleteMessage(
+        messageId: String
+    ) async throws {
+        let _: EmptyResponseObject = try await hitEndpoint(
+            .deleteMessage(messageId: messageId)
+        )
+    }
 }

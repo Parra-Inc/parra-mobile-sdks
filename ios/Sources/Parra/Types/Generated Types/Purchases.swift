@@ -155,6 +155,23 @@ public enum ParraPaywallSection: Codable, Equatable, Hashable, Identifiable {
     }
 }
 
+public enum PaywallIapType: String, Codable {
+    case inAppPurchase = "in_app_purchase"
+    case subscription
+    case subscriptionGroup = "subscription_group"
+
+    // MARK: - Internal
+
+    var isSubscription: Bool {
+        switch self {
+        case .subscription, .subscriptionGroup:
+            return true
+        case .inAppPurchase:
+            return false
+        }
+    }
+}
+
 public struct ParraAppPaywall: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
@@ -164,6 +181,7 @@ public struct ParraAppPaywall: Codable, Equatable, Hashable, Identifiable {
         updatedAt: String,
         deletedAt: String?,
         type: AppPaywallType,
+        iapType: PaywallIapType,
         groupId: String?,
         productIds: [String]?,
         marketingContent: ApplePaywallMarketingContent?,
@@ -174,6 +192,7 @@ public struct ParraAppPaywall: Codable, Equatable, Hashable, Identifiable {
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
         self.type = type
+        self.iapType = iapType
         self.groupId = groupId
         self.productIds = productIds
         self.marketingContent = marketingContent
@@ -187,6 +206,7 @@ public struct ParraAppPaywall: Codable, Equatable, Hashable, Identifiable {
     public let updatedAt: String
     public let deletedAt: String?
     public let type: AppPaywallType
+    public let iapType: PaywallIapType
     public let groupId: String?
     public let productIds: [String]?
     /// This is for legacy code paths only and can be ignored. The sections

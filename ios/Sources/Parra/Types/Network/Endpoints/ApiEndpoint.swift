@@ -88,6 +88,10 @@ enum ApiEndpoint: Endpoint {
     // Chat
     case getPaginateChannels
     case postCreateChannel
+    case getPaginateMessages(channelId: String)
+    case postSendMessage(channelId: String)
+    case postFlagMessage(messageId: String)
+    case deleteMessage(messageId: String)
 
     // MARK: - Internal
 
@@ -97,7 +101,7 @@ enum ApiEndpoint: Endpoint {
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
              .getUserProperties, .getPaginateFeed, .getFaqs,
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall,
-             .getPaginateComments, .getPaginateChannels:
+             .getPaginateComments, .getPaginateChannels, .getPaginateMessages:
 
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
@@ -105,7 +109,8 @@ enum ApiEndpoint: Endpoint {
              .postPushTokens, .postVoteForTicket,
              .postLogin, .postLogout, .postUpdateAvatar, .postPurchases,
              .postFeedReaction, .flagComment, .createFeedComment,
-             .postFeedCommentReaction, .postCreateChannel:
+             .postFeedCommentReaction, .postCreateChannel, .postSendMessage,
+             .postFlagMessage:
 
             return .post
         case .updateUserInfo, .putReplaceUserProperties,
@@ -115,7 +120,8 @@ enum ApiEndpoint: Endpoint {
             return .put
         case .deleteVoteForTicket, .deleteUser, .deleteAvatar,
              .deleteAllUserProperties, .deleteSingleUserProperty,
-             .deleteFeedReaction, .deleteComment, .deleteFeedCommentReaction:
+             .deleteFeedReaction, .deleteComment, .deleteFeedCommentReaction,
+             .deleteMessage:
 
             return .delete
         case .patchUpdateUserProperties:
@@ -207,6 +213,12 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/comments/:commentId/reactions/:reactionId"
         case .postCreateChannel, .getPaginateChannels:
             return "tenants/:tenantId/chat/channels"
+        case .getPaginateMessages, .postSendMessage:
+            return "tenants/:tenantId/chat/channels/:channelId/messages"
+        case .deleteMessage:
+            return "tenants/:tenantId/chat/messages/:messageId"
+        case .postFlagMessage:
+            return "tenants/:tenantId/chat/messages/:messageId/flag"
         }
     }
 
