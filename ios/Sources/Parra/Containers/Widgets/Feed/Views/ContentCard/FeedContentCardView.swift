@@ -241,6 +241,12 @@ struct FeedContentCardView: View {
                         )
                     )
                     .frame(width: 11, height: 11)
+                    .offset(
+                        action.type == .feedbackForm ? CGSize(
+                            width: -1,
+                            height: 1
+                        ) : .zero
+                    )
                 }
             }
         }

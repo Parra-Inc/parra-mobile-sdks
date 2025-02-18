@@ -156,7 +156,7 @@ public struct ParraContentCardAction: Codable, Equatable, Hashable {
         case .link:
             "link"
         case .feedbackForm:
-            "arrow.up.message.fill"
+            "paperplane"
         }
     }
 }
