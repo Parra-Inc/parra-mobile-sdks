@@ -157,56 +157,10 @@ struct FeedCommentWidget: ParraContainer {
                 .overlay(
                     alignment: .bottom
                 ) {
-                    AddCommentBarView { text in
-                        guard let user = authState.user else {
-                            Logger.error("Tried to submit a comment without a user")
-
-                            return false
+                    if let commentInfo = contentObserver.feedItem.comments {
+                        if !commentInfo.disabled {
+                            addCommentBar(proxy: proxy)
                         }
-
-                        if !userEntitlements.hasEntitlement(
-                            contentObserver.attachmentPaywall?.entitlement
-                        ) {
-                            Task { @MainActor in
-                                await UIApplication.dismissKeyboard()
-                            }
-
-                            DispatchQueue.main.asyncAfter(
-                                deadline: .now() + 0.1
-                            ) {
-                                isShowingPaywall = true
-                            }
-                        } else if authState.isLoggedIn {
-                            withAnimation {
-                                let newComment = contentObserver.addComment(
-                                    with: text,
-                                    from: user
-                                )
-
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                                    withAnimation {
-                                        proxy.scrollTo(
-                                            newComment,
-                                            anchor: .center
-                                        )
-                                    }
-                                }
-                            }
-
-                            return true
-                        } else {
-                            Task { @MainActor in
-                                await UIApplication.dismissKeyboard()
-                            }
-
-                            DispatchQueue.main.asyncAfter(
-                                deadline: .now() + 0.1
-                            ) {
-                                isRequiredSignInPresented = true
-                            }
-                        }
-
-                        return false
                     }
                 }
             }
@@ -289,6 +243,63 @@ struct FeedCommentWidget: ParraContainer {
             ),
             background: theme.palette.secondaryBackground
         )
+    }
+
+    @ViewBuilder
+    private func addCommentBar(
+        proxy: ScrollViewProxy
+    ) -> some View {
+        AddCommentBarView { text in
+            guard let user = authState.user else {
+                Logger.error("Tried to submit a comment without a user")
+
+                return false
+            }
+
+            if !userEntitlements.hasEntitlement(
+                contentObserver.attachmentPaywall?.entitlement
+            ) {
+                Task { @MainActor in
+                    await UIApplication.dismissKeyboard()
+                }
+
+                DispatchQueue.main.asyncAfter(
+                    deadline: .now() + 0.1
+                ) {
+                    isShowingPaywall = true
+                }
+            } else if authState.isLoggedIn {
+                withAnimation {
+                    let newComment = contentObserver.addComment(
+                        with: text,
+                        from: user
+                    )
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                        withAnimation {
+                            proxy.scrollTo(
+                                newComment,
+                                anchor: .center
+                            )
+                        }
+                    }
+                }
+
+                return true
+            } else {
+                Task { @MainActor in
+                    await UIApplication.dismissKeyboard()
+                }
+
+                DispatchQueue.main.asyncAfter(
+                    deadline: .now() + 0.1
+                ) {
+                    isRequiredSignInPresented = true
+                }
+            }
+
+            return false
+        }
     }
 }
 
