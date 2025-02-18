@@ -13,13 +13,52 @@ public final class ParraPaywallConfig: ParraContainerConfig {
 
     public init(
         visibleRelationships: Product.SubscriptionRelationship = .all,
+        thankYouContent: ToastContent = .successDefault,
+        purchaseErrorContent: ToastContent = .failureDefault,
         marketingContent: (() -> (any View))? = nil
     ) {
         self.visibleRelationships = visibleRelationships
+        self.thankYouContent = thankYouContent
+        self.purchaseErrorContent = purchaseErrorContent
         self.marketingContent = marketingContent
     }
 
     // MARK: - Public
+
+    public struct ToastContent {
+        // MARK: - Lifecycle
+
+        public init(
+            title: String,
+            subtitle: String,
+            icon: ParraImageContent? = nil,
+            backgroundColor: Color? = nil
+        ) {
+            self.title = title
+            self.subtitle = subtitle
+            self.icon = icon
+            self.backgroundColor = backgroundColor
+        }
+
+        // MARK: - Public
+
+        public static let successDefault = ToastContent(
+            title: "Thank You",
+            subtitle: "Your tip has been received. We appreciate your support!",
+            icon: .symbol("arrow.up.heart.fill")
+        )
+
+        public static let failureDefault = ToastContent(
+            title: "Purchase error",
+            subtitle: "Something went wrong completing this purchase. Please try again later.",
+            icon: .symbol("creditcard.trianglebadge.exclamationmark")
+        )
+
+        public let title: String
+        public let subtitle: String
+        public let icon: ParraImageContent?
+        public let backgroundColor: Color?
+    }
 
     public static let `default` = ParraPaywallConfig()
 
@@ -29,6 +68,10 @@ public final class ParraPaywallConfig: ParraContainerConfig {
     /// to use a subscription Group ID and not a list of products.
     public let visibleRelationships: Product.SubscriptionRelationship
 
+    public let thankYouContent: ToastContent
+    public let purchaseErrorContent: ToastContent
+
+    /// Overrides any marketing configuration provided by the Parra dashboard.
     public let marketingContent: (() -> (any View))?
 
     public static func registerDefaultConfig<Key>(

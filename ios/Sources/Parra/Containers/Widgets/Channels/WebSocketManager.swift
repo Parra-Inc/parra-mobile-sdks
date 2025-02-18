@@ -30,7 +30,10 @@ struct SendChatMessageRequest: WebSocketMessage {
     }
 }
 
-class WebSocketManager: ObservableObject {
+private let logger = Logger(category: "Chat Web Sockets")
+
+@Observable
+class WebSocketManager {
     // MARK: - Lifecycle
 
     init(authToken: String) {
@@ -45,11 +48,15 @@ class WebSocketManager: ObservableObject {
         case error(String)
     }
 
-    @Published private(set) var channelMessages: [String: [Message]] = [:]
-    @Published private(set) var directMessages: [String: [Message]] = [:]
-    @Published private(set) var connectionStatus: ConnectionStatus = .disconnected
+    private(set) var channelMessages: [String: [Message]] = [:]
+    private(set) var directMessages: [String: [Message]] = [:]
+    private(set) var connectionStatus: ConnectionStatus = .disconnected
 
     func connect(channels: [String]) {
+        logger.info("Connecting to channels", [
+            "channels": channels.joined(separator: ", ")
+        ])
+
         guard var urlComponents = URLComponents(string: "wss://ws.parra.io") else {
             return
         }

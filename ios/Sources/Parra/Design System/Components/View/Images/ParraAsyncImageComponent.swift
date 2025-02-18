@@ -93,7 +93,9 @@ public struct ParraAsyncImageComponent: View, Equatable {
     ) -> some View {
         switch phase {
         case .empty:
-            ProgressView()
+            if config.showLoadingIndicator {
+                ProgressView()
+            }
         case .failure:
             if config.showFailureIndicator {
                 Image(systemName: "exclamationmark.triangle.fill")

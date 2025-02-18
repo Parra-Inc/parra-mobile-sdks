@@ -10,8 +10,10 @@ import SwiftUI
 
 struct PaywallParams: Equatable {
     let id: String
+    let iapType: PaywallIapType
     let paywallProducts: PaywallProducts
-    let marketingContent: ParraPaywallMarketingContent?
+    let marketingContent: ApplePaywallMarketingContent?
+    let sections: [ParraPaywallSection]?
     let appInfo: ParraAppInfo
 }
 
@@ -32,15 +34,16 @@ extension ParraViewDataLoader {
             renderer: { parra, params, navigationPath, _ in
                 let container: PaywallWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
-                        params: PaywallWidget.ContentObserver
-                            .InitialParams(
-                                paywallId: params.id,
-                                paywallProducts: params.paywallProducts,
-                                marketingContent: params.marketingContent,
-                                config: config,
-                                api: parra.parraInternal.api,
-                                appInfo: params.appInfo
-                            ),
+                        params: PaywallWidget.ContentObserver.InitialParams(
+                            paywallId: params.id,
+                            iapType: params.iapType,
+                            paywallProducts: params.paywallProducts,
+                            marketingContent: params.marketingContent,
+                            sections: params.sections,
+                            config: config,
+                            api: parra.parraInternal.api,
+                            appInfo: params.appInfo
+                        ),
                         config: config,
                         contentTransformer: nil,
                         navigationPath: navigationPath

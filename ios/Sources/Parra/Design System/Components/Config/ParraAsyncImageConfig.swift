@@ -16,6 +16,7 @@ public struct ParraAsyncImageConfig: Equatable, Hashable, Sendable {
         blurContent: Bool = false,
         showBlurHash: Bool = true,
         showFailureIndicator: Bool = true,
+        showLoadingIndicator: Bool = true,
         cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy,
         timeoutInterval: TimeInterval = 60.0
     ) {
@@ -24,6 +25,7 @@ public struct ParraAsyncImageConfig: Equatable, Hashable, Sendable {
         self.blurContent = blurContent
         self.showBlurHash = showBlurHash
         self.showFailureIndicator = showFailureIndicator
+        self.showLoadingIndicator = showLoadingIndicator
         self.cachePolicy = cachePolicy
         self.timeoutInterval = timeoutInterval
     }
@@ -35,6 +37,7 @@ public struct ParraAsyncImageConfig: Equatable, Hashable, Sendable {
     public let blurContent: Bool
     public let showBlurHash: Bool
     public let showFailureIndicator: Bool
+    public let showLoadingIndicator: Bool
     public let cachePolicy: URLRequest.CachePolicy
     public let timeoutInterval: TimeInterval
 }

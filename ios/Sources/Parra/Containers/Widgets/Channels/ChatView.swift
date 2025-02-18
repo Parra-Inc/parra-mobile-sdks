@@ -6,9 +6,15 @@
 //
 
 import SwiftUI
-import Parra
 
-//public struct ChatTab: View {
+// 0. Update entitlements to support quantities
+// 1. Shared chat data storage
+//     * supports fetching and retreiving conversations by type
+// 2. Widget for a specific conversation
+//     * All specifying a required entitlement
+// 3. Widget for list of conversations
+
+// public struct ChatTab: View {
 //    let authToken: String
 //    @Binding var navigationPath: NavigationPath
 //
@@ -19,18 +25,17 @@ import Parra
 //    func loadChannels() async throws {
 //
 //    }
-//}
-// AuthenticatedChatView.swift
+// }
+
 public struct ChatView: View {
-    let authToken: String
-    @StateObject private var webSocketManager: WebSocketManager
-    @State private var messageText = ""
+    // MARK: - Lifecycle
 
     public init(authToken: String) {
-
         self.authToken = authToken
-        _webSocketManager = StateObject(wrappedValue: WebSocketManager(authToken: authToken))
+        _webSocketManager = State(wrappedValue: WebSocketManager(authToken: authToken))
     }
+
+    // MARK: - Public
 
     public var body: some View {
         VStack {
@@ -65,37 +70,27 @@ public struct ChatView: View {
         }
     }
 
+    // MARK: - Internal
+
+    let authToken: String
+
+    // MARK: - Private
+
+    @State private var webSocketManager: WebSocketManager
+    @State private var messageText = ""
+
     private func sendMessage() {
-        guard !messageText.isEmpty else { return }
+        guard !messageText.isEmpty else {
+            return
+        }
         webSocketManager.sendDirectMessage(messageText, to: "channel")
         messageText = ""
     }
 }
 
-struct MessageBubble: View {
-    let message: Message
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if let user = message.user {
-                Text(user.id)
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-
-            Text(message.content)
-                .padding(10)
-                .background(Color.blue.opacity(0.2))
-                .cornerRadius(10)
-
-            Text(message.createdAt)
-                .font(.caption2)
-                .foregroundColor(.gray)
-        }
-    }
-}
-
 struct ConnectionStatusView: View {
+    // MARK: - Internal
+
     let status: WebSocketManager.ConnectionStatus
 
     var body: some View {
@@ -108,6 +103,8 @@ struct ConnectionStatusView: View {
         }
         .padding(.top, 8)
     }
+
+    // MARK: - Private
 
     private var statusColor: Color {
         switch status {

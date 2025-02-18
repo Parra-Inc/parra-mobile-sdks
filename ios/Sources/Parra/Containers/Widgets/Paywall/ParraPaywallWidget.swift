@@ -37,11 +37,13 @@ public struct ParraPaywallWidget: View {
             .containerRenderer.renderContainer(
                 params: PaywallWidget.ContentObserver.InitialParams(
                     paywallId: paywall.id,
+                    iapType: paywall.iapType,
                     paywallProducts: paywallProducts,
                     marketingContent: paywall.marketingContent,
+                    sections: paywall.sections,
                     config: config,
                     api: parra.parraInternal.api,
-                    appInfo: parraAppInfo
+                    appInfo: appInfo
                 ),
                 config: config,
                 contentTransformer: nil,
@@ -56,5 +58,5 @@ public struct ParraPaywallWidget: View {
     @State private var navigationPath: NavigationPath = .init()
 
     @Environment(\.parra) private var parra
-    @Environment(\.parraAppInfo) private var parraAppInfo
+    @Environment(\.parraAppInfo) private var appInfo
 }
