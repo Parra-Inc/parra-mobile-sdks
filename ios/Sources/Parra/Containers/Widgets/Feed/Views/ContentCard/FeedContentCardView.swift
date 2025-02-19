@@ -65,9 +65,13 @@ struct FeedContentCardView: View {
             if let message = contentCard.action?.confirmationMessage, !message.isEmpty {
                 isConfirmationPresented = true
             } else {
-                performActionForFeedItemData(
-                    .contentCard(contentCard)
-                )
+                if let action = contentCard.action, let form = action.form {
+                    feedbackForm = form
+                } else {
+                    performActionForFeedItemData(
+                        .contentCard(contentCard)
+                    )
+                }
             }
         }) {
             ZStack(alignment: .center) {
@@ -95,6 +99,9 @@ struct FeedContentCardView: View {
         .safeAreaPadding(.horizontal, 16)
         .padding(.vertical, spacing)
         .disabled(!hasAction || !redactionReasons.isEmpty)
+        .presentParraFeedbackFormWidget(
+            with: $feedbackForm
+        )
         .onAppear {
             if redactionReasons.isEmpty {
                 // Don't track impressions for placeholder cells.
@@ -127,6 +134,8 @@ struct FeedContentCardView: View {
     }
 
     // MARK: - Private
+
+    @State private var feedbackForm: ParraFeedbackFormDataStub?
 
     @State private var isConfirmationPresented: Bool = false
 
@@ -215,7 +224,7 @@ struct FeedContentCardView: View {
 
             Spacer()
 
-            if hasAction && redactionReasons.isEmpty {
+            if let action = contentCard.action, redactionReasons.isEmpty {
                 ZStack(alignment: .center) {
                     backgroundColor
                         .frame(width: 20, height: 20)
@@ -225,13 +234,19 @@ struct FeedContentCardView: View {
                         )
 
                     componentFactory.buildImage(
-                        content: .symbol("link", .hierarchical),
+                        content: .symbol(action.symbol, .hierarchical),
                         localAttributes: ParraAttributes.Image(
                             tint: color,
                             background: .clear
                         )
                     )
                     .frame(width: 11, height: 11)
+                    .offset(
+                        action.type == .feedbackForm ? CGSize(
+                            width: -1,
+                            height: 1
+                        ) : .zero
+                    )
                 }
             }
         }
@@ -272,11 +287,19 @@ struct FeedContentCardView: View {
                 }
 
                 if reactor.showReactions {
+                    let showCommentCount = if let comments = feedItem.comments,
+                                              !comments.disabled
+                    {
+                        true
+                    } else {
+                        false
+                    }
+
                     VStack {
                         FeedReactionView(
                             feedItem: feedItem,
                             reactor: _reactor,
-                            showCommentCount: true
+                            showCommentCount: showCommentCount
                         )
                     }
                     .padding(

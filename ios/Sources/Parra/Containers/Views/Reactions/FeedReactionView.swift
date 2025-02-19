@@ -74,9 +74,11 @@ struct FeedReactionView: View {
                 }
             }
 
-            if showCommentCount {
-                Spacer()
+            // Keep this spacer outside of condition below to prevent an
+            // untappable area next to the reactions.
+            Spacer()
 
+            if showCommentCount {
                 let commentCount = feedItem.comments?.commentCount ?? 0
                 let hasComments = commentCount > 0
 

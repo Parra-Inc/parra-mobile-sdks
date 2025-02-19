@@ -118,11 +118,19 @@ struct FeedYouTubeVideoView: View {
                 .padding(.bottom, reactor.showReactions ? 0 : 16)
 
                 if reactor.showReactions {
+                    let showCommentCount = if let comments = feedItem.comments,
+                                              !comments.disabled
+                    {
+                        true
+                    } else {
+                        false
+                    }
+
                     VStack {
                         FeedReactionView(
                             feedItem: feedItem,
                             reactor: _reactor,
-                            showCommentCount: true
+                            showCommentCount: showCommentCount
                         )
                     }
                     .padding(

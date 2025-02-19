@@ -30,7 +30,9 @@ extension ParraContentCard: ParraFixture {
                 title: "Big news!",
                 description: "We're excited to announce that this year's Halloween merch is finally available! Get yours today!",
                 action: ParraContentCardAction(
+                    type: .link,
                     url: URL(string: "https://parra.io")!,
+                    form: nil,
                     confirmationMessage: "You're about to leave the Parra app and navigate to a third-party website. Do you want to proceed?"
                 ),
                 badge: "Paid Sponsorship"

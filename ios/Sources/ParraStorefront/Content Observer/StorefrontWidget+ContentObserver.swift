@@ -239,6 +239,32 @@ extension StorefrontWidget {
             }
         }
 
+        /// Tries to match the query string against the product id, product
+        /// variant ids, name, etc.
+        func queryProduct(
+            by query: String
+        ) -> ParraProduct? {
+            var actualQuery = query
+            if let productId = Int64(query) {
+                actualQuery = "gid://shopify/Product/\(productId)"
+            }
+
+            return productPaginator.items.first { product in
+                if product.id == actualQuery {
+                    return true
+                }
+
+                if product.name.lowercased() == actualQuery {
+                    return true
+                }
+
+                return product.variants
+                    .contains {
+                        $0.id == actualQuery
+                    }
+            }
+        }
+
         // MARK: Cart Management
 
         /// Creates a new cart with the provided product/etc and proceeds to
