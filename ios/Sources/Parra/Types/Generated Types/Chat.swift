@@ -46,25 +46,6 @@ public enum ParraChatChannelType: String, Codable, CaseIterable {
     case app
     case group
     case user
-
-    // MARK: - Internal
-
-    var defaultNavigationTitle: String {
-        switch self {
-        case .dm:
-            return "Direct Messages"
-        case .paidDm:
-            return "Direct Messages"
-        case .default:
-            return "Message History"
-        case .app:
-            return "Message History"
-        case .group:
-            return "Message History"
-        case .user:
-            return "Message History"
-        }
-    }
 }
 
 enum ChatChannelStatus: String, Codable {
