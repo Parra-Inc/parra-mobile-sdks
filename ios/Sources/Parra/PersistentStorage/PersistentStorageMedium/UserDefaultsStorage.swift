@@ -34,7 +34,9 @@ class UserDefaultsStorage: PersistentStorageMedium {
         let data = try jsonEncoder.encode(value)
 
         userDefaults.set(data, forKey: name)
-        userDefaults.synchronize()
+
+        // Don't synchronize here without thinking about where performance
+        // issues might pop up.
     }
 
     func delete(name: String) throws {
