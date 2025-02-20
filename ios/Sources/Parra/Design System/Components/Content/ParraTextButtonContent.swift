@@ -27,7 +27,7 @@ public struct ParraTextButtonContent: Equatable, Hashable {
         isLoading: Bool = false
     ) {
         self.text = ParraLabelContent(text: text)
-        self.isDisabled = isDisabled
+        self.isDisabled = isDisabled || isLoading
         self.isLoading = isLoading
     }
 
