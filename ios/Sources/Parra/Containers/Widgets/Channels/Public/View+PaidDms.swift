@@ -17,7 +17,7 @@ public extension View {
         requiredEntitlement entitlement: ParraEntitlement,
         context: String?,
         isPresented: Binding<Bool>,
-        config: ParraChannelConfiguration = .default,
+        config: ParraChannelListConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentParraPaidDirectMessageWidget(
@@ -36,7 +36,7 @@ public extension View {
         requiredEntitlement entitlement: EntitlementKey,
         context: String?,
         isPresented: Binding<Bool>,
-        config: ParraChannelConfiguration = .default,
+        config: ParraChannelListConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View where EntitlementKey: RawRepresentable,
         EntitlementKey.RawValue == String
@@ -58,7 +58,7 @@ public extension View {
         requiredEntitlement entitlement: String,
         context: String?,
         isPresented: Binding<Bool>,
-        config: ParraChannelConfiguration = .default,
+        config: ParraChannelListConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         let channelType = ParraChatChannelType.paidDm
@@ -80,7 +80,9 @@ public extension View {
             var presentationMode: PaidDirectMessageParams.PresentationMode
 
             if channelListResponse.data.elements.isEmpty {
-                if ParraUserEntitlements.shared.hasEntitlement(for: entitlement) {
+                if ParraUserEntitlements.shared.isEntitled(
+                    to: entitlement
+                ) {
                     let channel = try await api.createPaidDmChannel(
                         key: key
                     )

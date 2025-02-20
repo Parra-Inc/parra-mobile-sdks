@@ -44,7 +44,7 @@ public final class ParraPaywallConfig: ParraContainerConfig {
 
         public static let successDefault = ToastContent(
             title: "Thank You",
-            subtitle: "Your tip has been received. We appreciate your support!",
+            subtitle: "Your purchase has been received!",
             icon: .symbol("arrow.up.heart.fill")
         )
 

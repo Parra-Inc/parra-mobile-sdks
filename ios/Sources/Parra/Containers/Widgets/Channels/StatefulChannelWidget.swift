@@ -11,7 +11,7 @@ struct StatefulChannelWidget: View {
     // MARK: - Lifecycle
 
     init(
-        config: ParraChannelConfiguration,
+        config: ParraChannelListConfiguration,
         params: PaidDirectMessageParams,
         navigationPath: Binding<NavigationPath>
     ) {
@@ -22,7 +22,7 @@ struct StatefulChannelWidget: View {
 
     // MARK: - Internal
 
-    let config: ParraChannelConfiguration
+    let config: ParraChannelListConfiguration
     let params: PaidDirectMessageParams
     @Binding var navigationPath: NavigationPath
 
@@ -45,6 +45,7 @@ struct StatefulChannelWidget: View {
                 .renderContainer(
                     params: ChannelListWidget.ContentObserver.InitialParams(
                         config: config,
+                        key: params.key,
                         channelType: channelType,
                         channelsResponse: channelsResponse,
                         requiredEntitlement: params.requiredEntitlement,
@@ -62,13 +63,13 @@ struct StatefulChannelWidget: View {
                 .containerRenderer
                 .renderContainer(
                     params: ChannelWidget.ContentObserver.InitialParams(
-                        config: config,
+                        config: config.defaultChannelConfig,
                         channel: channel,
                         requiredEntitlement: params.requiredEntitlement,
                         context: params.context,
                         api: parra.parraInternal.api
                     ),
-                    config: config,
+                    config: config.defaultChannelConfig,
                     contentTransformer: nil,
                     navigationPath: $navigationPath
                 )
@@ -83,11 +84,11 @@ struct StatefulChannelWidget: View {
                         paywallProducts: paywallProducts,
                         marketingContent: paywall.marketingContent,
                         sections: paywall.sections,
-                        config: config.paywallConfig ?? .default,
+                        config: config.defaultChannelConfig.paywallConfig ?? .default,
                         api: parra.parraInternal.api,
                         appInfo: appInfo
                     ),
-                    config: config.paywallConfig ?? .default,
+                    config: config.defaultChannelConfig.paywallConfig ?? .default,
                     contentTransformer: nil,
                     navigationPath: $navigationPath
                 )
