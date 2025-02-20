@@ -15,13 +15,8 @@ struct ChannelMessageBubble: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            if isCurrentUser {
-                content
-                avatar
-            } else {
-                avatar
-                content
-            }
+            avatar
+            content
         }
         .padding(.horizontal)
         .padding(.top, 4)
@@ -44,7 +39,7 @@ struct ChannelMessageBubble: View {
 
     @ViewBuilder private var content: some View {
         VStack(
-            alignment: isCurrentUser ? .trailing : .leading,
+            alignment: .leading,
             spacing: 6
         ) {
             HStack(alignment: .center, spacing: 6) {
