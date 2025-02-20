@@ -103,7 +103,7 @@ struct ChannelListPaidDirectMessageCell: View {
     private var latestMessage: Message? {
         // TODO: Need to figure out what to do when new messages are updated.
 
-        return channel.latestMessages?.elements.last
+        return channel.latestMessages?.elements.first
     }
 
     private var preview: String {
