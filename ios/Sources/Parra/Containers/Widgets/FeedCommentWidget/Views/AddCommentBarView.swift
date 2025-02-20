@@ -125,6 +125,7 @@ struct AddCommentBarView: View {
             x: 0,
             y: -2
         )
+        .mask(Rectangle().padding(.top, -20))
         .onChange(of: text) { _, newValue in
             if let last = newValue.last, last.isNewline {
                 text.removeLast()
