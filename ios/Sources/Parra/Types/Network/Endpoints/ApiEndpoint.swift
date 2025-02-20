@@ -47,6 +47,9 @@ enum ApiEndpoint: Endpoint {
     case deleteAvatar
     case deleteUser
 
+    // User Entitlements
+    case listUserEntitlements
+
     // User Properties
     case getUserProperties
     case putReplaceUserProperties
@@ -101,7 +104,8 @@ enum ApiEndpoint: Endpoint {
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
              .getUserProperties, .getPaginateFeed, .getFaqs,
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall,
-             .getPaginateComments, .getPaginateChannels, .getPaginateMessages:
+             .getPaginateComments, .getPaginateChannels, .getPaginateMessages,
+             .listUserEntitlements:
 
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
@@ -219,6 +223,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/chat/messages/:messageId"
         case .postFlagMessage:
             return "tenants/:tenantId/chat/messages/:messageId/flag"
+        case .listUserEntitlements:
+            return "tenants/:tenantId/users/:userId/entitlements"
         }
     }
 

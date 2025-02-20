@@ -225,6 +225,14 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/chat/messages/\(messageId)"
         case .postFlagMessage(let messageId):
             return "tenants/\(tenantId)/chat/messages/\(messageId)/flag"
+        // User Entitlements
+        case .listUserEntitlements:
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
+            return "tenants/\(tenantId)/users/\(userId)/entitlements"
         }
     }
 
