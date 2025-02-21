@@ -111,6 +111,8 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
 
     // MARK: - Private
 
+    @Environment(\.parraAlertManager) private var alertManager
+
     @State private var state: SheetLoadState<Data> = .ready
     @State private var navigationState = NavigationState()
 
@@ -157,6 +159,12 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
             Logger.error(
                 "Error preparing data for Parra sheet presentation.",
                 error
+            )
+
+            alertManager.showErrorToast(
+                title: "Something went wrong",
+                userFacingMessage: "Please try again. Let us know if you keep experiencing this issue.",
+                underlyingError: error
             )
 
             await MainActor.run {

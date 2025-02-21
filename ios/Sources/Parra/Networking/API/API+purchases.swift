@@ -11,7 +11,7 @@ extension API {
     func getPaywall(
         for entitlement: String,
         context: String?
-    ) async throws -> ParraApplePaywall {
+    ) async throws -> ParraAppPaywall {
         var queryItems: [String: String] = [
             "entitlement": entitlement
         ]

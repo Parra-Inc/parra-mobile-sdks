@@ -113,6 +113,9 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
     @ViewBuilder private var defaultLogoView: some View {
         if let logo = parraAppInfo.tenant.logo {
             componentFactory.buildAsyncImage(
+                config: ParraAsyncImageConfig(
+                    showBlurHash: false
+                ),
                 content: ParraAsyncImageContent(
                     logo,
                     preferredThumbnailSize: .lg

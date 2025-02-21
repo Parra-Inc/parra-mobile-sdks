@@ -19,7 +19,7 @@ public extension View {
         detents: Set<PresentationDetent> = [],
         visibility: Visibility = .automatic,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
-    ) -> some View {
+    ) -> some View where SheetContent: View {
         modifier(
             SheetWithLoader(
                 loadType: loadType,

@@ -20,6 +20,7 @@ extension Storefront.QueryRootQuery {
             .products(
                 first: count,
                 after: startCursor,
+                before: endCursor,
                 reverse: reverse,
                 sortKey: sortKey
             ) { products in

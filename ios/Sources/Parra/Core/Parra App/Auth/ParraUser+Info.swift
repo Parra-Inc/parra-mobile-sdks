@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ParraUserEntitlement: Codable, Equatable, Hashable, Identifiable {
+public struct ParraUserEntitlement: Codable, Equatable, Hashable, Identifiable, Sendable {
     // The ID of this entitlement, specific to this user.
     public let id: String
 
@@ -16,9 +16,18 @@ public struct ParraUserEntitlement: Codable, Equatable, Hashable, Identifiable {
     public let entitlementId: String
     public let key: String
     public let title: String
+
+    public let isConsumable: Bool
+    public let isFree: Bool
+
+    /// If the entitlement is consumable, the maximum number of times it can be used.
+    public let quantityAvailable: Int?
+
+    /// The number of times the entitlement has been used or consumed.
+    public let quantityConsumed: Int?
 }
 
-public struct ParraEntitlement: Codable, Equatable, Hashable, Identifiable {
+public struct ParraEntitlement: Codable, Equatable, Hashable, Identifiable, Sendable {
     // The ID of the entitlement itself.
     public let id: String
     public let key: String

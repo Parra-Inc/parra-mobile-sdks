@@ -57,8 +57,16 @@ extension FeedCommentWidget {
                         pageSize: feedCollectionResponse.pageSize,
                         knownCount: feedCollectionResponse.totalCount
                     ),
-                    pageFetcher: loadMoreComments,
-                    missingFetcher: loadMissingComments
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMoreComments(
+                            pageSize,
+                            offset,
+                            context
+                        ) ?? []
+                    },
+                    missingFetcher: { [weak self] cursor, context in
+                        return try await self?.loadMissingComments(cursor, context) ?? []
+                    }
                 )
             } else {
                 .init(
@@ -68,8 +76,16 @@ extension FeedCommentWidget {
                         placeholderItems: (0 ... commentCount)
                             .map { _ in ParraComment.redactedComment }
                     ),
-                    pageFetcher: loadMoreComments,
-                    missingFetcher: loadMissingComments
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMoreComments(
+                            pageSize,
+                            offset,
+                            context
+                        ) ?? []
+                    },
+                    missingFetcher: { [weak self] cursor, context in
+                        return try await self?.loadMissingComments(cursor, context) ?? []
+                    }
                 )
             }
         }

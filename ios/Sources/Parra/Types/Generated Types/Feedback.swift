@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
+struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -53,7 +53,7 @@ struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
 }
 
 /// User facing
-public struct ParraFeedbackForm: Codable, Equatable, Identifiable {
+public struct ParraFeedbackForm: Codable, Equatable, Identifiable, Sendable {
     // MARK: - Lifecycle
 
     init(from response: ParraFeedbackFormResponse) {
@@ -108,7 +108,7 @@ struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
     let data: ParraFeedbackFormData
 }
 
-public struct ParraFeedbackFormData: Codable, Equatable, Hashable {
+public struct ParraFeedbackFormData: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     init(
@@ -128,7 +128,9 @@ public struct ParraFeedbackFormData: Codable, Equatable, Hashable {
     public let fields: PartiallyDecodableArray<ParraFeedbackFormField>
 }
 
-public struct ParraFeedbackFormDataStub: Codable, Equatable, Hashable, Identifiable {
+public struct ParraFeedbackFormDataStub: Codable, Equatable, Hashable, Identifiable,
+    Sendable
+{
     // MARK: - Lifecycle
 
     public init(
@@ -164,13 +166,15 @@ public struct ParraFeedbackFormDataStub: Codable, Equatable, Hashable, Identifia
     }
 }
 
-public enum ParraFeedbackFormFieldType: String, Codable {
+public enum ParraFeedbackFormFieldType: String, Codable, Sendable {
     case input
     case text
     case select
 }
 
-public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable {
+public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable,
+    Sendable
+{
     // MARK: - Lifecycle
 
     public init(
@@ -255,7 +259,7 @@ public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable
     }
 }
 
-public enum ParraFeedbackFormFieldData: Codable, Equatable, Hashable {
+public enum ParraFeedbackFormFieldData: Codable, Equatable, Hashable, Sendable {
     case feedbackFormTextFieldData(ParraFeedbackFormTextFieldData)
     case feedbackFormSelectFieldData(ParraFeedbackFormSelectFieldData)
     case feedbackFormInputFieldData(ParraFeedbackFormInputFieldData)
@@ -264,7 +268,7 @@ public enum ParraFeedbackFormFieldData: Codable, Equatable, Hashable {
 public protocol ParraFeedbackFormFieldDataType {}
 
 public struct ParraFeedbackFormInputFieldData: Codable, Equatable, Hashable,
-    ParraFeedbackFormFieldDataType
+    ParraFeedbackFormFieldDataType, Sendable
 {
     // MARK: - Lifecycle
 
@@ -280,7 +284,7 @@ public struct ParraFeedbackFormInputFieldData: Codable, Equatable, Hashable,
 }
 
 public struct ParraFeedbackFormTextFieldData: Codable, Equatable, Hashable,
-    ParraFeedbackFormFieldDataType
+    ParraFeedbackFormFieldDataType, Sendable
 {
     // MARK: - Lifecycle
 
@@ -318,7 +322,7 @@ public struct ParraFeedbackFormTextFieldData: Codable, Equatable, Hashable,
 }
 
 public struct ParraFeedbackFormSelectFieldData: Codable, Equatable, Hashable,
-    ParraFeedbackFormFieldDataType
+    ParraFeedbackFormFieldDataType, Sendable
 {
     // MARK: - Lifecycle
 
@@ -338,7 +342,7 @@ public struct ParraFeedbackFormSelectFieldData: Codable, Equatable, Hashable,
 }
 
 public struct ParraFeedbackFormSelectFieldOption: Codable, Equatable, Hashable,
-    Identifiable
+    Identifiable, Sendable
 {
     // MARK: - Lifecycle
 
@@ -479,12 +483,12 @@ struct FeedbackMetrics: Codable, Equatable, Hashable {
     }
 }
 
-public struct ParraAnswerData: Codable, Equatable, Hashable {
+public struct ParraAnswerData: Codable, Equatable, Hashable, Sendable {
     public init(
     ) {}
 }
 
-public struct ParraAnswer: Codable, Equatable, Hashable, Identifiable {
+public struct ParraAnswer: Codable, Equatable, Hashable, Identifiable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -546,21 +550,21 @@ struct AnswerQuestionBody: Codable, Equatable, Hashable {
     public let data: ParraAnswerData
 }
 
-public enum ParraCardItemData: Codable, Equatable, Hashable {
+public enum ParraCardItemData: Codable, Equatable, Hashable, Sendable {
     case question(ParraQuestion)
 }
 
-public enum ParraCardItemDisplayType: String, Codable {
+public enum ParraCardItemDisplayType: String, Codable, Sendable {
     case inline
     case popup
     case drawer
 }
 
-public enum ParraCardItemType: String, Codable {
+public enum ParraCardItemType: String, Codable, Sendable {
     case question
 }
 
-public struct ParraCardItem: Codable, Equatable, Hashable {
+public struct ParraCardItem: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -663,7 +667,7 @@ struct CardsResponse: Codable, Equatable, Hashable {
     public let items: PartiallyDecodableArray<ParraCardItem>
 }
 
-public enum ParraQuestionKind: String, Codable, Equatable {
+public enum ParraQuestionKind: String, Codable, Equatable, Sendable {
     case radio
     case checkbox
     case rating
@@ -674,7 +678,7 @@ public enum ParraQuestionKind: String, Codable, Equatable {
     case textLong = "long-text"
 }
 
-public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable {
+public struct ParraImageAssetThumbnail: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -770,7 +774,7 @@ public enum ParraImageAssetThumbnailSize {
     }
 }
 
-public struct ParraImageAssetThumbnails: Codable, Equatable, Hashable {
+public struct ParraImageAssetThumbnails: Codable, Equatable, Hashable, Sendable {
     /// Min dimension is 64px
     public let xs: ParraImageAssetThumbnail
 
@@ -809,7 +813,7 @@ public struct ParraImageAssetThumbnails: Codable, Equatable, Hashable {
     }
 }
 
-public struct ParraImageAsset: Codable, Equatable, Hashable, Identifiable {
+public struct ParraImageAsset: Codable, Equatable, Hashable, Identifiable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -960,7 +964,7 @@ public struct ParraImageAsset: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct ParraCheckboxQuestionOption: Codable, Equatable, Hashable,
-    Identifiable
+    Identifiable, Sendable
 {
     // MARK: - Lifecycle
 
@@ -993,7 +997,7 @@ public struct ParraCheckboxQuestionOption: Codable, Equatable, Hashable,
     }
 }
 
-public struct ParraCheckboxQuestionBody: Codable, Equatable, Hashable {
+public struct ParraCheckboxQuestionBody: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -1007,7 +1011,9 @@ public struct ParraCheckboxQuestionBody: Codable, Equatable, Hashable {
     public let options: [ParraCheckboxQuestionOption]
 }
 
-public struct ParraImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
+public struct ParraImageQuestionOption: Codable, Equatable, Hashable, Identifiable,
+    Sendable
+{
     // MARK: - Lifecycle
 
     public init(
@@ -1087,7 +1093,7 @@ public struct ParraImageQuestionOption: Codable, Equatable, Hashable, Identifiab
     }
 }
 
-public struct ParraImageQuestionBody: Codable, Equatable, Hashable {
+public struct ParraImageQuestionBody: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -1101,7 +1107,9 @@ public struct ParraImageQuestionBody: Codable, Equatable, Hashable {
     public let options: [ParraImageQuestionOption]
 }
 
-public struct ParraChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
+public struct ParraChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable,
+    Sendable
+{
     // MARK: - Lifecycle
 
     public init(
@@ -1133,7 +1141,7 @@ public struct ParraChoiceQuestionOption: Codable, Equatable, Hashable, Identifia
     }
 }
 
-public struct ParraChoiceQuestionBody: Codable, Equatable, Hashable {
+public struct ParraChoiceQuestionBody: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -1147,7 +1155,7 @@ public struct ParraChoiceQuestionBody: Codable, Equatable, Hashable {
     public let options: [ParraChoiceQuestionOption]
 }
 
-public struct ParraShortTextQuestionBody: Codable, Equatable, Hashable {
+public struct ParraShortTextQuestionBody: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -1192,7 +1200,7 @@ public struct ParraShortTextQuestionBody: Codable, Equatable, Hashable {
     }
 }
 
-public struct ParraLongTextQuestionBody: Codable, Equatable, Hashable {
+public struct ParraLongTextQuestionBody: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -1238,7 +1246,7 @@ public struct ParraLongTextQuestionBody: Codable, Equatable, Hashable {
 }
 
 public struct ParraBooleanQuestionOption: Codable, Equatable, Hashable,
-    Identifiable
+    Identifiable, Sendable
 {
     // MARK: - Lifecycle
 
@@ -1259,7 +1267,7 @@ public struct ParraBooleanQuestionOption: Codable, Equatable, Hashable,
     public let id: String
 }
 
-public struct ParraBooleanQuestionBody: Codable, Equatable, Hashable {
+public struct ParraBooleanQuestionBody: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -1273,7 +1281,7 @@ public struct ParraBooleanQuestionBody: Codable, Equatable, Hashable {
     public let options: [ParraBooleanQuestionOption]
 }
 
-public struct ParraStarQuestionBody: Codable, Equatable, Hashable {
+public struct ParraStarQuestionBody: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -1314,7 +1322,9 @@ public struct ParraStarQuestionBody: Codable, Equatable, Hashable {
     public let trailingLabel: String?
 }
 
-public struct ParraRatingQuestionOption: Codable, Equatable, Hashable, Identifiable {
+public struct ParraRatingQuestionOption: Codable, Equatable, Hashable, Identifiable,
+    Sendable
+{
     // MARK: - Lifecycle
 
     public init(
@@ -1334,7 +1344,7 @@ public struct ParraRatingQuestionOption: Codable, Equatable, Hashable, Identifia
     public let id: String
 }
 
-public struct ParraRatingQuestionBody: Codable, Equatable, Hashable {
+public struct ParraRatingQuestionBody: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -1366,7 +1376,7 @@ public struct ParraRatingQuestionBody: Codable, Equatable, Hashable {
     }
 }
 
-public enum ParraQuestionData: Codable, Equatable, Hashable {
+public enum ParraQuestionData: Codable, Equatable, Hashable, Sendable {
     case choiceQuestionBody(ParraChoiceQuestionBody)
     case checkboxQuestionBody(ParraCheckboxQuestionBody)
     case imageQuestionBody(ParraImageQuestionBody)
@@ -1377,7 +1387,7 @@ public enum ParraQuestionData: Codable, Equatable, Hashable {
     case booleanQuestionBody(ParraBooleanQuestionBody)
 }
 
-public struct ParraQuestion: Codable, Equatable, Hashable, Identifiable {
+public struct ParraQuestion: Codable, Equatable, Hashable, Identifiable, Sendable {
     // MARK: - Lifecycle
 
     public init(

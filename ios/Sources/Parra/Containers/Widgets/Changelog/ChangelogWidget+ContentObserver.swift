@@ -108,7 +108,9 @@ extension ChangelogWidget {
                         pageSize: appReleaseCollection.pageSize,
                         knownCount: appReleaseCollection.totalCount
                     ),
-                    pageFetcher: loadMoreReleases
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(pageSize, offset, context) ?? []
+                    }
                 )
             } else {
                 .init(
@@ -118,7 +120,9 @@ extension ChangelogWidget {
                         placeholderItems: (0 ... 15)
                             .map { _ in AppReleaseStubContent.redacted }
                     ),
-                    pageFetcher: loadMoreReleases
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(pageSize, offset, context) ?? []
+                    }
                 )
             }
         }
@@ -159,7 +163,7 @@ extension ChangelogWidget {
 
         private var paginatorSink: AnyCancellable? = nil
 
-        private func loadMoreReleases(
+        private func loadMore(
             _ limit: Int,
             _ offset: Int,
             _ ctx: String

@@ -22,10 +22,9 @@
     {
       "identity" : "swifthtmltomarkdown",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ActuallyTaylor/SwiftHTMLToMarkdown",
+      "location" : "https://github.com/chrisjenkins/SwiftHTMLToMarkdown",
       "state" : {
-        "revision" : "d533b9cb47a8defaa8d9432fad20ecf5964c0668",
-        "version" : "1.1.1"
+        "revision" : "d533b9cb47a8defaa8d9432fad20ecf5964c0668"
       }
     },
     {

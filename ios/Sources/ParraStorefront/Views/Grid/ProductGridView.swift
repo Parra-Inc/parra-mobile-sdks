@@ -42,7 +42,7 @@ struct ProductGridView: View {
             }
             .scrollDisabled(!redactionReasons.isEmpty)
             .refreshable {
-                contentObserver.refresh()
+                await contentObserver.refresh()
             }
         }
     }

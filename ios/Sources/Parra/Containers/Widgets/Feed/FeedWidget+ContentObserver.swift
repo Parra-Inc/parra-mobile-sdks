@@ -39,7 +39,9 @@ extension FeedWidget {
                         pageSize: feedCollectionResponse.pageSize,
                         knownCount: feedCollectionResponse.totalCount
                     ),
-                    pageFetcher: loadMoreFeedItems
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(pageSize, offset, context) ?? []
+                    }
                 )
             } else {
                 .init(
@@ -52,7 +54,9 @@ extension FeedWidget {
                         placeholderItems: (0 ... 12)
                             .map { _ in ParraFeedItem.redactedContentCard }
                     ),
-                    pageFetcher: loadMoreFeedItems
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(pageSize, offset, context) ?? []
+                    }
                 )
             }
         }
@@ -185,7 +189,7 @@ extension FeedWidget {
             }
         }
 
-        private func loadMoreFeedItems(
+        private func loadMore(
             _ limit: Int,
             _ offset: Int,
             _ feedId: String

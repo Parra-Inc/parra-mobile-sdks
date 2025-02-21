@@ -6,12 +6,13 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import AVFoundation
+@preconcurrency import AVFoundation
 import CoreImage
 import UIKit
 
 private let logger = Logger()
 
+@preconcurrency
 class Camera: NSObject {
     // MARK: - Lifecycle
 
@@ -68,7 +69,7 @@ class Camera: NSObject {
 
         if isCaptureSessionConfigured {
             if !captureSession.isRunning {
-                sessionQueue?.async { [self] in
+                sessionQueue?.async { [captureSession] in
                     captureSession.startRunning()
                 }
             }
@@ -76,12 +77,17 @@ class Camera: NSObject {
             return
         }
 
-        sessionQueue?.async { [self] in
+        sessionQueue?.async { [weak self, captureSession] in
+            guard let self else {
+                return
+            }
+
             configureCaptureSession { success in
                 guard success else {
                     return
                 }
-                self.captureSession.startRunning()
+
+                captureSession.startRunning()
             }
         }
     }

@@ -13,6 +13,7 @@ private let logger = Logger(category: "Feedback module")
 /// Parra API. Once data is fetched, it will be displayed automatically in any
 /// `ParraCardView`s that you add to your view hierarchy. To handle
 /// authentication, see the Parra module.
+@preconcurrency
 public final class ParraFeedback {
     // MARK: - Lifecycle
 

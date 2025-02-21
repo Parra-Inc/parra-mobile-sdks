@@ -1,5 +1,5 @@
 {
-  "originHash" : "8a238a694f1332c47517177bae680f807f8ce9f5b822f39c907aa8dfd4da0a22",
+  "originHash" : "0a67d8018e2930b3aa73871798442ba4b5645eb7238c780713b248acb79497be",
   "pins" : [
     {
       "identity" : "checkout-sheet-kit-swift",
@@ -22,10 +22,9 @@
     {
       "identity" : "swifthtmltomarkdown",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ActuallyTaylor/SwiftHTMLToMarkdown",
+      "location" : "https://github.com/chrisjenkins/SwiftHTMLToMarkdown",
       "state" : {
-        "revision" : "d533b9cb47a8defaa8d9432fad20ecf5964c0668",
-        "version" : "1.1.1"
+        "revision" : "fde77a95686329f2382f54af1955a8d781377059"
       }
     },
     {
@@ -33,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "0837db354faf9c9deb710dc597046edaadf5360f",
-        "version" : "2.7.6"
+        "revision" : "6b4930da67b462d3f200472c902dd016d37a554d",
+        "version" : "2.7.7"
       }
     }
   ],

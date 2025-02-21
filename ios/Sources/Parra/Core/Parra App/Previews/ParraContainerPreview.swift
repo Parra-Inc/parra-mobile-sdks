@@ -19,6 +19,7 @@ public struct ParraContainerPreview<ContainerType>: View
     public init(
         config: ContainerType.Config,
         theme: ParraTheme = .default,
+        authState: ParraAuthState = .undetermined,
         content: @escaping (
             _ parra: Parra,
             _ factory: ParraComponentFactory,
@@ -33,7 +34,7 @@ public struct ParraContainerPreview<ContainerType>: View
             theme: theme
         )
         self._authStateManager = State(
-            initialValue: ParraAuthStateManager.shared
+            initialValue: ParraAuthStateManager(current: authState)
         )
 
         ParraAppState.shared = ParraAppState(

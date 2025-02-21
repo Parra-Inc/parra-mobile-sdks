@@ -20,8 +20,7 @@ public struct ParraViewDataLoader<TransformParams, Data, ViewContent>
             Data,
             Binding<NavigationPath>,
             Dismisser?
-        )
-            -> ViewContent
+        ) -> ViewContent
     ) {
         self.render = renderer
     }

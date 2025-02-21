@@ -46,7 +46,9 @@ public extension ParraComponentFactory {
                     aspectRatio: originalSize.width / originalSize.height,
                     contentMode: config.contentMode,
                     blurContent: config.blurContent,
+                    showBlurHash: config.showBlurHash,
                     showFailureIndicator: config.showFailureIndicator,
+                    showLoadingIndicator: config.showLoadingIndicator,
                     cachePolicy: config.cachePolicy,
                     timeoutInterval: config.timeoutInterval
                 )

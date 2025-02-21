@@ -11,7 +11,7 @@ import Foundation
 
 /// CGSize is not Codable. Do not expose this externally. We don't want users
 /// to have to convert between this and CGSize.
-public struct _ParraSize: Codable, Equatable, Hashable {
+public struct _ParraSize: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -46,14 +46,14 @@ public struct _ParraSize: Codable, Equatable, Hashable {
     }
 }
 
-public enum ParraTicketType: String, Codable, Equatable, CaseIterable {
+public enum ParraTicketType: String, Codable, Equatable, CaseIterable, Sendable {
     case bug
     case feature
     case improvement
     case task
 }
 
-public enum ParraTicketStatus: String, Codable, Equatable, CaseIterable {
+public enum ParraTicketStatus: String, Codable, Equatable, CaseIterable, Sendable {
     case open
     case planning
     case inProgress =
@@ -64,7 +64,7 @@ public enum ParraTicketStatus: String, Codable, Equatable, CaseIterable {
     case archived
 }
 
-public enum ParraTicketDisplayStatus: String, Codable, Equatable, CaseIterable {
+public enum ParraTicketDisplayStatus: String, Codable, Equatable, CaseIterable, Sendable {
     case pending
     case inProgress =
         "in_progress" // Keep the underscore. Enums decode differently!
@@ -72,7 +72,7 @@ public enum ParraTicketDisplayStatus: String, Codable, Equatable, CaseIterable {
     case rejected
 }
 
-public struct ParraUserTicket: Codable, Equatable, Hashable, Identifiable {
+public struct ParraUserTicket: Codable, Equatable, Hashable, Identifiable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -180,7 +180,7 @@ struct CollectionResponse: Codable, Equatable, Hashable {
     }
 }
 
-public struct ParraUserTicketCollectionResponse: Codable, Equatable, Hashable {
+public struct ParraUserTicketCollectionResponse: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -217,7 +217,7 @@ public struct ParraUserTicketCollectionResponse: Codable, Equatable, Hashable {
 }
 
 public struct ParraRoadmapConfigurationTab: Codable, Equatable, Hashable,
-    Identifiable
+    Identifiable, Sendable
 {
     // MARK: - Lifecycle
 
@@ -244,7 +244,7 @@ public struct ParraRoadmapConfigurationTab: Codable, Equatable, Hashable,
     public let description: String?
 }
 
-public struct ParraAppRoadmapConfiguration: Codable, Equatable, Hashable {
+public struct ParraAppRoadmapConfiguration: Codable, Equatable, Hashable, Sendable {
     // MARK: - Lifecycle
 
     public init(
@@ -1457,7 +1457,7 @@ public struct ParraAuthInfoSsoAppleConfig: Codable, Equatable, Hashable {
                 return .fullName
             case .email:
                 return .email
-            default:
+            @unknown default:
                 return nil
             }
         }

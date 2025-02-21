@@ -14,7 +14,7 @@ struct ChangelogItemInfoView: View {
     init(content: AppReleaseStubContent) {
         self.version = content.version
         self.type = content.type
-        self.releasedAt = content.releasedAt ?? content.releasedAt
+        self.releasedAt = content.releasedAt
     }
 
     init(content: AppReleaseContent) {

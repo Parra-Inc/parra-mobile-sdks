@@ -16,7 +16,7 @@ public protocol ParraFixture {
     static func invalidStates() -> [Self]
 }
 
-extension ParraFixture {
+public extension ParraFixture {
     static func invalidStates() -> [Self] {
         return []
     }

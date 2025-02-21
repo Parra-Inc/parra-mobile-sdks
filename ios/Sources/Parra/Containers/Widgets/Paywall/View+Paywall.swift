@@ -73,7 +73,7 @@ public extension View {
             PaywallParams,
             PaywallWidget
         >.Transformer = { parra, transformParams in
-            let response = try await parra.parraInternal.api.getPaywall(
+            let paywall = try await parra.parraInternal.api.getPaywall(
                 for: transformParams.entitlement,
                 context: transformParams.context
             )
@@ -81,11 +81,11 @@ public extension View {
             let appInfo = await parra.parraInternal.appInfoManager
                 .cachedAppInfo() ?? .default
 
-            let paywallProducts: PaywallProducts = if let productIds = response
+            let paywallProducts: PaywallProducts = if let productIds = paywall
                 .productIds
             {
                 try await .products(Product.products(for: productIds))
-            } else if let groupId = response.groupId {
+            } else if let groupId = paywall.groupId {
                 .groupId(groupId)
             } else {
                 .productIds([])
@@ -96,9 +96,11 @@ public extension View {
             ])
 
             return PaywallParams(
-                id: response.id,
+                id: paywall.id,
+                iapType: paywall.iapType,
                 paywallProducts: paywallProducts,
-                marketingContent: response.marketingContent,
+                marketingContent: paywall.marketingContent,
+                sections: paywall.sections,
                 appInfo: appInfo
             )
         }

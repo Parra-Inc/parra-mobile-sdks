@@ -374,6 +374,32 @@ public class ParraPaginator<Item, Context>: ObservableObject
         items.insert(item, at: 0)
     }
 
+    public func replace(
+        matching predicate: (Item) -> Bool,
+        with newItem: Item
+    ) {
+        if isShowingPlaceholders {
+            return
+        }
+
+        if let index = items.firstIndex(where: predicate) {
+            items[index] = newItem
+        }
+    }
+
+    public func replace(
+        at index: Int,
+        with newItem: Item
+    ) {
+        if isShowingPlaceholders {
+            return
+        }
+
+        if index < items.count && index >= 0 {
+            items[index] = newItem
+        }
+    }
+
     public func replace(_ item: Item, with newItem: Item) {
         if isShowingPlaceholders {
             return

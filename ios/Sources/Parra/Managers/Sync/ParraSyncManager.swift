@@ -12,6 +12,7 @@ private let logger = Logger(bypassEventCreation: true, category: "Sync Manager")
 
 /// Manager used to facilitate the synchronization of Parra data stored locally
 /// with the Parra API.
+@preconcurrency
 class ParraSyncManager {
     // MARK: - Lifecycle
 

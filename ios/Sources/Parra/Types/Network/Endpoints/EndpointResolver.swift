@@ -216,6 +216,23 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/comments/\(commentId)/reactions"
         case .deleteFeedCommentReaction(let commentId, let reactionId):
             return "tenants/\(tenantId)/comments/\(commentId)/reactions/\(reactionId)"
+        // Chat
+        case .postCreateChannel, .getPaginateChannels:
+            return "tenants/\(tenantId)/chat/channels"
+        case .getPaginateMessages(let channelId), .postSendMessage(let channelId):
+            return "tenants/\(tenantId)/chat/channels/\(channelId)/messages"
+        case .deleteMessage(let messageId):
+            return "tenants/\(tenantId)/chat/messages/\(messageId)"
+        case .postFlagMessage(let messageId):
+            return "tenants/\(tenantId)/chat/messages/\(messageId)/flag"
+        // User Entitlements
+        case .listUserEntitlements:
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
+            return "tenants/\(tenantId)/users/\(userId)/entitlements"
         }
     }
 

@@ -25,37 +25,35 @@ struct StorefrontWidget: ParraContainer {
     // MARK: - Public
 
     public var body: some View {
-        VStack {
-            ProductGridView(
-                products: contentObserver.productPaginator.items
-            )
-            .redacted(
-                when: contentObserver.productPaginator.isShowingPlaceholders
-            )
-            .emptyPlaceholder(products) {
-                if !contentObserver.productPaginator.isLoading {
-                    componentFactory.buildEmptyState(
-                        config: .default,
-                        content: contentObserver.content.emptyStateView
-                    )
-                    .frame(
-                        maxWidth: .infinity,
-                        maxHeight: .infinity
-                    )
-                } else {
-                    EmptyView()
-                }
-            }
-            .errorPlaceholder(contentObserver.productPaginator.error) {
+        ProductGridView(
+            products: contentObserver.productPaginator.items
+        )
+        .redacted(
+            when: contentObserver.productPaginator.isShowingPlaceholders
+        )
+        .emptyPlaceholder(products) {
+            if !contentObserver.productPaginator.isLoading {
                 componentFactory.buildEmptyState(
-                    config: .errorDefault,
-                    content: contentObserver.content.errorStateView
+                    config: .default,
+                    content: contentObserver.content.emptyStateView
                 )
                 .frame(
                     maxWidth: .infinity,
                     maxHeight: .infinity
                 )
+            } else {
+                EmptyView()
             }
+        }
+        .errorPlaceholder(contentObserver.productPaginator.error) {
+            componentFactory.buildEmptyState(
+                config: .errorDefault,
+                content: contentObserver.content.errorStateView
+            )
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity
+            )
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(parraTheme.palette.primaryBackground)
@@ -108,34 +106,10 @@ struct StorefrontWidget: ParraContainer {
         }
         .navigationDestination(
             for: String.self
-        ) { path in
-            let components = path.split(separator: "/")
-
-            if let location = components.first {
-                if location == "cart" {
-                    CartView()
-                        .environment(contentObserver)
-
-                } else if location == "product", let productId = components[safe: 1],
-                          !productId.isEmpty
-                {
-                    if let product = contentObserver.queryProduct(
-                        by: String(productId)
-                    ) {
-                        ProductDetailView(product: product)
-                            .environment(contentObserver)
-                    } else {
-                        componentFactory.buildEmptyState(
-                            config: .default,
-                            content: contentObserver.content.productMissingView
-                        )
-                    }
-                } else {
-                    componentFactory.buildEmptyState(
-                        config: .default,
-                        content: contentObserver.content.productMissingView
-                    )
-                }
+        ) { location in
+            if location == "cart" {
+                CartView()
+                    .environment(contentObserver)
             }
         } // inject data model instance into env for child views
         .environment(contentObserver)

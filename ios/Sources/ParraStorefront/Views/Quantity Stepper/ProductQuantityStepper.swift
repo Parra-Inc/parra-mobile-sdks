@@ -53,12 +53,12 @@ struct ProductQuantityStepper: View {
                         .frame(
                             height: 16
                         )
-                        .foregroundStyle(Color(UIColor.darkGray))
+                        .foregroundStyle(Color(UIColor.darkText))
                 } else {
                     Text("－")
                         .foregroundStyle(
-                            Color(UIColor.darkGray)
-                                .opacity(value <= allowedRange.lowerBound ? 0.3 : 1)
+                            Color(UIColor.darkText)
+                                .opacity(value <= allowedRange.lowerBound ? 0.3 : 0.9)
                         )
                         .font(.system(size: 22))
                 }
@@ -84,8 +84,8 @@ struct ProductQuantityStepper: View {
             } label: {
                 Text("＋")
                     .foregroundStyle(
-                        Color(UIColor.darkGray)
-                            .opacity(value >= allowedRange.upperBound ? 0.3 : 1)
+                        Color(UIColor.darkText)
+                            .opacity(value >= allowedRange.upperBound ? 0.3 : 0.9)
                     )
                     .font(.system(size: 22))
             }
@@ -99,9 +99,7 @@ struct ProductQuantityStepper: View {
         .foregroundColor(.white)
         .background {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(
-                    parraTheme.palette.primary.shade400.opacity(0.4)
-                )
+                .fill(parraTheme.palette.primary.opacity(0.9))
         }
     }
 
