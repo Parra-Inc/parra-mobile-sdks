@@ -41,7 +41,9 @@ extension ChannelWidget {
                         items: previewMessages,
                         placeholderItems: []
                     ),
-                    pageFetcher: loadMoreMessages
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(pageSize, offset, context) ?? []
+                    }
                 )
             } else {
                 .init(
@@ -51,7 +53,9 @@ extension ChannelWidget {
                         placeholderItems: (0 ... 12)
                             .map { _ in Message.redactedMessage }
                     ),
-                    pageFetcher: loadMoreMessages
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(pageSize, offset, context) ?? []
+                    }
                 )
             }
         }
@@ -197,7 +201,7 @@ extension ChannelWidget {
 
         private var paginatorSink: AnyCancellable? = nil
 
-        private func loadMoreMessages(
+        private func loadMore(
             _ limit: Int,
             _ offset: Int,
             _ channelId: String

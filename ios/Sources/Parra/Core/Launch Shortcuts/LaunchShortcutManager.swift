@@ -28,8 +28,14 @@ final class LaunchShortcutManager {
             forName: Parra.launchScreenDidDismissNotification,
             object: nil,
             queue: .main
-        ) { _ in
-            self.hasFinishedLaunch = true
+        ) { [weak self] _ in
+            self?.hasFinishedLaunch = true
+        }
+    }
+
+    deinit {
+        if let launchScreenObserver {
+            ParraNotificationCenter.default.removeObserver(launchScreenObserver)
         }
     }
 

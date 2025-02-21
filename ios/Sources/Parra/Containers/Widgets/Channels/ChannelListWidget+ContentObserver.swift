@@ -46,7 +46,14 @@ extension ChannelListWidget {
                         pageSize: channelsResponse.pageSize,
                         knownCount: channelsResponse.totalCount
                     ),
-                    pageFetcher: loadMoreChannels
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        try await self?.loadMore(
+                            pageSize,
+                            offset,
+                            context,
+                            initialParams.channelType
+                        ) ?? []
+                    }
                 )
             } else {
                 .init(
@@ -56,7 +63,14 @@ extension ChannelListWidget {
                         placeholderItems: (0 ... 12)
                             .map { _ in Channel.redactedChannel }
                     ),
-                    pageFetcher: loadMoreChannels
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        try await self?.loadMore(
+                            pageSize,
+                            offset,
+                            context,
+                            initialParams.channelType
+                        ) ?? []
+                    }
                 )
             }
         }
@@ -109,10 +123,18 @@ extension ChannelListWidget {
 
         private var paginatorSink: AnyCancellable? = nil
 
-        private func loadMoreChannels(
+        @MainActor
+        private func receiveChannelUpdate(
+            _ notification: Notification
+        ) {
+            print("++++++++++++++++++++++++++++++++++")
+        }
+
+        private func loadMore(
             _ limit: Int,
             _ offset: Int,
-            _ channelId: String
+            _ channelId: String,
+            _ channelType: ParraChatChannelType
         ) async throws -> [Channel] {
             let response = try await api.paginateChannels(
                 type: channelType,

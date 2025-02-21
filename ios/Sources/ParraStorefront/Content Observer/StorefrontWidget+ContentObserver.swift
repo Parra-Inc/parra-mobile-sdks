@@ -111,7 +111,13 @@ extension StorefrontWidget {
                         pageSize: Int(storefrontPaginatorLimit),
                         knownCount: productsResponse.products.elements.count
                     ),
-                    pageFetcher: loadMoreProducts
+                    pageFetcher: { [weak self] cursor, pageSize, context in
+                        return try await self?
+                            .loadMore(cursor, pageSize, context) ?? .init(
+                                items: [],
+                                cursor: .init(hasNextPage: false)
+                            )
+                    }
                 )
             } else {
                 .init(
@@ -121,7 +127,13 @@ extension StorefrontWidget {
                         placeholderItems: (0 ... 12)
                             .map { _ in ParraProduct.redactedProduct }
                     ),
-                    pageFetcher: loadMoreProducts
+                    pageFetcher: { [weak self] cursor, pageSize, context in
+                        return try await self?
+                            .loadMore(cursor, pageSize, context) ?? .init(
+                                items: [],
+                                cursor: .init(hasNextPage: false)
+                            )
+                    }
                 )
             }
         }
@@ -577,7 +589,7 @@ extension StorefrontWidget {
             ShopifyCheckoutSheetKit.preload(checkout: checkoutURL)
         }
 
-        private func loadMoreProducts(
+        private func loadMore(
             _ cursor: ParraCursorPaginator<ParraProduct, String>.Cursor,
             _ pageSize: Int,
             _ context: String
