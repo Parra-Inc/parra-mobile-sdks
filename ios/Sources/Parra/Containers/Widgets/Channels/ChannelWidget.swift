@@ -27,6 +27,13 @@ struct ChannelWidget: ParraContainer {
     @Binding var navigationPath: NavigationPath
     let config: ParraChannelConfiguration
 
+    // Until we have websockets, this will have to do.
+    let timer = Timer.publish(
+        every: 15,
+        on: .main,
+        in: .common
+    ).autoconnect()
+
     var messages: Binding<[Message]> {
         return $contentObserver.messagePaginator.items
     }
@@ -57,6 +64,9 @@ struct ChannelWidget: ParraContainer {
             newestViewedMessage = ParraChannelManager.shared.newestViewedMessage(
                 for: contentObserver.channel
             )
+        }
+        .onReceive(timer) { _ in
+            contentObserver.checkForNewMessages()
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
