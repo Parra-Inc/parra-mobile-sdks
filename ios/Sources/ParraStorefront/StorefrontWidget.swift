@@ -106,10 +106,34 @@ struct StorefrontWidget: ParraContainer {
         }
         .navigationDestination(
             for: String.self
-        ) { location in
-            if location == "cart" {
-                CartView()
-                    .environment(contentObserver)
+        ) { path in
+            let components = path.split(separator: "/")
+
+            if let location = components.first {
+                if location == "cart" {
+                    CartView()
+                        .environment(contentObserver)
+
+                } else if location == "product", let productId = components[safe: 1],
+                          !productId.isEmpty
+                {
+                    if let product = contentObserver.queryProduct(
+                        by: String(productId)
+                    ) {
+                        ProductDetailView(product: product)
+                            .environment(contentObserver)
+                    } else {
+                        componentFactory.buildEmptyState(
+                            config: .default,
+                            content: contentObserver.content.productMissingView
+                        )
+                    }
+                } else {
+                    componentFactory.buildEmptyState(
+                        config: .default,
+                        content: contentObserver.content.productMissingView
+                    )
+                }
             }
         } // inject data model instance into env for child views
         .environment(contentObserver)
