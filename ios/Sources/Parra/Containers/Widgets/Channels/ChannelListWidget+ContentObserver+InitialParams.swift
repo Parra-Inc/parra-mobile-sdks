@@ -9,7 +9,8 @@ import SwiftUI
 
 extension ChannelListWidget.ContentObserver {
     struct InitialParams {
-        let config: ParraChannelConfiguration
+        let config: ParraChannelListConfiguration
+        let key: String
         let channelType: ParraChatChannelType
         let channelsResponse: ChannelCollectionResponse?
         let requiredEntitlement: String

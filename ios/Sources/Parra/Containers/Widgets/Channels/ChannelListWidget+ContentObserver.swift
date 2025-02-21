@@ -26,6 +26,7 @@ extension ChannelListWidget {
         ) {
             self.channelType = initialParams.channelType
             self.requiredEntitlement = initialParams.requiredEntitlement
+            self.key = initialParams.key
             self.context = initialParams.context
             self.config = initialParams.config
             self.api = initialParams.api
@@ -73,16 +74,33 @@ extension ChannelListWidget {
                     }
                 )
             }
+
+            self.channelObserver = ParraNotificationCenter.default.addObserver(
+                forName: Parra.channelDidUpdateNotification,
+                object: nil,
+                queue: .main
+            ) { @MainActor [weak self] notification in
+                self?.receiveChannelUpdate(notification)
+            }
+        }
+
+        deinit {
+            if let channelObserver {
+                Task { @MainActor in
+                    ParraNotificationCenter.default.removeObserver(channelObserver)
+                }
+            }
         }
 
         // MARK: - Internal
 
         private(set) var content: Content
+        var isLoadingStartConversation = false
 
         let api: API
 
         let channelType: ParraChatChannelType
-        let config: ParraChannelConfiguration
+        let config: ParraChannelListConfiguration
         let requiredEntitlement: String
         let context: String?
 
@@ -119,7 +137,26 @@ extension ChannelListWidget {
             channelPaginator.refresh()
         }
 
+        @MainActor
+        func startNewConversation() {
+            Task { @MainActor in
+                isLoadingStartConversation = true
+
+                do {
+                    let channel = try await api.createPaidDmChannel(
+                        key: key
+                    )
+
+                } catch {}
+
+                isLoadingStartConversation = false
+            }
+        }
+
         // MARK: - Private
+
+        private let key: String
+        @ObservationIgnored private var channelObserver: NSObjectProtocol?
 
         private var paginatorSink: AnyCancellable? = nil
 
@@ -127,7 +164,29 @@ extension ChannelListWidget {
         private func receiveChannelUpdate(
             _ notification: Notification
         ) {
-            print("++++++++++++++++++++++++++++++++++")
+            guard let userInfo = notification.userInfo as? [String: Any] else {
+                return
+            }
+
+            guard let channelId = userInfo["channelId"] as? String,
+                  let lastMessages = userInfo["lastMessages"] as? [Message] else
+            {
+                return
+            }
+
+            guard let matchingChannelIndex = channelPaginator.items.firstIndex(
+                where: { $0.id == channelId }
+            ) else {
+                return
+            }
+
+            var updatedChannel = channelPaginator.items[matchingChannelIndex]
+            updatedChannel.latestMessages = .init(lastMessages)
+
+            channelPaginator.replace(
+                at: matchingChannelIndex,
+                with: updatedChannel
+            )
         }
 
         private func loadMore(

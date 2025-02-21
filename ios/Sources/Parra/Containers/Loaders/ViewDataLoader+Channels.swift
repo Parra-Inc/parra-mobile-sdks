@@ -37,6 +37,7 @@ struct PaidDirectMessageTransformParams: Equatable {
 }
 
 struct ChannelListParams: Equatable {
+    let key: String
     let channelType: ParraChatChannelType
     let channelsResponse: ChannelCollectionResponse
     let requiredEntitlement: String
@@ -50,7 +51,7 @@ struct ChannelListTransformParams: Equatable {
 extension ParraViewDataLoader {
     static func channelListLoader(
         channelType: ParraChatChannelType,
-        config: ParraChannelConfiguration
+        config: ParraChannelListConfiguration
     ) -> ParraViewDataLoader<
         ChannelListTransformParams,
         ChannelListParams,
@@ -67,6 +68,7 @@ extension ParraViewDataLoader {
                     .renderContainer(
                         params: ChannelListWidget.ContentObserver.InitialParams(
                             config: config,
+                            key: params.key,
                             channelType: params.channelType,
                             channelsResponse: params.channelsResponse,
                             requiredEntitlement: params.requiredEntitlement,
@@ -85,7 +87,7 @@ extension ParraViewDataLoader {
 
     static func statefulChannelLoader(
         key: String,
-        config: ParraChannelConfiguration
+        config: ParraChannelListConfiguration
     ) -> ParraViewDataLoader<
         PaidDirectMessageTransformParams,
         PaidDirectMessageParams,

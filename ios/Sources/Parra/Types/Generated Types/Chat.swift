@@ -139,7 +139,7 @@ struct Channel: Codable, Equatable, Hashable, Identifiable {
     let type: ParraChatChannelType
     let status: ChatChannelStatus
     let members: PartiallyDecodableArray<ChannelMember>?
-    let latestMessages: PartiallyDecodableArray<Message>?
+    var latestMessages: PartiallyDecodableArray<Message>?
 }
 
 struct ChannelCollectionResponse: Codable, Equatable, Hashable {

@@ -11,7 +11,7 @@ extension Binding {
     func didSet(
         _ didSet: @escaping (Value) -> Void
     ) -> Binding<Value> {
-        Binding(
+        return Binding(
             get: {
                 return wrappedValue
             },

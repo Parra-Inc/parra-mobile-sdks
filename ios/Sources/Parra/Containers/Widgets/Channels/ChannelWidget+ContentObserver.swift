@@ -86,15 +86,41 @@ extension ChannelWidget {
             didSet {
                 paginatorSink = messagePaginator
                     .objectWillChange
+                    .throttle(
+                        for: .seconds(1.0),
+                        scheduler: DispatchQueue.main,
+                        latest: true
+                    )
                     .sink { [weak self] _ in
-                        self?.objectWillChange.send()
+                        guard let self else {
+                            return
+                        }
+
+                        objectWillChange.send()
+
+                        // Since we have them fill the preview with enough messages
+                        // to fill the screen if they exit then re-enter.
+                        let lastMessages = Array(messagePaginator.items.prefix(10))
+
+                        ParraNotificationCenter.default.post(
+                            name: Parra.channelDidUpdateNotification,
+                            object: nil,
+                            userInfo: [
+                                "channelId": channel.id,
+                                "lastMessages": lastMessages
+                            ]
+                        )
                     }
             }
         }
 
         @MainActor
         func loadInitialMessages() {
-            if messagePaginator.isShowingPlaceholders {
+            // Can't guard on showing placeholders. This view is pre-populated
+            // with preview messages from the channel
+            if messagePaginator.isShowingPlaceholders || messagePaginator.items == channel
+                .latestMessages?.elements
+            {
                 messagePaginator.loadMore(after: nil)
             }
         }
@@ -140,7 +166,7 @@ extension ChannelWidget {
                 submissionErrorMessage: nil
             )
 
-            messagePaginator.appendItem(temporaryMessage)
+            messagePaginator.preppendItem(temporaryMessage)
 
             Task { @MainActor in
                 do {

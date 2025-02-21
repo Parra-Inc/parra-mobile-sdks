@@ -12,9 +12,9 @@ public final class ParraChannelConfiguration: ParraContainerConfig {
 
     public init(
         paywallConfig: ParraPaywallConfig? = nil,
-        emptyStateContent: ParraEmptyStateContent = ParraFeedConfiguration
+        emptyStateContent: ParraEmptyStateContent = ParraChannelConfiguration
             .defaultEmptyStateContent,
-        errorStateContent: ParraEmptyStateContent = ParraFeedConfiguration
+        errorStateContent: ParraEmptyStateContent = ParraChannelConfiguration
             .defaultErrorStateContent
     ) {
         self.paywallConfig = paywallConfig
@@ -28,17 +28,18 @@ public final class ParraChannelConfiguration: ParraContainerConfig {
 
     public static let defaultEmptyStateContent = ParraEmptyStateContent(
         title: ParraLabelContent(
-            text: "Nothing here yet"
+            text: "Time to Chat"
         ),
         subtitle: ParraLabelContent(
-            text: "Check back later for new content!"
-        )
+            text: "Send a message to begin the conversation"
+        ),
+        icon: .symbol("bubble.left.and.bubble.right", .monochrome)
     )
 
     public static let defaultErrorStateContent = ParraEmptyStateContent(
         title: ParraEmptyStateContent.errorGeneric.title,
         subtitle: ParraLabelContent(
-            text: "Failed to load content feed. Please try again later."
+            text: "Failed to load any messages. Please try again later."
         ),
         icon: .symbol("network.slash", .monochrome)
     )
