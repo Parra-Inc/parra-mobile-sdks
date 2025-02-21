@@ -48,7 +48,9 @@ extension API {
     func paginateMessagesForChannel(
         channelId: String,
         limit: Int? = nil,
-        offset: Int? = nil
+        offset: Int? = nil,
+        sort: String? = nil,
+        createdAt: String? = nil
     ) async throws -> MessageCollectionResponse {
         var query: [String: String] = [:]
 
@@ -58,6 +60,14 @@ extension API {
 
         if let offset {
             query["offset"] = String(offset)
+        }
+
+        if let sort {
+            query["sort"] = sort
+        }
+
+        if let createdAt {
+            query["created_at"] = createdAt
         }
 
         return try await hitEndpoint(

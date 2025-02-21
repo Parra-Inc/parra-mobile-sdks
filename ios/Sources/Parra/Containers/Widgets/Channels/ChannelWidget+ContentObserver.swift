@@ -43,6 +43,9 @@ extension ChannelWidget {
                     ),
                     pageFetcher: { [weak self] pageSize, offset, context in
                         return try await self?.loadMore(pageSize, offset, context) ?? []
+                    },
+                    missingFetcher: { [weak self] cursor, context in
+                        return try await self?.loadMissing(cursor, context) ?? []
                     }
                 )
             } else {
@@ -55,6 +58,9 @@ extension ChannelWidget {
                     ),
                     pageFetcher: { [weak self] pageSize, offset, context in
                         return try await self?.loadMore(pageSize, offset, context) ?? []
+                    },
+                    missingFetcher: { [weak self] cursor, context in
+                        return try await self?.loadMissing(cursor, context) ?? []
                     }
                 )
             }
@@ -128,6 +134,21 @@ extension ChannelWidget {
         @MainActor
         func refresh() {
             messagePaginator.refresh()
+        }
+
+        @MainActor
+        func checkForNewMessages() {
+            logger.trace("Checking for new messages")
+
+            let cursor = messagePaginator.items.first?.createdAt
+                .addingTimeInterval(0.01)
+                .formatted(
+                    Date.ISO8601FormatStyle(
+                        includingFractionalSeconds: true
+                    )
+                )
+
+            messagePaginator.loadMissing(since: cursor)
         }
 
         @MainActor
@@ -226,6 +247,19 @@ extension ChannelWidget {
         // MARK: - Private
 
         private var paginatorSink: AnyCancellable? = nil
+
+        private func loadMissing(
+            _ cursor: String?,
+            _ channelId: String
+        ) async throws -> [Message] {
+            let response = try await api.paginateMessagesForChannel(
+                channelId: channelId,
+                sort: "created_at,desc",
+                createdAt: cursor
+            )
+
+            return response.data.elements
+        }
 
         private func loadMore(
             _ limit: Int,
