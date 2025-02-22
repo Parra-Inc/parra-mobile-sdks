@@ -6,6 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import ImageIO
 import PhotosUI
 import SwiftUI
 
@@ -169,10 +170,33 @@ public struct ParraPhotoWell: View {
         .fullScreenCover(isPresented: $showingCamera) {
             CameraView { image in
                 if let image {
-                    applyNewImage(image)
+                    editingImage = image
                 }
 
                 showingCamera = false
+            }
+        }
+        .fullScreenCover(
+            isPresented: .init(
+                get: {
+                    return editingImage != nil
+                },
+                set: { _ in
+                }
+            )
+        ) {
+            if let editingImage {
+                PhotoCropperView(
+                    image: editingImage,
+                    maskShape: .circle
+                ) { finalImage in
+                    if let finalImage {
+                        applyNewImage(finalImage)
+                    } else {
+                        selectedPhoto = nil
+                        self.editingImage = nil
+                    }
+                }
             }
         }
         .onChange(of: selectedPhoto) {
@@ -182,14 +206,12 @@ public struct ParraPhotoWell: View {
                 }
 
                 do {
-                    state = .loadingFromLibrary
-
                     let data = try await selectedPhoto.loadTransferable(
                         type: Data.self
                     )
 
                     if let data, let image = UIImage(data: data) {
-                        applyNewImage(image)
+                        editingImage = image
                     } else {
                         throw ParraError.message("Failed to decode image data")
                     }
@@ -231,7 +253,7 @@ public struct ParraPhotoWell: View {
 
     @ViewBuilder var currentImageElement: some View {
         switch state {
-        case .empty, .loadingFromLibrary, .error:
+        case .empty, .error:
             Image(systemName: "person.crop.circle.fill")
                 .resizable()
         case .url(let url):
@@ -271,6 +293,7 @@ public struct ParraPhotoWell: View {
     @State private var showingPhotoPicker = false
     @State private var showingCamera = false
     @State private var selectedPhoto: PhotosPickerItem?
+    @State private var editingImage: UIImage?
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.parraTheme) private var parraTheme
@@ -292,6 +315,16 @@ public struct ParraPhotoWell: View {
     }
 
     private func applyNewImage(_ image: UIImage) {
+        guard let stripped = removeExifData(from: image) else {
+            state = .error(
+                ParraError.message("Failed to remove metadata from image")
+            )
+
+            return
+        }
+
+        editingImage = nil
+        selectedPhoto = nil
         state = .processing(image)
 
         Task {
@@ -303,6 +336,57 @@ public struct ParraPhotoWell: View {
                 state = .loaded(image)
             }
         }
+    }
+
+    private func removeExifData(from image: UIImage) -> UIImage? {
+        guard let data = image.pngData() else {
+            return nil
+        }
+
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+            return nil
+        }
+
+        guard let type = CGImageSourceGetType(source) else {
+            return nil
+        }
+
+        let count = CGImageSourceGetCount(source)
+        let mutableData = NSMutableData(data: data)
+        guard let destination = CGImageDestinationCreateWithData(
+            mutableData,
+            type,
+            count,
+            nil
+        ) else {
+            return nil
+        }
+        // Check the keys for what you need to remove
+        // As per documentation, if you need a key removed, assign it kCFNull
+        let removeExifProperties: CFDictionary = [
+            String(kCGImagePropertyExifDictionary): kCFNull,
+            String(kCGImagePropertyDepth): kCFNull,
+            String(kCGImagePropertyGPSLatitude): kCFNull,
+            String(kCGImagePropertyGPSLongitude): kCFNull,
+            String(kCGImagePropertyGPSAltitude): kCFNull,
+            String(kCGImagePropertyGPSDictionary): kCFNull,
+            String(kCGImagePropertyGPSSpeed): kCFNull
+        ] as CFDictionary
+
+        for i in 0 ..< count {
+            CGImageDestinationAddImageFromSource(
+                destination,
+                source,
+                i,
+                removeExifProperties
+            )
+        }
+
+        guard CGImageDestinationFinalize(destination) else {
+            return nil
+        }
+
+        return UIImage(data: mutableData as Data)
     }
 
     private func removeExistingImage() {
