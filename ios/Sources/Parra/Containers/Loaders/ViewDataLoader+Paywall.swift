@@ -22,6 +22,8 @@ struct PaywallTransformParams: Equatable {
     let context: String?
 }
 
+private let logger = Logger()
+
 extension ParraViewDataLoader {
     static func paywallLoader(
         config: ParraPaywallConfig
@@ -31,7 +33,7 @@ extension ParraViewDataLoader {
             PaywallParams,
             PaywallWidget
         >(
-            renderer: { parra, params, navigationPath, _ in
+            renderer: { parra, params, navigationPath, dismisser in
                 let container: PaywallWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         params: PaywallWidget.ContentObserver.InitialParams(
@@ -45,7 +47,23 @@ extension ParraViewDataLoader {
                             appInfo: params.appInfo
                         ),
                         config: config,
-                        contentTransformer: nil,
+                        contentTransformer: { contentObserver in
+                            contentObserver.submissionHandler = { success, error in
+                                logger.info("Submitting feedback form data")
+
+                                if let dismisser {
+                                    if let error {
+                                        dismisser(
+                                            .failed(error.localizedDescription)
+                                        )
+                                    } else if success {
+                                        dismisser(.completed)
+                                    } else {
+                                        dismisser(.completed)
+                                    }
+                                }
+                            }
+                        },
                         navigationPath: navigationPath
                     )
 

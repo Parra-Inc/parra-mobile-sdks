@@ -14,11 +14,13 @@ public final class ParraPaywallConfig: ParraContainerConfig {
     public init(
         visibleRelationships: Product.SubscriptionRelationship = .all,
         thankYouContent: ToastContent = .successDefault,
+        dismissOnSuccess: Bool = false,
         purchaseErrorContent: ToastContent = .failureDefault,
         marketingContent: (() -> (any View))? = nil
     ) {
         self.visibleRelationships = visibleRelationships
         self.thankYouContent = thankYouContent
+        self.dismissOnSuccess = dismissOnSuccess
         self.purchaseErrorContent = purchaseErrorContent
         self.marketingContent = marketingContent
     }
@@ -67,6 +69,8 @@ public final class ParraPaywallConfig: ParraContainerConfig {
     /// only relevant when your paywall is configured in the Parra dashboard
     /// to use a subscription Group ID and not a list of products.
     public let visibleRelationships: Product.SubscriptionRelationship
+
+    public let dismissOnSuccess: Bool
 
     public let thankYouContent: ToastContent
     public let purchaseErrorContent: ToastContent

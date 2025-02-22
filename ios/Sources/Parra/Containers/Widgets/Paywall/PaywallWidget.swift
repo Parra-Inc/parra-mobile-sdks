@@ -62,25 +62,29 @@ struct PaywallWidget: ParraContainer {
                         )
                     )
                 } else {
-                    alertManager.showToast(
-                        for: 5.0,
-                        in: .topCenter,
-                        level: .success,
-                        content: ParraAlertContent(
-                            title: ParraLabelContent(
-                                text: config.thankYouContent.title
+                    if config.dismissOnSuccess {
+                        contentObserver.dismiss(with: nil)
+                    } else {
+                        alertManager.showToast(
+                            for: 5.0,
+                            in: .topCenter,
+                            level: .success,
+                            content: ParraAlertContent(
+                                title: ParraLabelContent(
+                                    text: config.thankYouContent.title
+                                ),
+                                subtitle: ParraLabelContent(
+                                    text: config.thankYouContent.subtitle
+                                ),
+                                icon: config.thankYouContent.icon,
+                                dismiss: nil
                             ),
-                            subtitle: ParraLabelContent(
-                                text: config.thankYouContent.subtitle
-                            ),
-                            icon: config.thankYouContent.icon,
-                            dismiss: nil
-                        ),
-                        attributes: ParraAttributes.ToastAlert(
-                            background: config.thankYouContent.backgroundColor
-                                ?? theme.palette.success.toParraColor()
+                            attributes: ParraAttributes.ToastAlert(
+                                background: config.thankYouContent.backgroundColor
+                                    ?? theme.palette.success.toParraColor()
+                            )
                         )
-                    )
+                    }
                 }
             }
     }
