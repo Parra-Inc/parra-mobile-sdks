@@ -358,6 +358,33 @@ public class ParraPaginator<Item, Context>: ObservableObject
         items[index] = item
     }
 
+    public func moveItem(at fromIndex: Int, to index: Int) {
+        if isShowingPlaceholders {
+            return
+        }
+
+        guard index < items.count && index >= 0 else {
+            return
+        }
+
+        items.move(
+            fromOffsets: IndexSet(integer: fromIndex),
+            toOffset: index
+        )
+    }
+
+    public func moveItem(_ item: Item, to index: Int) {
+        if isShowingPlaceholders {
+            return
+        }
+
+        guard let currentIndex = items.firstIndex(of: item) else {
+            return
+        }
+
+        moveItem(at: currentIndex, to: index)
+    }
+
     public func appendItem(_ item: Item) {
         if isShowingPlaceholders {
             return
