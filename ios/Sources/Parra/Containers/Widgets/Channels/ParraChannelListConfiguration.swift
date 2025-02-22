@@ -11,7 +11,7 @@ public final class ParraChannelListConfiguration: ParraContainerConfig {
     // MARK: - Lifecycle
 
     public init(
-        navigationTitle: String = "Message History",
+        navigationTitle: String = "Messages",
         defaultChannelConfig: ParraChannelConfiguration = .default,
         emptyStateContent: ParraEmptyStateContent = ParraChannelListConfiguration
             .defaultEmptyStateContent,
