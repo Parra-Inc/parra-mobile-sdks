@@ -61,15 +61,7 @@ struct FeedReactionView: View {
                     }
 
                     if reactor.totalReactions > 0 {
-                        componentFactory.buildLabel(
-                            text: "\(reactor.totalReactions)",
-                            localAttributes: .init(
-                                text: ParraAttributes.Text(
-                                    style: .caption,
-                                    color: accentColor
-                                )
-                            )
-                        )
+                        ReactionCountView(reactor: _reactor)
                     }
                 }
             }

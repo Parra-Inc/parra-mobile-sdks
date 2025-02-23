@@ -35,33 +35,11 @@ struct ReactionButtonView: View {
             }
         } label: {
             HStack(alignment: .center, spacing: 3) {
-                switch reaction.type {
-                case .emoji:
-                    Text(reaction.value)
-                        .font(.system(size: 500))
-                        .minimumScaleFactor(0.01)
-                        .frame(
-                            width: 18.0,
-                            height: 18.0
-                        )
-                        .scaleEffect(toggleAnimation ? 1.35 : 1.0)
-                        .animation(toggleAnimation ? Animation.easeInOut(
-                            duration: 0.1
-                        ) : Animation.easeInOut, value: toggleAnimation)
-                case .custom:
-                    if let url = URL(string: reaction.value) {
-                        componentFactory.buildAsyncImage(
-                            config: ParraAsyncImageConfig(
-                                aspectRatio: 1.0,
-                                contentMode: .fit
-                            ),
-                            content: ParraAsyncImageContent(url: url),
-                            localAttributes: ParraAttributes.AsyncImage(
-                                size: CGSize(width: 18.0, height: 18.0)
-                            )
-                        )
-                    }
-                }
+                ReactionIconView(reaction: _reaction, size: 18.0)
+                    .scaleEffect(toggleAnimation ? 1.35 : 1.0)
+                    .animation(toggleAnimation ? Animation.easeInOut(
+                        duration: 0.1
+                    ) : Animation.easeInOut, value: toggleAnimation)
 
                 Text(reaction.count.formatted(
                     .number
@@ -82,13 +60,25 @@ struct ReactionButtonView: View {
                 horizontal: 10
             )
         )
+        .highPriorityGesture(
+            LongPressGesture()
+                .onEnded { _ in
+                    isReactionPopoverPresented = true
+                }
+        )
         .background(backgroundColor)
         .applyCornerRadii(size: .full, from: theme)
+        .popover(
+            isPresented: $isReactionPopoverPresented
+        ) {
+            ReactionSummaryPopoverView(reaction: _reaction)
+        }
     }
 
     // MARK: - Private
 
     @State private var toggleAnimation: Bool = .init()
+    @State private var isReactionPopoverPresented = false
 
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
