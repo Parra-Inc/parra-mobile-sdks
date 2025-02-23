@@ -21,7 +21,9 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
 
             VStack(alignment: .leading) {
                 HStack(alignment: .center, spacing: 8) {
-                    ChannelNavigationHeaderView(user: comment.user)
+                    UserWithRolesView(
+                        user: comment.user
+                    )
 
                     Spacer()
 

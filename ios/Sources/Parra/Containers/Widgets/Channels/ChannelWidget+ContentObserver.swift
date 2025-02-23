@@ -92,30 +92,12 @@ extension ChannelWidget {
             didSet {
                 paginatorSink = messagePaginator
                     .objectWillChange
-                    .throttle(
-                        for: .seconds(1.0),
-                        scheduler: DispatchQueue.main,
-                        latest: true
-                    )
                     .sink { [weak self] _ in
                         guard let self else {
                             return
                         }
 
                         objectWillChange.send()
-
-                        // Since we have them fill the preview with enough messages
-                        // to fill the screen if they exit then re-enter.
-                        let lastMessages = Array(messagePaginator.items.prefix(10))
-
-                        ParraNotificationCenter.default.post(
-                            name: Parra.channelDidUpdateNotification,
-                            object: nil,
-                            userInfo: [
-                                "channelId": channel.id,
-                                "lastMessages": lastMessages
-                            ]
-                        )
                     }
             }
         }
@@ -198,6 +180,8 @@ extension ChannelWidget {
 
                     messagePaginator
                         .replace(temporaryMessage, with: realMessage)
+
+                    broadcastChanges()
                 } catch let error as ParraError {
                     var erroredMessage = temporaryMessage
 
@@ -247,6 +231,25 @@ extension ChannelWidget {
         // MARK: - Private
 
         private var paginatorSink: AnyCancellable? = nil
+
+        private func broadcastChanges() {
+            // NOTE: If this gets added in more places, consider that it being
+            // triggered causes this channel to move to the beginning of the
+            // channels list!
+
+            // Since we have them fill the preview with enough messages
+            // to fill the screen if they exit then re-enter.
+            let lastMessages = Array(messagePaginator.items.prefix(10))
+
+            ParraNotificationCenter.default.post(
+                name: Parra.channelDidUpdateNotification,
+                object: nil,
+                userInfo: [
+                    "channelId": channel.id,
+                    "lastMessages": lastMessages
+                ]
+            )
+        }
 
         private func loadMissing(
             _ cursor: String?,

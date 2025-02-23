@@ -38,31 +38,21 @@ struct ChannelMemberListHeaderView: View {
         } else if users.count == 1 {
             HStack {
                 let user = users[0]
-                AvatarView(avatar: user.avatar)
+
+                avatarView(for: user)
 
                 // Don't know why, but if we use the component factory label here
                 // it doesn't get rendered.
                 Text(verbatim: user.displayName)
                     .applyTextAttributes(.default(with: .headline), using: theme)
-
-                componentFactory.buildLabel(
-                    text: user.displayName,
-                    localAttributes: ParraAttributes.Label(
-                        text: .default(with: .headline),
-                        padding: .zero
-                    )
-                )
             }
             .frame(maxWidth: .infinity)
         } else {
             HStack(alignment: .center, spacing: 6) {
                 HStack(spacing: -20) {
-                    ForEach(Array(users.enumerated()), id: \.element) {
-                        index,
-                            user
-                        in
-                        AvatarView(
-                            avatar: user.avatar,
+                    ForEach(Array(users.enumerated()), id: \.element) { index, user in
+                        avatarView(
+                            for: user,
                             showLoadingIndicator: index == users.count - 1
                         )
                         .background(
@@ -91,5 +81,17 @@ struct ChannelMemberListHeaderView: View {
                     .applyTextAttributes(.default(with: .headline), using: theme)
             }
         }
+    }
+
+    @ViewBuilder
+    private func avatarView(
+        for user: ParraUserStub,
+        showLoadingIndicator: Bool = true
+    ) -> some View {
+        AvatarView(
+            avatar: user.avatar,
+            showLoadingIndicator: showLoadingIndicator,
+            showVerifiedBadge: user.verified == true
+        )
     }
 }

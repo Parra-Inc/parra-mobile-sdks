@@ -198,21 +198,29 @@ struct PaywallWidget: ParraContainer {
     @MainActor private var storeView: some View {
         switch contentObserver.initialParams.paywallProducts {
         case .products(let products):
-            VStack {
-                if hasMarketingContent {
-                    marketingContent
-                }
-
-                let iaps = products.filter { product in
-                    return product.type == .consumable || product.type == .nonConsumable
-                }
-
-                ForEach(iaps) { product in
-                    ProductView(product) {
-                        // To prevent showing an empty icon
-                        EmptyView()
+            NavigationStack {
+                VStack {
+                    if hasMarketingContent {
+                        marketingContent
                     }
-                    .padding(.horizontal)
+
+                    let iaps = products.filter { product in
+                        return product.type == .consumable || product
+                            .type == .nonConsumable
+                    }
+
+                    ForEach(iaps) { product in
+                        ProductView(product) {
+                            // To prevent showing an empty icon
+                            EmptyView()
+                        }
+                        .padding(.horizontal, 24)
+                    }
+                }
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        ParraDismissButton()
+                    }
                 }
             }
         case .productIds(let productIds):

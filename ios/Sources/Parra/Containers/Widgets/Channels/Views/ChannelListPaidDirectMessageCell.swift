@@ -16,30 +16,35 @@ struct ChannelListPaidDirectMessageCell: View {
         NavigationLink(
             value: channel,
             label: {
-                HStack(alignment: .top) {
+                HStack(alignment: .top, spacing: 20) {
                     AvatarView(
-                        avatar: memberUserList.first?.avatar
+                        avatar: memberUserList.first?.avatar,
+                        size: CGSize(width: 44, height: 44),
+                        showVerifiedBadge: memberUserList.first?.verified == true
                     )
 
                     VStack(alignment: .leading) {
-                        componentFactory.buildLabel(
-                            text: membersList,
-                            localAttributes: ParraAttributes.Label(
-                                text: .default(with: .headline),
-                                padding: .zero
+                        HStack {
+                            componentFactory.buildLabel(
+                                text: membersList,
+                                localAttributes: ParraAttributes.Label(
+                                    text: .default(with: .headline),
+                                    padding: .zero
+                                )
                             )
-                        )
 
-                        componentFactory.buildLabel(
-                            text: preview,
-                            localAttributes: ParraAttributes.Label(
-                                text: .default(with: .body),
-                                padding: .zero
-                            )
-                        )
-                        .lineLimit(2)
+                            if channel.status == .closed {
+                                componentFactory.buildBadge(
+                                    size: .sm,
+                                    variant: .outlined,
+                                    text: channel.status.description
+                                )
+                            } else {
+                                Spacer()
+                            }
+                        }
 
-                        //                    Text(channel.status.rawValue)
+                        previewView
                     }
                     .frame(
                         maxWidth: .infinity,
@@ -64,7 +69,7 @@ struct ChannelListPaidDirectMessageCell: View {
         .simultaneousGesture(TapGesture())
         .buttonStyle(ContentCardButtonStyle())
         .padding(.horizontal)
-        .padding(.vertical, 4)
+        .padding(.vertical, 8)
     }
 
     // MARK: - Private
@@ -72,6 +77,45 @@ struct ChannelListPaidDirectMessageCell: View {
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraAuthState) private var authState
+
+    private var isPreviewUnread: Bool {
+        guard let latestMessage else {
+            return false
+        }
+
+        guard let newestViewed = ParraChannelManager.shared.newestViewedMessage(
+            for: channel
+        ) else {
+            return true
+        }
+
+        guard let latestSender = latestMessage.user else {
+            // If there's no user, it was not sent by a tenant user, therefore
+            // not the current user.
+            return latestMessage.createdAt > newestViewed.createdAt
+        }
+
+        guard latestSender.id == authState.user?.info.id else {
+            return latestMessage.createdAt > newestViewed.createdAt
+        }
+
+        return false // is the current user
+    }
+
+    @ViewBuilder private var previewView: some View {
+        componentFactory.buildLabel(
+            text: latestMessage?.content ?? "No message yet",
+            localAttributes: ParraAttributes.Label(
+                text: .default(
+                    with: .body,
+                    weight: isPreviewUnread ? .bold : .regular
+                ),
+                padding: .zero
+            )
+        )
+        .opacity(latestMessage?.content == nil ? 0.5 : 1.0)
+        .lineLimit(2)
+    }
 
     private var memberUserList: [ParraUserStub] {
         guard let members = channel.members?.elements else {
@@ -101,17 +145,7 @@ struct ChannelListPaidDirectMessageCell: View {
     }
 
     private var latestMessage: Message? {
-        // TODO: Need to figure out what to do when new messages are updated.
-
         return channel.latestMessages?.elements.first
-    }
-
-    private var preview: String {
-        guard let latestMessage else {
-            return "No messages yet"
-        }
-
-        return latestMessage.content
     }
 }
 

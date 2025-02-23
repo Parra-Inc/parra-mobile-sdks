@@ -113,8 +113,6 @@ struct ChannelWidget: ParraContainer {
 
     @Environment(\.parraAuthState) private var authState
 
-    @State private var isShowingPaywall = false
-
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraAlertManager) private var alertManager
     @Environment(\.parraTheme) private var parraTheme
@@ -184,48 +182,34 @@ struct ChannelWidget: ParraContainer {
                 return false
             }
 
-            if !userEntitlements.hasEntitlement(
-                for: contentObserver.requiredEntitlement
-            ) {
-                Task { @MainActor in
-                    await UIApplication.dismissKeyboard()
-                }
+            do {
+                try withAnimation {
+                    let newMessage = try contentObserver.sendMessage(
+                        with: text,
+                        from: user
+                    )
 
-                DispatchQueue.main.asyncAfter(
-                    deadline: .now() + 0.1
-                ) {
-                    isShowingPaywall = true
-                }
-            } else {
-                withAnimation {
-                    do {
-                        let newMessage = try contentObserver.sendMessage(
-                            with: text,
-                            from: user
-                        )
-
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                            withAnimation {
-                                proxy.scrollTo(
-                                    newMessage,
-                                    anchor: .center
-                                )
-                            }
-                        }
-                    } catch {
-                        alertManager
-                            .showErrorToast(
-                                title: "Error sending message",
-                                userFacingMessage: "Something went wrong sending that message. Please try again.",
-                                underlyingError: error
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                        withAnimation {
+                            proxy.scrollTo(
+                                newMessage,
+                                anchor: .center
                             )
+                        }
                     }
                 }
 
                 return true
-            }
+            } catch {
+                alertManager
+                    .showErrorToast(
+                        title: "Error sending message",
+                        userFacingMessage: "Something went wrong sending that message. Please try again.",
+                        underlyingError: error
+                    )
 
-            return false
+                return false
+            }
         }
     }
 

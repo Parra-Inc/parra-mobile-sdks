@@ -138,18 +138,29 @@ extension ChannelListWidget {
         }
 
         @MainActor
-        func startNewConversation() {
-            Task { @MainActor in
-                isLoadingStartConversation = true
+        func startNewConversation() async throws -> Channel {
+            isLoadingStartConversation = true
 
-                do {
-                    let channel = try await api.createPaidDmChannel(
-                        key: key
-                    )
-
-                } catch {}
-
+            defer {
                 isLoadingStartConversation = false
+            }
+
+            do {
+                let channel = try await api.createPaidDmChannel(
+                    key: key
+                )
+
+                // Creating the channel burns the entitlement, so refresh the
+                // user's entitlements so they're up to date.
+                try await ParraUserEntitlements.shared.refreshEntitlements()
+
+                channelPaginator.preppendItem(channel)
+
+                return channel
+            } catch {
+                logger.error("Error starting new conversation", error)
+
+                throw error
             }
         }
 
@@ -186,6 +197,13 @@ extension ChannelListWidget {
             channelPaginator.replace(
                 at: matchingChannelIndex,
                 with: updatedChannel
+            )
+
+            // Since this channel was most recently modified, move it to the
+            // front of the list.
+            channelPaginator.moveItem(
+                at: matchingChannelIndex,
+                to: 0
             )
         }
 

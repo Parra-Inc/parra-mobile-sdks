@@ -18,6 +18,12 @@ struct StatefulChannelWidget: View {
         self.config = config
         self.params = params
         _navigationPath = navigationPath
+
+        if case .paywall = params.presentationMode {
+            _isPresentingPaywall = State(initialValue: true)
+        } else {
+            _isPresentingPaywall = State(initialValue: false)
+        }
     }
 
     // MARK: - Internal
@@ -28,9 +34,18 @@ struct StatefulChannelWidget: View {
 
     var body: some View {
         content
+            .presentParraPaywall(
+                entitlement: params.requiredEntitlement,
+                context: params.context,
+                isPresented: $isPresentingPaywall,
+                config: config.defaultChannelConfig.paywallConfig ?? .default
+            ) { _ in
+            }
     }
 
     // MARK: - Private
+
+    @State private var isPresentingPaywall: Bool
 
     @Environment(\.parra) private var parra
     @Environment(\.parraTheme) private var theme
@@ -76,24 +91,25 @@ struct StatefulChannelWidget: View {
 
             container
         case .paywall(let paywall, let paywallProducts):
-            let container: PaywallWidget = parra.parraInternal
-                .containerRenderer.renderContainer(
-                    params: PaywallWidget.ContentObserver.InitialParams(
-                        paywallId: paywall.id,
-                        iapType: paywall.iapType,
-                        paywallProducts: paywallProducts,
-                        marketingContent: paywall.marketingContent,
-                        sections: paywall.sections,
-                        config: config.defaultChannelConfig.paywallConfig ?? .default,
-                        api: parra.parraInternal.api,
-                        appInfo: appInfo
-                    ),
-                    config: config.defaultChannelConfig.paywallConfig ?? .default,
-                    contentTransformer: nil,
-                    navigationPath: $navigationPath
-                )
-
-            container
+            EmptyView()
+//            let container: PaywallWidget = parra.parraInternal
+//                .containerRenderer.renderContainer(
+//                    params: PaywallWidget.ContentObserver.InitialParams(
+//                        paywallId: paywall.id,
+//                        iapType: paywall.iapType,
+//                        paywallProducts: paywallProducts,
+//                        marketingContent: paywall.marketingContent,
+//                        sections: paywall.sections,
+//                        config: config.defaultChannelConfig.paywallConfig ?? .default,
+//                        api: parra.parraInternal.api,
+//                        appInfo: appInfo
+//                    ),
+//                    config: config.defaultChannelConfig.paywallConfig ?? .default,
+//                    contentTransformer: nil,
+//                    navigationPath: $navigationPath
+//                )
+//
+//            container
         }
     }
 }

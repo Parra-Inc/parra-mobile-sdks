@@ -40,7 +40,8 @@ struct ChannelListWidget: ParraContainer {
             for: defaultWidgetAttributes.contentPadding
         )
 
-        VStack {
+        // Keep this 0 so the scrollview touches the footer.
+        VStack(spacing: 0) {
             scrollView(
                 with: contentPadding
             )
@@ -63,10 +64,13 @@ struct ChannelListWidget: ParraContainer {
                         )
                     ),
                     onPress: {
-                        if userEntitlements.isEntitled(
-                            to: contentObserver.requiredEntitlement
-                        ) {
-                            isShowingConfirmation = true
+                        if let entitlement = userEntitlements.getEntitlement(
+                            for: contentObserver.requiredEntitlement
+                        ), entitlement.isConsumable {
+                            // The user already has the entitlement required
+                            // for this action. Let them confirm using existing
+                            // credits
+                            currentEntitlement = entitlement
                         } else {
                             isShowingPaywall = true
                         }
@@ -105,43 +109,109 @@ struct ChannelListWidget: ParraContainer {
             container
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
-                        ParraDismissButton()
+                        if channel.hasMemberRole(authState.user, role: .admin) {
+                            adminMenu(for: channel)
+                        } else {
+                            ParraDismissButton()
+                        }
                     }
                 }
         }
         .presentParraPaywall(
             entitlement: contentObserver.requiredEntitlement,
             context: contentObserver.context,
-            isPresented: $isShowingPaywall
+            isPresented: $isShowingPaywall,
+            config: ParraPaywallConfig(
+                dismissOnSuccess: true
+            )
         ) { _ in
-            // TODO: Test dismiss
             if userEntitlements.isEntitled(
                 to: contentObserver.requiredEntitlement
             ) {
-                // TODO: Do we still want to confirm spending the credits if
-                // they just purhcased them for this?
-                contentObserver.startNewConversation()
+                startNewConversation()
             } else {
                 // TODO: Error toast?
             }
         }
         .confirmationDialog(
             "Confirm Purchase",
-            isPresented: $isShowingConfirmation
+            isPresented: .init(
+                get: {
+                    return currentEntitlement != nil
+                },
+                set: { value in
+                    if !value {
+                        currentEntitlement = nil
+                    }
+                }
+            )
         ) {
             Button("Cancel", role: .cancel) {}
 
             Button("Proceed") {
-                contentObserver.startNewConversation()
+                startNewConversation()
             }
         } message: {
-            Text(
-                "This will cost X of your remaining Y Z credits. Would you like to proceed?"
-            )
+            // Only shown for consumable entitlements
+            if let currentEntitlement {
+                Text(
+                    "You have already purchased \(currentEntitlement.title). Would you like to proceed?"
+                )
+            }
         }
     }
 
-    func scrollView(
+    // MARK: - Private
+
+    @State private var isShowingPaywall = false
+    @State private var currentEntitlement: ParraUserEntitlement?
+
+    @Environment(\.parra) private var parra
+    @Environment(\.parraAuthState) private var authState
+    @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraUserEntitlements) private var userEntitlements
+
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
+    @ViewBuilder private var cells: some View {
+        switch contentObserver.channelType {
+        case .dm:
+            EmptyView()
+        case .paidDm:
+            paidDmCells
+        case .default:
+            EmptyView()
+        case .app:
+            EmptyView()
+        case .group:
+            EmptyView()
+        case .user:
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder private var paidDmCells: some View {
+        LazyVStack {
+            ForEach(channels) { channel in
+                ChannelListPaidDirectMessageCell(channel: channel)
+            }
+        }
+    }
+
+    private func adminMenu(
+        for channel: Channel
+    ) -> some View {
+        Menu("Admin Menu", systemImage: "ellipsis.circle") {
+            Section("Admin Menu") {
+                Button("Close Conversation", systemImage: "xmark.bin") {}
+            }
+        }
+    }
+
+    private func scrollView(
         with contentPadding: EdgeInsets
     ) -> some View {
         GeometryReader { _ in
@@ -186,43 +256,13 @@ struct ChannelListWidget: ParraContainer {
         }
     }
 
-    // MARK: - Private
+    private func startNewConversation() {
+        Task {
+            do {
+                let channel = try await contentObserver.startNewConversation()
 
-    @State private var isShowingPaywall = false
-    @State private var isShowingConfirmation = false
-
-    @Environment(\.parra) private var parra
-    @Environment(\.parraAuthState) private var authState
-    @Environment(\.parraComponentFactory) private var componentFactory
-    @Environment(\.parraTheme) private var parraTheme
-    @Environment(\.parraUserEntitlements) private var userEntitlements
-
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
-
-    @ViewBuilder private var cells: some View {
-        switch contentObserver.channelType {
-        case .dm:
-            EmptyView()
-        case .paidDm:
-            paidDmCells
-        case .default:
-            EmptyView()
-        case .app:
-            EmptyView()
-        case .group:
-            EmptyView()
-        case .user:
-            EmptyView()
-        }
-    }
-
-    @ViewBuilder private var paidDmCells: some View {
-        LazyVStack {
-            ForEach(channels) { channel in
-                ChannelListPaidDirectMessageCell(channel: channel)
-            }
+                navigationPath.append(channel)
+            } catch {}
         }
     }
 }

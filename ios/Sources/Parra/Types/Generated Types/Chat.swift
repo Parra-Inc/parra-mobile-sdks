@@ -48,10 +48,23 @@ public enum ParraChatChannelType: String, Codable, CaseIterable {
     case user
 }
 
-enum ChatChannelStatus: String, Codable {
+enum ChatChannelStatus: String, Codable, CustomStringConvertible {
     case active
     case closed
     case archived
+
+    // MARK: - Internal
+
+    var description: String {
+        switch self {
+        case .active:
+            return "active"
+        case .closed:
+            return "closed"
+        case .archived:
+            return "archived"
+        }
+    }
 }
 
 enum ChannelMemberType: String, Codable {
@@ -64,7 +77,7 @@ enum ChannelMemberType: String, Codable {
     case bot
 }
 
-enum ChannelMemberRole: String, Codable {
+enum ChannelMemberRole: String, Codable, Equatable {
     case admin
     case member
     case guest
@@ -140,6 +153,60 @@ struct Channel: Codable, Equatable, Hashable, Identifiable {
     let status: ChatChannelStatus
     let members: PartiallyDecodableArray<ChannelMember>?
     var latestMessages: PartiallyDecodableArray<Message>?
+
+    func hasMemberRole(
+        _ user: ParraUser?,
+        role: ChannelMemberRole
+    ) -> Bool {
+        return hasMemberRole(user?.info.id, role: role)
+    }
+
+    func hasMemberRole(
+        _ user: ParraUserStub?,
+        role: ChannelMemberRole
+    ) -> Bool {
+        return hasMemberRole(user?.id, role: role)
+    }
+
+    func hasMemberRole(
+        _ userId: String?,
+        role: ChannelMemberRole
+    ) -> Bool {
+        guard let matchingMember = member(matching: userId) else {
+            // The user isn't even a member.
+            return false
+        }
+
+        return matchingMember.roles.elements.contains(role)
+    }
+
+    func member(
+        matching user: ParraUser?
+    ) -> ChannelMember? {
+        return member(matching: user?.info.id)
+    }
+
+    func member(
+        matching user: ParraUserStub?
+    ) -> ChannelMember? {
+        return member(matching: user?.id)
+    }
+
+    func member(
+        matching userId: String?
+    ) -> ChannelMember? {
+        guard let userId else {
+            return nil
+        }
+
+        guard let members = members?.elements else {
+            return nil
+        }
+
+        return members.first { member in
+            member.user?.id == userId
+        }
+    }
 }
 
 struct ChannelCollectionResponse: Codable, Equatable, Hashable {

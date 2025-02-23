@@ -1,19 +1,25 @@
 //
-//  ChannelNavigationHeaderView.swift
+//  UserWithRolesView.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 2/13/25.
+//  Created by Mick MacCallum on 2/21/25.
 //
 
 import SwiftUI
 
-struct ChannelNavigationHeaderView: View {
+struct UserWithRolesView: View {
+    // MARK: - Lifecycle
+
+    init(user: ParraUserStub) {
+        self.user = user
+    }
+
     // MARK: - Internal
 
     var user: ParraUserStub
 
     var body: some View {
-        HStack(alignment: .center, spacing: 6) {
+        HStack(spacing: 6) {
             componentFactory.buildLabel(
                 text: user.displayName,
                 localAttributes: ParraAttributes.Label(
@@ -22,7 +28,7 @@ struct ChannelNavigationHeaderView: View {
                 )
             )
 
-            if let verified = user.verified, verified, redactionReasons.isEmpty {
+            if user.verified == true && redactionReasons.isEmpty {
                 componentFactory.buildImage(
                     content: .name("CheckBadgeSolid", .module, .template),
                     localAttributes: ParraAttributes.Image(

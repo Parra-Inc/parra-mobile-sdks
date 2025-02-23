@@ -36,6 +36,7 @@ final class ParraChannelManager {
     struct ChannelInfo: Codable {
         struct ViewedMessage: Codable {
             var id: String
+            var memberId: String
             var createdAt: Date
         }
 
@@ -78,6 +79,7 @@ final class ParraChannelManager {
             cache[channel.id] = ChannelInfo(
                 newestViewedMessage: ChannelInfo.ViewedMessage(
                     id: message.id,
+                    memberId: message.memberId,
                     createdAt: message.createdAt
                 )
             )
