@@ -49,7 +49,7 @@ struct ReactionMultipleSummaryPopoverView: View {
                                 .default(
                                     with: .callout,
                                     color: theme.palette.primaryText.toParraColor(),
-                                    alignment: .center
+                                    alignment: .leading
                                 ),
                                 using: theme
                             )
