@@ -24,7 +24,8 @@ struct FeedCreatorUpdateDetailHeaderView: View {
             .padding([.horizontal, .top], 16)
 
             FeedCreatorUpdateContentView(
-                creatorUpdate: creatorUpdate
+                creatorUpdate: creatorUpdate,
+                lineLimit: nil
             )
             .padding(.horizontal, 16)
 

@@ -85,7 +85,8 @@ struct FeedCreatorUpdateView: View {
                 .padding([.horizontal, .top], 16)
 
                 FeedCreatorUpdateContentView(
-                    creatorUpdate: creatorUpdate
+                    creatorUpdate: creatorUpdate,
+                    lineLimit: 8
                 )
                 .padding(.horizontal, 16)
                 .padding(.bottom, hasAttachments || !hasReactions ? 12 : 0)
