@@ -120,6 +120,8 @@ struct ChannelWidget: ParraContainer {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
 
+    @State private var allowSubmission = false
+
     @ViewBuilder private var messageStack: some View {
         LazyVStack {
             ForEach(messages) { message in
@@ -175,7 +177,9 @@ struct ChannelWidget: ParraContainer {
     private func addCommentBar(
         with proxy: ScrollViewProxy
     ) -> some View {
-        AddCommentBarView { text in
+        AddCommentBarView(
+            allowSubmission: $allowSubmission
+        ) { text in
             guard let user = authState.user else {
                 Logger.error("Tried to submit a comment without a user")
 

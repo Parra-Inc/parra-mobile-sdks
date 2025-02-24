@@ -102,6 +102,11 @@ public struct ParraReactionOptionGroup: Codable, Equatable, Hashable, Identifiab
     public let options: [ParraReactionOption]
 }
 
+struct ParraUserNameStub: Codable, Equatable, Hashable, Identifiable {
+    let id: String
+    let name: String
+}
+
 public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
@@ -113,7 +118,8 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
         value: String,
         count: Int,
         reactionId: String?,
-        originalReactionId: String?
+        originalReactionId: String?,
+        users: [ParraUserNameStub]?
     ) {
         self.id = id
         self.firstReactionAt = firstReactionAt
@@ -123,6 +129,7 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
         self.count = count
         self.reactionId = reactionId
         self.originalReactionId = originalReactionId
+        self.users = .init(users)
     }
 
     // MARK: - Public
@@ -136,6 +143,8 @@ public struct ParraReactionSummary: Codable, Equatable, Hashable, Identifiable {
     public let reactionId: String?
 
     // MARK: - Internal
+
+    let users: PartiallyDecodableArray<ParraUserNameStub>?
 
     /// Used when toggling reaction state, this keeps track of what the reaction
     /// id was while the state is toggled and a temporary reactionId is applied.

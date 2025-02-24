@@ -43,7 +43,8 @@ extension ParraComment: ParraFixture {
                         value: "👍",
                         count: 6,
                         reactionId: .uuid,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     ),
                     ParraReactionSummary(
                         id: .uuid,
@@ -53,7 +54,8 @@ extension ParraComment: ParraFixture {
                         value: "👎",
                         count: 1,
                         reactionId: nil,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     ),
                     ParraReactionSummary(
                         id: .uuid,
@@ -63,7 +65,8 @@ extension ParraComment: ParraFixture {
                         value: "❤️",
                         count: 42,
                         reactionId: nil,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     ),
                     ParraReactionSummary(
                         id: .uuid,
@@ -73,7 +76,8 @@ extension ParraComment: ParraFixture {
                         value: "🥳",
                         count: 4,
                         reactionId: .uuid,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     )
                 ],
                 isTemporary: nil
@@ -110,7 +114,8 @@ extension ParraComment: ParraFixture {
                         value: "❤️",
                         count: 4,
                         reactionId: .uuid,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     )
                 ],
                 isTemporary: true,
@@ -150,7 +155,8 @@ extension ParraComment: ParraFixture {
                         value: "🔥",
                         count: 65,
                         reactionId: .uuid,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     )
                 ],
                 isTemporary: nil

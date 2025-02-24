@@ -220,6 +220,8 @@ struct FeedCommentWidget: ParraContainer {
     @Environment(\.parraUserEntitlements) private var userEntitlements
     @Environment(\.parraAppInfo) private var appInfo
 
+    @State private var allowSubmission = false
+
     private var emptyStateAttributes: ParraAttributes.EmptyState {
         ParraAttributes.EmptyState(
             titleLabel: .default(
@@ -246,7 +248,9 @@ struct FeedCommentWidget: ParraContainer {
     private func addCommentBar(
         proxy: ScrollViewProxy
     ) -> some View {
-        AddCommentBarView { text in
+        AddCommentBarView(
+            allowSubmission: $allowSubmission
+        ) { text in
             guard let user = authState.user else {
                 Logger.error("Tried to submit a comment without a user")
 

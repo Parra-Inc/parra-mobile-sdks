@@ -43,7 +43,7 @@ struct FeedReactionView: View {
                 reactionButtons
 
                 // Keep these together to prevent wrapping between them
-                HStack(spacing: 6) {
+                HStack(spacing: 10) {
                     AddReactionButtonView(
                         attachmentPaywall: attachmentPaywall
                     ) {

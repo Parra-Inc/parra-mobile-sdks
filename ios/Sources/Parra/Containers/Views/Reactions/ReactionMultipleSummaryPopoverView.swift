@@ -34,15 +34,20 @@ struct ReactionMultipleSummaryPopoverView: View {
                             )
                             .applyCornerRadii(size: .xl, from: theme)
 
-                        (
-                            Text(names)
-                                + Text(" reacted with \(reaction.wrappedValue.name)")
-                                .foregroundStyle(
-                                    .secondary
-                                )
-                        )
-                        .lineLimit(3)
-                        .fixedSize(horizontal: false, vertical: true)
+                        if let names = namesList(
+                            for: reaction.wrappedValue
+                        ) {
+                            (
+                                Text(names)
+                                    + Text(
+                                        " reacted with \(reaction.wrappedValue.name)"
+                                    ).foregroundStyle(
+                                        .secondary
+                                    )
+                            )
+                            .lineLimit(3)
+                            .fixedSize(horizontal: false, vertical: true)
+                        }
                     }
                 }
             }
@@ -64,4 +69,27 @@ struct ReactionMultipleSummaryPopoverView: View {
     @Binding private var reactions: [ParraReactionSummary]
 
     @Environment(\.parraTheme) private var theme
+
+    private func namesList(
+        for reaction: ParraReactionSummary
+    ) -> String? {
+        guard let stubs = reaction.users?.elements, !stubs.isEmpty else {
+            return nil
+        }
+
+        var names = stubs.map { stub in
+            return stub.name
+        }
+
+        let remaining = reaction.count - names.count
+        if remaining == 0 {
+            // noop
+        } else if remaining == 1 {
+            names.append("1 other")
+        } else {
+            names.append("\(remaining) others")
+        }
+
+        return names.toCommaList()
+    }
 }

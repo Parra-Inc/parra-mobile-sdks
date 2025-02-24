@@ -7,14 +7,16 @@
 
 import SwiftUI
 
-private let characterLimit: Int = 250
-
 struct AddCommentBarView: View {
     // MARK: - Lifecycle
 
     init(
+        allowSubmission: Binding<Bool>,
+        characterLimit: Int = 250,
         submitComment: @escaping (String) -> Bool
     ) {
+        self._allowSubmission = allowSubmission
+        self.characterLimit = characterLimit
         self.submitComment = submitComment
         self._submitButtonContent = State(
             initialValue: ParraImageButtonContent(
@@ -26,6 +28,7 @@ struct AddCommentBarView: View {
 
     // MARK: - Internal
 
+    let characterLimit: Int
     let submitComment: (String) -> Bool
 
     var body: some View {
@@ -139,14 +142,19 @@ struct AddCommentBarView: View {
                 in: .whitespacesAndNewlines
             )
 
+            let isDisabled = !allowSubmission ||
+                (trimmed.isEmpty || trimmed.count > characterLimit)
+
             submitButtonContent = ParraImageButtonContent(
                 image: .symbol("arrow.up.circle.fill", .monochrome),
-                isDisabled: trimmed.isEmpty || trimmed.count > characterLimit
+                isDisabled: isDisabled
             )
         }
     }
 
     // MARK: - Private
+
+    @Binding private var allowSubmission: Bool
 
     @State private var text = ""
     @State private var submitButtonContent: ParraImageButtonContent

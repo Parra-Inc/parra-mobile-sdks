@@ -27,18 +27,20 @@ struct ReactionSummaryPopoverView: View {
                 )
                 .applyCornerRadii(size: .xl, from: theme)
 
-            (
-                Text(names)
-                    + Text(" reacted with \(reaction.name)").foregroundStyle(
-                        .secondary
-                    )
-            )
-            .lineLimit(3)
-            .fixedSize(horizontal: false, vertical: true)
+            if let names = namesList(from: reaction.users?.elements) {
+                (
+                    Text(names)
+                        + Text(" reacted with \(reaction.name)").foregroundStyle(
+                            .secondary
+                        )
+                )
+                .lineLimit(3)
+                .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 24)
-        .frame(maxWidth: 240)
+        .padding(.vertical, 30)
+        .frame(maxWidth: 340, maxHeight: 500)
         .presentationCompactAdaptation(.popover)
         .background(
             theme.palette.primaryBackground.toParraColor()
@@ -50,4 +52,27 @@ struct ReactionSummaryPopoverView: View {
     @Binding private var reaction: ParraReactionSummary
 
     @Environment(\.parraTheme) private var theme
+
+    private func namesList(
+        from stubs: [ParraUserNameStub]?
+    ) -> String? {
+        guard let stubs, !stubs.isEmpty else {
+            return nil
+        }
+
+        var names = stubs.map { stub in
+            return stub.name
+        }
+
+        let remaining = reaction.count - names.count
+        if remaining == 0 {
+            // noop
+        } else if remaining == 1 {
+            names.append("1 other")
+        } else {
+            names.append("\(remaining) others")
+        }
+
+        return names.toCommaList()
+    }
 }

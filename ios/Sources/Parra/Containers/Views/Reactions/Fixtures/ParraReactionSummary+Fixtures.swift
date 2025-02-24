@@ -18,7 +18,8 @@ extension ParraReactionSummary: ParraFixture {
                 value: "😀",
                 count: 2,
                 reactionId: .uuid,
-                originalReactionId: nil
+                originalReactionId: nil,
+                users: []
             ),
             ParraReactionSummary(
                 id: .uuid,
@@ -28,7 +29,8 @@ extension ParraReactionSummary: ParraFixture {
                 value: "👎",
                 count: 29,
                 reactionId: nil,
-                originalReactionId: nil
+                originalReactionId: nil,
+                users: []
             )
         ]
     }
