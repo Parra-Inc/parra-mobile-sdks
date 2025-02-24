@@ -8,6 +8,8 @@
 import Foundation
 
 extension API {
+    // MARK: - Channels
+
     func createPaidDmChannel(
         key: String
     ) async throws -> ChannelResponse {
@@ -34,6 +36,42 @@ extension API {
             queryItems: query
         )
     }
+
+    // MARK: - Channel Admin
+
+    func adminCloseChannel(
+        channelId: String
+    ) async throws -> ChannelResponse {
+        return try await hitEndpoint(
+            .postCloseChannel(channelId: channelId)
+        )
+    }
+
+    func adminOpenChannel(
+        channelId: String
+    ) async throws -> ChannelResponse {
+        return try await hitEndpoint(
+            .postOpenChannel(channelId: channelId)
+        )
+    }
+
+    func adminLeaveChannel(
+        channelId: String
+    ) async throws {
+        let _: EmptyResponseObject = try await hitEndpoint(
+            .postLeaveChannel(channelId: channelId)
+        )
+    }
+
+    func adminArchiveChannel(
+        channelId: String
+    ) async throws {
+        let _: EmptyResponseObject = try await hitEndpoint(
+            .deleteArchiveChannel(channelId: channelId)
+        )
+    }
+
+    // MARK: - Messages
 
     func paginateMessagesForChannel(
         channelId: String,
