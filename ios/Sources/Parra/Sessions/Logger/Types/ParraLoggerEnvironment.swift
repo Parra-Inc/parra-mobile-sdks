@@ -54,9 +54,9 @@ public enum ParraLoggerEnvironment {
             #if DEBUG
             return true
             #else
-            // Normally this is always false, but on the Parra Demo app, logs
-            // should also be sent to the console to be displayed on screen
-            return ParraAppEnvironment.isParraDemoBeta
+            // Send logs to the console in TestFlight apps so they are visible
+            // in the debug logger.
+            return ParraAppEnvironment.isBeta
             #endif
         }
     }
