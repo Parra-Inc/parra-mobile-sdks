@@ -56,48 +56,56 @@ public final class ParraUserEntitlements {
     public func getEntitlement(
         for entitlementKey: String
     ) -> ParraUserEntitlement? {
-        return current.first { entitlement in
-            guard entitlement.isConsumable else {
-                logger.debug("Current user has non consumable entitlement", [
-                    "entitlement": entitlementKey,
-                    "entitlementId": entitlement.id
-                ])
+        logger.debug("Getting entitlement for key", [
+            "entitlementKey": entitlementKey
+        ])
 
-                return true
-            }
+        guard let entitlement = current.first(where: { entitlement in
+            return entitlement.key == entitlementKey
+        }) else {
+            return nil
+        }
 
-            guard let quantityAvailable = entitlement.quantityAvailable else {
-                logger.warn(
-                    "Current user is missing quantity available data for consumable entitlement",
-                    [
-                        "entitlement": entitlementKey
-                    ]
-                )
+        guard entitlement.isConsumable else {
+            logger.debug("Current user has non consumable entitlement", [
+                "entitlementKey": entitlement.key,
+                "entitlementId": entitlement.id
+            ])
 
-                return false
-            }
+            return entitlement
+        }
 
-            if quantityAvailable > 0 {
-                logger.debug(
-                    "Current user has sufficient remaining quantity for consumable entitlement",
-                    [
-                        "entitlement": entitlementKey,
-                        "quantityAvailable": String(quantityAvailable)
-                    ]
-                )
+        guard let quantityAvailable = entitlement.quantityAvailable else {
+            logger.warn(
+                "Current user is missing quantity available data for consumable entitlement",
+                [
+                    "entitlementKey": entitlement.key
+                ]
+            )
 
-                return true
-            } else {
-                logger.debug(
-                    "Current user has insufficient remaining quantity for consumable entitlement",
-                    [
-                        "entitlement": entitlementKey,
-                        "quantityAvailable": String(quantityAvailable)
-                    ]
-                )
+            return nil
+        }
 
-                return false
-            }
+        if quantityAvailable > 0 {
+            logger.debug(
+                "Current user has sufficient remaining quantity for consumable entitlement",
+                [
+                    "entitlementKey": entitlement.key,
+                    "quantityAvailable": String(quantityAvailable)
+                ]
+            )
+
+            return entitlement
+        } else {
+            logger.debug(
+                "Current user has insufficient remaining quantity for consumable entitlement",
+                [
+                    "entitlementKey": entitlement.key,
+                    "quantityAvailable": String(quantityAvailable)
+                ]
+            )
+
+            return nil
         }
     }
 
