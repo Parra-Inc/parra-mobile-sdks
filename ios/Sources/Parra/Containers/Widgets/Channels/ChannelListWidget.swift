@@ -28,7 +28,7 @@ struct ChannelListWidget: ParraContainer {
     let config: ParraChannelListConfiguration
 
     var channels: Binding<[Channel]> {
-        return $contentObserver.channelPaginator.items
+        return $contentObserver.channels
     }
 
     var body: some View {
@@ -87,7 +87,9 @@ struct ChannelListWidget: ParraContainer {
         .environment(componentFactory)
         .environmentObject(contentObserver)
         .onAppear {
-            contentObserver.loadInitialChannels()
+            Task {
+                await contentObserver.refresh()
+            }
         }
         .navigationTitle(config.navigationTitle)
         .navigationDestination(for: Channel.self) { channel in
@@ -216,38 +218,21 @@ struct ChannelListWidget: ParraContainer {
     ) -> some View {
         GeometryReader { _ in
             ScrollView {
-                cells.redacted(
-                    when: contentObserver.channelPaginator.isShowingPlaceholders
-                )
+                cells
             }
             .emptyPlaceholder(channels) {
-                if !contentObserver.channelPaginator.isLoading {
-                    componentFactory.buildEmptyState(
-                        config: .default,
-                        content: contentObserver.content.emptyStateView
-                    )
-                } else {
-                    EmptyView()
-                }
-            }
-            .errorPlaceholder(contentObserver.channelPaginator.error) {
                 componentFactory.buildEmptyState(
-                    config: .errorDefault,
-                    content: contentObserver.content.errorStateView
+                    config: .default,
+                    content: contentObserver.content.emptyStateView
                 )
             }
-            // A limited number of placeholder cells will be generated.
-            // Don't allow scrolling past them while loading.
-            .scrollDisabled(
-                contentObserver.channelPaginator.isShowingPlaceholders
-            )
             .contentMargins(
                 .vertical,
                 contentPadding.bottom / 2,
                 for: .scrollContent
             )
             .refreshable {
-                contentObserver.refresh()
+                await contentObserver.refresh()
             }
             .frame(
                 maxWidth: .infinity,

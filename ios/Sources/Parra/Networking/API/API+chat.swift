@@ -22,25 +22,15 @@ extension API {
         )
     }
 
-    func paginateChannels(
-        type: ParraChatChannelType,
-        limit: Int? = nil,
-        offset: Int? = nil
-    ) async throws -> ChannelCollectionResponse {
+    func listChatChannels(
+        type: ParraChatChannelType
+    ) async throws -> ChannelListResponse {
         var query: [String: String] = [
             "type": type.rawValue
         ]
 
-        if let limit {
-            query["limit"] = String(limit)
-        }
-
-        if let offset {
-            query["offset"] = String(offset)
-        }
-
         return try await hitEndpoint(
-            .getPaginateChannels,
+            .getListChatChannels,
             queryItems: query
         )
     }

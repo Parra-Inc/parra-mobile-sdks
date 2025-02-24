@@ -71,15 +71,13 @@ public extension View {
         >.Transformer = { parra, _ in
             let api = parra.parraInternal.api
 
-            let channelListResponse = try await api.paginateChannels(
-                type: channelType,
-                limit: nil,
-                offset: nil
+            let channelListResponse = try await api.listChatChannels(
+                type: channelType
             )
 
             var presentationMode: PaidDirectMessageParams.PresentationMode
 
-            if channelListResponse.data.elements.isEmpty {
+            if channelListResponse.elements.isEmpty {
                 if ParraUserEntitlements.shared.isEntitled(
                     to: entitlement
                 ) {

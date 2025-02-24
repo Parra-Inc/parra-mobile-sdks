@@ -72,13 +72,8 @@ public extension View {
             ChannelListWidget
         >.Transformer = { parra, transformParams in
             let api = parra.parraInternal.api
-            let channelListResponse = try await api.paginateChannels(
-                type: .paidDm,
-                // Eventual todo, we're just fetching a lot of conversations in
-                // advance to avoid paginator bugs sorting the channel list
-                // by its most recently updated message.
-                limit: 250,
-                offset: 0
+            let channelListResponse = try await api.listChatChannels(
+                type: .paidDm
             )
 
             return ChannelListParams(

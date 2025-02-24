@@ -150,7 +150,7 @@ struct Channel: Codable, Equatable, Hashable, Identifiable {
     let deletedAt: Date?
     let tenantId: String
     let type: ParraChatChannelType
-    let status: ChatChannelStatus
+    var status: ChatChannelStatus
     let members: PartiallyDecodableArray<ChannelMember>?
     var latestMessages: PartiallyDecodableArray<Message>?
 
@@ -209,31 +209,7 @@ struct Channel: Codable, Equatable, Hashable, Identifiable {
     }
 }
 
-struct ChannelCollectionResponse: Codable, Equatable, Hashable {
-    // MARK: - Lifecycle
-
-    init(
-        page: Int,
-        pageCount: Int,
-        pageSize: Int,
-        totalCount: Int,
-        data: [Channel]
-    ) {
-        self.page = page
-        self.pageCount = pageCount
-        self.pageSize = pageSize
-        self.totalCount = totalCount
-        self.data = .init(data)
-    }
-
-    // MARK: - Internal
-
-    let page: Int
-    let pageCount: Int
-    let pageSize: Int
-    let totalCount: Int
-    let data: PartiallyDecodableArray<Channel>
-}
+typealias ChannelListResponse = PartiallyDecodableArray<Channel>
 
 struct UpdateChatChannelRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
