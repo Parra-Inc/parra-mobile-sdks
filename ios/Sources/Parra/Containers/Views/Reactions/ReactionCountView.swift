@@ -32,6 +32,9 @@ struct ReactionCountView: View {
                 )
             )
         )
+        .onTapGesture {
+            isReactionPopoverPresented = true
+        }
         .onLongPressGesture {
             isReactionPopoverPresented = true
         }
