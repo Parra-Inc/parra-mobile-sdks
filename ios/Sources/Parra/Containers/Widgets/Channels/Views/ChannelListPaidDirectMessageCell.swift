@@ -16,51 +16,72 @@ struct ChannelListPaidDirectMessageCell: View {
         CellNavigationLink(
             value: channel,
             label: {
-                HStack(alignment: .top, spacing: 20) {
-                    AvatarView(
-                        avatar: memberUserList.first?.avatar,
-                        size: CGSize(width: 44, height: 44),
-                        showVerifiedBadge: memberUserList.first?.verified == true
-                    )
-
-                    VStack(alignment: .leading) {
-                        HStack {
-                            componentFactory.buildLabel(
-                                text: membersList,
-                                localAttributes: ParraAttributes.Label(
-                                    text: .default(with: .headline),
-                                    padding: .zero
-                                )
-                            )
-
-                            if channel.status == .locked {
-                                componentFactory.buildBadge(
-                                    size: .sm,
-                                    variant: .outlined,
-                                    text: channel.status.description
-                                )
-                            } else {
-                                Spacer()
-                            }
-                        }
-
-                        previewView
+                HStack(alignment: .center, spacing: 0) {
+                    if isPreviewUnread {
+                        Circle().foregroundStyle(.blue).frame(
+                            width: 16, height: 16
+                        )
                     }
-                    .frame(
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
 
-                    componentFactory.buildLabel(
-                        text: (latestMessage?.updatedAt ?? channel.updatedAt)
-                            .timeAgoAbbreviated(),
-                        localAttributes: ParraAttributes.Label(
-                            text: .default(with: .caption),
-                            padding: .custom(
-                                EdgeInsets(top: 1, leading: 0, bottom: 0, trailing: 0)
+                    HStack(alignment: .top, spacing: 16) {
+                        AvatarView(
+                            avatar: memberUserList.first?.avatar,
+                            size: CGSize(width: 44, height: 44),
+                            showVerifiedBadge: memberUserList.first?.verified == true
+                        )
+
+                        VStack(alignment: .leading) {
+                            HStack {
+                                componentFactory.buildLabel(
+                                    text: membersList,
+                                    localAttributes: ParraAttributes.Label(
+                                        text: .default(with: .headline),
+                                        padding: .zero
+                                    )
+                                )
+
+                                if channel.status == .locked {
+                                    componentFactory.buildBadge(
+                                        size: .sm,
+                                        variant: .outlined,
+                                        text: channel.status.description
+                                    )
+                                } else {
+                                    Spacer()
+                                }
+                            }
+
+                            previewView
+                        }
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+
+                        componentFactory.buildLabel(
+                            text: (latestMessage?.updatedAt ?? channel.updatedAt)
+                                .timeAgoAbbreviated(),
+                            localAttributes: ParraAttributes.Label(
+                                text: .default(with: .caption),
+                                padding: .custom(
+                                    EdgeInsets(top: 1, leading: 0, bottom: 0, trailing: 0)
+                                )
                             )
                         )
-                    )
+                    }
+                    //                .swipeActions(edge: .trailing) {
+                    //                    Button(role: .destructive) {
+                    //
+                    //                    } label: {
+                    //                        Label("Archive", systemImage: "trash")
+                    //                    }
+                    //
+                    //                    Button {
+                    //
+                    //                    } label: {
+                    //                        Label("Close", systemImage: "flag")
+                    //                    }
+                    //                }
                 }
             }
         )

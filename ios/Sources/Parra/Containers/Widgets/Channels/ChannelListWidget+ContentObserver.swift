@@ -120,6 +120,7 @@ extension ChannelListWidget {
             }
 
             guard let channelId = userInfo["channelId"] as? String,
+                  let status = userInfo["status"] as? ChatChannelStatus,
                   let lastMessages = userInfo["lastMessages"] as? [Message] else
             {
                 return
@@ -132,6 +133,7 @@ extension ChannelListWidget {
             }
 
             var updatedChannel = channels[matchingChannelIndex]
+            updatedChannel.status = status
             updatedChannel.latestMessages = .init(lastMessages)
 
             channels[matchingChannelIndex] = updatedChannel

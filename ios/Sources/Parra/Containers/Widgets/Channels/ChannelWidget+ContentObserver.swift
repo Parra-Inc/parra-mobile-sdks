@@ -231,21 +231,71 @@ extension ChannelWidget {
         // MARK: - Changing Channel Status
 
         @MainActor
-        func adminUnlockChannel() {}
+        func adminUnlockChannel() async throws {
+            do {
+                let updatedChannel = try await api.adminUnlockChannel(
+                    channelId: channel.id
+                )
 
-        @MainActor
-        func adminLockChannel() {
-            channel.status = .active
+                withAnimation {
+                    channel = updatedChannel
+
+                    broadcastChanges()
+                }
+            } catch {
+                logger.error("Error admin unlocking channel", error)
+
+                throw error
+            }
         }
 
         @MainActor
-        func adminLeaveChannel() {
-            channel.status = .active
+        func adminLockChannel() async throws {
+            do {
+                let updatedChannel = try await api.adminLockChannel(
+                    channelId: channel.id
+                )
+
+                withAnimation {
+                    channel = updatedChannel
+
+                    broadcastChanges()
+                }
+            } catch {
+                logger.error("Error admin unlocking channel", error)
+
+                throw error
+            }
         }
 
         @MainActor
-        func adminArchiveChannel() {
-            channel.status = .active
+        func adminLeaveChannel() async throws {
+            do {
+                try await api.adminLeaveChannel(
+                    channelId: channel.id
+                )
+
+                broadcastChanges()
+            } catch {
+                logger.error("Error admin leaving channel", error)
+
+                throw error
+            }
+        }
+
+        @MainActor
+        func adminArchiveChannel() async throws {
+            do {
+                try await api.adminArchiveChannel(
+                    channelId: channel.id
+                )
+
+                broadcastChanges()
+            } catch {
+                logger.error("Error admin archiving channel", error)
+
+                throw error
+            }
         }
 
         // MARK: - Private
@@ -266,6 +316,7 @@ extension ChannelWidget {
                 object: nil,
                 userInfo: [
                     "channelId": channel.id,
+                    "status": channel.status,
                     "lastMessages": lastMessages
                 ]
             )

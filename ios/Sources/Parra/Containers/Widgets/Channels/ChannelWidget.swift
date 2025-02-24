@@ -40,10 +40,10 @@ struct ChannelWidget: ParraContainer {
 
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: parraTheme
+            with: theme
         )
 
-        let contentPadding = parraTheme.padding.value(
+        let contentPadding = theme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -52,7 +52,7 @@ struct ChannelWidget: ParraContainer {
         )
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: parraTheme
+            using: theme
         )
         .environment(config)
         .environment(componentFactory)
@@ -84,7 +84,17 @@ struct ChannelWidget: ParraContainer {
             Button("Cancel", role: .cancel) {}
 
             Button("Lock", role: .destructive) {
-                contentObserver.adminLockChannel()
+                Task { @MainActor in
+                    do {
+                        try await contentObserver.adminLockChannel()
+                    } catch {
+                        alertManager.showErrorToast(
+                            title: "Error Locking Conversation",
+                            userFacingMessage: "Something went wrong locking the conversation. Please try again.",
+                            underlyingError: error
+                        )
+                    }
+                }
             }
         } message: {
             Text(
@@ -99,7 +109,17 @@ struct ChannelWidget: ParraContainer {
             Button("Cancel", role: .cancel) {}
 
             Button("Unlock") {
-                contentObserver.adminUnlockChannel()
+                Task { @MainActor in
+                    do {
+                        try await contentObserver.adminUnlockChannel()
+                    } catch {
+                        alertManager.showErrorToast(
+                            title: "Error Unlocking Conversation",
+                            userFacingMessage: "Something went wrong unlocking the conversation. Please try again.",
+                            underlyingError: error
+                        )
+                    }
+                }
             }
         } message: {
             Text(
@@ -114,7 +134,19 @@ struct ChannelWidget: ParraContainer {
             Button("Cancel", role: .cancel) {}
 
             Button("Leave", role: .destructive) {
-                contentObserver.adminLeaveChannel()
+                Task { @MainActor in
+                    do {
+                        try await contentObserver.adminLeaveChannel()
+
+                        dismiss()
+                    } catch {
+                        alertManager.showErrorToast(
+                            title: "Error Leaving Conversation",
+                            userFacingMessage: "Something went wrong leaving the conversation. Please try again.",
+                            underlyingError: error
+                        )
+                    }
+                }
             }
         } message: {
             Text(
@@ -129,7 +161,7 @@ struct ChannelWidget: ParraContainer {
             Button("Cancel", role: .cancel) {}
 
             Button("Archive", role: .destructive) {
-                contentObserver.adminArchiveChannel()
+//                contentObserver.adminArchiveChannel()
             }
         } message: {
             Text(
@@ -200,10 +232,11 @@ struct ChannelWidget: ParraContainer {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraAlertManager) private var alertManager
-    @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraTheme) private var theme
     @Environment(\.parraUserEntitlements) private var userEntitlements
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.dismiss) private var dismiss
 
     @State private var allowSubmission = false
     @State private var isConfirmingLock = false
@@ -311,10 +344,39 @@ struct ChannelWidget: ParraContainer {
         with contentPadding: EdgeInsets
     ) -> some View {
         ScrollViewReader { proxy in
-            VStack {
+            VStack(spacing: 0) {
+                if contentObserver.channel.status == .locked {
+                    HStack {
+                        Spacer()
+
+                        componentFactory.buildLabel(
+                            content: ParraLabelContent(
+                                text: "This conversation has ended",
+                                icon: .symbol("exclamationmark.circle")
+                            ),
+                            localAttributes: .default(
+                                with: .callout,
+                                alignment: .center
+                            )
+                        )
+
+                        Spacer()
+                    }
+                    .padding()
+                    .background(theme.palette.secondaryBackground)
+                    .shadow(
+                        color: theme.palette.secondaryBackground.opacity(0.7),
+                        radius: 4,
+                        x: 0,
+                        y: 2
+                    )
+                    .mask(Rectangle().padding(.bottom, -20))
+                }
+
                 ScrollView {
                     messageStack
                 }
+                .scrollDismissesKeyboard(.interactively)
                 .upsideDown()
                 // A limited number of placeholder cells will be generated.
                 // Don't allow scrolling past them while loading.
@@ -336,7 +398,15 @@ struct ChannelWidget: ParraContainer {
                     contentObserver.refresh()
                 }
 
-                addCommentBar(with: proxy)
+                if contentObserver.channel.hasMemberRole(
+                    authState.user,
+                    role: .admin
+                ) {
+                    // Admins always see the add message bar
+                    addCommentBar(with: proxy)
+                } else if contentObserver.channel.status == .active {
+                    addCommentBar(with: proxy)
+                }
             }
             .frame(
                 maxWidth: .infinity,

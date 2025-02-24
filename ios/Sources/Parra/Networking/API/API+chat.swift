@@ -39,7 +39,7 @@ extension API {
 
     // MARK: - Channel Admin
 
-    func adminCloseChannel(
+    func adminLockChannel(
         channelId: String
     ) async throws -> ChannelResponse {
         return try await hitEndpoint(
@@ -47,7 +47,7 @@ extension API {
         )
     }
 
-    func adminOpenChannel(
+    func adminUnlockChannel(
         channelId: String
     ) async throws -> ChannelResponse {
         return try await hitEndpoint(
