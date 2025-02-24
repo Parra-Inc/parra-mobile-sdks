@@ -138,6 +138,8 @@ struct ChannelWidget: ParraContainer {
                     do {
                         try await contentObserver.adminLeaveChannel()
 
+                        // Relies on navigating back triggering a refresh, which
+                        // will cause the channel to be removed from the list
                         dismiss()
                     } catch {
                         alertManager.showErrorToast(
@@ -161,7 +163,21 @@ struct ChannelWidget: ParraContainer {
             Button("Cancel", role: .cancel) {}
 
             Button("Archive", role: .destructive) {
-//                contentObserver.adminArchiveChannel()
+                Task { @MainActor in
+                    do {
+                        try await contentObserver.adminArchiveChannel()
+
+                        // Relies on navigating back triggering a refresh, which
+                        // will cause the channel to be removed from the list
+                        dismiss()
+                    } catch {
+                        alertManager.showErrorToast(
+                            title: "Error Archiving Conversation",
+                            userFacingMessage: "Something went wrong archiving the conversation. Please try again.",
+                            underlyingError: error
+                        )
+                    }
+                }
             }
         } message: {
             Text(

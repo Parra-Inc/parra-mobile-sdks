@@ -274,8 +274,6 @@ extension ChannelWidget {
                 try await api.adminLeaveChannel(
                     channelId: channel.id
                 )
-
-                broadcastChanges()
             } catch {
                 logger.error("Error admin leaving channel", error)
 
@@ -289,8 +287,6 @@ extension ChannelWidget {
                 try await api.adminArchiveChannel(
                     channelId: channel.id
                 )
-
-                broadcastChanges()
             } catch {
                 logger.error("Error admin archiving channel", error)
 
