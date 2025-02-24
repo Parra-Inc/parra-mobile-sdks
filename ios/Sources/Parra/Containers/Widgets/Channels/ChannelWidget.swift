@@ -295,6 +295,18 @@ struct ChannelWidget: ParraContainer {
         }
     }
 
+    private var showCommentBar: Bool {
+        if contentObserver.channel.hasMemberRole(
+            authState.user,
+            role: .admin
+        ) {
+            // Admins always see the add message bar
+            return true
+        }
+
+        return contentObserver.channel.status == .active
+    }
+
     @ViewBuilder
     private func addCommentBar(
         with proxy: ScrollViewProxy
@@ -384,8 +396,13 @@ struct ChannelWidget: ParraContainer {
                     contentObserver.messagePaginator.isShowingPlaceholders
                 )
                 .contentMargins(
-                    .vertical,
-                    contentPadding.bottom / 2,
+                    [.top, .bottom],
+                    EdgeInsets(
+                        top: showCommentBar ? contentPadding.bottom / 2 : 44,
+                        leading: 0,
+                        bottom: contentPadding.bottom / 2,
+                        trailing: 0
+                    ),
                     for: .scrollContent
                 )
                 .emptyPlaceholder(messages) {
@@ -398,16 +415,14 @@ struct ChannelWidget: ParraContainer {
                     contentObserver.refresh()
                 }
 
-                if contentObserver.channel.hasMemberRole(
-                    authState.user,
-                    role: .admin
-                ) {
-                    // Admins always see the add message bar
-                    addCommentBar(with: proxy)
-                } else if contentObserver.channel.status == .active {
+                if showCommentBar {
                     addCommentBar(with: proxy)
                 }
             }
+            .ignoresSafeArea(
+                .container,
+                edges: showCommentBar ? [] : [.bottom]
+            )
             .frame(
                 maxWidth: .infinity,
                 maxHeight: .infinity
