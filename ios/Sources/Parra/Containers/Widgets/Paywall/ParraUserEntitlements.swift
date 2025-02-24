@@ -107,23 +107,23 @@ public final class ParraUserEntitlements {
     public func isEntitled(
         to entitlementKey: String
     ) -> Bool {
-        let firstMatch = getEntitlement(for: entitlementKey)
-
-        if firstMatch == nil {
+        if let firstMatch = getEntitlement(for: entitlementKey) {
             logger.debug("Current user has entitlement", [
-                "entitlement": entitlementKey
-            ])
-
-            return false
-        } else {
-            logger.debug("Current user is missing entitlement", [
-                "entitlement": entitlementKey
+                "entitlementKey": entitlementKey,
+                "isConsumable": String(firstMatch.isConsumable),
+                "isFree": String(firstMatch.isFree),
+                "quantityAvailable": String(firstMatch.quantityAvailable ?? -1),
+                "quantityConsumed": String(firstMatch.quantityConsumed ?? -1)
             ])
 
             return true
         }
 
-        return firstMatch != nil
+        logger.debug("Current user is missing entitlement", [
+            "entitlement": entitlementKey
+        ])
+
+        return false
     }
 
     /// Whether the currently logged in user has the provided entitlement key.

@@ -10,6 +10,8 @@ import SwiftUI
 
 // TODO: Write comment about how "key" is a Paid DM configuration in the dashboard.
 
+private let logger = Logger()
+
 public extension View {
     @MainActor
     func presentParraPaidDirectMessageWidget(
@@ -69,24 +71,36 @@ public extension View {
             PaidDirectMessageParams,
             ChannelWidget
         >.Transformer = { parra, _ in
+            logger.debug("Applying transformer to present Paid DM Widget")
+
             let api = parra.parraInternal.api
 
             let channelListResponse = try await api.listChatChannels(
                 type: channelType
             )
 
+            logger.debug("Successfully received channels list", [
+                "count": String(channelListResponse.elements.count)
+            ])
+
             var presentationMode: PaidDirectMessageParams.PresentationMode
 
             if channelListResponse.elements.isEmpty {
+                logger.debug("Channel list is empty.")
+
                 if ParraUserEntitlements.shared.isEntitled(
                     to: entitlement
                 ) {
+                    logger.debug("User is entitled, creating new channel.")
                     let channel = try await api.createPaidDmChannel(
                         key: key
                     )
 
+                    logger.debug("Channel is created. Presentation mode is channel")
                     presentationMode = .channel(channel)
                 } else {
+                    logger.debug("User is not entitled. Presenting paywall.")
+
                     let paywall = try await api.getPaywall(
                         for: entitlement,
                         context: context
@@ -102,9 +116,15 @@ public extension View {
                         .productIds([])
                     }
 
+                    logger
+                        .debug(
+                            "Paywall successfully fetched. Presentation mode is paywall."
+                        )
                     presentationMode = .paywall(paywall, paywallProducts)
                 }
             } else {
+                logger.debug("Channel list not empty. Pesentation mode is channelList.")
+
                 presentationMode = .channelList(
                     channelType,
                     channelListResponse
