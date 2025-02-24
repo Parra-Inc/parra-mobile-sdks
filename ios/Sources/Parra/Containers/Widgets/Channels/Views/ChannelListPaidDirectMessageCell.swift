@@ -16,76 +16,81 @@ struct ChannelListPaidDirectMessageCell: View {
         CellNavigationLink(
             value: channel,
             label: {
-                HStack(alignment: .center, spacing: 0) {
-                    if isPreviewUnread {
-                        Circle().foregroundStyle(.blue).frame(
-                            width: 16, height: 16
-                        )
+                HStack(alignment: .top, spacing: 16) {
+                    HStack(alignment: .center, spacing: 0) {
+                        if isPreviewUnread {
+                            Circle()
+                                .foregroundStyle(
+                                    theme.palette.primary.toParraColor()
+                                )
+                                .frame(
+                                    width: 8, height: 8
+                                )
+                                .padding(.leading, 6)
+                                .padding(.trailing, 6)
+
+                            avatars
+                        } else {
+                            avatars
+                                .padding(.leading, 20)
+                        }
                     }
 
-                    HStack(alignment: .top, spacing: 16) {
-                        AvatarView(
-                            avatar: memberUserList.first?.avatar,
-                            size: CGSize(width: 44, height: 44),
-                            showVerifiedBadge: memberUserList.first?.verified == true
-                        )
-
-                        VStack(alignment: .leading) {
-                            HStack {
-                                componentFactory.buildLabel(
-                                    text: membersList,
-                                    localAttributes: ParraAttributes.Label(
-                                        text: .default(with: .headline),
-                                        padding: .zero
-                                    )
-                                )
-
-                                if channel.status == .locked {
-                                    componentFactory.buildBadge(
-                                        size: .sm,
-                                        variant: .outlined,
-                                        text: channel.status.description
-                                    )
-                                } else {
-                                    Spacer()
-                                }
-                            }
-
-                            previewView
-                        }
-                        .frame(
-                            maxWidth: .infinity,
-                            alignment: .leading
-                        )
-
-                        componentFactory.buildLabel(
-                            text: (latestMessage?.updatedAt ?? channel.updatedAt)
-                                .timeAgoAbbreviated(),
-                            localAttributes: ParraAttributes.Label(
-                                text: .default(with: .caption),
-                                padding: .custom(
-                                    EdgeInsets(top: 1, leading: 0, bottom: 0, trailing: 0)
+                    VStack(alignment: .leading) {
+                        HStack {
+                            componentFactory.buildLabel(
+                                text: membersList,
+                                localAttributes: ParraAttributes.Label(
+                                    text: .default(with: .headline),
+                                    padding: .zero
                                 )
                             )
-                        )
+
+                            if channel.status == .locked {
+                                componentFactory.buildBadge(
+                                    size: .sm,
+                                    variant: .outlined,
+                                    text: channel.status.description
+                                )
+                            } else {
+                                Spacer()
+                            }
+                        }
+
+                        previewView
                     }
-                    //                .swipeActions(edge: .trailing) {
-                    //                    Button(role: .destructive) {
-                    //
-                    //                    } label: {
-                    //                        Label("Archive", systemImage: "trash")
-                    //                    }
-                    //
-                    //                    Button {
-                    //
-                    //                    } label: {
-                    //                        Label("Close", systemImage: "flag")
-                    //                    }
-                    //                }
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+
+                    componentFactory.buildLabel(
+                        text: (latestMessage?.updatedAt ?? channel.updatedAt)
+                            .timeAgoAbbreviated(),
+                        localAttributes: ParraAttributes.Label(
+                            text: .default(with: .caption),
+                            padding: .custom(
+                                EdgeInsets(top: 1, leading: 0, bottom: 0, trailing: 0)
+                            )
+                        )
+                    )
                 }
+                //                .swipeActions(edge: .trailing) {
+                //                    Button(role: .destructive) {
+                //
+                //                    } label: {
+                //                        Label("Archive", systemImage: "trash")
+                //                    }
+                //
+                //                    Button {
+                //
+                //                    } label: {
+                //                        Label("Close", systemImage: "flag")
+                //                    }
+                //                }
             }
         )
-        .padding(.horizontal)
+        .padding(.trailing, 20)
         .padding(.vertical, 8)
     }
 
@@ -94,6 +99,14 @@ struct ChannelListPaidDirectMessageCell: View {
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraAuthState) private var authState
+
+    private var avatars: some View {
+        AvatarView(
+            avatar: memberUserList.first?.avatar,
+            size: CGSize(width: 44, height: 44),
+            showVerifiedBadge: memberUserList.first?.verified == true
+        )
+    }
 
     private var isPreviewUnread: Bool {
         guard let latestMessage else {
@@ -125,7 +138,7 @@ struct ChannelListPaidDirectMessageCell: View {
             localAttributes: ParraAttributes.Label(
                 text: .default(
                     with: .body,
-                    weight: isPreviewUnread ? .bold : .regular
+                    weight: isPreviewUnread ? .semibold : .regular
                 ),
                 padding: .zero
             )
