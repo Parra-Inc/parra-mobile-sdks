@@ -67,7 +67,7 @@ struct FeedCreatorUpdateView: View {
             creatorUpdate.attachmentPaywall?.entitlement
         )
 
-        Button(
+        CellButton(
             action: {
                 params.performCreatorUpdateSelection(
                     FeedCreatorUpdateDetailParams(
@@ -141,9 +141,6 @@ struct FeedCreatorUpdateView: View {
                 }
             }
         }
-        // Required to prevent highlighting the button then dragging the scroll
-        // view from causing the button to be pressed.
-        .simultaneousGesture(TapGesture())
         .disabled(!redactionReasons.isEmpty && hasPaywallEntitlement)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)

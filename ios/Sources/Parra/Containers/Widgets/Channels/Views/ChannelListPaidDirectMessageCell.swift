@@ -13,7 +13,7 @@ struct ChannelListPaidDirectMessageCell: View {
     @Binding var channel: Channel
 
     var body: some View {
-        NavigationLink(
+        CellNavigationLink(
             value: channel,
             label: {
                 HStack(alignment: .top, spacing: 20) {
@@ -64,10 +64,6 @@ struct ChannelListPaidDirectMessageCell: View {
                 }
             }
         )
-        // Required to prevent highlighting the button then dragging the scroll
-        // view from causing the button to be pressed.
-        .simultaneousGesture(TapGesture())
-        .buttonStyle(ContentCardButtonStyle())
         .padding(.horizontal)
         .padding(.vertical, 8)
     }

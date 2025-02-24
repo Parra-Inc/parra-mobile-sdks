@@ -85,7 +85,7 @@ struct FeedYouTubeVideoView: View {
 //            youtubeVideo.attachmentPaywall?.entitlement
 //        )
 
-        Button(action: {
+        CellButton(action: {
             performYouTubeVideoUpdateSelection(
                 FeedYouTubeVideoDetailParams(
                     youtubeVideo: youtubeVideo,
@@ -144,9 +144,6 @@ struct FeedYouTubeVideoView: View {
             }
             .contentShape(.rect)
         }
-        // Required to prevent highlighting the button then dragging the scroll
-        // view from causing the button to be pressed.
-        .simultaneousGesture(TapGesture())
         .disabled(!redactionReasons.isEmpty && hasPaywallEntitlement)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)

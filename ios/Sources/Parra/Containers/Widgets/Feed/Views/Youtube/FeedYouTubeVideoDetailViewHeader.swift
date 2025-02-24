@@ -199,7 +199,7 @@ struct FeedYouTubeVideoDetailViewHeader: View {
     @ViewBuilder @MainActor private var thumbnail: some View {
         let thumb = youtubeVideo.thumbnails.maxAvailable
 
-        Button {
+        CellButton {
             contentObserver.performActionForFeedItemData(
                 .feedItemYoutubeVideo(youtubeVideo)
             )
@@ -210,9 +210,6 @@ struct FeedYouTubeVideoDetailViewHeader: View {
             .aspectRatio(thumb.width / thumb.height, contentMode: .fit)
         }
         .buttonStyle(.plain)
-        // Required to prevent highlighting the button then dragging the scroll
-        // view from causing the button to be pressed.
-        .simultaneousGesture(TapGesture())
     }
 }
 

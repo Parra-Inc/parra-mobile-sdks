@@ -61,7 +61,7 @@ struct FeedContentCardView: View {
     @Binding var navigationPath: NavigationPath
 
     var body: some View {
-        Button(action: {
+        CellButton(action: {
             if let message = contentCard.action?.confirmationMessage, !message.isEmpty {
                 isConfirmationPresented = true
             } else {
@@ -92,10 +92,6 @@ struct FeedContentCardView: View {
         }
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
-        .buttonStyle(ContentCardButtonStyle())
-        // Required to prevent highlighting the button then dragging the scroll
-        // view from causing the button to be pressed.
-        .simultaneousGesture(TapGesture())
         .safeAreaPadding(.horizontal, 16)
         .padding(.vertical, spacing)
         .disabled(!hasAction || !redactionReasons.isEmpty)
