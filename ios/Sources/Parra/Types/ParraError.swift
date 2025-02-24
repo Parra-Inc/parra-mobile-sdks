@@ -27,6 +27,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     case system(Error)
     case validationFailed(failures: [String: String])
     case unknown
+    case missingEntitlement(entitlement: String, context: String?)
     case rateLimited
     /// Thrown when an action is attempted by a user using guest auth, that
     /// requires being authenticated anonymously or via login. The action
@@ -50,7 +51,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
 
         switch self {
         case .message, .unknown, .jsonError, .notInitialized,
-             .unauthenticated, .parraAuthenticationRequired, .rateLimited:
+             .unauthenticated, .parraAuthenticationRequired, .rateLimited,
+             .missingEntitlement:
 
             return baseMessage
         case .generic(_, let error):
@@ -163,6 +165,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return "Rate limited"
         case .guestNotPermitted(let action):
             return "Guests are not permitted to perform the action: \(action)"
+        case .missingEntitlement(let entitlement, let context):
+            return "You are not entitled to perform the attempted Action. Missing entitlement is: \(entitlement) in context: \(context)"
         }
     }
 
@@ -224,6 +228,16 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
                 "path": path.relativeString,
                 "error_description": message
             ]
+        case .missingEntitlement(let entitlement, let context):
+            var bodyInfo: [String: Any] = [
+                "entitlement": entitlement
+            ]
+
+            if let context {
+                bodyInfo["context"] = context
+            }
+
+            return ParraSanitizedDictionary(dictionary: bodyInfo)
         case .notInitialized, .message, .jsonError, .unknown, .system,
              .rateLimited, .parraAuthenticationRequired, .unauthenticated,
              .guestNotPermitted:
