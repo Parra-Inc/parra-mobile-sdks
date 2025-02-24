@@ -58,7 +58,7 @@ public final class ParraUserEntitlements {
     ) -> ParraUserEntitlement? {
         return current.first { entitlement in
             guard entitlement.isConsumable else {
-                logger.trace("Current user has non consumable entitlement", [
+                logger.debug("Current user has non consumable entitlement", [
                     "entitlement": entitlementKey,
                     "entitlementId": entitlement.id
                 ])
@@ -136,11 +136,11 @@ public final class ParraUserEntitlements {
         }
 
         if isEntitled {
-            logger.debug("Current user has entitlement", [
+            logger.trace("Current user has entitlement", [
                 "entitlement": key
             ])
         } else {
-            logger.debug("Current user is missing entitlement", [
+            logger.warn("Current user is missing entitlement", [
                 "entitlement": key
             ])
         }
