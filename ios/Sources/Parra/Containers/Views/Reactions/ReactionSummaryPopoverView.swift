@@ -34,6 +34,14 @@ struct ReactionSummaryPopoverView: View {
                             .secondary
                         )
                 )
+                .applyTextAttributes(
+                    .default(
+                        with: .callout,
+                        color: theme.palette.primaryText.toParraColor(),
+                        alignment: .center
+                    ),
+                    using: theme
+                )
                 .lineLimit(3)
                 .fixedSize(horizontal: false, vertical: true)
             }
