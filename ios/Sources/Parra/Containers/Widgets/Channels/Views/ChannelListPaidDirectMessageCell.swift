@@ -33,7 +33,7 @@ struct ChannelListPaidDirectMessageCell: View {
                                 )
                             )
 
-                            if channel.status == .closed {
+                            if channel.status == .locked {
                                 componentFactory.buildBadge(
                                     size: .sm,
                                     variant: .outlined,

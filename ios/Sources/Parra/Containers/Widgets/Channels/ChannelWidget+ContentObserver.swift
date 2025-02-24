@@ -72,7 +72,7 @@ extension ChannelWidget {
 
         let api: API
 
-        let channel: Channel
+        var channel: Channel
         let requiredEntitlement: String
         let context: String?
         let config: ParraChannelConfiguration
@@ -226,6 +226,26 @@ extension ChannelWidget {
             }
 
             return temporaryMessage
+        }
+
+        // MARK: - Changing Channel Status
+
+        @MainActor
+        func adminUnlockChannel() {}
+
+        @MainActor
+        func adminLockChannel() {
+            channel.status = .active
+        }
+
+        @MainActor
+        func adminLeaveChannel() {
+            channel.status = .active
+        }
+
+        @MainActor
+        func adminArchiveChannel() {
+            channel.status = .active
         }
 
         // MARK: - Private

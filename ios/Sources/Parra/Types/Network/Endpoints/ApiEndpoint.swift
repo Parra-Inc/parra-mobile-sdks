@@ -97,8 +97,8 @@ enum ApiEndpoint: Endpoint {
     case deleteMessage(messageId: String)
 
     // Chat Admin
-    case postCloseChannel(channelId: String)
-    case postOpenChannel(channelId: String)
+    case postLockChannel(channelId: String)
+    case postUnlockChannel(channelId: String)
     case postLeaveChannel(channelId: String)
     case deleteArchiveChannel(channelId: String)
 
@@ -120,7 +120,7 @@ enum ApiEndpoint: Endpoint {
              .postLogin, .postLogout, .postUpdateAvatar, .postPurchases,
              .postFeedReaction, .flagComment, .createFeedComment,
              .postFeedCommentReaction, .postCreateChannel, .postSendMessage,
-             .postFlagMessage, .postCloseChannel, .postOpenChannel,
+             .postFlagMessage, .postLockChannel, .postUnlockChannel,
              .postLeaveChannel:
 
             return .post
@@ -232,10 +232,10 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/chat/messages/:messageId/flag"
         case .listUserEntitlements:
             return "tenants/:tenantId/users/:userId/entitlements"
-        case .postOpenChannel:
-            return "tenants/:tenantId/chat/channels/:channelId/open"
-        case .postCloseChannel:
-            return "tenants/:tenantId/chat/channels/:channelId/close"
+        case .postUnlockChannel:
+            return "tenants/:tenantId/chat/channels/:channelId/unlock"
+        case .postLockChannel:
+            return "tenants/:tenantId/chat/channels/:channelId/lock"
         case .postLeaveChannel:
             return "tenants/:tenantId/chat/channels/:channelId/leave"
         case .deleteArchiveChannel:

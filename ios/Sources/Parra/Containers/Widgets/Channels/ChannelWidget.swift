@@ -68,7 +68,92 @@ struct ChannelWidget: ParraContainer {
         .onReceive(timer) { _ in
             contentObserver.checkForNewMessages()
         }
+        .onChange(of: contentObserver.channel, initial: true) { _, newValue in
+            if newValue.hasMemberRole(authState.user, role: .admin) {
+                // Admins can still send messages to closed channels
+                allowSubmission = newValue.status != .archived
+            } else {
+                allowSubmission = newValue.status == .active
+            }
+        }
+        .confirmationDialog(
+            "Lock Conversation",
+            isPresented: $isConfirmingLock,
+            titleVisibility: .visible
+        ) {
+            Button("Cancel", role: .cancel) {}
+
+            Button("Lock", role: .destructive) {
+                contentObserver.adminLockChannel()
+            }
+        } message: {
+            Text(
+                "Members will no longer be able to send messages without paying to unlock the conversation. Admins (including you) can still send messages."
+            )
+        }
+        .confirmationDialog(
+            "Unlock Conversation",
+            isPresented: $isConfirmingUnlock,
+            titleVisibility: .visible
+        ) {
+            Button("Cancel", role: .cancel) {}
+
+            Button("Unlock") {
+                contentObserver.adminUnlockChannel()
+            }
+        } message: {
+            Text(
+                "Non-admin members will be allowed to send messages again."
+            )
+        }
+        .confirmationDialog(
+            "Leave Conversation",
+            isPresented: $isConfirmingLeave,
+            titleVisibility: .visible
+        ) {
+            Button("Cancel", role: .cancel) {}
+
+            Button("Leave", role: .destructive) {
+                contentObserver.adminLeaveChannel()
+            }
+        } message: {
+            Text(
+                "Removes this conversation from your messages list and lock it so that no new messages can be added by other members. Other members will still be able to see the conversation."
+            )
+        }
+        .confirmationDialog(
+            "Archive Conversation",
+            isPresented: $isConfirmingArchive,
+            titleVisibility: .visible
+        ) {
+            Button("Cancel", role: .cancel) {}
+
+            Button("Archive", role: .destructive) {
+                contentObserver.adminArchiveChannel()
+            }
+        } message: {
+            Text(
+                "This conversation will be deleted and not visible to anyone. This action should only be taken when a member posts inappropriate content or is otherwise abusive."
+            )
+        }
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if contentObserver.channel.hasMemberRole(
+                    authState.user,
+                    role: .admin
+                ) {
+                    AdminMenuView(
+                        isConfirmingLock: $isConfirmingLock,
+                        isConfirmingUnlock: $isConfirmingUnlock,
+                        isConfirmingLeave: $isConfirmingLeave,
+                        isConfirmingArchive: $isConfirmingArchive,
+                        contentObserver: contentObserver
+                    )
+                } else {
+                    ParraDismissButton()
+                }
+            }
+
             ToolbarItem(placement: .principal) {
                 if let members = contentObserver.channel.members?.elements {
                     let users: [ParraUserStub] = members
@@ -121,6 +206,10 @@ struct ChannelWidget: ParraContainer {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     @State private var allowSubmission = false
+    @State private var isConfirmingLock = false
+    @State private var isConfirmingUnlock = false
+    @State private var isConfirmingLeave = false
+    @State private var isConfirmingArchive = false
 
     @ViewBuilder private var messageStack: some View {
         LazyVStack {

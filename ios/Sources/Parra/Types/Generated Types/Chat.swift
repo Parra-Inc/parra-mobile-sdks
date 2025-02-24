@@ -50,7 +50,7 @@ public enum ParraChatChannelType: String, Codable, CaseIterable {
 
 enum ChatChannelStatus: String, Codable, CustomStringConvertible {
     case active
-    case closed
+    case locked
     case archived
 
     // MARK: - Internal
@@ -59,8 +59,8 @@ enum ChatChannelStatus: String, Codable, CustomStringConvertible {
         switch self {
         case .active:
             return "active"
-        case .closed:
-            return "closed"
+        case .locked:
+            return "locked"
         case .archived:
             return "archived"
         }

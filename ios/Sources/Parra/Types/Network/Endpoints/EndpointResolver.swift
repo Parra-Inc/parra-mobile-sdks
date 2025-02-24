@@ -226,10 +226,10 @@ enum EndpointResolver {
         case .postFlagMessage(let messageId):
             return "tenants/\(tenantId)/chat/messages/\(messageId)/flag"
         // Chat Admin
-        case .postOpenChannel(let channelId):
-            return "tenants/\(tenantId)/chat/channels/\(channelId)/open"
-        case .postCloseChannel(let channelId):
-            return "tenants/\(tenantId)/chat/channels/\(channelId)/close"
+        case .postUnlockChannel(let channelId):
+            return "tenants/\(tenantId)/chat/channels/\(channelId)/unlock"
+        case .postLockChannel(let channelId):
+            return "tenants/\(tenantId)/chat/channels/\(channelId)/lock"
         case .postLeaveChannel(let channelId):
             return "tenants/\(tenantId)/chat/channels/\(channelId)/leave"
         case .deleteArchiveChannel(let channelId):

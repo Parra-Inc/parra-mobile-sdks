@@ -43,7 +43,7 @@ extension API {
         channelId: String
     ) async throws -> ChannelResponse {
         return try await hitEndpoint(
-            .postCloseChannel(channelId: channelId)
+            .postLockChannel(channelId: channelId)
         )
     }
 
@@ -51,7 +51,7 @@ extension API {
         channelId: String
     ) async throws -> ChannelResponse {
         return try await hitEndpoint(
-            .postOpenChannel(channelId: channelId)
+            .postUnlockChannel(channelId: channelId)
         )
     }
 

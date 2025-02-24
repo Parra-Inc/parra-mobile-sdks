@@ -109,15 +109,6 @@ struct ChannelListWidget: ParraContainer {
                 )
 
             container
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        if channel.hasMemberRole(authState.user, role: .admin) {
-                            adminMenu(for: channel)
-                        } else {
-                            ParraDismissButton()
-                        }
-                    }
-                }
         }
         .presentParraPaywall(
             entitlement: contentObserver.requiredEntitlement,
@@ -198,17 +189,9 @@ struct ChannelListWidget: ParraContainer {
     @ViewBuilder private var paidDmCells: some View {
         LazyVStack {
             ForEach(channels) { channel in
-                ChannelListPaidDirectMessageCell(channel: channel)
-            }
-        }
-    }
-
-    private func adminMenu(
-        for channel: Channel
-    ) -> some View {
-        Menu("Admin Menu", systemImage: "ellipsis.circle") {
-            Section("Admin Menu") {
-                Button("Close Conversation", systemImage: "xmark.bin") {}
+                ChannelListPaidDirectMessageCell(
+                    channel: channel
+                )
             }
         }
     }
