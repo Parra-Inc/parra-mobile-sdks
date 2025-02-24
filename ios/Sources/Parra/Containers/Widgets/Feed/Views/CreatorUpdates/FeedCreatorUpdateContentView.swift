@@ -52,7 +52,6 @@ struct FeedCreatorUpdateContentView: View {
                         )
                     )
                 )
-                .lineLimit(8)
             }
         }
     }
