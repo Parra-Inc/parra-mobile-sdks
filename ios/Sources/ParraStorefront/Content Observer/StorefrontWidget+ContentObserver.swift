@@ -33,6 +33,8 @@ enum ProductSortOrder: CaseIterable {
 
     // MARK: - Internal
 
+    static let `default` = ProductSortOrder.newestToOldest
+
     var shopifySort: (Bool, Storefront.ProductSortKeys) {
         switch self {
         case .bestSelling:
@@ -145,7 +147,9 @@ extension StorefrontWidget {
         let config: ParraStorefrontWidgetConfig
         nonisolated let delegate: ParraStorefrontWidgetDelegate?
 
-        var sortOrder: ProductSortOrder = .newestToOldest {
+        // NOTE: ! If you change this here, you need to update the sort order
+        // used in performProductPreload
+        var sortOrder: ProductSortOrder = .default {
             didSet {
                 productPaginator.refresh()
             }
