@@ -218,8 +218,10 @@ struct PaywallWidget: ParraContainer {
                     }
                 }
                 .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        ParraDismissButton()
+                    if config.showsDismissButton {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            ParraDismissButton()
+                        }
                     }
                 }
             }

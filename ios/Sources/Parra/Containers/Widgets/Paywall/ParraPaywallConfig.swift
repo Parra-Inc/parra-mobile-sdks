@@ -14,12 +14,14 @@ public final class ParraPaywallConfig: ParraContainerConfig {
     public init(
         visibleRelationships: Product.SubscriptionRelationship = .all,
         thankYouContent: ToastContent = .successDefault,
+        showsDismissButton: Bool = true,
         dismissOnSuccess: Bool = false,
         purchaseErrorContent: ToastContent = .failureDefault,
         marketingContent: (() -> (any View))? = nil
     ) {
         self.visibleRelationships = visibleRelationships
         self.thankYouContent = thankYouContent
+        self.showsDismissButton = showsDismissButton
         self.dismissOnSuccess = dismissOnSuccess
         self.purchaseErrorContent = purchaseErrorContent
         self.marketingContent = marketingContent
@@ -71,6 +73,7 @@ public final class ParraPaywallConfig: ParraContainerConfig {
     public let visibleRelationships: Product.SubscriptionRelationship
 
     public let dismissOnSuccess: Bool
+    public let showsDismissButton: Bool
 
     public let thankYouContent: ToastContent
     public let purchaseErrorContent: ToastContent
