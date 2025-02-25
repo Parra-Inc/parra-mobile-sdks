@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+private let logger = Logger()
+
 struct ChannelListWidget: ParraContainer {
     // MARK: - Lifecycle
 
@@ -16,7 +18,12 @@ struct ChannelListWidget: ParraContainer {
         navigationPath: Binding<NavigationPath>
     ) {
         self.config = config
-        self._contentObserver = StateObject(wrappedValue: contentObserver)
+        self._contentObserver = StateObject(
+            wrappedValue: contentObserver
+        )
+        self._isShowingPaywall = State(
+            initialValue: config.forcePresentPaywall
+        )
 
         _navigationPath = navigationPath
     }
@@ -117,13 +124,33 @@ struct ChannelListWidget: ParraContainer {
             config: ParraPaywallConfig(
                 dismissOnSuccess: true
             )
-        ) { _ in
-            if userEntitlements.isEntitled(
-                to: contentObserver.requiredEntitlement
-            ) {
-                startNewConversation()
-            } else {
-                // TODO: Error toast?
+        ) { dismissType in
+            switch dismissType {
+            case .cancelled:
+                logger.debug("User cancelled paywall to start new conversation")
+
+            case .completed:
+                if userEntitlements.isEntitled(
+                    to: contentObserver.requiredEntitlement
+                ) {
+                    startNewConversation()
+                } else {
+                    alertManager.showErrorToast(
+                        title: "Error Starting Conversation",
+                        userFacingMessage: "You are not permitted to start new conversations at this time.",
+                        underlyingError: ParraError.missingEntitlement(
+                            entitlement: contentObserver.requiredEntitlement,
+                            context: contentObserver.context
+                        )
+                    )
+                }
+
+            case .failed(let errorMessage):
+                alertManager.showErrorToast(
+                    title: "Error Starting Conversation",
+                    userFacingMessage: errorMessage,
+                    underlyingError: ParraError.unknown
+                )
             }
         }
         .confirmationDialog(
@@ -156,7 +183,7 @@ struct ChannelListWidget: ParraContainer {
 
     // MARK: - Private
 
-    @State private var isShowingPaywall = false
+    @State private var isShowingPaywall: Bool
     @State private var currentEntitlement: ParraUserEntitlement?
 
     @Environment(\.parra) private var parra
@@ -164,6 +191,7 @@ struct ChannelListWidget: ParraContainer {
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.parraUserEntitlements) private var userEntitlements
+    @Environment(\.parraAlertManager) private var alertManager
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -230,7 +258,13 @@ struct ChannelListWidget: ParraContainer {
                 let channel = try await contentObserver.startNewConversation()
 
                 navigationPath.append(channel)
-            } catch {}
+            } catch {
+                alertManager.showErrorToast(
+                    title: "Error Starting Conversation",
+                    userFacingMessage: "Something went wrong starting the conversation. Let us know if this problem persists.",
+                    underlyingError: error
+                )
+            }
         }
     }
 }
