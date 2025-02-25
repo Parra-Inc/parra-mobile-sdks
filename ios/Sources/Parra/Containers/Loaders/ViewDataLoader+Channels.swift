@@ -12,7 +12,6 @@ private let logger = Logger()
 struct PaidDirectMessageParams: Equatable {
     enum PresentationMode: Equatable {
         case channelList(
-            _ channelType: ParraChatChannelType,
             _ channelListResponse: ChannelListResponse
         )
 
@@ -27,6 +26,7 @@ struct PaidDirectMessageParams: Equatable {
     }
 
     let key: String
+    let channelType: ParraChatChannelType
     let requiredEntitlement: String
     let context: String?
     let presentationMode: PresentationMode

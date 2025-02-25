@@ -126,13 +126,13 @@ public extension View {
                 logger.debug("Channel list not empty. Pesentation mode is channelList.")
 
                 presentationMode = .channelList(
-                    channelType,
                     channelListResponse
                 )
             }
 
             return PaidDirectMessageParams(
                 key: key,
+                channelType: channelType,
                 requiredEntitlement: entitlement,
                 context: context,
                 presentationMode: presentationMode

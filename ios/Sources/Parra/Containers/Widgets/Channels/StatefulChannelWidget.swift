@@ -18,12 +18,6 @@ struct StatefulChannelWidget: View {
         self.config = config
         self.params = params
         _navigationPath = navigationPath
-
-        if case .paywall = params.presentationMode {
-            _isPresentingPaywall = State(initialValue: true)
-        } else {
-            _isPresentingPaywall = State(initialValue: false)
-        }
     }
 
     // MARK: - Internal
@@ -34,82 +28,64 @@ struct StatefulChannelWidget: View {
 
     var body: some View {
         content
-            .presentParraPaywall(
-                entitlement: params.requiredEntitlement,
-                context: params.context,
-                isPresented: $isPresentingPaywall,
-                config: config.defaultChannelConfig.paywallConfig ?? .default
-            ) { _ in
+            .onAppear {
+                // The first time the view appears, if we intended to navigate
+                // to a specific channel, push that channel onto the navigation
+                // stack.
+                if case .channel(let channel) = params.presentationMode,
+                   !hasPerformedChannelPush
+                {
+                    hasPerformedChannelPush = true
+                    navigationPath.append(channel)
+                }
             }
     }
 
     // MARK: - Private
-
-    @State private var isPresentingPaywall: Bool
 
     @Environment(\.parra) private var parra
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraAppInfo) private var appInfo
 
-    @ViewBuilder private var content: some View {
-        switch params.presentationMode {
-        case .channelList(let channelType, let channelsResponse):
-            let container: ChannelListWidget = parra.parraInternal
-                .containerRenderer
-                .renderContainer(
-                    params: ChannelListWidget.ContentObserver.InitialParams(
-                        config: config,
-                        key: params.key,
-                        channelType: channelType,
-                        channelsResponse: channelsResponse,
-                        requiredEntitlement: params.requiredEntitlement,
-                        context: params.context,
-                        api: parra.parraInternal.api
-                    ),
-                    config: config,
-                    contentTransformer: nil,
-                    navigationPath: $navigationPath
-                )
+    @State private var hasPerformedChannelPush = false
 
-            container
-        case .channel(let channel):
-            let container: ChannelWidget = parra.parraInternal
-                .containerRenderer
-                .renderContainer(
-                    params: ChannelWidget.ContentObserver.InitialParams(
-                        config: config.defaultChannelConfig,
-                        channel: channel,
-                        requiredEntitlement: params.requiredEntitlement,
-                        context: params.context,
-                        api: parra.parraInternal.api
-                    ),
-                    config: config.defaultChannelConfig,
-                    contentTransformer: nil,
-                    navigationPath: $navigationPath
-                )
+    private var modifiedConfig: ParraChannelListConfiguration {
+        var modified = config
 
-            container
-        case .paywall(let paywall, let paywallProducts):
-            EmptyView()
-//            let container: PaywallWidget = parra.parraInternal
-//                .containerRenderer.renderContainer(
-//                    params: PaywallWidget.ContentObserver.InitialParams(
-//                        paywallId: paywall.id,
-//                        iapType: paywall.iapType,
-//                        paywallProducts: paywallProducts,
-//                        marketingContent: paywall.marketingContent,
-//                        sections: paywall.sections,
-//                        config: config.defaultChannelConfig.paywallConfig ?? .default,
-//                        api: parra.parraInternal.api,
-//                        appInfo: appInfo
-//                    ),
-//                    config: config.defaultChannelConfig.paywallConfig ?? .default,
-//                    contentTransformer: nil,
-//                    navigationPath: $navigationPath
-//                )
-//
-//            container
+        if case .paywall = params.presentationMode {
+            modified.forcePresentPaywall = true
         }
+
+        return modified
+    }
+
+    @ViewBuilder private var content: some View {
+        let channelsResponse: ChannelListResponse? = if case .channelList(
+            let response
+        ) = params.presentationMode {
+            response
+        } else {
+            nil
+        }
+
+        let container: ChannelListWidget = parra.parraInternal
+            .containerRenderer
+            .renderContainer(
+                params: ChannelListWidget.ContentObserver.InitialParams(
+                    config: modifiedConfig,
+                    key: params.key,
+                    channelType: params.channelType,
+                    channelsResponse: channelsResponse,
+                    requiredEntitlement: params.requiredEntitlement,
+                    context: params.context,
+                    api: parra.parraInternal.api
+                ),
+                config: modifiedConfig,
+                contentTransformer: nil,
+                navigationPath: $navigationPath
+            )
+
+        container
     }
 }
