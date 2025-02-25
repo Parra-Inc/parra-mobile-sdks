@@ -35,7 +35,7 @@ public struct ParraErrorBoundary: View {
         }
         .presentParraFeedbackFormWidget(
             by: errorFormId ?? "error-boundary-form",
-            isPresented: $isShowingFeedbackForm
+            presentationState: $presentationState
         )
     }
 
@@ -57,7 +57,7 @@ public struct ParraErrorBoundary: View {
 
     // MARK: - Private
 
-    @State private var isShowingFeedbackForm = false
+    @State private var presentationState = ParraSheetPresentationState.ready
     @State private var retryButtonContent = ParraTextButtonContent(
         text: "Try again"
     )
@@ -139,7 +139,7 @@ public struct ParraErrorBoundary: View {
                     ),
                     text: "Report this issue",
                     onPress: {
-                        isShowingFeedbackForm = true
+                        presentationState = .loading
                     }
                 )
             }

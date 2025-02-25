@@ -14,7 +14,7 @@ public extension View {
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
     func presentParraStorefront(
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraStorefrontWidgetConfig,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -40,20 +40,9 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(transformParams, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .storefrontLoader(
                 config: config
             ),

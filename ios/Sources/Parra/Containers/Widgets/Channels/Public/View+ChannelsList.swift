@@ -14,7 +14,7 @@ public extension View {
         channelType: ParraChatChannelType,
         requiredEntitlement entitlement: ParraEntitlement,
         context: String?,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraChannelListConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -23,7 +23,7 @@ public extension View {
             channelType: channelType,
             requiredEntitlement: entitlement.key,
             context: context,
-            isPresented: isPresented,
+            presentationState: presentationState,
             config: config,
             onDismiss: onDismiss
         )
@@ -35,7 +35,7 @@ public extension View {
         channelType: ParraChatChannelType,
         requiredEntitlement entitlement: EntitlementKey,
         context: String?,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraChannelListConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View where EntitlementKey: RawRepresentable,
@@ -46,7 +46,7 @@ public extension View {
             channelType: channelType,
             requiredEntitlement: entitlement.rawValue,
             context: context,
-            isPresented: isPresented,
+            presentationState: presentationState,
             config: config,
             onDismiss: onDismiss
         )
@@ -58,7 +58,7 @@ public extension View {
         channelType: ParraChatChannelType,
         requiredEntitlement entitlement: String,
         context: String?,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraChannelListConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -86,22 +86,10 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(transformParams, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .channelListLoader(
-                channelType: channelType,
                 config: config
             ),
             onDismiss: onDismiss

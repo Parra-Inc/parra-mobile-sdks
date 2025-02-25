@@ -99,16 +99,16 @@ struct RoadmapWidget: ParraContainer {
         .environmentObject(contentObserver)
         .presentParraFeedbackFormWidget(
             with: $contentObserver.addRequestForm,
-            onDismiss: { dismissType in
-                if dismissType == .completed {
-                    alertManager.showSuccessToast(
-                        title: config.addRequestSuccessToastTitle,
-                        subtitle: config.addRequestSuccessToastSubtitle,
-                        in: .bottomCenter
-                    )
-                }
+            config: .default
+        ) { dismissType in
+            if dismissType == .completed {
+                alertManager.showSuccessToast(
+                    title: config.addRequestSuccessToastTitle,
+                    subtitle: config.addRequestSuccessToastSubtitle,
+                    in: .bottomCenter
+                )
             }
-        )
+        }
         .navigationBarTitleDisplayMode(.automatic)
         .navigationTitle(contentObserver.content.title.text)
         .navigationDestination(for: TicketUserContent.self) { ticket in

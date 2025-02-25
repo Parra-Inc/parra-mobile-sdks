@@ -13,7 +13,7 @@ public extension View {
     @MainActor
     func presentParraFeedWidget(
         by feedId: String,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraFeedConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -44,22 +44,10 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(transformParams, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .feedLoader(
-                feedId: feedId,
                 config: config
             ),
             onDismiss: onDismiss

@@ -17,14 +17,14 @@ public extension View {
     func presentParraPaywall(
         entitlement: ParraEntitlement,
         context: String?,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentParraPaywall(
             entitlement: entitlement.key,
             context: context,
-            isPresented: isPresented,
+            presentationState: presentationState,
             config: config,
             onDismiss: onDismiss
         )
@@ -38,14 +38,14 @@ public extension View {
     func presentParraPaywall<Key>(
         entitlement key: Key,
         context: String?,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View where Key: RawRepresentable, Key.RawValue == String {
         return presentParraPaywall(
             entitlement: key.rawValue,
             context: context,
-            isPresented: isPresented,
+            presentationState: presentationState,
             config: config,
             onDismiss: onDismiss
         )
@@ -59,7 +59,7 @@ public extension View {
     func presentParraPaywall(
         entitlement: String,
         context: String?,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -112,20 +112,9 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(transformParams, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .paywallLoader(
                 config: finalConfig
             ),

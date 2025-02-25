@@ -50,7 +50,6 @@ struct ChannelListTransformParams: Equatable {
 
 extension ParraViewDataLoader {
     static func channelListLoader(
-        channelType: ParraChatChannelType,
         config: ParraChannelListConfiguration
     ) -> ParraViewDataLoader<
         ChannelListTransformParams,
@@ -86,7 +85,6 @@ extension ParraViewDataLoader {
     }
 
     static func statefulChannelLoader(
-        key: String,
         config: ParraChannelListConfiguration
     ) -> ParraViewDataLoader<
         PaidDirectMessageTransformParams,

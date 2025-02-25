@@ -92,7 +92,7 @@ public struct ParraPaywalledContentView<
         .presentParraPaywall(
             entitlement: entitlement?.key ?? "unknown",
             context: context,
-            isPresented: $isShowingPaywall,
+            presentationState: $paywallPresentationState,
             config: config
         ) { _ in
             if let continuation {
@@ -111,7 +111,7 @@ public struct ParraPaywalledContentView<
     @Environment(\.parraUserEntitlements) private var userEntitlements
 
     @State private var lockedState: LockedState = .initial
-    @State private var isShowingPaywall = false
+    @State private var paywallPresentationState: ParraSheetPresentationState = .ready
     @State private var continuation: CheckedContinuation<Void, Never>?
 
     @ViewBuilder
@@ -149,7 +149,7 @@ public struct ParraPaywalledContentView<
             return
         }
 
-        isShowingPaywall = true
+        paywallPresentationState = .loading
 
         await withCheckedContinuation { continuation in
             self.continuation = continuation

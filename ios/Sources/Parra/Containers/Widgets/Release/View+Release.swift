@@ -13,28 +13,28 @@ public extension View {
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
     func presentParraReleaseWidget(
-        with appVersionInfoBinding: Binding<ParraNewInstalledVersionInfo?>,
+        with dataBinding: Binding<ParraNewInstalledVersionInfo?>,
         config: ParraChangelogWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
-        return loadAndPresentSheet(
-            loadType: .init(
+        return presentSheetWithData(
+            data: .init(
                 get: {
-                    if let appVersionInfo = appVersionInfoBinding.wrappedValue {
-                        return .raw(.newInstalledVersion(appVersionInfo))
+                    if let value = dataBinding.wrappedValue {
+                        ReleaseContentObserver.ReleaseContentType
+                            .newInstalledVersion(value)
                     } else {
-                        return nil
+                        nil
                     }
                 },
-                set: { type in
-                    if type == nil {
-                        appVersionInfoBinding.wrappedValue = nil
+                set: { newValue in
+                    if newValue == nil {
+                        dataBinding.wrappedValue = nil
                     }
                 }
             ),
-            with: .releaseLoader(
-                config: config
-            ),
+            config: config,
+            with: ParraContainerRenderer.releaseRenderer,
             onDismiss: onDismiss
         )
     }

@@ -52,7 +52,7 @@ struct FeedReactionView: View {
                         } else if !userEntitlements
                             .hasEntitlement(attachmentPaywall?.entitlement)
                         {
-                            isShowingPaywall = true
+                            paywallPresentationState = .loading
                         } else if authState.isLoggedIn {
                             isReactionPickerPresented = true
                         } else {
@@ -104,7 +104,7 @@ struct FeedReactionView: View {
         .presentParraPaywall(
             entitlement: attachmentPaywall?.entitlement.key ?? "unknown",
             context: attachmentPaywall?.context,
-            isPresented: $isShowingPaywall
+            presentationState: $paywallPresentationState
         )
         .presentParraSignInWidget(
             isPresented: $isRequiredSignInPresented,
@@ -148,7 +148,8 @@ struct FeedReactionView: View {
 
     @State private var isReactionPickerPresented: Bool = false
     @State private var isRequiredSignInPresented: Bool = false
-    @State private var isShowingPaywall: Bool = false
+    @State private var paywallPresentationState = ParraSheetPresentationState.ready
+
     @State private var pickerSelectedReaction: ParraReactionOption?
     @StateObject private var reactor: Reactor
 
@@ -156,7 +157,7 @@ struct FeedReactionView: View {
         ForEach($reactor.currentReactions) { $reaction in
             ReactionButtonView(reaction: $reaction) { reacted, summary in
                 if !userEntitlements.hasEntitlement(attachmentPaywall?.entitlement) {
-                    isShowingPaywall = true
+                    paywallPresentationState = .loading
                 } else if authState.isLoggedIn || UIDevice.isPreview {
                     if reacted {
                         reactor.addExistingReaction(

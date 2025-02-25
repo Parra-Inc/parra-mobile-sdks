@@ -186,7 +186,7 @@ struct FeedCommentWidget: ParraContainer {
         .presentParraPaywall(
             entitlement: contentObserver.attachmentPaywall?.entitlement.key ?? "unknown",
             context: contentObserver.attachmentPaywall?.context,
-            isPresented: $isShowingPaywall
+            presentationState: $paywallPresentationState
         )
         .presentParraSignInWidget(
             isPresented: $isRequiredSignInPresented,
@@ -212,7 +212,7 @@ struct FeedCommentWidget: ParraContainer {
     @State private var headerHeight: CGFloat = 0
     @State private var footerHeight: CGFloat = 0
     @State private var isRequiredSignInPresented: Bool = false
-    @State private var isShowingPaywall: Bool = false
+    @State private var paywallPresentationState = ParraSheetPresentationState.ready
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var theme
@@ -267,7 +267,7 @@ struct FeedCommentWidget: ParraContainer {
                 DispatchQueue.main.asyncAfter(
                     deadline: .now() + 0.1
                 ) {
-                    isShowingPaywall = true
+                    paywallPresentationState = .loading
                 }
             } else if authState.isLoggedIn {
                 withAnimation {

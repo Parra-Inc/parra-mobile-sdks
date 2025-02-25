@@ -21,8 +21,9 @@ struct ChannelListWidget: ParraContainer {
         self._contentObserver = StateObject(
             wrappedValue: contentObserver
         )
-        self._isShowingPaywall = State(
-            initialValue: config.forcePresentPaywall
+
+        self._paywallPresentationState = State(
+            initialValue: config.forcePresentPaywall ? .loading : .ready
         )
 
         _navigationPath = navigationPath
@@ -63,7 +64,8 @@ struct ChannelListWidget: ParraContainer {
                     content: .init(
                         text: ParraLabelContent(text: "Start a Conversation"),
                         isLoading: contentObserver
-                            .isLoadingStartConversation || isShowingPaywall
+                            .isLoadingStartConversation || paywallPresentationState !=
+                            .ready
                     ),
                     localAttributes: ParraAttributes.ContainedButton(
                         normal: ParraAttributes.ContainedButton.StatefulAttributes(
@@ -79,7 +81,7 @@ struct ChannelListWidget: ParraContainer {
                             // credits
                             currentEntitlement = entitlement
                         } else {
-                            isShowingPaywall = true
+                            paywallPresentationState = .loading
                         }
                     }
                 )
@@ -120,7 +122,7 @@ struct ChannelListWidget: ParraContainer {
         .presentParraPaywall(
             entitlement: contentObserver.requiredEntitlement,
             context: contentObserver.context,
-            isPresented: $isShowingPaywall,
+            presentationState: $paywallPresentationState,
             config: ParraPaywallConfig(
                 dismissOnSuccess: true
             )
@@ -183,7 +185,7 @@ struct ChannelListWidget: ParraContainer {
 
     // MARK: - Private
 
-    @State private var isShowingPaywall: Bool
+    @State private var paywallPresentationState: ParraSheetPresentationState
     @State private var currentEntitlement: ParraUserEntitlement?
 
     @Environment(\.parra) private var parra

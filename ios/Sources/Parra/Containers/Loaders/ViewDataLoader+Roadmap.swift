@@ -28,21 +28,15 @@ extension ParraViewDataLoader {
             ParraRoadmapInfo,
             RoadmapWidget
         >(
-            renderer: { parra, params, navigationPath, _ in
-                let container: RoadmapWidget = parra.parraInternal
-                    .containerRenderer.renderContainer(
-                        params: RoadmapWidget.ContentObserver.InitialParams(
-                            roadmapConfig: params.roadmapConfig,
-                            selectedTab: params.selectedTab,
-                            ticketResponse: params.ticketResponse,
-                            api: parra.parraInternal.api
-                        ),
+            renderer: { parra, data, navigationPath, dismisser in
+                return ParraContainerRenderer
+                    .roadmapRenderer(
                         config: config,
-                        contentTransformer: nil,
-                        navigationPath: navigationPath
+                        parra: parra,
+                        data: data,
+                        navigationPath: navigationPath,
+                        dismisser: dismisser
                     )
-
-                return container
             }
         )
     }
