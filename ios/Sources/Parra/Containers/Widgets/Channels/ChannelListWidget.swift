@@ -22,10 +22,6 @@ struct ChannelListWidget: ParraContainer {
             wrappedValue: contentObserver
         )
 
-        self._paywallPresentationState = State(
-            initialValue: config.forcePresentPaywall ? .loading : .ready
-        )
-
         _navigationPath = navigationPath
     }
 
@@ -40,14 +36,6 @@ struct ChannelListWidget: ParraContainer {
     }
 
     var body: some View {
-        let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: parraTheme
-        )
-
-        let contentPadding = parraTheme.padding.value(
-            for: defaultWidgetAttributes.contentPadding
-        )
-
         // Keep this 0 so the scrollview touches the footer.
         VStack(spacing: 0) {
             scrollView(
@@ -96,8 +84,24 @@ struct ChannelListWidget: ParraContainer {
         .environment(componentFactory)
         .environmentObject(contentObserver)
         .onAppear {
-            Task {
-                await contentObserver.refresh()
+            switch contentObserver.autoPresentation {
+            case .paywall(let paywall, let products):
+                if paywallPresentationState == .ready && !hasPerformedOnAppearAction {
+                    paywallPresentationState = .loading
+
+                    hasPerformedOnAppearAction = true
+                }
+            case .channel(let channel):
+                if !hasPerformedOnAppearAction {
+                    navigationPath.append(channel)
+
+                    hasPerformedOnAppearAction = true
+                }
+            case .none:
+                // Don't need to refresh if we're going to show the paywall.
+                Task {
+                    await contentObserver.refresh()
+                }
             }
         }
         .navigationTitle(config.navigationTitle)
@@ -185,8 +189,10 @@ struct ChannelListWidget: ParraContainer {
 
     // MARK: - Private
 
-    @State private var paywallPresentationState: ParraSheetPresentationState
+    @State private var paywallPresentationState: ParraSheetPresentationState = .ready
     @State private var currentEntitlement: ParraUserEntitlement?
+
+    @State private var hasPerformedOnAppearAction = false
 
     @Environment(\.parra) private var parra
     @Environment(\.parraAuthState) private var authState
@@ -195,9 +201,20 @@ struct ChannelListWidget: ParraContainer {
     @Environment(\.parraUserEntitlements) private var userEntitlements
     @Environment(\.parraAlertManager) private var alertManager
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+
+    private var defaultWidgetAttributes: ParraAttributes.Widget {
+        return ParraAttributes.Widget.default(
+            with: parraTheme
+        )
+    }
+
+    private var contentPadding: EdgeInsets {
+        return parraTheme.padding.value(
+            for: defaultWidgetAttributes.contentPadding
+        )
+    }
 
     @ViewBuilder private var cells: some View {
         switch contentObserver.channelType {

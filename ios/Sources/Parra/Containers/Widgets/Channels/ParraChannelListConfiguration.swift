@@ -22,23 +22,6 @@ public final class ParraChannelListConfiguration: ParraContainerConfig {
         self.navigationTitle = navigationTitle
         self.emptyStateContent = emptyStateContent
         self.errorStateContent = errorStateContent
-        self.forcePresentPaywall = false
-    }
-
-    init(
-        navigationTitle: String = "Messages",
-        defaultChannelConfig: ParraChannelConfiguration = .default,
-        forcePresentPaywall: Bool = false,
-        emptyStateContent: ParraEmptyStateContent = ParraChannelListConfiguration
-            .defaultEmptyStateContent,
-        errorStateContent: ParraEmptyStateContent = ParraChannelListConfiguration
-            .defaultErrorStateContent
-    ) {
-        self.defaultChannelConfig = defaultChannelConfig
-        self.navigationTitle = navigationTitle
-        self.emptyStateContent = emptyStateContent
-        self.errorStateContent = errorStateContent
-        self.forcePresentPaywall = forcePresentPaywall
     }
 
     // MARK: - Public
@@ -67,8 +50,4 @@ public final class ParraChannelListConfiguration: ParraContainerConfig {
 
     public let emptyStateContent: ParraEmptyStateContent
     public let errorStateContent: ParraEmptyStateContent
-
-    // MARK: - Internal
-
-    var forcePresentPaywall: Bool
 }
