@@ -260,6 +260,11 @@ struct ChannelWidget: ParraContainer {
     @State private var isConfirmingLeave = false
     @State private var isConfirmingArchive = false
 
+    @State private var size = CGSize(
+        width: UIScreen.main.bounds.width,
+        height: 70 // just a guess
+    )
+
     @ViewBuilder private var messageStack: some View {
         LazyVStack {
             ForEach(messages) { message in
@@ -414,7 +419,8 @@ struct ChannelWidget: ParraContainer {
                 .contentMargins(
                     [.top, .bottom],
                     EdgeInsets(
-                        top: showCommentBar ? contentPadding.bottom / 2 : 44,
+                        top: showCommentBar ? contentPadding.bottom / 2 + size
+                            .height : 44,
                         leading: 0,
                         bottom: contentPadding.bottom / 2,
                         trailing: 0
@@ -430,9 +436,25 @@ struct ChannelWidget: ParraContainer {
                 .refreshable {
                     contentObserver.refresh()
                 }
-
+                // must keep so that the add message bar stays on the bottom
+                // when in the empty state
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity
+                )
+            }
+            .overlay(alignment: .bottom) {
                 if showCommentBar {
-                    addCommentBar(with: proxy)
+                    addCommentBar(
+                        with: proxy
+                    )
+                    .onGeometryChange(
+                        for: CGSize.self
+                    ) { geometry in
+                        return geometry.size
+                    } action: { newValue in
+                        size = newValue
+                    }
                 }
             }
             .ignoresSafeArea(
