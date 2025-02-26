@@ -62,11 +62,13 @@ struct FeedCreatorUpdateView: View {
 
     let params: FeedCreatorUpdateParams
 
-    var body: some View {
-        let hasPaywallEntitlement = entitlements.hasEntitlement(
+    var hasPaywallEntitlement: Bool {
+        return entitlements.hasEntitlement(
             creatorUpdate.attachmentPaywall?.entitlement
         )
+    }
 
+    var body: some View {
         CellButton(
             action: {
                 params.performCreatorUpdateSelection(
