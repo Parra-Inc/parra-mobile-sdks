@@ -73,6 +73,7 @@ enum ApiEndpoint: Endpoint {
 
     // Feeds
     case getPaginateFeed(feedId: String)
+    case getFeedItem(feedItemId: String)
 
     // Reactions
     case postFeedReaction(feedItemId: String)
@@ -111,7 +112,7 @@ enum ApiEndpoint: Endpoint {
              .getUserProperties, .getPaginateFeed, .getFaqs,
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall,
              .getPaginateComments, .getListChatChannels, .getPaginateMessages,
-             .listUserEntitlements:
+             .listUserEntitlements, .getFeedItem:
 
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
@@ -192,6 +193,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/users/:userId/properties/:userPropertyKey"
         case .getPaginateFeed:
             return "tenants/:tenantId/applications/:applicationId/feeds/:feedId/items"
+        case .getFeedItem:
+            return "tenants/:tenantId/feed/items/:feedItemId"
         case .getUserSettingsLayouts:
             return "tenants/:tenantId/users/:userId/settings/views"
         case .getUserSettingsLayout:

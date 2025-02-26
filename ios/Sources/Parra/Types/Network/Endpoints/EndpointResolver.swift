@@ -168,8 +168,11 @@ enum EndpointResolver {
             )
 
             return "tenants/\(tenantId)/users/\(userId)/properties/\(propertyKey)"
+        // Feeds
         case .getPaginateFeed(let feedId):
             return "tenants/\(tenantId)/applications/\(applicationId)/feeds/\(feedId)/items"
+        case .getFeedItem(let feedItemId):
+            return "tenants/\(tenantId)/feed/items/\(feedItemId)"
         // User Settings
         case .getUserSettingsLayouts:
             let userId = try await getUserId(
