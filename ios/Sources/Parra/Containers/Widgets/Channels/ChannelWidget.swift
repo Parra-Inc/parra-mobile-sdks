@@ -221,20 +221,8 @@ struct ChannelWidget: ParraContainer {
                             return member.user
                         }
 
-                    HStack {
-                        Spacer()
-
-                        ChannelMemberListHeaderView(users: users)
-
-                        Spacer()
-                    }
-                    .frame(width: 100)
-                } else {
-                    // Need to render something to occupy the space before data
-                    // loads preventing the navigation back button from changing
-                    // once the view is visible.
-                    Color.clear
-                        .frame(minWidth: 50)
+                    ChannelMemberListHeaderView(users: users)
+                        .fixedSize()
                 }
             }
         }

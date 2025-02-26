@@ -40,11 +40,6 @@ struct ChannelMemberListHeaderView: View {
                 let user = users[0]
 
                 avatarView(for: user)
-
-                // Don't know why, but if we use the component factory label here
-                // it doesn't get rendered.
-                Text(verbatim: user.displayName)
-                    .applyTextAttributes(.default(with: .headline), using: theme)
             }
             .frame(maxWidth: .infinity)
         } else {
@@ -68,17 +63,6 @@ struct ChannelMemberListHeaderView: View {
                         )
                     }
                 }
-
-                let names = if users.count == 2 {
-                    users.map(\.displayName).toCommaList()
-                } else {
-                    "\(users.count) people"
-                }
-
-                // Don't know why, but if we use the component factory label here
-                // it doesn't get rendered.
-                Text(verbatim: names)
-                    .applyTextAttributes(.default(with: .headline), using: theme)
             }
         }
     }
