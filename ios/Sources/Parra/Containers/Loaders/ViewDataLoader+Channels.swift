@@ -9,39 +9,22 @@ import SwiftUI
 
 private let logger = Logger()
 
-struct PaidDirectMessageParams: Equatable {
-    enum PresentationMode: Equatable {
-        case channelList(
-            _ channelListResponse: ChannelListResponse
-        )
-
-        case channel(
-            _ channel: Channel
-        )
-
+struct ChannelListParams: Equatable {
+    enum AutoPresentationMode: Equatable {
         case paywall(
             _ paywall: ParraAppPaywall,
             _ paywallProducts: PaywallProducts
         )
+
+        case channel(_ channel: Channel)
     }
 
-    let key: String
-    let channelType: ParraChatChannelType
-    let requiredEntitlement: String
-    let context: String?
-    let presentationMode: PresentationMode
-}
-
-struct PaidDirectMessageTransformParams: Equatable {
-    let key: String
-}
-
-struct ChannelListParams: Equatable {
     let key: String
     let channelType: ParraChatChannelType
     let channelsResponse: ChannelListResponse
     let requiredEntitlement: String
     let context: String?
+    let autoPresentation: AutoPresentationMode?
 }
 
 struct ChannelListTransformParams: Equatable {
@@ -80,28 +63,6 @@ extension ParraViewDataLoader {
                     )
 
                 return container
-            }
-        )
-    }
-
-    static func statefulChannelLoader(
-        config: ParraChannelListConfiguration
-    ) -> ParraViewDataLoader<
-        PaidDirectMessageTransformParams,
-        PaidDirectMessageParams,
-        StatefulChannelWidget
-    > {
-        return ParraViewDataLoader<
-            PaidDirectMessageTransformParams,
-            PaidDirectMessageParams,
-            StatefulChannelWidget
-        >(
-            renderer: { _, params, navigationPath, _ in
-                StatefulChannelWidget(
-                    config: config,
-                    params: params,
-                    navigationPath: navigationPath
-                )
             }
         )
     }

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public enum ParraSheetPresentationState {
+public enum ParraSheetPresentationState: Equatable {
     case ready
     case loading
     case presented

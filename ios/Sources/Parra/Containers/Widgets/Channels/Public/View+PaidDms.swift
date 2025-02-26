@@ -64,12 +64,14 @@ public extension View {
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         let channelType = ParraChatChannelType.paidDm
-        let transformParams = PaidDirectMessageTransformParams(key: key)
+        let transformParams = ChannelListTransformParams(
+            channelType: channelType
+        )
 
         let transformer: ParraViewDataLoader<
-            PaidDirectMessageTransformParams,
-            PaidDirectMessageParams,
-            ChannelWidget
+            ChannelListTransformParams,
+            ChannelListParams,
+            ChannelListWidget
         >.Transformer = { parra, _ in
             logger.debug("Applying transformer to present Paid DM Widget")
 
@@ -83,7 +85,7 @@ public extension View {
                 "count": String(channelListResponse.elements.count)
             ])
 
-            var presentationMode: PaidDirectMessageParams.PresentationMode
+            var autoPresentation: ChannelListParams.AutoPresentationMode?
 
             if channelListResponse.elements.isEmpty {
                 logger.debug("Channel list is empty.")
@@ -97,7 +99,8 @@ public extension View {
                     )
 
                     logger.debug("Channel is created. Presentation mode is channel")
-                    presentationMode = .channel(channel)
+
+                    autoPresentation = .channel(channel)
                 } else {
                     logger.debug("User is not entitled. Presenting paywall.")
 
@@ -120,30 +123,29 @@ public extension View {
                         .debug(
                             "Paywall successfully fetched. Presentation mode is paywall."
                         )
-                    presentationMode = .paywall(paywall, paywallProducts)
+
+                    autoPresentation = .paywall(paywall, paywallProducts)
                 }
             } else {
                 logger.debug("Channel list not empty. Pesentation mode is channelList.")
-
-                presentationMode = .channelList(
-                    channelListResponse
-                )
             }
 
-            return PaidDirectMessageParams(
+            return ChannelListParams(
                 key: key,
                 channelType: channelType,
+                channelsResponse: channelListResponse,
                 requiredEntitlement: entitlement,
                 context: context,
-                presentationMode: presentationMode
+                autoPresentation: autoPresentation
             )
         }
 
         return loadAndPresentSheet(
+            name: "paid-dms",
             presentationState: presentationState,
             transformParams: transformParams,
             transformer: transformer,
-            with: .statefulChannelLoader(
+            with: .channelListLoader(
                 config: config
             ),
             onDismiss: onDismiss
