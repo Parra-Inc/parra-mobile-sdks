@@ -32,8 +32,7 @@ extension ChannelWidget {
             )
 
             self.messagePaginator = if let previewMessages = channel.latestMessages?
-                .elements,
-                !previewMessages.isEmpty
+                .elements
             {
                 .init(
                     context: channel.id,

@@ -281,16 +281,18 @@ struct ChannelWidget: ParraContainer {
     }
 
     @ViewBuilder private var emptyContent: some View {
-        if !contentObserver.messagePaginator.isLoading {
-            VStack {
-                Spacer()
-                componentFactory.buildEmptyState(
-                    config: .default,
-                    content: contentObserver.content.emptyStateView
-                )
-                Spacer()
-            }
+        VStack {
+            Spacer()
+            componentFactory.buildEmptyState(
+                config: .default,
+                content: contentObserver.content.emptyStateView
+            )
+            Spacer()
         }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
     }
 
     @ViewBuilder private var errorContent: some View {
