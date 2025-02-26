@@ -40,6 +40,7 @@ public extension View {
         }
 
         return loadAndPresentSheet(
+            name: "storefront",
             presentationState: presentationState,
             transformParams: transformParams,
             transformer: transformer,

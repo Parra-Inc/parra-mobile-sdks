@@ -112,6 +112,7 @@ public extension View {
         }
 
         return loadAndPresentSheet(
+            name: "paywall",
             presentationState: presentationState,
             transformParams: transformParams,
             transformer: transformer,

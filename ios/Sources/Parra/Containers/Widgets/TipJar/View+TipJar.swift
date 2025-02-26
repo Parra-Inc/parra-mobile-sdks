@@ -42,6 +42,7 @@ public extension View {
         }
 
         return loadAndPresentSheet(
+            name: "tipjar",
             presentationState: presentationState,
             transformParams: transformParams,
             transformer: transformer,

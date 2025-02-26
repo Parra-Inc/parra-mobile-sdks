@@ -81,11 +81,13 @@ public extension View {
                 channelType: transformParams.channelType,
                 channelsResponse: channelListResponse,
                 requiredEntitlement: entitlement,
-                context: context
+                context: context,
+                autoPresentation: nil
             )
         }
 
         return loadAndPresentSheet(
+            name: "channel-list",
             presentationState: presentationState,
             transformParams: transformParams,
             transformer: transformer,

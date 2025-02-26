@@ -38,6 +38,7 @@ public extension View {
 
     @MainActor
     func loadAndPresentSheet<TransformParams, Data, SheetContent>(
+        name: String,
         presentationState: Binding<ParraSheetPresentationState>,
         transformParams: TransformParams,
         transformer: @escaping ParraViewDataLoader<TransformParams, Data, SheetContent>
@@ -49,6 +50,7 @@ public extension View {
     ) -> some View where SheetContent: View {
         return modifier(
             SheetWithLoader(
+                name: name,
                 presentationState: presentationState,
                 transformParams: transformParams,
                 transformer: transformer,

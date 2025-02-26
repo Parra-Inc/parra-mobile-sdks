@@ -39,6 +39,7 @@ public extension View {
         }
 
         return loadAndPresentSheet(
+            name: "changelog",
             presentationState: presentationState,
             transformParams: transformParams,
             transformer: transformer,

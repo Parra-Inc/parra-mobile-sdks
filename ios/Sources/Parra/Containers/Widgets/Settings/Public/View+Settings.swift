@@ -57,6 +57,7 @@ public extension View {
         }
 
         return loadAndPresentSheet(
+            name: "settings",
             presentationState: presentationState,
             transformParams: transformParams,
             transformer: transformer,

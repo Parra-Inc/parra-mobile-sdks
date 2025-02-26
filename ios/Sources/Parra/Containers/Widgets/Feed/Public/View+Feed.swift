@@ -44,6 +44,7 @@ public extension View {
         }
 
         return loadAndPresentSheet(
+            name: "feed",
             presentationState: presentationState,
             transformParams: transformParams,
             transformer: transformer,

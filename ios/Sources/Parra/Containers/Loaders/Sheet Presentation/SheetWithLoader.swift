@@ -14,8 +14,6 @@ public enum ParraSheetPresentationState {
     case presented
 }
 
-private let logger = Logger()
-
 /// Facilitates loading data asynchonously then presenting a sheet with a view
 /// rendered from the data.
 @MainActor
@@ -25,6 +23,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     // MARK: - Lifecycle
 
     init(
+        name: String,
         presentationState: Binding<ParraSheetPresentationState>,
         transformParams: TransformParams,
         transformer: @escaping ParraViewDataLoader<TransformParams, Data, SheetContent>
@@ -34,6 +33,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
         visibility: Visibility = .automatic,
         onDismiss: ((ParraSheetDismissType) -> Void)?
     ) {
+        self.name = name
         self._presentationState = presentationState
         self.transformParams = transformParams
         self.transformer = transformer
@@ -41,6 +41,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
         self.detents = detents
         self.visibility = visibility
         self.onDismiss = onDismiss
+        self.logger = Logger(category: "SheetWithLoader \(name)")
     }
 
     // MARK: - Internal
@@ -49,7 +50,13 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
         content
             .onChange(
                 of: presentationState
-            ) { _, newValue in
+            ) { oldValue, newValue in
+
+                logger.debug("presentation state changed", [
+                    "to": "\(newValue)",
+                    "from": "\(oldValue)"
+                ])
+
                 if newValue == .loading {
                     Task { @MainActor in
                         await triggerTransform(
@@ -66,6 +73,8 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                     },
                     set: { newValue in
                         if !newValue {
+                            logger.debug("dismissing")
+
                             presentationState = .ready
                         }
                     }
@@ -113,6 +122,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     @State private var data: Data?
     @State private var navigationState = NavigationState()
 
+    private let name: String
     private let transformParams: TransformParams
     private let transformer: ParraViewDataLoader<TransformParams, Data, SheetContent>
         .Transformer
@@ -120,6 +130,8 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     private let detents: Set<PresentationDetent>
     private let visibility: Visibility
     private let onDismiss: ((ParraSheetDismissType) -> Void)?
+
+    private let logger: Logger
 
     @MainActor
     private func dismiss(_ type: ParraSheetDismissType) {
