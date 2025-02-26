@@ -421,50 +421,23 @@ struct CreateUserRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        identity: String? = nil,
         type: ParraIdentityType,
-        name: String? = nil,
-        properties: [String: String]? = nil,
         username: String? = nil,
-        email: String? = nil,
-        emailVerified: Bool? = nil,
         password: String? = nil,
-        phoneNumber: String? = nil,
-        phoneNumberVerified: Bool? = nil,
-        firstName: String? = nil,
-        lastName: String? = nil,
-        locale: String? = nil
+        anonymousToken: String? = nil
     ) {
-        self.identity = identity
         self.type = type
-        self.name = name
-        self.password = password
-        self.properties = properties
         self.username = username
-        self.email = email
-        self.emailVerified = emailVerified
-        self.phoneNumber = phoneNumber
-        self.phoneNumberVerified = phoneNumberVerified
-        self.firstName = firstName
-        self.lastName = lastName
-        self.locale = locale
+        self.password = password
+        self.anonymousToken = anonymousToken
     }
 
     // MARK: - Internal
 
-    let identity: String?
     let type: ParraIdentityType
-    let name: String?
-    let properties: [String: String]?
     let username: String?
-    let email: String?
-    let emailVerified: Bool?
     let password: String?
-    let phoneNumber: String?
-    let phoneNumberVerified: Bool?
-    let firstName: String?
-    let lastName: String?
-    let locale: String?
+    let anonymousToken: String?
 }
 
 struct UserInfoResponse: Codable, Equatable, Hashable {
