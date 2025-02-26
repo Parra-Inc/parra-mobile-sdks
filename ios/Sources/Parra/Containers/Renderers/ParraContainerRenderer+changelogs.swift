@@ -27,4 +27,29 @@ extension ParraContainerRenderer {
                 navigationPath: navigationPath
             )
     }
+
+    @MainActor
+    static func paywallRenderer(
+        config: PaywallWidget.Config,
+        parra: Parra,
+        data: ParraPaywall,
+        navigationPath: Binding<NavigationPath>,
+        dismisser: ParraSheetDismisser?
+    ) -> PaywallWidget {
+        return parra.parraInternal
+            .containerRenderer.renderContainer(
+                params: .init(
+                    paywallId: data.paywall.id,
+                    iapType: data.paywall.iapType,
+                    paywallProducts: data.products,
+                    marketingContent: data.paywall.marketingContent,
+                    sections: data.paywall.sections,
+                    config: config,
+                    api: parra.parraInternal.api
+                ),
+                config: config,
+                contentTransformer: nil,
+                navigationPath: navigationPath
+            )
+    }
 }

@@ -49,6 +49,5 @@ extension PaywallWidget.ContentObserver {
         let sections: [ParraPaywallSection]?
         let config: ParraPaywallConfig
         let api: API
-        let appInfo: ParraAppInfo
     }
 }

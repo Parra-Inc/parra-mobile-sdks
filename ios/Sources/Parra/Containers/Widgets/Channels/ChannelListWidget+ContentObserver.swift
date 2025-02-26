@@ -24,6 +24,7 @@ extension ChannelListWidget {
             self.requiredEntitlement = initialParams.requiredEntitlement
             self.key = initialParams.key
             self.context = initialParams.context
+            self.autoPresentation = initialParams.autoPresentation
             self.config = initialParams.config
             self.api = initialParams.api
 
@@ -62,6 +63,7 @@ extension ChannelListWidget {
         let config: ParraChannelListConfiguration
         let requiredEntitlement: String
         let context: String?
+        let autoPresentation: ChannelListParams.AutoPresentationMode?
 
         var channels: [Channel]
 

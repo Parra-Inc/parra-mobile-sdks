@@ -43,8 +43,7 @@ extension ParraViewDataLoader {
                             marketingContent: params.marketingContent,
                             sections: params.sections,
                             config: config,
-                            api: parra.parraInternal.api,
-                            appInfo: params.appInfo
+                            api: parra.parraInternal.api
                         ),
                         config: config,
                         contentTransformer: { contentObserver in

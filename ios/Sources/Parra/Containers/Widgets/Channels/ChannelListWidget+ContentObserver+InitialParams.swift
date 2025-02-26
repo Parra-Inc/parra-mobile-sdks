@@ -15,6 +15,7 @@ extension ChannelListWidget.ContentObserver {
         let channelsResponse: ChannelListResponse?
         let requiredEntitlement: String
         let context: String?
+        let autoPresentation: ChannelListParams.AutoPresentationMode?
         let api: API
     }
 }

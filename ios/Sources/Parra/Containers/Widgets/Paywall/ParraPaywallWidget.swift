@@ -42,8 +42,7 @@ public struct ParraPaywallWidget: View {
                     marketingContent: paywall.marketingContent,
                     sections: paywall.sections,
                     config: config,
-                    api: parra.parraInternal.api,
-                    appInfo: appInfo
+                    api: parra.parraInternal.api
                 ),
                 config: config,
                 contentTransformer: nil,
@@ -58,5 +57,4 @@ public struct ParraPaywallWidget: View {
     @State private var navigationPath: NavigationPath = .init()
 
     @Environment(\.parra) private var parra
-    @Environment(\.parraAppInfo) private var appInfo
 }

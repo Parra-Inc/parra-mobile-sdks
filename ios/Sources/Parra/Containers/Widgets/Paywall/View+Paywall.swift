@@ -123,4 +123,25 @@ public extension View {
             onDismiss: onDismiss
         )
     }
+
+    @MainActor
+    internal func presentParraPaywall(
+        entitlement: String,
+        context: String?,
+        with dataBinding: Binding<ParraPaywall?>,
+        config: ParraPaywallConfig? = nil,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
+    ) -> some View {
+        return presentSheetWithData(
+            data: dataBinding,
+            config: config ?? .default,
+            with: ParraContainerRenderer.paywallRenderer,
+            onDismiss: onDismiss
+        )
+    }
+}
+
+struct ParraPaywall: Equatable {
+    let paywall: ParraAppPaywall
+    let products: PaywallProducts
 }

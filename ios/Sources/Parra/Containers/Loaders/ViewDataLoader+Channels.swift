@@ -55,6 +55,7 @@ extension ParraViewDataLoader {
                             channelsResponse: params.channelsResponse,
                             requiredEntitlement: params.requiredEntitlement,
                             context: params.context,
+                            autoPresentation: params.autoPresentation,
                             api: parra.parraInternal.api
                         ),
                         config: config,
