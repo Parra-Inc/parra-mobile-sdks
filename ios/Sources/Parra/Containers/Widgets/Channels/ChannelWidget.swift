@@ -123,7 +123,7 @@ struct ChannelWidget: ParraContainer {
             }
         } message: {
             Text(
-                "Non-admin members will be allowed to send messages again."
+                "All members will be allowed to send messages again."
             )
         }
         .confirmationDialog(
