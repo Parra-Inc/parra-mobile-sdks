@@ -229,7 +229,7 @@ struct PaywallWidget: ParraContainer {
         case .productIds(let productIds):
             // TODO: Marketing content?
             StoreView(ids: productIds)
-        case .groupId(let string):
+        case .groupId:
             // Invalid state. Group ID should only be for subscriptions.
             EmptyView()
         }

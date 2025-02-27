@@ -68,8 +68,10 @@ extension ChannelWidget {
                 forName: Parra.receivedChannelPushNotification,
                 object: nil,
                 queue: .main
-            ) { @MainActor [weak self] notification in
-                self?.receiveChannelUpdate(notification)
+            ) { [weak self] notification in
+                Task { @MainActor in
+                    self?.receiveChannelUpdate(notification)
+                }
             }
         }
 

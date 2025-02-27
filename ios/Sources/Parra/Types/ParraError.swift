@@ -166,7 +166,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         case .guestNotPermitted(let action):
             return "Guests are not permitted to perform the action: \(action)"
         case .missingEntitlement(let entitlement, let context):
-            return "You are not entitled to perform the attempted Action. Missing entitlement is: \(entitlement) in context: \(context)"
+            let ctx = context ?? "<null>"
+            return "You are not entitled to perform the attempted Action. Missing entitlement is: \(entitlement) in context: \(ctx)"
         }
     }
 

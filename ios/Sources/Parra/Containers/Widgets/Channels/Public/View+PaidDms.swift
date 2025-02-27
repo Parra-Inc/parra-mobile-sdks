@@ -54,7 +54,6 @@ public extension View {
     }
 
     @MainActor
-    @ViewBuilder
     func presentParraPaidDirectMessageWidget(
         for key: String,
         requiredEntitlement entitlement: String,

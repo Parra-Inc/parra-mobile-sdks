@@ -32,7 +32,7 @@ enum PaywallProducts: Equatable, CustomStringConvertible {
             return products.map(\.id)
         case .productIds(let productIds):
             return productIds
-        case .groupId(let string):
+        case .groupId:
             return nil
         }
     }

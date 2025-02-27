@@ -27,7 +27,7 @@ extension API {
     func listChatChannels(
         type: ParraChatChannelType
     ) async throws -> ChannelListResponse {
-        var query: [String: String] = [
+        let query: [String: String] = [
             "type": type.rawValue
         ]
 

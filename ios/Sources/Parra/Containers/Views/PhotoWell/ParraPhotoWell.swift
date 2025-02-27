@@ -325,15 +325,15 @@ public struct ParraPhotoWell: View {
 
         editingImage = nil
         selectedPhoto = nil
-        state = .processing(image)
+        state = .processing(stripped)
 
         Task {
             if let onSelectionChanged {
-                await onSelectionChanged(image)
+                await onSelectionChanged(stripped)
             }
 
             Task { @MainActor in
-                state = .loaded(image)
+                state = .loaded(stripped)
             }
         }
     }

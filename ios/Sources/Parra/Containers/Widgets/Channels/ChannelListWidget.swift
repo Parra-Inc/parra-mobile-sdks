@@ -85,7 +85,7 @@ struct ChannelListWidget: ParraContainer {
         .environmentObject(contentObserver)
         .onAppear {
             switch contentObserver.autoPresentation {
-            case .paywall(let paywall, let products):
+            case .paywall:
                 if paywallPresentationState == .ready && !hasPerformedOnAppearAction {
                     paywallPresentationState = .loading
 
