@@ -21,4 +21,12 @@ extension API {
             ]
         )
     }
+
+    func getFeedItem(
+        by feedItemId: String
+    ) async throws -> ParraFeedItem {
+        return try await hitEndpoint(
+            .getFeedItem(feedItemId: feedItemId)
+        )
+    }
 }

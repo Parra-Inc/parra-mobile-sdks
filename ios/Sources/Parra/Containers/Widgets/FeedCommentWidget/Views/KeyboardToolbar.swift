@@ -18,8 +18,6 @@ struct KeyboardToolbar<ToolbarView: View>: ViewModifier {
     // MARK: - Internal
 
     func body(content: Content) -> some View {
-        let cornerRadius = theme.cornerRadius.value(for: .xl)
-
         ZStack(alignment: .bottom) {
             GeometryReader { geometry in
                 VStack(spacing: 0) {

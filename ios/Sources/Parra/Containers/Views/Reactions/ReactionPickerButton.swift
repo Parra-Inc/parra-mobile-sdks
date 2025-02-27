@@ -23,7 +23,7 @@ struct ReactionPickerButton: View {
     // MARK: - Internal
 
     var body: some View {
-        Button {
+        CellButton {
             if authState.isLoggedIn {
                 toggleAnimation = true
 
@@ -62,9 +62,6 @@ struct ReactionPickerButton: View {
                 }
             }
         }
-        // Required to prevent highlighting the button then dragging the scroll
-        // view from causing the button to be pressed.
-        .simultaneousGesture(TapGesture())
         .buttonStyle(.plain)
         .sensoryFeedback(.impact, trigger: toggleAnimation)
         .presentParraSignInWidget(

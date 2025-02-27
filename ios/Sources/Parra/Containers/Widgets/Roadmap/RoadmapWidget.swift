@@ -57,15 +57,12 @@ struct RoadmapWidget: ParraContainer {
         ForEach(items.indices, id: \.self) { index in
             let ticket = items[index]
 
-            NavigationLink(
+            CellNavigationLink(
                 value: ticket.wrappedValue,
                 label: {
                     RoadmapListItem(ticketContent: ticket)
                 }
             )
-            // Required to prevent highlighting the button then dragging the scroll
-            // view from causing the button to be pressed.
-            .simultaneousGesture(TapGesture())
             .disabled(
                 contentObserver.ticketPaginator
                     .isShowingPlaceholders
@@ -102,16 +99,16 @@ struct RoadmapWidget: ParraContainer {
         .environmentObject(contentObserver)
         .presentParraFeedbackFormWidget(
             with: $contentObserver.addRequestForm,
-            onDismiss: { dismissType in
-                if dismissType == .completed {
-                    alertManager.showSuccessToast(
-                        title: config.addRequestSuccessToastTitle,
-                        subtitle: config.addRequestSuccessToastSubtitle,
-                        in: .bottomCenter
-                    )
-                }
+            config: .default
+        ) { dismissType in
+            if dismissType == .completed {
+                alertManager.showSuccessToast(
+                    title: config.addRequestSuccessToastTitle,
+                    subtitle: config.addRequestSuccessToastSubtitle,
+                    in: .bottomCenter
+                )
             }
-        )
+        }
         .navigationBarTitleDisplayMode(.automatic)
         .navigationTitle(contentObserver.content.title.text)
         .navigationDestination(for: TicketUserContent.self) { ticket in

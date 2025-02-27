@@ -15,7 +15,7 @@ public extension View {
     /// with the "notifications" key.
     @MainActor
     func presentParraNotificationSettingsView(
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraUserNotificationSettingsConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -24,7 +24,7 @@ public extension View {
 
         return presentParraSettingsView(
             layoutId: "notifications",
-            isPresented: isPresented,
+            presentationState: presentationState,
             config: fullConfig,
             onDismiss: onDismiss
         )
@@ -35,7 +35,7 @@ public extension View {
     @MainActor
     func presentParraSettingsView(
         layoutId: String,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraUserSettingsConfiguration = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -57,20 +57,10 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(transformParams, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            name: "settings",
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .settingsLoader(
                 config: config
             ),

@@ -25,6 +25,17 @@ enum PaywallProducts: Equatable, CustomStringConvertible {
             "groupId(\(groupId))"
         }
     }
+
+    var productIds: [String]? {
+        switch self {
+        case .products(let products):
+            return products.map(\.id)
+        case .productIds(let productIds):
+            return productIds
+        case .groupId:
+            return nil
+        }
+    }
 }
 
 // MARK: - PaywallWidget.ContentObserver.InitialParams
@@ -32,10 +43,11 @@ enum PaywallProducts: Equatable, CustomStringConvertible {
 extension PaywallWidget.ContentObserver {
     struct InitialParams {
         let paywallId: String
+        let iapType: PaywallIapType
         let paywallProducts: PaywallProducts
-        let marketingContent: ParraPaywallMarketingContent?
+        let marketingContent: ApplePaywallMarketingContent?
+        let sections: [ParraPaywallSection]?
         let config: ParraPaywallConfig
         let api: API
-        let appInfo: ParraAppInfo
     }
 }

@@ -362,7 +362,7 @@ struct CreatorUpdateAttachmentsView: View {
         for image: ParraImageAsset,
         size: CGSize
     ) -> some View {
-        Button {
+        CellButton {
             handleSelectedImage(image)
         } label: {
             Color.clear.background {
@@ -387,10 +387,6 @@ struct CreatorUpdateAttachmentsView: View {
                 }
             }
         }
-        // Required to prevent highlighting the button then dragging the scroll
-        // view from causing the button to be pressed.
-        .simultaneousGesture(TapGesture())
-        .buttonStyle(ContentCardButtonStyle())
         .disabled(unlockingAsset != nil)
     }
 
@@ -399,7 +395,7 @@ struct CreatorUpdateAttachmentsView: View {
         amount: Int,
         size: CGSize
     ) -> some View {
-        Button {
+        CellButton {
             handleSelectedImage(image)
         } label: {
             Color.clear.background {
@@ -433,11 +429,7 @@ struct CreatorUpdateAttachmentsView: View {
                 }
             }
         }
-        // Required to prevent highlighting the button then dragging the scroll
-        // view from causing the button to be pressed.
-        .simultaneousGesture(TapGesture())
         .disabled(unlockingAsset != nil)
-        .buttonStyle(ContentCardButtonStyle())
     }
 
     @ViewBuilder

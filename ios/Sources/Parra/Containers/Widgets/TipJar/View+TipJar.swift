@@ -13,7 +13,7 @@ public extension View {
     @MainActor
     func presentParraTipJar(
         with productIds: [String],
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraTipJarConfig = .default
     ) -> some View {
         let transformParams = TipJarTransformParams(
@@ -42,20 +42,10 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(transformParams, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            name: "tipjar",
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .tipJarLoader(
                 config: config
             ),

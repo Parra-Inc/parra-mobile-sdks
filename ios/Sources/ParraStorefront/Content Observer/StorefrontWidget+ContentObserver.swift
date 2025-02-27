@@ -33,6 +33,8 @@ enum ProductSortOrder: CaseIterable {
 
     // MARK: - Internal
 
+    static let `default` = ProductSortOrder.newestToOldest
+
     var shopifySort: (Bool, Storefront.ProductSortKeys) {
         switch self {
         case .bestSelling:
@@ -111,7 +113,13 @@ extension StorefrontWidget {
                         pageSize: Int(storefrontPaginatorLimit),
                         knownCount: productsResponse.products.elements.count
                     ),
-                    pageFetcher: loadMoreProducts
+                    pageFetcher: { [weak self] cursor, pageSize, context in
+                        return try await self?
+                            .loadMore(cursor, pageSize, context) ?? .init(
+                                items: [],
+                                cursor: .init(hasNextPage: false)
+                            )
+                    }
                 )
             } else {
                 .init(
@@ -121,7 +129,13 @@ extension StorefrontWidget {
                         placeholderItems: (0 ... 12)
                             .map { _ in ParraProduct.redactedProduct }
                     ),
-                    pageFetcher: loadMoreProducts
+                    pageFetcher: { [weak self] cursor, pageSize, context in
+                        return try await self?
+                            .loadMore(cursor, pageSize, context) ?? .init(
+                                items: [],
+                                cursor: .init(hasNextPage: false)
+                            )
+                    }
                 )
             }
         }
@@ -133,7 +147,9 @@ extension StorefrontWidget {
         let config: ParraStorefrontWidgetConfig
         nonisolated let delegate: ParraStorefrontWidgetDelegate?
 
-        var sortOrder: ProductSortOrder = .newestToOldest {
+        // NOTE: ! If you change this here, you need to update the sort order
+        // used in performProductPreload
+        var sortOrder: ProductSortOrder = .default {
             didSet {
                 productPaginator.refresh()
             }
@@ -171,8 +187,8 @@ extension StorefrontWidget {
         }
 
         @MainActor
-        func refresh() {
-            productPaginator.refresh()
+        func refresh() async {
+            await productPaginator.refresh()
         }
 
         @MainActor
@@ -577,7 +593,7 @@ extension StorefrontWidget {
             ShopifyCheckoutSheetKit.preload(checkout: checkoutURL)
         }
 
-        private func loadMoreProducts(
+        private func loadMore(
             _ cursor: ParraCursorPaginator<ParraProduct, String>.Cursor,
             _ pageSize: Int,
             _ context: String
@@ -592,8 +608,7 @@ extension StorefrontWidget {
             let result = try await shopifyService.performQuery(
                 .productsQuery(
                     count: Int32(pageSize),
-                    startCursor: cursor.startCursor,
-                    endCursor: cursor.endCursor,
+                    startCursor: cursor.endCursor,
                     reverse: reverse,
                     sortKey: sortKey
                 )

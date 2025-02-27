@@ -19,7 +19,7 @@ struct AccountView: View {
     var body: some View {
         let user = parraAuthState.user
 
-        List {
+        Form {
             Section {
                 AccountHeader()
             }

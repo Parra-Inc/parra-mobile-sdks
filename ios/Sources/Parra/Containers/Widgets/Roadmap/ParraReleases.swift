@@ -107,13 +107,13 @@ public final class ParraReleases {
                     filter: tab.key
                 )
 
-                let roadmapInfo = ParraRoadmapInfo(
-                    roadmapConfig: roadmapConfig,
-                    selectedTab: tab,
-                    ticketResponse: ticketResponse
-                )
+                Task { @MainActor in
+                    let roadmapInfo = ParraRoadmapInfo(
+                        roadmapConfig: roadmapConfig,
+                        selectedTab: tab,
+                        ticketResponse: ticketResponse
+                    )
 
-                DispatchQueue.main.async {
                     completion(.success(roadmapInfo))
                 }
             } catch {

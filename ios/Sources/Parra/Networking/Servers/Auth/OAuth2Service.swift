@@ -35,7 +35,8 @@ final class OAuth2Service {
     let authServer: AuthServer
 
     func authenticate(
-        using authType: AuthType
+        using authType: AuthType,
+        anonymousToken: String?
     ) async throws -> ParraUser.Credential.Token {
         let tokenType = authType.tokenType
 
@@ -44,7 +45,8 @@ final class OAuth2Service {
              .signInWithApple:
             try await authenticateWithAccount(
                 endpoint: authType.issuerEndpoint,
-                authType: authType
+                authType: authType,
+                anonymousToken: anonymousToken
             )
         case .anonymous, .guest:
             try await authServer.authenticateWithoutAccount(
@@ -144,12 +146,17 @@ final class OAuth2Service {
 
     private func authenticateWithAccount(
         endpoint: IssuerEndpoint,
-        authType: AuthType
+        authType: AuthType,
+        anonymousToken: String?
     ) async throws -> TokenResponse {
         var data: [String: String] = [
             "scope": "parra openid offline_access profile email phone",
             "client_id": clientId
         ]
+
+        if let anonymousToken {
+            data["anonymous_token"] = anonymousToken
+        }
 
         switch authType {
         case .usernamePassword(let email, let password):

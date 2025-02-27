@@ -57,8 +57,16 @@ extension FeedCommentWidget {
                         pageSize: feedCollectionResponse.pageSize,
                         knownCount: feedCollectionResponse.totalCount
                     ),
-                    pageFetcher: loadMoreComments,
-                    missingFetcher: loadMissingComments
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(
+                            pageSize,
+                            offset,
+                            context
+                        ) ?? []
+                    },
+                    missingFetcher: { [weak self] cursor, context in
+                        return try await self?.loadMissing(cursor, context) ?? []
+                    }
                 )
             } else {
                 .init(
@@ -68,8 +76,16 @@ extension FeedCommentWidget {
                         placeholderItems: (0 ... commentCount)
                             .map { _ in ParraComment.redactedComment }
                     ),
-                    pageFetcher: loadMoreComments,
-                    missingFetcher: loadMissingComments
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(
+                            pageSize,
+                            offset,
+                            context
+                        ) ?? []
+                    },
+                    missingFetcher: { [weak self] cursor, context in
+                        return try await self?.loadMissing(cursor, context) ?? []
+                    }
                 )
             }
         }
@@ -225,7 +241,7 @@ extension FeedCommentWidget {
         private let feedConfig: ParraFeedCommentWidgetConfig
         private var paginatorSink: AnyCancellable? = nil
 
-        private func loadMissingComments(
+        private func loadMissing(
             _ cursor: String?,
             _ feedItemId: String
         ) async throws -> [ParraComment] {
@@ -240,7 +256,7 @@ extension FeedCommentWidget {
             return response.data.elements
         }
 
-        private func loadMoreComments(
+        private func loadMore(
             _ limit: Int,
             _ offset: Int,
             _ feedItemId: String

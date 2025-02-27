@@ -13,11 +13,11 @@ public extension View {
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
     func presentParraChangelogWidget(
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraChangelogWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
-        let params = ChangelogParams(
+        let transformParams = ChangelogParams(
             limit: 15,
             offset: 0
         )
@@ -39,20 +39,10 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(params, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            name: "changelog",
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .changelogLoader(
                 config: config
             ),
@@ -62,28 +52,14 @@ public extension View {
 
     @MainActor
     func presentParraChangelogWidget(
-        with resultBinding: Binding<ParraChangelogInfo?>,
+        with dataBinding: Binding<ParraChangelogInfo?>,
         config: ParraChangelogWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
-        return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if let result = resultBinding.wrappedValue {
-                        return .raw(result)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        resultBinding.wrappedValue = nil
-                    }
-                }
-            ),
-            with: .changelogLoader(
-                config: config
-            ),
+        return presentSheetWithData(
+            data: dataBinding,
+            config: config,
+            with: ParraContainerRenderer.changelogRenderer,
             onDismiss: onDismiss
         )
     }

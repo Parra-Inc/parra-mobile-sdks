@@ -20,7 +20,6 @@ struct FeedTransformParams: Equatable {
 
 extension ParraViewDataLoader {
     static func feedLoader(
-        feedId: String,
         config: ParraFeedConfiguration
     )
         -> ParraViewDataLoader<

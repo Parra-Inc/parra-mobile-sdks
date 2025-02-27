@@ -17,82 +17,13 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: mainPadding.width) {
-            withContent(
-                content: comment.user.avatar
-            ) { avatar in
-                componentFactory.buildAsyncImage(
-                    config: ParraAsyncImageConfig(
-                        contentMode: .fill
-                    ),
-                    content: ParraAsyncImageContent(
-                        avatar,
-                        preferredThumbnailSize: .md
-                    ),
-                    localAttributes: ParraAttributes.AsyncImage(
-                        size: CGSize(width: 34, height: 34),
-                        cornerRadius: .full
-                    )
-                )
-            } elseRenderer: {
-                componentFactory.buildImage(
-                    config: ParraImageConfig(),
-                    content: .symbol("person.crop.circle.fill", .hierarchical),
-                    localAttributes: ParraAttributes.Image(
-                        size: CGSize(width: 34, height: 34),
-                        cornerRadius: .full
-                    )
-                )
-                .foregroundStyle(
-                    theme.palette.primary.toParraColor(),
-                    theme.palette.primaryBackground
-                )
-            }
+            AvatarView(avatar: comment.user.avatar)
 
             VStack(alignment: .leading) {
                 HStack(alignment: .center, spacing: 8) {
-                    HStack(alignment: .center, spacing: 6) {
-                        componentFactory.buildLabel(
-                            text: comment.user.displayName,
-                            localAttributes: ParraAttributes.Label(
-                                text: .default(with: .headline),
-                                padding: .zero
-                            )
-                        )
-
-                        if let verified = comment.user.verified, verified,
-                           redactionReasons.isEmpty
-                        {
-                            componentFactory.buildImage(
-                                content: .name("CheckBadgeSolid", .module, .template),
-                                localAttributes: ParraAttributes.Image(
-                                    tint: .blue,
-                                    size: CGSize(width: 20, height: 20),
-                                    padding: .zero
-                                )
-                            )
-                        }
-
-                        if let role = comment.user.roles?.elements.first,
-                           redactionReasons.isEmpty
-                        {
-                            componentFactory.buildLabel(
-                                text: role.name,
-                                localAttributes: ParraAttributes.Label(
-                                    text: .init(
-                                        style: .caption2,
-                                        color: theme.palette.primary.toParraColor()
-                                    ),
-                                    cornerRadius: .sm,
-                                    padding: .custom(
-                                        EdgeInsets(vertical: 2.5, horizontal: 7)
-                                    ),
-                                    background: theme.palette.primary
-                                        .toParraColor()
-                                        .opacity(0.2)
-                                )
-                            )
-                        }
-                    }
+                    UserWithRolesView(
+                        user: comment.user
+                    )
 
                     Spacer()
 

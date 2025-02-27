@@ -44,12 +44,94 @@ public final class ParraUserEntitlements {
     /// A list of the entitlements belonging to the currently logged in user.
     public internal(set) var current: [ParraUserEntitlement] = [] {
         didSet {
-            keyedEntitlements = current.reduce(into: [:]) { $0[$1.key] = $1 }
-
             Task { @MainActor in
                 propagateChanges()
             }
         }
+    }
+
+    /// Returns the entitlement object for the provided key, if the current user
+    /// has this entitlement
+    @MainActor
+    public func getEntitlement(
+        for entitlementKey: String
+    ) -> ParraUserEntitlement? {
+        logger.debug("Getting entitlement for key", [
+            "entitlementKey": entitlementKey
+        ])
+
+        guard let entitlement = current.first(where: { entitlement in
+            return entitlement.key == entitlementKey
+        }) else {
+            return nil
+        }
+
+        guard entitlement.isConsumable else {
+            logger.debug("Current user has non consumable entitlement", [
+                "entitlementKey": entitlement.key,
+                "entitlementId": entitlement.id
+            ])
+
+            return entitlement
+        }
+
+        guard let quantityAvailable = entitlement.quantityAvailable else {
+            logger.warn(
+                "Current user is missing quantity available data for consumable entitlement",
+                [
+                    "entitlementKey": entitlement.key
+                ]
+            )
+
+            return nil
+        }
+
+        if quantityAvailable > 0 {
+            logger.debug(
+                "Current user has sufficient remaining quantity for consumable entitlement",
+                [
+                    "entitlementKey": entitlement.key,
+                    "quantityAvailable": String(quantityAvailable)
+                ]
+            )
+
+            return entitlement
+        } else {
+            logger.debug(
+                "Current user has insufficient remaining quantity for consumable entitlement",
+                [
+                    "entitlementKey": entitlement.key,
+                    "quantityAvailable": String(quantityAvailable)
+                ]
+            )
+
+            return nil
+        }
+    }
+
+    /// Whether the currently logged in user has, and in the case of consumable
+    /// IAPs, has a non 0 quantity available.
+    @MainActor
+    public func isEntitled(
+        to entitlementKey: String
+    ) -> Bool {
+        if let firstMatch = getEntitlement(for: entitlementKey) {
+            logger.debug("Current user has entitlement", [
+                "entitlementKey": entitlementKey,
+                "isConsumable": String(firstMatch.isConsumable),
+                "isFree": String(firstMatch.isFree),
+                "quantityAvailable": String(firstMatch.quantityAvailable ?? -1),
+                "quantityConsumed": String(firstMatch.quantityConsumed ?? -1)
+            ])
+
+            return true
+        }
+
+        logger.debug("Current user is missing entitlement", [
+            "entitlement": entitlementKey
+        ])
+
+        return false
     }
 
     /// Whether the currently logged in user has the provided entitlement key.
@@ -57,14 +139,16 @@ public final class ParraUserEntitlements {
     public func hasEntitlement(
         for key: String
     ) -> Bool {
-        let isEntitled = keyedEntitlements[key] != nil
+        let isEntitled = current.contains { entitlement in
+            return entitlement.key == key
+        }
 
         if isEntitled {
-            logger.debug("Current user has entitlement", [
+            logger.trace("Current user has entitlement", [
                 "entitlement": key
             ])
         } else {
-            logger.debug("Current user is missing entitlement", [
+            logger.warn("Current user is missing entitlement", [
                 "entitlement": key
             ])
         }
@@ -108,7 +192,7 @@ public final class ParraUserEntitlements {
     public func getPaywall(
         for entitlement: String,
         in context: String?
-    ) async throws -> ParraApplePaywall {
+    ) async throws -> ParraAppPaywall {
         return try await Parra.default.parraInternal.api.getPaywall(
             for: entitlement,
             context: context
@@ -156,6 +240,18 @@ public final class ParraUserEntitlements {
 
     // MARK: - Internal
 
+    /// Retreives the latest entitlements for the user from the server and
+    /// applies them.
+    @MainActor
+    func refreshEntitlements() async throws {
+        logger.debug("Retreiving latest user entitlements")
+
+        let entitlements = try await Parra.default.parraInternal.api.getUserEntitlements()
+
+        updateEntitlements(entitlements)
+    }
+
+    /// Updates the entitlements to those provided.
     @MainActor
     func updateEntitlements(_ entitlements: [ParraUserEntitlement]) {
         if entitlements.isEmpty {
@@ -188,8 +284,6 @@ public final class ParraUserEntitlements {
     }
 
     // MARK: - Private
-
-    private var keyedEntitlements: [String: ParraUserEntitlement] = [:]
 
     private var updates: Task<Void, Never>?
     private var cancellables: Set<AnyCancellable> = []

@@ -131,6 +131,7 @@ struct ProductDetailView: View {
                             originalSize: image.size
                         )
                     )
+                    .cornerRadius(16)
                     .overlay(
                         alignment: .topLeading
                     ) {
@@ -178,7 +179,6 @@ struct ProductDetailView: View {
         )
         .aspectRatio(1.0, contentMode: .fit)
         .frame(maxWidth: .infinity)
-        .cornerRadius(16)
     }
 
     @ViewBuilder private var description: some View {

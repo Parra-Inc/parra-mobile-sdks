@@ -176,9 +176,20 @@ class ParraInternal {
         try await withThrowingDiscardingTaskGroup { taskGroup in
             taskGroup.addTask {
                 logger.debug("Fetching user properties")
+
                 let userProperties = try await self.api.getUserProperties()
 
                 await ParraUserProperties.shared.forceSetStore(userProperties)
+            }
+
+            taskGroup.addTask {
+                logger.debug("Fetching user entitlements")
+
+                let userEntitlements = try await self.api.getUserEntitlements()
+
+                await ParraUserEntitlements.shared.updateEntitlements(
+                    userEntitlements
+                )
             }
         }
     }

@@ -17,14 +17,14 @@ public extension View {
     func presentParraPaywall(
         entitlement: ParraEntitlement,
         context: String?,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentParraPaywall(
             entitlement: entitlement.key,
             context: context,
-            isPresented: isPresented,
+            presentationState: presentationState,
             config: config,
             onDismiss: onDismiss
         )
@@ -38,14 +38,14 @@ public extension View {
     func presentParraPaywall<Key>(
         entitlement key: Key,
         context: String?,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View where Key: RawRepresentable, Key.RawValue == String {
         return presentParraPaywall(
             entitlement: key.rawValue,
             context: context,
-            isPresented: isPresented,
+            presentationState: presentationState,
             config: config,
             onDismiss: onDismiss
         )
@@ -59,7 +59,7 @@ public extension View {
     func presentParraPaywall(
         entitlement: String,
         context: String?,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraPaywallConfig? = nil,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -73,7 +73,7 @@ public extension View {
             PaywallParams,
             PaywallWidget
         >.Transformer = { parra, transformParams in
-            let response = try await parra.parraInternal.api.getPaywall(
+            let paywall = try await parra.parraInternal.api.getPaywall(
                 for: transformParams.entitlement,
                 context: transformParams.context
             )
@@ -81,11 +81,11 @@ public extension View {
             let appInfo = await parra.parraInternal.appInfoManager
                 .cachedAppInfo() ?? .default
 
-            let paywallProducts: PaywallProducts = if let productIds = response
+            let paywallProducts: PaywallProducts = if let productIds = paywall
                 .productIds
             {
                 try await .products(Product.products(for: productIds))
-            } else if let groupId = response.groupId {
+            } else if let groupId = paywall.groupId {
                 .groupId(groupId)
             } else {
                 .productIds([])
@@ -96,9 +96,11 @@ public extension View {
             ])
 
             return PaywallParams(
-                id: response.id,
+                id: paywall.id,
+                iapType: paywall.iapType,
                 paywallProducts: paywallProducts,
-                marketingContent: response.marketingContent,
+                marketingContent: paywall.marketingContent,
+                sections: paywall.sections,
                 appInfo: appInfo
             )
         }
@@ -110,20 +112,10 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(transformParams, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            name: "paywall",
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .paywallLoader(
                 config: finalConfig
             ),
@@ -131,4 +123,25 @@ public extension View {
             onDismiss: onDismiss
         )
     }
+
+    @MainActor
+    internal func presentParraPaywall(
+        entitlement: String,
+        context: String?,
+        with dataBinding: Binding<ParraPaywall?>,
+        config: ParraPaywallConfig? = nil,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
+    ) -> some View {
+        return presentSheetWithData(
+            data: dataBinding,
+            config: config ?? .default,
+            with: ParraContainerRenderer.paywallRenderer,
+            onDismiss: onDismiss
+        )
+    }
+}
+
+struct ParraPaywall: Equatable {
+    let paywall: ParraAppPaywall
+    let products: PaywallProducts
 }

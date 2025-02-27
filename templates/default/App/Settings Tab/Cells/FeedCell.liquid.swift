@@ -15,17 +15,17 @@ struct FeedCell: View {
     @Environment(\.parra) private var parra
     @Environment(\.parraAppInfo) private var parraAppInfo
 
-    @State private var isPresented = false
+    @State private var presentationState: ParraSheetPresentationState = .ready
 
     var body: some View {
         ListItemLoadingButton(
-            isLoading: $isPresented,
+            presentationState: $presentationState,
             text: "Social Feed",
             symbol: "megaphone"
         )
         .presentParraFeedWidget(
             by: "content",
-            isPresented: $isPresented
+            presentationState: $presentationState
         )
     }
 }

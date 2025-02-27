@@ -17,17 +17,7 @@ extension ParraComment: ParraFixture {
             body: "Some text that you should never see. If you do, report it please :)",
             userId: .uuid,
             feedItemId: .uuid,
-            user: ParraUserStub(
-                id: .uuid,
-                tenantId: .uuid,
-                name: "John Appleseed",
-                displayName: "User 123456",
-                avatar: nil,
-                verified: true,
-                roles: [
-                    .init(id: .uuid, name: "Moderator", key: "mod")
-                ]
-            ),
+            user: .validStates()[0],
             reactions: nil,
             isTemporary: nil
         )
@@ -43,23 +33,7 @@ extension ParraComment: ParraFixture {
                 body: "I love this content! Keep up the great work",
                 userId: .uuid,
                 feedItemId: .uuid,
-                user: ParraUserStub(
-                    id: .uuid,
-                    tenantId: .uuid,
-                    name: "Mick",
-                    displayName: "User 123456",
-                    avatar: ParraImageAsset(
-                        id: .uuid,
-                        size: CGSize(width: 4_284, height: 4_284),
-                        url: URL(
-                            string: "https://parra-cdn.com/users/9a311ff4-6af9-445e-a3df-6900787e2198/avatar/807a9033-0d1b-41d8-9102-3dc47f0c3e32.jpg"
-                        )!
-                    ),
-                    verified: true,
-                    roles: [
-                        .init(id: .uuid, name: "Owner", key: "owner")
-                    ]
-                ),
+                user: .validStates()[0],
                 reactions: [
                     ParraReactionSummary(
                         id: .uuid,
@@ -69,7 +43,8 @@ extension ParraComment: ParraFixture {
                         value: "👍",
                         count: 6,
                         reactionId: .uuid,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     ),
                     ParraReactionSummary(
                         id: .uuid,
@@ -79,7 +54,8 @@ extension ParraComment: ParraFixture {
                         value: "👎",
                         count: 1,
                         reactionId: nil,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     ),
                     ParraReactionSummary(
                         id: .uuid,
@@ -89,7 +65,8 @@ extension ParraComment: ParraFixture {
                         value: "❤️",
                         count: 42,
                         reactionId: nil,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     ),
                     ParraReactionSummary(
                         id: .uuid,
@@ -99,7 +76,8 @@ extension ParraComment: ParraFixture {
                         value: "🥳",
                         count: 4,
                         reactionId: .uuid,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     )
                 ],
                 isTemporary: nil
@@ -136,7 +114,8 @@ extension ParraComment: ParraFixture {
                         value: "❤️",
                         count: 4,
                         reactionId: .uuid,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     )
                 ],
                 isTemporary: true,
@@ -176,7 +155,8 @@ extension ParraComment: ParraFixture {
                         value: "🔥",
                         count: 65,
                         reactionId: .uuid,
-                        originalReactionId: nil
+                        originalReactionId: nil,
+                        users: []
                     )
                 ],
                 isTemporary: nil

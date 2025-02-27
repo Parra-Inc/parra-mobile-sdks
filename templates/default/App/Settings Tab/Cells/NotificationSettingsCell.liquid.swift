@@ -10,17 +10,18 @@ import SwiftUI
 import Parra
 
 struct NotificationSettingsCell: View {
-    @State private var isPresented = false
+    @State private var presentationState: ParraSheetPresentationState = .ready
 
     var body: some View {
         ListItemLoadingButton(
-            isLoading: $isPresented,
-            text: "Notifications",
+            presentationState: $presentationState,
+            text: "Notification settings",
             symbol: "bell.badge"
         )
-        .presentParraSettingsView(
-            layoutId: "notifications",
-            isPresented: $isPresented
+        // Settings view layout IDs can be either the ID or Key for a group of
+        // settings definied at https://parra.io/dashboard/users/configuration
+        .presentParraNotificationSettingsView(
+            presentationState: $presentationState
         )
     }
 }

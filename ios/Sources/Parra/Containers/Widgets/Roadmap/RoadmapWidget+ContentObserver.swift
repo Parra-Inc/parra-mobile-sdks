@@ -74,7 +74,9 @@ extension RoadmapWidget {
             >(
                 context: initialTab,
                 data: initialPaginatorData,
-                pageFetcher: loadMoreTickets
+                pageFetcher: { [weak self] pageSize, offset, context in
+                    return try await self?.loadMore(pageSize, offset, context) ?? []
+                }
             )
 
             self.ticketPaginator = initialPaginator
@@ -195,7 +197,9 @@ extension RoadmapWidget {
                 >(
                     context: newTab,
                     data: cachedData,
-                    pageFetcher: loadMoreTickets
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(pageSize, offset, context) ?? []
+                    }
                 )
             } else {
                 logger.debug("tab will change to new tab: \(newTab.title)")
@@ -216,7 +220,9 @@ extension RoadmapWidget {
                 >(
                     context: newTab,
                     data: newPageData,
-                    pageFetcher: loadMoreTickets
+                    pageFetcher: { [weak self] pageSize, offset, context in
+                        return try await self?.loadMore(pageSize, offset, context) ?? []
+                    }
                 )
 
                 // Tab didn't previously exist, so nothing is loaded yet.
@@ -226,7 +232,7 @@ extension RoadmapWidget {
             objectWillChange.send()
         }
 
-        private func loadMoreTickets(
+        private func loadMore(
             _ limit: Int,
             _ offset: Int,
             _ tab: ParraRoadmapConfigurationTab

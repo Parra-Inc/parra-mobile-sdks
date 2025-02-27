@@ -14,7 +14,7 @@ public extension View {
     @MainActor
     func presentParraFeedbackFormWidget(
         by formId: String,
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraFeedbackFormWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -31,50 +31,13 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(transformParams, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            name: "form",
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .feedbackFormLoader(
-                config: config,
-                submissionType: .default
+                config: config
             ),
-            onDismiss: onDismiss
-        )
-    }
-
-    @MainActor
-    internal func presentParraFeedbackFormWidget(
-        with formBinding: Binding<ParraFeedbackFormDataStub?>,
-        config: ParraFeedbackFormWidgetConfig = .default,
-        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
-    ) -> some View {
-        return presentParraFeedbackFormWidget(
-            with: .init(
-                get: {
-                    if let stub = formBinding.wrappedValue {
-                        return ParraFeedbackForm(from: stub)
-                    }
-
-                    return nil
-                },
-                set: { form in
-                    if form == nil {
-                        formBinding.wrappedValue = nil
-                    }
-                }
-            ),
-            config: config,
             onDismiss: onDismiss
         )
     }
@@ -83,14 +46,40 @@ public extension View {
     /// parameter becomes non-nil.
     @MainActor
     func presentParraFeedbackFormWidget(
-        with formBinding: Binding<ParraFeedbackForm?>,
+        with dataBinding: Binding<ParraFeedbackForm?>,
+        config: ParraFeedbackFormWidgetConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
+    ) -> some View {
+        return presentSheetWithData(
+            data: dataBinding,
+            config: config,
+            with: ParraContainerRenderer.feedbackFormRenderer,
+            onDismiss: onDismiss
+        )
+    }
+
+    @MainActor
+    internal func presentParraFeedbackFormWidget(
+        with dataBinding: Binding<ParraFeedbackFormDataStub?>,
         config: ParraFeedbackFormWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentParraFeedbackFormWidget(
-            with: formBinding,
+            with: .init(
+                get: {
+                    if let stub = dataBinding.wrappedValue {
+                        return ParraFeedbackForm(from: stub)
+                    }
+
+                    return nil
+                },
+                set: { form in
+                    if form == nil {
+                        dataBinding.wrappedValue = nil
+                    }
+                }
+            ),
             config: config,
-            submissionType: .default,
             onDismiss: onDismiss
         )
     }

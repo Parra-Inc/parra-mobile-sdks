@@ -13,7 +13,6 @@ extension ParraPhotoWell {
         case empty
         case asset(ParraImageAsset)
         case url(URL)
-        case loadingFromLibrary
         case loaded(UIImage)
         case processing(UIImage)
         case error(Error)
@@ -22,7 +21,7 @@ extension ParraPhotoWell {
 
         var isLoading: Bool {
             switch self {
-            case .loadingFromLibrary, .processing:
+            case .processing:
                 return true
             default:
                 return false
@@ -35,8 +34,6 @@ extension ParraPhotoWell {
         ) -> Bool {
             switch (lhs, rhs) {
             case (.empty, .empty):
-                return true
-            case (.loadingFromLibrary, .loadingFromLibrary):
                 return true
             case (.asset(let lhsAsset), .asset(let rhsAsset)):
                 return lhsAsset == rhsAsset

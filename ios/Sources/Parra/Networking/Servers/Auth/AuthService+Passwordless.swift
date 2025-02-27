@@ -53,7 +53,8 @@ extension AuthService {
         }
 
         let oauthToken = try await oauth2Service.authenticate(
-            using: authType
+            using: authType,
+            anonymousToken: dataManager.getAccessToken()
         )
 
         // On login, get user info via login route instead of GET user-info

@@ -19,7 +19,7 @@ struct SettingsTab: View {
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            List {
+            Form {
                 Section {
                     ProfileCell()
                 }

@@ -10,7 +10,7 @@ import SwiftUI
 
 public extension ParraComponentFactory {
     func buildPlainButton(
-        config: ParraTextButtonConfig,
+        config: ParraTextButtonConfig = ParraTextButtonConfig(),
         content: ParraTextButtonContent,
         localAttributes: ParraAttributes.PlainButton? = nil,
         onPress: @escaping () -> Void
@@ -36,7 +36,7 @@ public extension ParraComponentFactory {
     }
 
     func buildPlainButton(
-        config: ParraTextButtonConfig,
+        config: ParraTextButtonConfig = ParraTextButtonConfig(),
         text: String,
         localAttributes: ParraAttributes.PlainButton? = nil,
         onPress: @escaping () -> Void
@@ -64,7 +64,7 @@ public extension ParraComponentFactory {
     }
 
     func buildOutlinedButton(
-        config: ParraTextButtonConfig,
+        config: ParraTextButtonConfig = ParraTextButtonConfig(),
         content: ParraTextButtonContent,
         localAttributes: ParraAttributes.OutlinedButton? = nil,
         onPress: @escaping () -> Void
@@ -90,7 +90,7 @@ public extension ParraComponentFactory {
     }
 
     func buildOutlinedButton(
-        config: ParraTextButtonConfig,
+        config: ParraTextButtonConfig = ParraTextButtonConfig(),
         text: String,
         localAttributes: ParraAttributes.OutlinedButton? = nil,
         onPress: @escaping () -> Void
@@ -118,7 +118,7 @@ public extension ParraComponentFactory {
     }
 
     func buildContainedButton(
-        config: ParraTextButtonConfig,
+        config: ParraTextButtonConfig = ParraTextButtonConfig(),
         content: ParraTextButtonContent,
         localAttributes: ParraAttributes.ContainedButton? = nil,
         onPress: @escaping () -> Void
@@ -144,7 +144,7 @@ public extension ParraComponentFactory {
     }
 
     func buildContainedButton(
-        config: ParraTextButtonConfig,
+        config: ParraTextButtonConfig = ParraTextButtonConfig(),
         text: String,
         localAttributes: ParraAttributes.ContainedButton? = nil,
         onPress: @escaping () -> Void
@@ -172,7 +172,7 @@ public extension ParraComponentFactory {
     }
 
     func buildImageButton(
-        config: ParraImageButtonConfig,
+        config: ParraImageButtonConfig = ParraImageButtonConfig(),
         content: ParraImageButtonContent,
         localAttributes: ParraAttributes.ImageButton? = nil,
         onPress: @escaping () -> Void

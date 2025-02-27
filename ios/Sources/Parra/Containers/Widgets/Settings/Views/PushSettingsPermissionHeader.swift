@@ -134,7 +134,7 @@ struct PushSettingsPermissionHeader: View {
 
 #Preview {
     ParraAppPreview {
-        List {
+        Form {
             Section {
                 PushSettingsPermissionHeader(
                     config: .default,

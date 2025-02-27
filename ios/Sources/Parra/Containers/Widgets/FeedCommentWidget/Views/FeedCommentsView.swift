@@ -37,7 +37,7 @@ struct FeedCommentsView: View {
                     ),
                     text: "Get \(requiredEntitlement.title)"
                 ) {
-                    isShowingPaywall = true
+                    paywallPresentationState = .loading
                 }
             }
             .padding(.top, 40)
@@ -45,7 +45,7 @@ struct FeedCommentsView: View {
             .presentParraPaywall(
                 entitlement: requiredEntitlement.key,
                 context: context,
-                isPresented: $isShowingPaywall
+                presentationState: $paywallPresentationState
             ) { _ in
             }
         } else {
@@ -68,7 +68,7 @@ struct FeedCommentsView: View {
 
     // MARK: - Private
 
-    @State private var isShowingPaywall = false
+    @State private var paywallPresentationState = ParraSheetPresentationState.ready
 
     @Environment(\.parra) private var parra
     @Environment(\.parraComponentFactory) private var componentFactory

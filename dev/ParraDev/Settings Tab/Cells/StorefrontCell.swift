@@ -15,19 +15,19 @@ struct StorefrontCell: View {
     @Environment(\.parra) private var parra
     @Environment(\.parraAppInfo) private var parraAppInfo
 
-    @State private var isPresented = false
+    @State private var presentationState: ParraSheetPresentationState = .ready
 
     var body: some View {
         // A Shopify storefront can not be presented without defining your
         // Shopify domain and API key.
         if ParraStorefront.isInitialized {
             ListItemLoadingButton(
-                isLoading: $isPresented,
+                presentationState: $presentationState,
                 text: "Shopify Storefront",
                 symbol: "storefront"
             )
             .presentParraStorefront(
-                isPresented: $isPresented,
+                presentationState: $presentationState,
                 config: ParraStorefrontWidgetConfig(
                     showDismissButton: true
                 )

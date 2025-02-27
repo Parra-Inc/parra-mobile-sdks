@@ -169,47 +169,52 @@ public class ParraCursorPaginator<Item, Context>: ObservableObject
 
     public func refresh() {
         Task { @MainActor in
-            guard let pageFetcher else {
-                return
+            await refresh()
+        }
+    }
+
+    @MainActor
+    public func refresh() async {
+        guard let pageFetcher else {
+            return
+        }
+
+        guard !isRefreshing else {
+            logger.trace("Already refreshing. Skipping refresh.")
+
+            return
+        }
+
+        guard !isLoading else {
+            logger.trace("Already loading. Skipping refresh.")
+
+            return
+        }
+
+        logger.trace("Beginning refresh for \(context)")
+
+        isRefreshing = true
+        error = nil
+
+        do {
+            let nextPage = try await pageFetcher(
+                .init(hasNextPage: true),
+                pageSize,
+                context
+            )
+
+            await MainActor.run {
+                cursor = nextPage.cursor
+                items = nextPage.items
+                isRefreshing = false
+                isShowingPlaceholders = false
             }
-
-            guard !isRefreshing else {
-                logger.trace("Already refreshing. Skipping refresh.")
-
-                return
-            }
-
-            guard !isLoading else {
-                logger.trace("Already loading. Skipping refresh.")
-
-                return
-            }
-
-            logger.trace("Beginning refresh for \(context)")
-
-            isRefreshing = true
-            error = nil
-
-            do {
-                let nextPage = try await pageFetcher(
-                    .init(hasNextPage: true),
-                    pageSize,
-                    context
-                )
-
-                await MainActor.run {
-                    cursor = nextPage.cursor
-                    items = nextPage.items
-                    isRefreshing = false
-                    isShowingPlaceholders = false
-                }
-            } catch {
-                await MainActor.run {
-                    self.error = error
-                    items = []
-                    isShowingPlaceholders = false
-                    isRefreshing = false
-                }
+        } catch {
+            await MainActor.run {
+                self.error = error
+                items = []
+                isShowingPlaceholders = false
+                isRefreshing = false
             }
         }
     }

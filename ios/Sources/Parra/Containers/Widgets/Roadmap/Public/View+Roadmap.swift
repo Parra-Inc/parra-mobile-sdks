@@ -13,7 +13,7 @@ public extension View {
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
     func presentParraRoadmapWidget(
-        isPresented: Binding<Bool>,
+        presentationState: Binding<ParraSheetPresentationState>,
         config: ParraRoadmapWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -51,20 +51,10 @@ public extension View {
         }
 
         return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if isPresented.wrappedValue {
-                        return .transform(transformParams, transformer)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        isPresented.wrappedValue = false
-                    }
-                }
-            ),
+            name: "roadmap",
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
             with: .roadmapLoader(
                 config: config
             ),
@@ -74,28 +64,14 @@ public extension View {
 
     @MainActor
     func presentParraRoadmapWidget(
-        with resultBinding: Binding<ParraRoadmapInfo?>,
+        with dataBinding: Binding<ParraRoadmapInfo?>,
         config: ParraRoadmapWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
-        return loadAndPresentSheet(
-            loadType: .init(
-                get: {
-                    if let result = resultBinding.wrappedValue {
-                        return .raw(result)
-                    } else {
-                        return nil
-                    }
-                },
-                set: { type in
-                    if type == nil {
-                        resultBinding.wrappedValue = nil
-                    }
-                }
-            ),
-            with: .roadmapLoader(
-                config: config
-            ),
+        return presentSheetWithData(
+            data: dataBinding,
+            config: config,
+            with: ParraContainerRenderer.roadmapRenderer,
             onDismiss: onDismiss
         )
     }

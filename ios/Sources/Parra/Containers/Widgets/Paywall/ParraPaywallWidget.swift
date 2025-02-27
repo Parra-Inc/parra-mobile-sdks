@@ -12,7 +12,7 @@ public struct ParraPaywallWidget: View {
     // MARK: - Lifecycle
 
     public init(
-        paywall: ParraApplePaywall,
+        paywall: ParraAppPaywall,
         config: ParraPaywallConfig
     ) {
         self.paywall = paywall
@@ -21,7 +21,7 @@ public struct ParraPaywallWidget: View {
 
     // MARK: - Public
 
-    public let paywall: ParraApplePaywall
+    public let paywall: ParraAppPaywall
     public let config: ParraPaywallConfig
 
     public var body: some View {
@@ -37,11 +37,12 @@ public struct ParraPaywallWidget: View {
             .containerRenderer.renderContainer(
                 params: PaywallWidget.ContentObserver.InitialParams(
                     paywallId: paywall.id,
+                    iapType: paywall.iapType,
                     paywallProducts: paywallProducts,
                     marketingContent: paywall.marketingContent,
+                    sections: paywall.sections,
                     config: config,
-                    api: parra.parraInternal.api,
-                    appInfo: parraAppInfo
+                    api: parra.parraInternal.api
                 ),
                 config: config,
                 contentTransformer: nil,
@@ -56,5 +57,4 @@ public struct ParraPaywallWidget: View {
     @State private var navigationPath: NavigationPath = .init()
 
     @Environment(\.parra) private var parra
-    @Environment(\.parraAppInfo) private var parraAppInfo
 }

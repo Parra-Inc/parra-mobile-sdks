@@ -11,6 +11,7 @@ struct FeedCreatorUpdateContentView: View {
     // MARK: - Internal
 
     let creatorUpdate: ParraCreatorUpdateAppStub
+    let lineLimit: Int?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -52,7 +53,7 @@ struct FeedCreatorUpdateContentView: View {
                         )
                     )
                 )
-                .lineLimit(8)
+                .lineLimit(lineLimit)
             }
         }
     }

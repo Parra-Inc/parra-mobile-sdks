@@ -212,9 +212,9 @@ extension ParraAttributes.Text.FontType: OverridableAttributes {
                 return self
             }
 
-            return overrides ?? self
+            return overrides
         default:
-            return overrides ?? self
+            return overrides
         }
     }
 }

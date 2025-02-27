@@ -9,7 +9,7 @@
 import Foundation
 
 public struct NilFailureDecodable<Base>: Codable, Equatable,
-    Hashable where Base: Codable & Equatable & Hashable
+    Hashable, Sendable where Base: Codable & Equatable & Hashable & Sendable
 {
     // MARK: - Lifecycle
 

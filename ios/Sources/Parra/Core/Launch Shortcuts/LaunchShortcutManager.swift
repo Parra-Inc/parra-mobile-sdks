@@ -28,8 +28,14 @@ final class LaunchShortcutManager {
             forName: Parra.launchScreenDidDismissNotification,
             object: nil,
             queue: .main
-        ) { _ in
-            self.hasFinishedLaunch = true
+        ) { [weak self] _ in
+            self?.hasFinishedLaunch = true
+        }
+    }
+
+    deinit {
+        if let launchScreenObserver {
+            ParraNotificationCenter.default.removeObserver(launchScreenObserver)
         }
     }
 
@@ -68,6 +74,7 @@ final class LaunchShortcutManager {
     }
 
     @MainActor
+    @discardableResult
     func registerLaunchShortcut(_ shortcut: UIApplicationShortcutItem) -> Bool {
         logger.debug("Registering application launch shortcut", [
             "title": shortcut.localizedTitle,

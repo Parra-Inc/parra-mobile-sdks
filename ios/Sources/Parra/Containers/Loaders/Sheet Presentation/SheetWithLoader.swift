@@ -8,9 +8,11 @@
 
 import SwiftUI
 
-// Important: !!! Do NOT use environment values in this file without being very
-// careful that they do not trigger complete deinit and rebuild of sheets when
-// things like auth or other global state changes.
+public enum ParraSheetPresentationState: Equatable {
+    case ready
+    case loading
+    case presented
+}
 
 /// Facilitates loading data asynchonously then presenting a sheet with a view
 /// rendered from the data.
@@ -21,59 +23,59 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     // MARK: - Lifecycle
 
     init(
-        loadType: Binding<
-            ParraViewDataLoader<TransformParams, Data, SheetContent>
-                .LoadType?
-        >,
+        name: String,
+        presentationState: Binding<ParraSheetPresentationState>,
+        transformParams: TransformParams,
+        transformer: @escaping ParraViewDataLoader<TransformParams, Data, SheetContent>
+            .Transformer,
         loader: ParraViewDataLoader<TransformParams, Data, SheetContent>,
         detents: Set<PresentationDetent> = [],
         visibility: Visibility = .automatic,
         onDismiss: ((ParraSheetDismissType) -> Void)?
     ) {
-        self._loadType = loadType
+        self.name = name
+        self._presentationState = presentationState
+        self.transformParams = transformParams
+        self.transformer = transformer
         self.loader = loader
         self.detents = detents
         self.visibility = visibility
         self.onDismiss = onDismiss
+        self.logger = Logger(category: "SheetWithLoader \(name)")
     }
 
     // MARK: - Internal
 
-    // Externally controlled state to use to determine when to kick off
-    // the loader and with what data
-    @Binding var loadType: ParraViewDataLoader<TransformParams, Data, SheetContent>
-        .LoadType?
-
     func body(content: Content) -> some View {
         content
             .onChange(
-                of: loadType,
-                initial: true, { _, newValue in
-                    guard let newValue else {
-                        return
-                    }
+                of: presentationState
+            ) { oldValue, newValue in
 
-                    switch state {
-                    case .ready:
-                        initiateLoad(with: newValue)
-                    case .started, .complete, .error:
-                        break
+                logger.debug("presentation state changed", [
+                    "to": "\(newValue)",
+                    "from": "\(oldValue)"
+                ])
+
+                if newValue == .loading {
+                    Task { @MainActor in
+                        await triggerTransform(
+                            with: transformParams,
+                            via: transformer
+                        )
                     }
                 }
-            )
+            }
             .sheet(
                 isPresented: .init(
                     get: {
-                        switch state {
-                        case .ready, .error, .started:
-                            return false
-                        case .complete:
-                            return true
-                        }
+                        return presentationState == .presented
                     },
                     set: { newValue in
                         if !newValue {
-                            state = .ready
+                            logger.debug("dismissing")
+
+                            presentationState = .ready
                         }
                     }
                 ),
@@ -81,7 +83,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                     dismiss(.cancelled)
                 },
                 content: {
-                    if case .complete(let data) = state {
+                    if let data {
                         NavigationStack(path: $navigationState.navigationPath) {
                             loader.render(
                                 Parra.default,
@@ -111,36 +113,30 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
 
     // MARK: - Private
 
-    @State private var state: SheetLoadState<Data> = .ready
+    // Externally controlled state to use to determine when to kick off
+    // the loader and with what data
+    @Binding private var presentationState: ParraSheetPresentationState
+
+    @Environment(\.parraAlertManager) private var alertManager
+
+    @State private var data: Data?
     @State private var navigationState = NavigationState()
 
+    private let name: String
+    private let transformParams: TransformParams
+    private let transformer: ParraViewDataLoader<TransformParams, Data, SheetContent>
+        .Transformer
     private let loader: ParraViewDataLoader<TransformParams, Data, SheetContent>
     private let detents: Set<PresentationDetent>
     private let visibility: Visibility
     private let onDismiss: ((ParraSheetDismissType) -> Void)?
 
+    private let logger: Logger
+
     @MainActor
     private func dismiss(_ type: ParraSheetDismissType) {
-        loadType = .none
-        state = .ready
-
         onDismiss?(type)
-    }
-
-    private func initiateLoad(
-        with type: ParraViewDataLoader<TransformParams, Data, SheetContent>.LoadType
-    ) {
-        switch type {
-        case .transform(let transformParams, let transformer):
-            Task {
-                await triggerTransform(
-                    with: transformParams,
-                    via: transformer
-                )
-            }
-        case .raw(let data):
-            state = .complete(data)
-        }
+        presentationState = .ready
     }
 
     private func triggerTransform(
@@ -151,16 +147,22 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
             let result = try await transformer(Parra.default, params)
 
             await MainActor.run {
-                state = .complete(result)
+                data = result
+                presentationState = .presented
             }
         } catch {
-            Logger.error(
+            logger.error(
                 "Error preparing data for Parra sheet presentation.",
                 error
             )
 
+            alertManager.showErrorToast(
+                title: "Something went wrong",
+                userFacingMessage: "Please try again. Let us know if you keep experiencing this issue.",
+                underlyingError: error
+            )
+
             await MainActor.run {
-                state = .error(error)
                 dismiss(.failed(error.localizedDescription))
             }
         }

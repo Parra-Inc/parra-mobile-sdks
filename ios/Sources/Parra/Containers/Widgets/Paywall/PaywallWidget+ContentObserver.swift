@@ -24,5 +24,15 @@ extension PaywallWidget {
 
         var content: Content
         let initialParams: InitialParams
+
+        var submissionHandler: ((_ success: Bool, _ error: Error?) -> Void)?
+
+        func dismiss(with error: Error?) {
+            if let error {
+                submissionHandler?(false, error)
+            } else {
+                submissionHandler?(true, nil)
+            }
+        }
     }
 }

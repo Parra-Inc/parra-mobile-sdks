@@ -93,9 +93,15 @@ public class ParraStorefront {
     static var cachedPreloadResponse: ParraProductResponse?
 
     static func performProductPreload() async throws -> ParraProductResponse {
+        // NOTE: ! If you change this here, you need to update the default
+        // value for sortOrder in StorefrontWidget.ContentObserver.
+        let (reverse, sortKey) = ProductSortOrder.default.shopifySort
+
         let rawResponse = try await getShopifyService().performQuery(
             .productsQuery(
-                count: storefrontPaginatorLimit
+                count: storefrontPaginatorLimit,
+                reverse: reverse,
+                sortKey: sortKey
             )
         )
 

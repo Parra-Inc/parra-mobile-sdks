@@ -183,7 +183,8 @@ class Reactor: ObservableObject {
                     value: option.value,
                     count: 1,
                     reactionId: "placeholder",
-                    originalReactionId: nil
+                    originalReactionId: nil,
+                    users: []
                 )
             )
 
@@ -201,7 +202,8 @@ class Reactor: ObservableObject {
                     value: matching.value,
                     count: matching.count + 1,
                     reactionId: matching.originalReactionId ?? "placeholder",
-                    originalReactionId: matching.reactionId
+                    originalReactionId: matching.reactionId,
+                    users: matching.users?.elements
                 )
             }
 
@@ -221,7 +223,8 @@ class Reactor: ObservableObject {
                         value: matching.value,
                         count: matching.count - 1,
                         reactionId: nil,
-                        originalReactionId: matching.reactionId
+                        originalReactionId: matching.reactionId,
+                        users: matching.users?.elements
                     )
                 }
             }
@@ -263,11 +266,12 @@ class Reactor: ObservableObject {
                             value: match.value,
                             count: match.count,
                             reactionId: reactionId,
-                            originalReactionId: nil
+                            originalReactionId: nil,
+                            users: match.users?.elements
                         )
                     }
                 } catch let error as ParraError {
-                    if case .networkError(_, let response, let data) = error,
+                    if case .networkError(_, let response, _) = error,
                        response.statusCode == 409
                     {
                         logger.warn("User already had this reaction.")
@@ -299,7 +303,8 @@ class Reactor: ObservableObject {
                             value: match.value,
                             count: match.count,
                             reactionId: reactionId,
-                            originalReactionId: nil
+                            originalReactionId: nil,
+                            users: match.users?.elements
                         )
                     }
                 } catch let error as ParraError {
@@ -345,7 +350,8 @@ class Reactor: ObservableObject {
                             value: matching.value,
                             count: matching.count + 1,
                             reactionId: reactionId,
-                            originalReactionId: nil
+                            originalReactionId: nil,
+                            users: matching.users?.elements
                         )
                     }
                 }
@@ -376,7 +382,8 @@ class Reactor: ObservableObject {
                     value: match.value,
                     count: match.count - 1,
                     reactionId: nil,
-                    originalReactionId: nil
+                    originalReactionId: nil,
+                    users: match.users?.elements
                 )
             }
         }

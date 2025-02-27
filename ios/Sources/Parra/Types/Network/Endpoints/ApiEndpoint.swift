@@ -47,6 +47,9 @@ enum ApiEndpoint: Endpoint {
     case deleteAvatar
     case deleteUser
 
+    // User Entitlements
+    case listUserEntitlements
+
     // User Properties
     case getUserProperties
     case putReplaceUserProperties
@@ -70,6 +73,7 @@ enum ApiEndpoint: Endpoint {
 
     // Feeds
     case getPaginateFeed(feedId: String)
+    case getFeedItem(feedItemId: String)
 
     // Reactions
     case postFeedReaction(feedItemId: String)
@@ -85,6 +89,20 @@ enum ApiEndpoint: Endpoint {
     case deleteComment(commentId: String)
     case flagComment(commentId: String)
 
+    // Chat
+    case getListChatChannels
+    case postCreateChannel
+    case getPaginateMessages(channelId: String)
+    case postSendMessage(channelId: String)
+    case postFlagMessage(messageId: String)
+    case deleteMessage(messageId: String)
+
+    // Chat Admin
+    case postLockChannel(channelId: String)
+    case postUnlockChannel(channelId: String)
+    case postLeaveChannel(channelId: String)
+    case deleteArchiveChannel(channelId: String)
+
     // MARK: - Internal
 
     var method: HttpMethod {
@@ -93,7 +111,8 @@ enum ApiEndpoint: Endpoint {
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
              .getUserProperties, .getPaginateFeed, .getFaqs,
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall,
-             .getPaginateComments:
+             .getPaginateComments, .getListChatChannels, .getPaginateMessages,
+             .listUserEntitlements, .getFeedItem:
 
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
@@ -101,7 +120,9 @@ enum ApiEndpoint: Endpoint {
              .postPushTokens, .postVoteForTicket,
              .postLogin, .postLogout, .postUpdateAvatar, .postPurchases,
              .postFeedReaction, .flagComment, .createFeedComment,
-             .postFeedCommentReaction:
+             .postFeedCommentReaction, .postCreateChannel, .postSendMessage,
+             .postFlagMessage, .postLockChannel, .postUnlockChannel,
+             .postLeaveChannel:
 
             return .post
         case .updateUserInfo, .putReplaceUserProperties,
@@ -111,7 +132,8 @@ enum ApiEndpoint: Endpoint {
             return .put
         case .deleteVoteForTicket, .deleteUser, .deleteAvatar,
              .deleteAllUserProperties, .deleteSingleUserProperty,
-             .deleteFeedReaction, .deleteComment, .deleteFeedCommentReaction:
+             .deleteFeedReaction, .deleteComment, .deleteFeedCommentReaction,
+             .deleteMessage, .deleteArchiveChannel:
 
             return .delete
         case .patchUpdateUserProperties:
@@ -171,6 +193,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/users/:userId/properties/:userPropertyKey"
         case .getPaginateFeed:
             return "tenants/:tenantId/applications/:applicationId/feeds/:feedId/items"
+        case .getFeedItem:
+            return "tenants/:tenantId/feed/items/:feedItemId"
         case .getUserSettingsLayouts:
             return "tenants/:tenantId/users/:userId/settings/views"
         case .getUserSettingsLayout:
@@ -201,6 +225,24 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/comments/:commentId/reactions"
         case .deleteFeedCommentReaction:
             return "tenants/:tenantId/comments/:commentId/reactions/:reactionId"
+        case .postCreateChannel, .getListChatChannels:
+            return "tenants/:tenantId/chat/channels"
+        case .getPaginateMessages, .postSendMessage:
+            return "tenants/:tenantId/chat/channels/:channelId/messages"
+        case .deleteMessage:
+            return "tenants/:tenantId/chat/messages/:messageId"
+        case .postFlagMessage:
+            return "tenants/:tenantId/chat/messages/:messageId/flag"
+        case .listUserEntitlements:
+            return "tenants/:tenantId/users/:userId/entitlements"
+        case .postUnlockChannel:
+            return "tenants/:tenantId/chat/channels/:channelId/unlock"
+        case .postLockChannel:
+            return "tenants/:tenantId/chat/channels/:channelId/lock"
+        case .postLeaveChannel:
+            return "tenants/:tenantId/chat/channels/:channelId/leave"
+        case .deleteArchiveChannel:
+            return "tenants/:tenantId/chat/channels/:channelId"
         }
     }
 

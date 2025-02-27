@@ -169,7 +169,6 @@ struct FeedCommentWidget: ParraContainer {
                 .frame(height: 1)
                 .ignoresSafeArea()
         }
-        .keyboardHeight($keyboardHeight)
         .background(theme.palette.primaryBackground)
         .onAppear {
             // This is a slightly nicer visual since they load in too quickly
@@ -187,7 +186,7 @@ struct FeedCommentWidget: ParraContainer {
         .presentParraPaywall(
             entitlement: contentObserver.attachmentPaywall?.entitlement.key ?? "unknown",
             context: contentObserver.attachmentPaywall?.context,
-            isPresented: $isShowingPaywall
+            presentationState: $paywallPresentationState
         )
         .presentParraSignInWidget(
             isPresented: $isRequiredSignInPresented,
@@ -210,18 +209,18 @@ struct FeedCommentWidget: ParraContainer {
 
     // MARK: - Private
 
-    @State private var keyboardHeight: CGFloat = 0
-
     @State private var headerHeight: CGFloat = 0
     @State private var footerHeight: CGFloat = 0
     @State private var isRequiredSignInPresented: Bool = false
-    @State private var isShowingPaywall: Bool = false
+    @State private var paywallPresentationState = ParraSheetPresentationState.ready
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraAuthState) private var authState
     @Environment(\.parraUserEntitlements) private var userEntitlements
     @Environment(\.parraAppInfo) private var appInfo
+
+    @State private var allowSubmission = false
 
     private var emptyStateAttributes: ParraAttributes.EmptyState {
         ParraAttributes.EmptyState(
@@ -249,7 +248,9 @@ struct FeedCommentWidget: ParraContainer {
     private func addCommentBar(
         proxy: ScrollViewProxy
     ) -> some View {
-        AddCommentBarView { text in
+        AddCommentBarView(
+            allowSubmission: $allowSubmission
+        ) { text in
             guard let user = authState.user else {
                 Logger.error("Tried to submit a comment without a user")
 
@@ -266,7 +267,7 @@ struct FeedCommentWidget: ParraContainer {
                 DispatchQueue.main.asyncAfter(
                     deadline: .now() + 0.1
                 ) {
-                    isShowingPaywall = true
+                    paywallPresentationState = .loading
                 }
             } else if authState.isLoggedIn {
                 withAnimation {

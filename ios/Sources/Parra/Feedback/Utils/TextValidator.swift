@@ -112,7 +112,7 @@ enum TextValidator {
                 }
             } catch {
                 logger.error("Error validating text", error, [
-                    "text": text,
+                    "text": text ?? "unknown",
                     "rules": rules.map { rule in
                         rule.description
                     }.joined()

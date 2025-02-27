@@ -73,7 +73,8 @@ final class AuthService {
         ])
 
         let oauthToken = try await oauth2Service.authenticate(
-            using: authType
+            using: authType,
+            anonymousToken: dataManager.getAccessToken()
         )
 
         switch authType {
@@ -104,23 +105,28 @@ final class AuthService {
             password: password
         )
 
-        let requestPayload = CreateUserRequestBody(
+        let requestPayload = await CreateUserRequestBody(
             type: type,
             username: username,
-            password: password
+            password: password,
+            anonymousToken: dataManager.getAccessToken()
         )
 
-        logger
-            .debug(
-                "About to sign up with: \(String(describing: requestPayload))"
-            )
+        logger.debug(
+            "About to sign up with: \(String(describing: requestPayload))"
+        )
+
         try await authServer.postSignup(
             requestData: requestPayload
         )
+
         logger.debug("finished sign up endpoint... authenticating...")
+
         let oauthToken = try await oauth2Service.authenticate(
-            using: authType
+            using: authType,
+            anonymousToken: nil
         )
+
         logger.debug("Finished auth endpoint")
 
         return try await _completeLogin(
@@ -623,7 +629,7 @@ final class AuthService {
         forceRefresh: Bool,
         timeout: TimeInterval = 10.0
     ) async throws -> ParraUser.Credential? {
-        logger.debug("Invoking authentication provider")
+        logger.trace("Invoking authentication provider")
 
         do {
             let newCredential = try await getRefreshedCredential(

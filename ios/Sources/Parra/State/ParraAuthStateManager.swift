@@ -75,13 +75,13 @@ public class ParraAuthStateManager {
             forName: Parra.authenticationStateDidChangeNotification,
             object: nil,
             queue: .main
-        ) { notification in
-            let wrapper = ParraNotificationCenter.Wrapper(
-                userInfo: notification.userInfo ?? [:]
-            )
-
+        ) { [weak self] notification in
             Task { @MainActor in
-                self.handleAuthChange(wrapper)
+                let wrapper = ParraNotificationCenter.Wrapper(
+                    userInfo: notification.userInfo ?? [:]
+                )
+
+                self?.handleAuthChange(wrapper)
             }
         }
     }

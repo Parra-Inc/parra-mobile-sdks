@@ -9,11 +9,11 @@ import Parra
 import SwiftUI
 
 struct TipJarCell: View {
-    @State private var isPresented = false
+    @State private var presentationState: ParraSheetPresentationState = .ready
 
     var body: some View {
         ListItemLoadingButton(
-            isLoading: $isPresented,
+            presentationState: $presentationState,
             text: "Leave a tip",
             symbol: "heart"
         )
@@ -23,7 +23,7 @@ struct TipJarCell: View {
                 "tip_jar_299",
                 "tip_jar_999"
             ],
-            isPresented: $isPresented,
+            presentationState: $presentationState,
             config: .default
         )
     }

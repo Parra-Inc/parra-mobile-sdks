@@ -16,7 +16,7 @@ private extension UnkeyedDecodingContainer {
 }
 
 public struct PartiallyDecodableArray<Element>: Codable, Equatable,
-    Hashable where Element: Codable & Equatable & Hashable
+    Hashable, Sendable where Element: Codable & Equatable & Hashable & Sendable
 {
     // MARK: - Lifecycle
 

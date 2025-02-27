@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Parra
 
 struct ListItemLabel: View {
     let text: String
@@ -41,13 +42,17 @@ struct ListItemLabel: View {
 }
 
 struct ListItemLoadingButton: View {
-    @Binding var isLoading: Bool
+    @Binding var presentationState: ParraSheetPresentationState
     let text: String
     let symbol: String
 
+    private var isLoading: Bool {
+        return presentationState == .loading
+    }
+
     var body: some View {
         Button {
-            isLoading = true
+            presentationState = .loading
         } label: {
             ListItemLabel(
                 text: text,

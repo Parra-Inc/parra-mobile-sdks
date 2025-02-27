@@ -93,7 +93,9 @@ public struct ParraAsyncImageComponent: View, Equatable {
     ) -> some View {
         switch phase {
         case .empty:
-            ProgressView()
+            if config.showLoadingIndicator {
+                ProgressView()
+            }
         case .failure:
             if config.showFailureIndicator {
                 Image(systemName: "exclamationmark.triangle.fill")
@@ -116,46 +118,48 @@ public struct ParraAsyncImageComponent: View, Equatable {
                 maxHeight: .infinity
             )
 
-            GeometryReader { geometry in
-                let imageSize = content.originalSize?.toCGSize ?? geometry.size
-                let aspectRatio = imageSize.width / imageSize.height
+            if config.showBlurHash {
+                GeometryReader { geometry in
+                    let imageSize = content.originalSize?.toCGSize ?? geometry.size
+                    let aspectRatio = imageSize.width / imageSize.height
 
-                let size = if imageSize.width > imageSize.height {
-                    CGSize(width: 32, height: 32 / aspectRatio)
-                } else if imageSize.width == imageSize.height {
-                    CGSize(width: 32, height: 32)
-                } else {
-                    CGSize(width: 32 / aspectRatio, height: 32)
-                }
-
-                VStack(alignment: .center) {
-                    Spacer()
-
-                    if let blurHash = content.blurHash, let blurImage = Image(
-                        blurHash: blurHash,
-                        size: size
-                    ) {
-                        blurImage
-                            .resizable()
-                            .aspectRatio(
-                                config.aspectRatio,
-                                contentMode: config.contentMode
-                            )
-                            .clipped()
-
-                    } else if let background = attributes.background {
-                        Color(background)
+                    let size = if imageSize.width > imageSize.height {
+                        CGSize(width: 32, height: 32 / aspectRatio)
+                    } else if imageSize.width == imageSize.height {
+                        CGSize(width: 32, height: 32)
+                    } else {
+                        CGSize(width: 32 / aspectRatio, height: 32)
                     }
 
-                    Spacer()
+                    VStack(alignment: .center) {
+                        Spacer()
+
+                        if let blurHash = content.blurHash, let blurImage = Image(
+                            blurHash: blurHash,
+                            size: size
+                        ) {
+                            blurImage
+                                .resizable()
+                                .aspectRatio(
+                                    config.aspectRatio,
+                                    contentMode: config.contentMode
+                                )
+                                .clipped()
+
+                        } else if let background = attributes.background {
+                            Color(background)
+                        }
+
+                        Spacer()
+                    }
+                    .overlay(alignment: .center) {
+                        renderBlurHashOverlay(for: phase)
+                    }
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity
+                    )
                 }
-                .overlay(alignment: .center) {
-                    renderBlurHashOverlay(for: phase)
-                }
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity
-                )
             }
         }
         .frame(

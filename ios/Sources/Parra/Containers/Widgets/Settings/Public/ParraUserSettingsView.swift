@@ -15,7 +15,7 @@ struct ParraUserSettingsView: View {
     let onValueChanged: (_ key: String, _ value: ParraSettingsItemDataWithValue) -> Void
 
     var body: some View {
-        List {
+        Form {
             if let notificationSettingsConfig = config.notificationSettingsConfig {
                 PushSettingsPermissionHeader(
                     config: notificationSettingsConfig

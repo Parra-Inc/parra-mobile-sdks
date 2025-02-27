@@ -62,12 +62,14 @@ struct FeedCreatorUpdateView: View {
 
     let params: FeedCreatorUpdateParams
 
-    var body: some View {
-        let hasPaywallEntitlement = entitlements.hasEntitlement(
+    var hasPaywallEntitlement: Bool {
+        return entitlements.hasEntitlement(
             creatorUpdate.attachmentPaywall?.entitlement
         )
+    }
 
-        Button(
+    var body: some View {
+        CellButton(
             action: {
                 params.performCreatorUpdateSelection(
                     FeedCreatorUpdateDetailParams(
@@ -85,7 +87,8 @@ struct FeedCreatorUpdateView: View {
                 .padding([.horizontal, .top], 16)
 
                 FeedCreatorUpdateContentView(
-                    creatorUpdate: creatorUpdate
+                    creatorUpdate: creatorUpdate,
+                    lineLimit: 8
                 )
                 .padding(.horizontal, 16)
                 .padding(.bottom, hasAttachments || !hasReactions ? 12 : 0)
@@ -140,9 +143,6 @@ struct FeedCreatorUpdateView: View {
                 }
             }
         }
-        // Required to prevent highlighting the button then dragging the scroll
-        // view from causing the button to be pressed.
-        .simultaneousGesture(TapGesture())
         .disabled(!redactionReasons.isEmpty && hasPaywallEntitlement)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
