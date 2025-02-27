@@ -9,14 +9,14 @@ import SwiftUI
 import Parra
 
 struct FaqCell: View {
-    @State private var isPresented = false
+    @State private var presentationState: ParraSheetPresentationState = .ready
 
     var body: some View {
         ListItemLoadingButton(
-            isLoading: $isPresented,
+            presentationState: $presentationState,
             text: "FAQs",
             symbol: "questionmark.bubble"
         )
-        .presentParraFAQView(isPresented: $isPresented)
+        .presentParraFAQView(presentationState: $presentationState)
     }
 }
