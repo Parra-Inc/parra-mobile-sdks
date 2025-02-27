@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 02/06/2025.
+//  Bootstrapped with ❤️ by Parra on 02/27/2025.
 //  Copyright © 2025 Parra Inc.. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  ChangelogCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 02/06/2025.
+//  Bootstrapped with ❤️ by Parra on 02/27/2025.
 //  Copyright © 2025 Parra Inc.. All rights reserved.
 //
 
@@ -12,7 +12,7 @@ import SwiftUI
 /// This example shows how you can use your own custom logic for determining how
 /// and when to present a Parra Feedback Form.
 struct ChangelogCell: View {
-    @State private var isPresented = false
+    @State private var presentationState: ParraSheetPresentationState = .ready
     @Environment(\.parraAppInfo) private var parraAppInfo
 
     var showChangelog: Bool {
@@ -26,11 +26,13 @@ struct ChangelogCell: View {
     var body: some View {
         if showChangelog {
             ListItemLoadingButton(
-                isLoading: $isPresented,
+                presentationState: $presentationState,
                 text: "Changelog",
                 symbol: "note.text"
             )
-            .presentParraChangelogWidget(isPresented: $isPresented)
+            .presentParraChangelogWidget(
+                presentationState: $presentationState
+            )
         }
     }
 }

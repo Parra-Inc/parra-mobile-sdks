@@ -2,11 +2,12 @@
 //  ListItemLoadingButton.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 02/06/2025.
+//  Bootstrapped with ❤️ by Parra on 02/27/2025.
 //  Copyright © 2025 Parra Inc.. All rights reserved.
 //
 
 import SwiftUI
+import Parra
 
 struct ListItemLabel: View {
     let text: String
@@ -42,13 +43,17 @@ struct ListItemLabel: View {
 }
 
 struct ListItemLoadingButton: View {
-    @Binding var isLoading: Bool
+    @Binding var presentationState: ParraSheetPresentationState
     let text: String
     let symbol: String
 
+    private var isLoading: Bool {
+        return presentationState == .loading
+    }
+
     var body: some View {
         Button {
-            isLoading = true
+            presentationState = .loading
         } label: {
             ListItemLabel(
                 text: text,

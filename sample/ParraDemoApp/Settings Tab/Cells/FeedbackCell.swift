@@ -2,7 +2,7 @@
 //  FeedbackCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 02/06/2025.
+//  Bootstrapped with ❤️ by Parra on 02/27/2025.
 //  Copyright © 2025 Parra Inc.. All rights reserved.
 //
 
@@ -15,18 +15,18 @@ struct FeedbackCell: View {
     @Environment(\.parra) private var parra
     @Environment(\.parraAppInfo) private var parraAppInfo
 
-    @State private var isPresented = false
+    @State private var presentationState: ParraSheetPresentationState = .ready
 
     var body: some View {
         if let formId = parraAppInfo.application.defaultFeedbackFormId {
             ListItemLoadingButton(
-                isLoading: $isPresented,
+                presentationState: $presentationState,
                 text: "Leave Feedback",
                 symbol: "quote.bubble"
             )
             .presentParraFeedbackFormWidget(
                 by: formId,
-                isPresented: $isPresented
+                presentationState: $presentationState
             )
         }
     }

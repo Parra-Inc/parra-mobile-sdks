@@ -2,7 +2,7 @@
 //  SubscriptionUpsellCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 02/06/2025.
+//  Bootstrapped with ❤️ by Parra on 02/27/2025.
 //  Copyright © 2025 Parra Inc.. All rights reserved.
 //
 
@@ -12,8 +12,8 @@ import Parra
 private let PremiumEntitlementKey = "premium"
 
 struct SubscriptionUpsellCell: View {
-    @State private var isUpsellPresented = false
-    @State private var isManagePresented = false
+    @State private var upsellPresentationState: ParraSheetPresentationState = .ready
+    @State private var managePresentationState: ParraSheetPresentationState = .ready
 
     @Environment(\.parraUserEntitlements) private var userEntitlements
 
@@ -26,13 +26,13 @@ struct SubscriptionUpsellCell: View {
 
         if hasPremium {
             ListItemLoadingButton(
-                isLoading: $isManagePresented,
+                presentationState: $managePresentationState,
                 text: "Manage Subscription",
                 symbol: "creditcard"
             )
         } else {
             ListItemLoadingButton(
-                isLoading: $isUpsellPresented,
+                presentationState: $upsellPresentationState,
                 text: "Become a subscriber",
                 symbol: "crown"
             )
@@ -43,10 +43,19 @@ struct SubscriptionUpsellCell: View {
         button.presentParraPaywall(
             entitlement: PremiumEntitlementKey,
             context: "settings",
-            isPresented: $isUpsellPresented
+            presentationState: $upsellPresentationState
         )
         .manageSubscriptionsSheet(
-            isPresented: $isManagePresented
+            isPresented: .init(
+                get: {
+                    return managePresentationState == .loading
+                },
+                set: { newValue in
+                    if !newValue {
+                        managePresentationState = .ready
+                    }
+                }
+            )
         )
     }
 }
