@@ -20,14 +20,6 @@
       }
     },
     {
-      "identity" : "swifthtmltomarkdown",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/chrisjenkins/SwiftHTMLToMarkdown",
-      "state" : {
-        "revision" : "d533b9cb47a8defaa8d9432fad20ecf5964c0668"
-      }
-    },
-    {
       "identity" : "swiftsoup",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",

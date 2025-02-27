@@ -8,7 +8,6 @@
 import Buy
 import Foundation
 import Parra
-import SwiftHTMLtoMarkdown
 
 public struct ParraProduct: Identifiable, Equatable, Hashable, Codable {
     // MARK: - Lifecycle
@@ -154,7 +153,7 @@ public struct ParraProduct: Identifiable, Equatable, Hashable, Codable {
 
     static func markdownFromHTML(_ html: String) -> String? {
         do {
-            var document = BasicHTML(rawHTML: html)
+            let document = BasicHTML(rawHTML: html)
             try document.parse()
 
             return try document.asMarkdown()
