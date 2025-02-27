@@ -214,6 +214,7 @@ struct PaywallWidget: ParraContainer {
                             // To prevent showing an empty icon
                             EmptyView()
                         }
+                        .productDescription(.hidden)
                         .padding(.horizontal, 24)
                     }
                 }
@@ -331,7 +332,6 @@ struct PaywallWidget: ParraContainer {
             )
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
-            .lineLimit(2)
 
             withContent(
                 content: subtitle
@@ -345,7 +345,6 @@ struct PaywallWidget: ParraContainer {
                 )
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-                .lineLimit(3)
             }
         }
         .padding(.bottom, 12)
