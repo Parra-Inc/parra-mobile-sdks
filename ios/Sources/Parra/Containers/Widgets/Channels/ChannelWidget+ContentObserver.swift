@@ -63,6 +63,14 @@ extension ChannelWidget {
                     }
                 )
             }
+
+            self.channelObserver = ParraNotificationCenter.default.addObserver(
+                forName: Parra.receivedChannelPushNotification,
+                object: nil,
+                queue: .main
+            ) { @MainActor [weak self] notification in
+                self?.receiveChannelUpdate(notification)
+            }
         }
 
         // MARK: - Internal
@@ -295,7 +303,30 @@ extension ChannelWidget {
 
         // MARK: - Private
 
+        @ObservationIgnored private var channelObserver: NSObjectProtocol?
+
         private var paginatorSink: AnyCancellable? = nil
+
+        @MainActor
+        private func receiveChannelUpdate(
+            _ notification: Notification
+        ) {
+            guard let userInfo = notification.userInfo as? [String: Any] else {
+                return
+            }
+
+            guard let channelId = userInfo["channelId"] as? String else {
+                return
+            }
+
+            if channelId == channel.id {
+                logger.debug(
+                    "Checking for new messages in response to push notification"
+                )
+
+                checkForNewMessages()
+            }
+        }
 
         private func broadcastChanges() {
             // NOTE: If this gets added in more places, consider that it being

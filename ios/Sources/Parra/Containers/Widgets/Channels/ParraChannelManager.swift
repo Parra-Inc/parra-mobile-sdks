@@ -45,6 +45,9 @@ final class ParraChannelManager {
 
     static let shared = ParraChannelManager()
 
+    /// The channel that is currently being viewed by the user.
+    var visibleChannelId: String?
+
     func newestViewedMessage(
         for channel: Channel
     ) -> ChannelInfo.ViewedMessage? {

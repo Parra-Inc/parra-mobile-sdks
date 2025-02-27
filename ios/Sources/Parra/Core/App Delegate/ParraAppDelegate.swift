@@ -9,6 +9,8 @@
 import UIKit
 import UserNotifications
 
+private let logger = Logger()
+
 // IMPORTANT: Any UIApplicationDelegate methods that are implemented here must
 //            be explicitly declared open in order for end users to be able to
 //            implement them.
@@ -151,43 +153,41 @@ open class ParraAppDelegate<
         openSettingsFor notification: UNNotification?
     ) {}
 
-    open nonisolated func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        didReceive response: UNNotificationResponse,
-        withCompletionHandler completionHandler: @escaping () -> Void
-    ) {
-        completionHandler()
-    }
-
     @nonobjc
     open nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
-    ) async {}
+    ) async {
+        await Parra.default.push.handleNotificationActivation(
+            response
+        )
+    }
 
     open nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        let pushOptions = await Parra.default.parraInternal.configuration
-            .pushNotificationOptions
+        return await Parra.default.push.handleNotificationPresentation(
+            notification
+        )
+    }
 
-        var presentationOptions: UNNotificationPresentationOptions = []
-        if pushOptions.alerts {
-            presentationOptions.insert([.list, .banner])
-        }
-        if pushOptions.badges {
-            presentationOptions.insert(.badge)
-        }
-        if pushOptions.sounds {
-            presentationOptions.insert(.sound)
-        }
+    // MARK: - Public
 
-        return presentationOptions
+    public nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        Task { @MainActor in
+            await userNotificationCenter(center, didReceive: response)
+
+            completionHandler()
+        }
     }
 
     @nonobjc
-    open nonisolated func userNotificationCenter(
+    public nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (

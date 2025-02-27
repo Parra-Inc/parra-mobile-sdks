@@ -49,5 +49,8 @@ public extension Parra {
     internal static let channelDidUpdateNotification = NSNotification
         .Name("ParraChannelDidUpdateNotification")
 
+    internal static let receivedChannelPushNotification = NSNotification
+        .Name("ParraReceivedChannelPushNotification")
+
     static let authenticationStateKey = "ParraAuthenticationState"
 }

@@ -629,7 +629,7 @@ final class AuthService {
         forceRefresh: Bool,
         timeout: TimeInterval = 10.0
     ) async throws -> ParraUser.Credential? {
-        logger.debug("Invoking authentication provider")
+        logger.trace("Invoking authentication provider")
 
         do {
             let newCredential = try await getRefreshedCredential(

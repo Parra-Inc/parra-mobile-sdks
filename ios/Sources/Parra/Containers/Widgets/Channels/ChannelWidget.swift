@@ -59,11 +59,30 @@ struct ChannelWidget: ParraContainer {
         .environmentObject(contentObserver)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
+            ParraChannelManager.shared.visibleChannelId = contentObserver.channel.id
+
             contentObserver.loadInitialMessages()
 
             newestViewedMessage = ParraChannelManager.shared.newestViewedMessage(
                 for: contentObserver.channel
             )
+        }
+        .onDisappear {
+            ParraChannelManager.shared.visibleChannelId = nil
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: UIScene.willEnterForegroundNotification
+            )
+        ) { _ in
+            ParraChannelManager.shared.visibleChannelId = contentObserver.channel.id
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: UIScene.didEnterBackgroundNotification
+            )
+        ) { _ in
+            ParraChannelManager.shared.visibleChannelId = nil
         }
         .onReceive(timer) { _ in
             contentObserver.checkForNewMessages()
