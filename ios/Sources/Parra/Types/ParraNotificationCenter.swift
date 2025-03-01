@@ -13,30 +13,31 @@ private let logger = Logger(category: "Parra notification center")
 class ParraNotificationCenter: NotificationCenterType, @unchecked Sendable {
     // MARK: - Lifecycle
 
-    init() {}
+    init(notificationCenter: NotificationCenter) {
+        self.underlyingNotificationCenter = notificationCenter
+    }
 
     // MARK: - Internal
 
-    struct Wrapper: @unchecked Sendable {
-        let userInfo: [AnyHashable: Any]?
-    }
+    // Default instance should use the default notification center instance
+    // because we need to assume that this is what developers will use
+    // externally to receive some notifications.
+    static let `default` = ParraNotificationCenter(notificationCenter: .default)
 
-    static let `default` = ParraNotificationCenter()
-
-    let underlyingNotificationCenter = NotificationCenter()
+    let underlyingNotificationCenter: NotificationCenter
 
     func post(
         name aName: NSNotification.Name,
         object anObject: Any? = nil,
         userInfo aUserInfo: [AnyHashable: Any]? = nil
     ) {
-        Task {
-            await postAsync(
-                name: aName,
-                object: anObject,
-                userInfo: aUserInfo
-            )
-        }
+        logger.trace("Posting notification: \(aName.rawValue)")
+
+        underlyingNotificationCenter.post(
+            name: aName,
+            object: anObject,
+            userInfo: aUserInfo
+        )
     }
 
     func postAsync(
@@ -44,18 +45,12 @@ class ParraNotificationCenter: NotificationCenterType, @unchecked Sendable {
         object anObject: Any? = nil,
         userInfo aUserInfo: [AnyHashable: Any]? = nil
     ) async {
-        logger.trace("Posting notification: \(aName.rawValue)")
-
-        let wrapper = Wrapper(userInfo: aUserInfo)
-
         await MainActor.run {
-            DispatchQueue.main.async {
-                self.underlyingNotificationCenter.post(
-                    name: aName,
-                    object: anObject,
-                    userInfo: wrapper.userInfo
-                )
-            }
+            post(
+                name: aName,
+                object: anObject,
+                userInfo: aUserInfo
+            )
         }
     }
 

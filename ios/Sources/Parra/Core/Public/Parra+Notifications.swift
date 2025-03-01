@@ -46,6 +46,15 @@ public extension Parra {
     static let launchScreenDidDismissNotification = NSNotification
         .Name("ParraLaunchScreenDidDismissNotification")
 
+    static let ParraUserDidAddReactionNotification = NSNotification
+        .Name("ParraUserDidAddReactionNotification")
+
+    static let ParraUserDidRemoveReactionNotification = NSNotification
+        .Name("ParraUserDidRemoveReactionNotification")
+
+    static let ParraUserDidAddCommentNotification = NSNotification
+        .Name("ParraUserDidAddCommentNotification")
+
     internal static let channelDidUpdateNotification = NSNotification
         .Name("ParraChannelDidUpdateNotification")
 

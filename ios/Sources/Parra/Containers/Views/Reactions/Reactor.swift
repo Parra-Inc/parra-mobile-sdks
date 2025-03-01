@@ -252,7 +252,14 @@ class Reactor: ObservableObject {
                 let optionId = summary.id
                 assert(optionId != "placeholder")
                 do {
-                    let reactionId = try await submitReaction(api, feedItemId, optionId)
+                    let reactionId = try await _submitReaction(
+                        api,
+                        feedItemId,
+                        optionId,
+                        summary.name,
+                        summary.type,
+                        summary.value
+                    )
 
                     if let idx = copiedReactions.firstIndex(
                         where: { $0.id == optionId }
@@ -289,7 +296,14 @@ class Reactor: ObservableObject {
                 assert(optionId != "placeholder")
 
                 do {
-                    let reactionId = try await submitReaction(api, feedItemId, optionId)
+                    let reactionId = try await _submitReaction(
+                        api,
+                        feedItemId,
+                        optionId,
+                        option.name,
+                        option.type,
+                        option.value
+                    )
 
                     if let idx = copiedReactions
                         .firstIndex(where: { $0.id == optionId })
@@ -330,10 +344,11 @@ class Reactor: ObservableObject {
                 assert(reactionId != "placeholder")
 
                 do {
-                    try await removeReaction(
+                    try await _removeReaction(
                         api,
                         feedItemId,
-                        reactionId
+                        reactionId,
+                        summary
                     )
                 } catch {
                     logger.error("Error removing reaction", error)
@@ -387,6 +402,56 @@ class Reactor: ObservableObject {
                 )
             }
         }
+    }
+
+    private func _submitReaction(
+        _ api: API,
+        _ itemId: String,
+        _ summaryId: String,
+        _ name: String,
+        _ type: ParraReactionType,
+        _ value: String
+    ) async throws -> String {
+        let result = try await submitReaction(
+            api,
+            itemId,
+            summaryId
+        )
+
+        ParraNotificationCenter.default.post(
+            name: Parra.ParraUserDidAddReactionNotification,
+            object: nil,
+            userInfo: [
+                "name": name,
+                "type": type.rawValue,
+                "value": value
+            ]
+        )
+
+        return result
+    }
+
+    private func _removeReaction(
+        _ api: API,
+        _ itemId: String,
+        _ reactionId: String,
+        _ reactionSummary: ParraReactionSummary
+    ) async throws {
+        try await removeReaction(
+            api,
+            itemId,
+            reactionId
+        )
+
+        ParraNotificationCenter.default.post(
+            name: Parra.ParraUserDidRemoveReactionNotification,
+            object: nil,
+            userInfo: [
+                "name": reactionSummary.name,
+                "type": reactionSummary.type.rawValue,
+                "value": reactionSummary.value
+            ]
+        )
     }
 }
 

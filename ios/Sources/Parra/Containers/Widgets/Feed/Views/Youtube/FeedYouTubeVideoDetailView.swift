@@ -86,5 +86,4 @@ struct FeedYouTubeVideoDetailView: View {
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var theme
     @Environment(\.parra) private var parra
-    @Environment(FeedWidget.ContentObserver.self) private var contentObserver
 }

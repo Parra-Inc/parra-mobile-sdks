@@ -135,7 +135,8 @@ struct StorefrontWidget: ParraContainer {
                     )
                 }
             }
-        } // inject data model instance into env for child views
+        }
+        // inject data model instance into env for child views
         .environment(contentObserver)
         .onChange(
             of: parraAuthState,

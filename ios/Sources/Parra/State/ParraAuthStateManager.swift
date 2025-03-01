@@ -77,20 +77,18 @@ public class ParraAuthStateManager {
             queue: .main
         ) { [weak self] notification in
             Task { @MainActor in
-                let wrapper = ParraNotificationCenter.Wrapper(
-                    userInfo: notification.userInfo ?? [:]
-                )
+                let userInfo = notification.userInfo as? [String: Any]
 
-                self?.handleAuthChange(wrapper)
+                self?.handleAuthChange(userInfo)
             }
         }
     }
 
     @MainActor
-    private func handleAuthChange(_ wrapper: ParraNotificationCenter.Wrapper) {
+    private func handleAuthChange(_ userInfo: [String: Any]?) {
         logger.debug("Received auth state change notification")
 
-        guard let userInfo = wrapper.userInfo,
+        guard let userInfo,
               let result =
               userInfo[Parra.authenticationStateKey] as? ParraAuthState else
         {

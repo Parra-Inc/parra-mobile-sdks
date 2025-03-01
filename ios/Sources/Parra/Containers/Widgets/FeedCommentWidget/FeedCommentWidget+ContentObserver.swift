@@ -189,6 +189,16 @@ extension FeedCommentWidget {
 
                     commentPaginator.replace(temporaryComment, with: realComment)
                     totalComments = totalComments + 1
+
+                    ParraNotificationCenter.default.post(
+                        name: Parra.ParraUserDidAddCommentNotification,
+                        object: nil,
+                        userInfo: [
+                            "feedItemId": feedItem.id,
+                            "commentId": realComment.id,
+                            "body": realComment.body
+                        ]
+                    )
                 } catch let error as ParraError {
                     var erroredComment = temporaryComment
 
