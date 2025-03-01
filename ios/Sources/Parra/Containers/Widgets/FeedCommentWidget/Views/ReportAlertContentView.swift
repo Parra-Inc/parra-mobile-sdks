@@ -40,7 +40,7 @@ struct ReportAlertContentView: View {
                 )
 
                 alertManager.showSuccessToast(
-                    title: "Report submitted",
+                    title: "Report Submitted",
                     subtitle: "We'll review your report and take action accordingly."
                 )
             } catch {

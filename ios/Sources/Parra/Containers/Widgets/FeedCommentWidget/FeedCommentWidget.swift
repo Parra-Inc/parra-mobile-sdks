@@ -65,7 +65,8 @@ struct FeedCommentWidget: ParraContainer {
                     feedItem: contentObserver.feedItem,
                     comments: comments,
                     requiredEntitlement: requiredEntitlement,
-                    context: contentObserver.attachmentPaywall?.context
+                    context: contentObserver.attachmentPaywall?.context,
+                    contentObserver: _contentObserver
                 ) { index in
                     contentObserver.commentPaginator.loadMore(
                         after: index
@@ -76,7 +77,8 @@ struct FeedCommentWidget: ParraContainer {
                     feedItem: contentObserver.feedItem,
                     comments: comments,
                     requiredEntitlement: nil,
-                    context: nil
+                    context: nil,
+                    contentObserver: _contentObserver
                 ) { index in
                     contentObserver.commentPaginator.loadMore(
                         after: index
@@ -220,7 +222,7 @@ struct FeedCommentWidget: ParraContainer {
     @Environment(\.parraUserEntitlements) private var userEntitlements
     @Environment(\.parraAppInfo) private var appInfo
 
-    @State private var allowSubmission = false
+    @State private var allowSubmission = true
 
     private var emptyStateAttributes: ParraAttributes.EmptyState {
         ParraAttributes.EmptyState(

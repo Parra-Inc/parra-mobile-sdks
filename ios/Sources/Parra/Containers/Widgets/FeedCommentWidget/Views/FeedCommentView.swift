@@ -15,10 +15,12 @@ struct FeedCommentView: View {
     init(
         feedItem: ParraFeedItem,
         comment: ParraComment,
-        api: API
+        api: API,
+        contentObserver: StateObject<FeedCommentWidget.ContentObserver>
     ) {
         self.comment = comment
         self.feedItem = feedItem
+        self._contentObserver = contentObserver
         self._reactor = StateObject(
             wrappedValue: Reactor(
                 feedItemId: comment.id,
@@ -47,17 +49,15 @@ struct FeedCommentView: View {
 
     let feedItem: ParraFeedItem
     let comment: ParraComment
-
-    var isCurrentUser: Bool {
-        return comment.user.id == authState.user?.info.id
-    }
+    @StateObject var contentObserver: FeedCommentWidget.ContentObserver
 
     var body: some View {
         FeedCommentContentView(comment: comment) {
             FeedCommentReactionView(
                 comment: comment,
                 isReactionPickerPresented: $isReactionPickerPresented,
-                reactor: _reactor
+                reactor: _reactor,
+                contentObserver: _contentObserver
             )
         }
         .padding(.horizontal, mainPadding.width)
@@ -66,20 +66,14 @@ struct FeedCommentView: View {
             maxWidth: .infinity
         )
         .onTapGesture {
-            if !isCurrentUser {
-                isReactionPickerPresented = true
-            }
+            isReactionPickerPresented = true
         }
         .onLongPressGesture {
-            if !isCurrentUser {
-                isReactionPickerPresented = true
-            }
+            isReactionPickerPresented = true
         }
     }
 
     // MARK: - Private
-
-    @Environment(\.parraAuthState) private var authState
 
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory

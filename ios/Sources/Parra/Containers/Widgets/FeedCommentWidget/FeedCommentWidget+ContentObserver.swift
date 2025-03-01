@@ -150,6 +150,32 @@ extension FeedCommentWidget {
 
         @MainActor
         @discardableResult
+        func deleteComment(
+            commentId: String
+        ) {
+            logger.info("Deleting comment", [
+                "commentId": commentId
+            ])
+
+            Task { @MainActor in
+                commentPaginator.removeItem(by: commentId)
+
+                do {
+                    try await api.deleteComment(
+                        commentId: commentId
+                    )
+
+                    totalComments = max(0, totalComments - 1)
+                } catch {
+                    logger.error("Failed to delete comment", error, [
+                        "commentId": commentId
+                    ])
+                }
+            }
+        }
+
+        @MainActor
+        @discardableResult
         func addComment(
             with text: String,
             from user: ParraUser

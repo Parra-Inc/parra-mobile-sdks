@@ -338,6 +338,32 @@ public class ParraPaginator<Item, Context>: ObservableObject
         }
     }
 
+    public func removeItem(
+        _ item: Item
+    ) {
+        removeItem(by: item.id)
+    }
+
+    public func removeItem(
+        by id: Item.ID
+    ) {
+        // Must lookup by id instead of firstIndex(of:) because fields other
+        // than `id` will change during the update.
+        guard let index = items.firstIndex(where: { $0.id == id }) else {
+            logger.warn(
+                "Attempt to delete item that did not previously exist.",
+                [
+                    "itemId": id,
+                    "context": String(describing: context)
+                ]
+            )
+
+            return
+        }
+
+        items.remove(at: index)
+    }
+
     public func updateItem(
         _ item: Item
     ) {

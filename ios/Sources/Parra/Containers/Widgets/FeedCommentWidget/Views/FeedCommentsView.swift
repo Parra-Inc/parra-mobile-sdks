@@ -8,12 +8,31 @@
 import SwiftUI
 
 struct FeedCommentsView: View {
+    // MARK: - Lifecycle
+
+    init(
+        feedItem: ParraFeedItem,
+        comments: Binding<[ParraComment]>,
+        requiredEntitlement: ParraEntitlement?,
+        context: String?,
+        contentObserver: StateObject<FeedCommentWidget.ContentObserver>,
+        itemAtIndexDidAppear: @escaping (_: Int) -> Void
+    ) {
+        self.feedItem = feedItem
+        self._comments = comments
+        self.requiredEntitlement = requiredEntitlement
+        self.context = context
+        self._contentObserver = contentObserver
+        self.itemAtIndexDidAppear = itemAtIndexDidAppear
+    }
+
     // MARK: - Internal
 
     let feedItem: ParraFeedItem
     @Binding var comments: [ParraComment]
     let requiredEntitlement: ParraEntitlement?
     let context: String?
+    @StateObject var contentObserver: FeedCommentWidget.ContentObserver
     var itemAtIndexDidAppear: (_: Int) -> Void
 
     var body: some View {
@@ -56,7 +75,8 @@ struct FeedCommentsView: View {
                 FeedCommentView(
                     feedItem: feedItem,
                     comment: comment,
-                    api: parra.parraInternal.api
+                    api: parra.parraInternal.api,
+                    contentObserver: _contentObserver
                 )
                 .id(comment)
                 .onAppear {

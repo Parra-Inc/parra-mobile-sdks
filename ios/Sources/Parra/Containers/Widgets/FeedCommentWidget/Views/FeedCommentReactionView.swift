@@ -13,14 +13,18 @@ struct FeedCommentReactionView: View {
     init(
         comment: ParraComment,
         isReactionPickerPresented: Binding<Bool>,
-        reactor: StateObject<Reactor>
+        reactor: StateObject<Reactor>,
+        contentObserver: StateObject<FeedCommentWidget.ContentObserver>
     ) {
         self.comment = comment
         self._isReactionPickerPresented = isReactionPickerPresented
         self._reactor = reactor
+        self._contentObserver = contentObserver
     }
 
     // MARK: - Internal
+
+    @StateObject var contentObserver: FeedCommentWidget.ContentObserver
 
     var isCurrentUser: Bool {
         return comment.user.id == authState.user?.info.id
@@ -72,7 +76,9 @@ struct FeedCommentReactionView: View {
                 reactor: _reactor,
                 showLabels: false,
                 searchEnabled: false
-            )
+            ) { commentId in
+                contentObserver.deleteComment(commentId: commentId)
+            }
             .presentationDetents([.large, .fraction(0.6)])
             .presentationDragIndicator(.visible)
         }
@@ -88,26 +94,4 @@ struct FeedCommentReactionView: View {
 
     private let comment: ParraComment
     @StateObject private var reactor: Reactor
-}
-
-#Preview {
-    ParraContainerPreview<FeedWidget>(config: .default) { parra, _, _ in
-        FeedCommentReactionView(
-            comment: .validStates()[0],
-            isReactionPickerPresented: .constant(false),
-            reactor: StateObject(
-                wrappedValue: Reactor(
-                    feedItemId: .uuid,
-                    reactionOptionGroups: ParraReactionOptionGroup.validStates(),
-                    reactions: ParraReactionSummary.validStates(),
-                    api: parra.parraInternal.api,
-                    submitReaction: { _, _, _ in
-                        return .uuid
-                    },
-                    removeReaction: { _, _, _ in
-                    }
-                )
-            )
-        )
-    }
 }

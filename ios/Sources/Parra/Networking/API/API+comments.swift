@@ -62,4 +62,12 @@ extension API {
             body: body
         )
     }
+
+    func deleteComment(
+        commentId: String
+    ) async throws {
+        let _: EmptyResponseObject = try await hitEndpoint(
+            .deleteComment(commentId: commentId)
+        )
+    }
 }

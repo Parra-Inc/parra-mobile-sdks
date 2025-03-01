@@ -14,18 +14,25 @@ struct FeedCommentReactionPickerView: View {
         comment: ParraComment,
         reactor: StateObject<Reactor>,
         showLabels: Bool = true,
-        searchEnabled: Bool = false
+        searchEnabled: Bool = false,
+        onDeleteComment: @escaping (_ commentId: String) -> Void
     ) {
         self.comment = comment
         self.searchEnabled = searchEnabled
         self.showLabels = showLabels
         self._reactor = reactor
+        self.onDeleteComment = onDeleteComment
     }
 
     // MARK: - Internal
 
-    let showLabels: Bool
-    let comment: ParraComment
+    var showLabels: Bool
+    var comment: ParraComment
+    var onDeleteComment: (_ commentId: String) -> Void
+
+    var isCurrentUser: Bool {
+        return comment.user.id == authState.user?.info.id
+    }
 
     var body: some View {
         ScrollView {
@@ -33,24 +40,20 @@ struct FeedCommentReactionPickerView: View {
                 HStack {
                     Spacer()
 
-                    componentFactory.buildImageButton(
-                        config: ParraImageButtonConfig(
-                            type: .primary,
-                            size: .custom(
-                                CGSize(width: 20, height: 20)
-                            ),
-                            variant: .plain
-                        ),
-                        content: ParraImageButtonContent(
-                            image: .symbol("flag.circle", .monochrome)
-                        ),
-                        localAttributes: ParraAttributes.ImageButton(
-                            normal: ParraAttributes.ImageButton.StatefulAttributes(
-                                padding: .zero
-                            )
-                        )
-                    ) {
-                        showingReportAlert = true
+                    Menu {
+                        if isCurrentUser {
+                            // Users can only delete their own comments.
+                            Button("Delete Commment", systemImage: "trash") {
+                                showingDeleteAlert = true
+                            }
+                        } else {
+                            // Users don't need to report their own comments.
+                            Button("Report Comment", systemImage: "flag") {
+                                showingReportAlert = true
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
                     }
                 }
 
@@ -64,6 +67,7 @@ struct FeedCommentReactionPickerView: View {
                     searchResults: searchResults,
                     showLabels: showLabels
                 )
+                .disabled(isCurrentUser)
             }
             .padding(.top, 30)
             .padding(.horizontal)
@@ -74,7 +78,7 @@ struct FeedCommentReactionPickerView: View {
             ctx.searchable(text: $search)
         }
         .alert(
-            "Report comment",
+            "Report Comment",
             isPresented: $showingReportAlert
         ) {
             ReportAlertContentView(
@@ -82,7 +86,21 @@ struct FeedCommentReactionPickerView: View {
             )
         } message: {
             Text(
-                "Are you sure you want to report this comment as inappropriate? This action cannot be undone."
+                "Are you sure you want to report this comment as inappropriate? This cannot be undone."
+            )
+        }
+        .alert(
+            "Delete Comment",
+            isPresented: $showingDeleteAlert
+        ) {
+            DeleteCommentAlertContentView(
+                commentId: comment.id
+            ) {
+                onDeleteComment(comment.id)
+            }
+        } message: {
+            Text(
+                "Are you sure you want to delete this comment? This cannot be undone."
             )
         }
     }
@@ -93,8 +111,10 @@ struct FeedCommentReactionPickerView: View {
 
     @State private var search: String = ""
     @State private var showingReportAlert = false
+    @State private var showingDeleteAlert = false
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var theme
+    @Environment(\.parraAuthState) private var authState
 
     private var searchEnabled: Bool
 
@@ -142,7 +162,7 @@ struct FeedCommentReactionPickerView: View {
                 ),
                 showLabels: false,
                 searchEnabled: false
-            )
+            ) { _ in }
         }
     }
 }
