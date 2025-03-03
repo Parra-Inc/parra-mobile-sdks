@@ -31,9 +31,17 @@ extension AppInfoManager {
             throw ParraError.message("Could not load app version for app")
         }
 
-        let currentAppVersion = cachedAppVersion()
+        // If nothing was cached this was a fresh install.
+        guard let currentAppVersion = cachedAppVersion() else {
+            logger.debug(
+                "No current app version cached. Skipping."
+            )
+
+            return
+        }
+
         // The internal build/longform version string.
-        let currentBuild = currentAppVersion?.version
+        let currentBuild = currentAppVersion.version
 
         // Cache the current app version since we've launched once without
         // it being set. This will allow the next launch to proceed further.
