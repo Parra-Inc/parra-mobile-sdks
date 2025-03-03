@@ -37,7 +37,7 @@ targets:
         MARKETING_VERSION: 1.0.0
         CURRENT_PROJECT_VERSION: 1
         SWIFT_ENABLE_BARE_SLASH_REGEX: YES
-        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        ENABLE_USER_SCRIPT_SANDBOXING: NO # If this is enabled, Crashlytics symbol uploads won't work.
       configs:
         debug:
           CODE_SIGN_IDENTITY: {{ app.code_sign.debug.identity }}
