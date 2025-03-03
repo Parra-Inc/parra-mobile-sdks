@@ -54,7 +54,11 @@ public extension View {
             data: dataBinding,
             config: config,
             with: ParraContainerRenderer.feedbackFormRenderer,
-            onDismiss: onDismiss
+            onDismiss: { type in
+                dataBinding.wrappedValue = nil
+
+                onDismiss?(type)
+            }
         )
     }
 
