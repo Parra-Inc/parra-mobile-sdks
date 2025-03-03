@@ -563,6 +563,8 @@ final class AuthService {
     /// Only for use when the refresh token has expired! Dumps local user
     /// and triggers reauthentication flow.
     private func forceLogout() async throws {
+        let currentUser = await dataManager.getCurrentUser()
+
         await applyUserUpdate(.undetermined, shouldBroadcast: true)
 
         let appInfo = try await Parra.default.parraInternal.appInfoManager.getAppInfo()
@@ -583,11 +585,13 @@ final class AuthService {
             shouldBroadcast: true
         )
 
-        await ParraAlertManager.shared.showToast(
-            for: 5.0,
-            level: .warn,
-            content: .defaultSessionExpired
-        )
+        if let currentUser, !currentUser.info.isAnonymous {
+            await ParraAlertManager.shared.showToast(
+                for: 5.0,
+                level: .warn,
+                content: .defaultSessionExpired
+            )
+        }
     }
 
     private func performUnauthenticatedLogin(
