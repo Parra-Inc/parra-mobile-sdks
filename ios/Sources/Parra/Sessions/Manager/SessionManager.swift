@@ -431,6 +431,10 @@ class SessionManager {
 // MARK: ParraLoggerBackend
 
 extension SessionManager: ParraLoggerBackend {
+    @usableFromInline var name: String {
+        return "parra-default-session-logger"
+    }
+
     @usableFromInline
     func log(
         data: ParraLogData

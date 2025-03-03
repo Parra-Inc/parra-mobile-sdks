@@ -66,28 +66,57 @@ public class ParraLogger {
 
     // MARK: - Public
 
-    /// A backend for all the methods for different verbosities provided by the Parra
-    /// Logger. The logger backend is the place where log events should be written
-    /// to console, disk, network, etc.
-    public static var loggerBackend: ParraLoggerBackend? {
+    /// A backend for all the methods for different verbosities provided by the
+    /// Parra Logger. The logger backend is the place where log events should be
+    /// written to console, disk, network, etc.
+    public private(set) static var loggerBackends: [ParraLoggerBackend] = [] {
         didSet {
             loggerBackendDidChange()
         }
     }
 
-    /// Whether or not logging is enabled on this logger instance. Logging is enabled
-    /// by default. If you disable logging, logs are ignored until re-enabling. Changing this
-    /// property will not affect any logs made before enabling/disabling the logger.
+    /// Whether or not logging is enabled on this logger instance. Logging is
+    /// enabled by default. If you disable logging, logs are ignored until
+    /// re-enabling. Changing this property will not affect any logs made before
+    /// enabling/disabling the logger.
     public var isEnabled = true
 
-    /// Enabling logging on this logger instance. This update only applies to the current Logger
-    /// instance and not to other instances or static Logger.info/etc methods. Logging is enabled by default.
+    public static func addLoggerBackend(_ backend: ParraLoggerBackend) throws {
+        for loggerBackend in loggerBackends {
+            if loggerBackend.name == backend.name {
+                throw ParraError.message(
+                    "Tried to add duplicate logger backend with name: \(backend.name)"
+                )
+            }
+        }
+
+        Logger.info("Adding new logger backend", [
+            "name": backend.name
+        ])
+
+        loggerBackends.append(backend)
+    }
+
+    public static func removeLoggerBackend(named name: String) {
+        Logger.info("Removing logger backend", [
+            "name": name
+        ])
+
+        loggerBackends.removeAll { backend in
+            return backend.name == name
+        }
+    }
+
+    /// Enabling logging on this logger instance. This update only applies to
+    /// the current Logger instance and not to other instances or static
+    /// Logger.info/etc methods. Logging is enabled by default.
     public func enable() {
         isEnabled = true
     }
 
-    /// Disabling logging on this logger instance. This update only applies to the current Logger
-    /// instance and not to other instances or static Logger.info/etc methods. Logging is enabled by default.
+    /// Disabling logging on this logger instance. This update only applies to
+    /// the current Logger instance and not to other instances or static
+    /// Logger.info/etc methods. Logging is enabled by default.
     public func disable() {
         isEnabled = false
     }
@@ -115,7 +144,8 @@ public class ParraLogger {
         let logContext = ParraLogContext(
             callSiteContext: callSiteContext,
             loggerContext: nil,
-            // Static logger methods do not have a way of changing this configuration (intentionally).
+            // Static logger methods do not have a way of changing this
+            // configuration (intentionally).
             bypassEventCreation: false
         )
 
@@ -128,14 +158,16 @@ public class ParraLogger {
             logContext: logContext
         )
 
-        // We don't check that the logger is enabled here because this only applies to
-        // logger instances.
-        if let loggerBackend {
-            loggerBackend.log(
-                data: data
-            )
-        } else {
+        // We don't check that the logger is enabled here because this only
+        // applies to logger instances.
+        if loggerBackends.isEmpty {
             collectLogWithoutDestination(data: data)
+        } else {
+            for loggerBackend in loggerBackends {
+                loggerBackend.log(
+                    data: data
+                )
+            }
         }
 
         return ParraLogMarker(
@@ -179,12 +211,14 @@ public class ParraLogger {
             logContext: logContext
         )
 
-        if let loggerBackend = Logger.loggerBackend {
-            loggerBackend.log(
-                data: data
-            )
-        } else {
+        if Logger.loggerBackends.isEmpty {
             Logger.collectLogWithoutDestination(data: data)
+        } else {
+            for loggerBackend in Logger.loggerBackends {
+                loggerBackend.log(
+                    data: data
+                )
+            }
         }
 
         return ParraLogMarker(
@@ -198,20 +232,23 @@ public class ParraLogger {
     // MARK: - Private
 
     private enum Constant {
-        /// The maximum number of logs that can be collected before a logging backend is configured.
-        /// Once the backend is set, the most recent logs (number by this variable) will be flushed to the backend.
+        /// The maximum number of logs that can be collected before a logging
+        /// backend is configured. Once the backend is set, the most recent
+        /// logs (number by this variable) will be flushed to the backend.
         static let maxOrphanedLogBuffer = 100
     }
 
-    /// A cache of logs that occurred before the Parra SDK was initialized. Once initialization occurs
-    /// these are meant to be flushed to the newly set logger backend.
+    /// A cache of logs that occurred before the Parra SDK was initialized. Once
+    /// initialization occurs these are meant to be flushed to the newly set
+    /// logger backend.
     private static let cachedLogsLock =
         OSAllocatedUnfairLock(initialState: [ParraLogData]())
 
     private static func loggerBackendDidChange() {
         cachedLogsLock.withLock { cachedLogs in
-            guard let loggerBackend else {
-                // If the logger backend is unset or still not set, there is nowhere to flush the logs to.
+            if loggerBackends.isEmpty {
+                // If no logger backends are set, there is nowhere to flush the
+                // logs to.
                 return
             }
 
@@ -224,9 +261,11 @@ public class ParraLogger {
             let logCacheCopy = cachedLogs
             cachedLogs = []
 
-            loggerBackend.logMultiple(
-                data: logCacheCopy
-            )
+            for loggerBackend in loggerBackends {
+                loggerBackend.logMultiple(
+                    data: logCacheCopy
+                )
+            }
         }
     }
 

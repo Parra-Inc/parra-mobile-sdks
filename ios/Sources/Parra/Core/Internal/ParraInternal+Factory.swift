@@ -226,7 +226,11 @@ extension ParraInternal {
             modalScreenManager: modalScreenManager
         )
 
-        Logger.loggerBackend = sessionManager
+        do {
+            try Logger.addLoggerBackend(sessionManager)
+        } catch {
+            Logger.fatal("Failed to attach logger backend", error)
+        }
 
         let parra = ParraInternal(
             authenticationMethod: authenticationMethod,
