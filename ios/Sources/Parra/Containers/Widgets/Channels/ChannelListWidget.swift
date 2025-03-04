@@ -42,39 +42,41 @@ struct ChannelListWidget: ParraContainer {
                 with: contentPadding
             )
 
-            WidgetFooter {
-                componentFactory.buildContainedButton(
-                    config: ParraTextButtonConfig(
-                        type: .primary,
-                        size: .large,
-                        isMaxWidth: true
-                    ),
-                    content: .init(
-                        text: ParraLabelContent(text: "Start a Conversation"),
-                        isLoading: contentObserver
-                            .isLoadingStartConversation || paywallPresentationState !=
-                            .ready
-                    ),
-                    localAttributes: ParraAttributes.ContainedButton(
-                        normal: ParraAttributes.ContainedButton.StatefulAttributes(
-                            padding: .zero
-                        )
-                    ),
-                    onPress: {
-                        if let entitlement = userEntitlements.getEntitlement(
-                            for: contentObserver.requiredEntitlement
-                        ), entitlement.isConsumable {
-                            // The user already has the entitlement required
-                            // for this action. Let them confirm using existing
-                            // credits
-                            currentEntitlement = entitlement
-                        } else {
-                            paywallPresentationState = .loading
+            if config.allowStartingNewConversations {
+                WidgetFooter {
+                    componentFactory.buildContainedButton(
+                        config: ParraTextButtonConfig(
+                            type: .primary,
+                            size: .large,
+                            isMaxWidth: true
+                        ),
+                        content: .init(
+                            text: ParraLabelContent(text: "Start a Conversation"),
+                            isLoading: contentObserver
+                                .isLoadingStartConversation || paywallPresentationState !=
+                                .ready
+                        ),
+                        localAttributes: ParraAttributes.ContainedButton(
+                            normal: ParraAttributes.ContainedButton.StatefulAttributes(
+                                padding: .zero
+                            )
+                        ),
+                        onPress: {
+                            if let entitlement = userEntitlements.getEntitlement(
+                                for: contentObserver.requiredEntitlement
+                            ), entitlement.isConsumable {
+                                // The user already has the entitlement required
+                                // for this action. Let them confirm using existing
+                                // credits
+                                currentEntitlement = entitlement
+                            } else {
+                                paywallPresentationState = .loading
+                            }
                         }
-                    }
-                )
+                    )
+                }
+                .safeAreaPadding(.horizontal)
             }
-            .safeAreaPadding(.horizontal)
         }
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),

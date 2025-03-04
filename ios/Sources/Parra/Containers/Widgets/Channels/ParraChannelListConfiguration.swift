@@ -12,6 +12,7 @@ public final class ParraChannelListConfiguration: ParraContainerConfig {
 
     public init(
         navigationTitle: String = "Messages",
+        allowStartingNewConversations: Bool = true,
         defaultChannelConfig: ParraChannelConfiguration = .default,
         emptyStateContent: ParraEmptyStateContent = ParraChannelListConfiguration
             .defaultEmptyStateContent,
@@ -20,6 +21,7 @@ public final class ParraChannelListConfiguration: ParraContainerConfig {
     ) {
         self.defaultChannelConfig = defaultChannelConfig
         self.navigationTitle = navigationTitle
+        self.allowStartingNewConversations = allowStartingNewConversations
         self.emptyStateContent = emptyStateContent
         self.errorStateContent = errorStateContent
     }
@@ -50,4 +52,6 @@ public final class ParraChannelListConfiguration: ParraContainerConfig {
 
     public let emptyStateContent: ParraEmptyStateContent
     public let errorStateContent: ParraEmptyStateContent
+
+    public let allowStartingNewConversations: Bool
 }

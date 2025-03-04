@@ -101,6 +101,22 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
         }
     }
 
+    public func userHasRole(
+        with key: String
+    ) -> Bool {
+        guard let user else {
+            return false
+        }
+
+        guard let roles = user.info.roles?.elements else {
+            return false
+        }
+
+        return roles.contains { role in
+            return role.key == key
+        }
+    }
+
     // MARK: - Internal
 
     var hasResolvedAuth: Bool {
