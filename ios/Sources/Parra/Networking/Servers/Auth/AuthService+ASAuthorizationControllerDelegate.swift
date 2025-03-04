@@ -55,6 +55,10 @@ extension AuthService {
     ) {
         let completion = activeAuthorizationRequest?.1
 
+        defer {
+            activeAuthorizationRequest = nil
+        }
+
         guard let error = error as? ASAuthorizationError else {
             logger.error(
                 "Received unexpected authorization error callback",
@@ -81,9 +85,30 @@ extension AuthService {
                 error
             )
         } else {
-            completion?(.failure(error))
+            let authErrorName = switch error.code {
+            case .canceled:
+                "canceled"
+            case .credentialExport:
+                "credentialExport"
+            case .credentialImport:
+                "credentialImport"
+            case .failed:
+                "failed"
+            case .invalidResponse:
+                "invalidResponse"
+            case .matchedExcludedCredential:
+                "matchedExcludedCredential"
+            case .notHandled:
+                "notHandled"
+            case .notInteractive:
+                "notInteractive"
+            case .unknown:
+                "unknown"
+            }
 
-            activeAuthorizationRequest = nil
+            logger.debug("Authorization failure with code: \(authErrorName)")
+
+            completion?(.failure(error))
         }
     }
 

@@ -38,6 +38,8 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
     public var delegate: (any ParraAuthenticationFlowDelegate)?
 
     public var body: some View {
+        let _ = Self._printChanges()
+
         NavigationStack(
             path: $navigationState.navigationPath
         ) {
@@ -78,6 +80,10 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
                 return
             }
 
+            if hasPerformedPasskeyAttempt {
+                return
+            }
+
             switch parraAuthState {
             case .authenticated, .undetermined:
                 break
@@ -87,6 +93,8 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
                     && parraInternal.authService.activeAuthorizationRequest == nil
                 {
                     landingScreenParams.attemptPasskeyLogin()
+
+                    hasPerformedPasskeyAttempt = true
                 }
             }
         }
@@ -126,6 +134,8 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
     }
 
     // MARK: - Private
+
+    @State private var hasPerformedPasskeyAttempt = false
 
     private let flowConfig: ParraAuthenticationFlowConfig
     private let completion: (() -> Void)?
