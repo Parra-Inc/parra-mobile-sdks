@@ -76,7 +76,6 @@ struct FeedReactionView: View {
 
                 HStack(alignment: .center, spacing: 4) {
                     componentFactory.buildImage(
-                        config: .init(),
                         content: .symbol(hasComments ? "bubble.fill" : "bubble"),
                         localAttributes: ParraAttributes.Image(
                             tint: accentColor,

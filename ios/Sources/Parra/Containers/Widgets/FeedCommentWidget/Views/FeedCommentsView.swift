@@ -65,8 +65,7 @@ struct FeedCommentsView: View {
                 entitlement: requiredEntitlement.key,
                 context: context,
                 presentationState: $paywallPresentationState
-            ) { _ in
-            }
+            )
         } else {
             ForEach(
                 Array(comments.enumerated()),
