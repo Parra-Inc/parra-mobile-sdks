@@ -75,6 +75,13 @@ enum ApiEndpoint: Endpoint {
     case getPaginateFeed(feedId: String)
     case getFeedItem(feedItemId: String)
 
+    // Feed Admin
+    case getPaginateCreatorUpdateTemplates
+    case postCreateCreatorUpdate
+    case putUpdateCreatorUpdate(creatorUpdateId: String)
+    case postSendCreatorUpdate(creatorUpdateId: String)
+    case postCreateCreatorUpdateAttachment(creatorUpdateId: String)
+
     // Reactions
     case postFeedReaction(feedItemId: String)
     case deleteFeedReaction(feedItemId: String, reactionId: String)
@@ -112,7 +119,8 @@ enum ApiEndpoint: Endpoint {
              .getUserProperties, .getPaginateFeed, .getFaqs,
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall,
              .getPaginateComments, .getListChatChannels, .getPaginateMessages,
-             .listUserEntitlements, .getFeedItem:
+             .listUserEntitlements, .getFeedItem,
+             .getPaginateCreatorUpdateTemplates:
 
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
@@ -122,7 +130,8 @@ enum ApiEndpoint: Endpoint {
              .postFeedReaction, .flagComment, .createFeedComment,
              .postFeedCommentReaction, .postCreateChannel, .postSendMessage,
              .postFlagMessage, .postLockChannel, .postUnlockChannel,
-             .postLeaveChannel:
+             .postLeaveChannel, .postCreateCreatorUpdate,
+             .postSendCreatorUpdate, .postCreateCreatorUpdateAttachment:
 
             return .post
         case .updateUserInfo, .putReplaceUserProperties,
@@ -133,7 +142,7 @@ enum ApiEndpoint: Endpoint {
         case .deleteVoteForTicket, .deleteUser, .deleteAvatar,
              .deleteAllUserProperties, .deleteSingleUserProperty,
              .deleteFeedReaction, .deleteComment, .deleteFeedCommentReaction,
-             .deleteMessage, .deleteArchiveChannel:
+             .deleteMessage, .deleteArchiveChannel, .putUpdateCreatorUpdate:
 
             return .delete
         case .patchUpdateUserProperties:
@@ -191,10 +200,22 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/users/:userId/properties"
         case .putUpdateSingleUserProperty, .deleteSingleUserProperty:
             return "tenants/:tenantId/users/:userId/properties/:userPropertyKey"
+        // Feed
         case .getPaginateFeed:
             return "tenants/:tenantId/applications/:applicationId/feeds/:feedId/items"
         case .getFeedItem:
             return "tenants/:tenantId/feed/items/:feedItemId"
+        // Feed Admin
+        case .getPaginateCreatorUpdateTemplates:
+            return "tenants/:tenantId/creator/updates/templates"
+        case .postCreateCreatorUpdate:
+            return "tenants/:tenantId/creator/updates"
+        case .putUpdateCreatorUpdate:
+            return "tenants/:tenantId/creator/updates/:creatorUpdateId"
+        case .postSendCreatorUpdate:
+            return "tenants/:tenantId/creator/updates/:creatorUpdateId/send"
+        case .postCreateCreatorUpdateAttachment:
+            return "tenants/:tenantId/creator/updates/:creatorUpdateId/attachments"
         case .getUserSettingsLayouts:
             return "tenants/:tenantId/users/:userId/settings/views"
         case .getUserSettingsLayout:

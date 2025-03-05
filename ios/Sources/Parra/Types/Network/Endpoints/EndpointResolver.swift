@@ -173,6 +173,17 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/applications/\(applicationId)/feeds/\(feedId)/items"
         case .getFeedItem(let feedItemId):
             return "tenants/\(tenantId)/feed/items/\(feedItemId)"
+        // Feed Admin
+        case .getPaginateCreatorUpdateTemplates:
+            return "tenants/\(tenantId)/creator/updates/templates"
+        case .postCreateCreatorUpdate:
+            return "tenants/\(tenantId)/creator/updates"
+        case .putUpdateCreatorUpdate(let creatorUpdateId):
+            return "tenants/\(tenantId)/creator/updates/\(creatorUpdateId)"
+        case .postSendCreatorUpdate(let creatorUpdateId):
+            return "tenants/\(tenantId)/creator/updates/\(creatorUpdateId)/send"
+        case .postCreateCreatorUpdateAttachment(let creatorUpdateId):
+            return "tenants/\(tenantId)/creator/updates/\(creatorUpdateId)/attachments"
         // User Settings
         case .getUserSettingsLayouts:
             let userId = try await getUserId(
