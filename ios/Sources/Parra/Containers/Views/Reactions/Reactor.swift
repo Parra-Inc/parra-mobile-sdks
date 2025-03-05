@@ -23,7 +23,7 @@ class Reactor: ObservableObject {
             _ api: API,
             _ itemId: String,
             _ reactionOptionId: String
-        ) async throws -> String,
+        ) async throws -> Reaction,
         removeReaction: @escaping (
             _ api: API,
             _ itemId: String,
@@ -86,7 +86,7 @@ class Reactor: ObservableObject {
         _ api: API,
         _ itemId: String,
         _ reactionOptionId: String
-    ) async throws -> String
+    ) async throws -> Reaction
     let removeReaction: (
         _ api: API,
         _ itemId: String,
@@ -252,7 +252,7 @@ class Reactor: ObservableObject {
                 let optionId = summary.id
                 assert(optionId != "placeholder")
                 do {
-                    let reactionId = try await _submitReaction(
+                    let reaction = try await _submitReaction(
                         api,
                         feedItemId,
                         optionId,
@@ -265,6 +265,15 @@ class Reactor: ObservableObject {
                         where: { $0.id == optionId }
                     ) {
                         let match = copiedReactions[idx]
+
+                        // When adding a reaction, the user who just reacted
+                        // needs to be added to the reactions list.
+                        let users: [ParraUserNameStub]? = if let user = reaction.user {
+                            (match.users?.elements ?? []) + [user]
+                        } else {
+                            match.users?.elements
+                        }
+
                         copiedReactions[idx] = ParraReactionSummary(
                             id: optionId,
                             firstReactionAt: match.firstReactionAt,
@@ -272,9 +281,9 @@ class Reactor: ObservableObject {
                             type: match.type,
                             value: match.value,
                             count: match.count,
-                            reactionId: reactionId,
+                            reactionId: reaction.id,
                             originalReactionId: nil,
-                            users: match.users?.elements
+                            users: users
                         )
                     }
                 } catch let error as ParraError {
@@ -296,7 +305,7 @@ class Reactor: ObservableObject {
                 assert(optionId != "placeholder")
 
                 do {
-                    let reactionId = try await _submitReaction(
+                    let reaction = try await _submitReaction(
                         api,
                         feedItemId,
                         optionId,
@@ -309,6 +318,15 @@ class Reactor: ObservableObject {
                         .firstIndex(where: { $0.id == optionId })
                     {
                         let match = copiedReactions[idx]
+
+                        // When adding a reaction, the user who just reacted
+                        // needs to be added to the reactions list.
+                        let users: [ParraUserNameStub]? = if let user = reaction.user {
+                            (match.users?.elements ?? []) + [user]
+                        } else {
+                            match.users?.elements
+                        }
+
                         copiedReactions[idx] = ParraReactionSummary(
                             id: optionId,
                             firstReactionAt: match.firstReactionAt,
@@ -316,9 +334,9 @@ class Reactor: ObservableObject {
                             type: match.type,
                             value: match.value,
                             count: match.count,
-                            reactionId: reactionId,
+                            reactionId: reaction.id,
                             originalReactionId: nil,
-                            users: match.users?.elements
+                            users: users
                         )
                     }
                 } catch let error as ParraError {
@@ -411,8 +429,8 @@ class Reactor: ObservableObject {
         _ name: String,
         _ type: ParraReactionType,
         _ value: String
-    ) async throws -> String {
-        let result = try await submitReaction(
+    ) async throws -> Reaction {
+        let reaction = try await submitReaction(
             api,
             itemId,
             summaryId
@@ -428,7 +446,7 @@ class Reactor: ObservableObject {
             ]
         )
 
-        return result
+        return reaction
     }
 
     private func _removeReaction(

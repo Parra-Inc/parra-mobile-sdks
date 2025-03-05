@@ -31,11 +31,13 @@ struct Reaction: Codable, Equatable, Hashable, Identifiable {
     init(
         id: String,
         optionId: String,
-        userId: String
+        userId: String,
+        user: ParraUserNameStub?
     ) {
         self.id = id
         self.optionId = optionId
         self.userId = userId
+        self.user = user
     }
 
     // MARK: - Internal
@@ -44,11 +46,13 @@ struct Reaction: Codable, Equatable, Hashable, Identifiable {
         case id
         case optionId
         case userId
+        case user
     }
 
     let id: String
     let optionId: String
     let userId: String
+    let user: ParraUserNameStub?
 }
 
 public enum ParraReactionType: String, Codable {

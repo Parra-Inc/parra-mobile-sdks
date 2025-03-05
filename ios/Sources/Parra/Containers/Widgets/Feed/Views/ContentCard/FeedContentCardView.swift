@@ -34,12 +34,10 @@ struct FeedContentCardView: View {
                 reactions: reactions ?? [],
                 api: api,
                 submitReaction: { api, itemId, reactionOptionId in
-                    let response = try await api.addFeedReaction(
+                    return try await api.addFeedReaction(
                         feedItemId: itemId,
                         reactionOptionId: reactionOptionId
                     )
-
-                    return response.id
                 },
                 removeReaction: { api, itemId, reactionId in
                     try await api.removeFeedReaction(

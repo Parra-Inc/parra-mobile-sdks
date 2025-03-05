@@ -186,7 +186,7 @@ struct FeedReactionView: View {
                     reactions: ParraReactionSummary.validStates(),
                     api: parra.parraInternal.api,
                     submitReaction: { _, _, _ in
-                        return .uuid
+                        return .validStates()[0]
                     },
                     removeReaction: { _, _, _ in
                     }
