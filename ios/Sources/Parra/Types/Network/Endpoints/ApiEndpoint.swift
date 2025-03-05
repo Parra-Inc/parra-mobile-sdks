@@ -99,6 +99,7 @@ enum ApiEndpoint: Endpoint {
     // Chat
     case getListChatChannels
     case postCreateChannel
+    case getChannel(channelId: String)
     case getPaginateMessages(channelId: String)
     case postSendMessage(channelId: String)
     case postFlagMessage(messageId: String)
@@ -120,7 +121,7 @@ enum ApiEndpoint: Endpoint {
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall,
              .getPaginateComments, .getListChatChannels, .getPaginateMessages,
              .listUserEntitlements, .getFeedItem,
-             .getPaginateCreatorUpdateTemplates:
+             .getPaginateCreatorUpdateTemplates, .getChannel:
 
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
@@ -248,6 +249,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/comments/:commentId/reactions/:reactionId"
         case .postCreateChannel, .getListChatChannels:
             return "tenants/:tenantId/chat/channels"
+        case .getChannel:
+            return "tenants/:tenantId/chat/channels/:channelId"
         case .getPaginateMessages, .postSendMessage:
             return "tenants/:tenantId/chat/channels/:channelId/messages"
         case .deleteMessage:

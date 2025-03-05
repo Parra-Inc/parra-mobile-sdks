@@ -31,6 +31,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
         loader: ParraViewDataLoader<TransformParams, Data, SheetContent>,
         detents: Set<PresentationDetent> = [],
         visibility: Visibility = .automatic,
+        showDismissButton: Bool,
         onDismiss: ((ParraSheetDismissType) -> Void)?
     ) {
         self.name = name
@@ -40,6 +41,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
         self.loader = loader
         self.detents = detents
         self.visibility = visibility
+        self.showDismissButton = showDismissButton
         self.onDismiss = onDismiss
         self.logger = Logger(category: "SheetWithLoader \(name)")
     }
@@ -91,7 +93,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                                 $navigationState.navigationPath,
                                 dismiss
                             )
-                            .if(detents.isEmpty) { ctx in
+                            .if(showDismissButton && detents.isEmpty) { ctx in
                                 ctx.toolbar {
                                     ToolbarItem(placement: .topBarTrailing) {
                                         ParraDismissButton()
@@ -129,6 +131,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     private let loader: ParraViewDataLoader<TransformParams, Data, SheetContent>
     private let detents: Set<PresentationDetent>
     private let visibility: Visibility
+    private let showDismissButton: Bool
     private let onDismiss: ((ParraSheetDismissType) -> Void)?
 
     private let logger: Logger

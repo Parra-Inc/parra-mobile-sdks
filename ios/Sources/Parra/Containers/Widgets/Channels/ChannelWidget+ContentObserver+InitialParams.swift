@@ -11,8 +11,6 @@ extension ChannelWidget.ContentObserver {
     struct InitialParams {
         let config: ParraChannelConfiguration
         let channel: Channel
-        let requiredEntitlement: String
-        let context: String?
         let api: API
     }
 }

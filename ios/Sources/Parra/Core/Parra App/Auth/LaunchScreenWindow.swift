@@ -95,6 +95,10 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     @Environment(\.parra) private var parra
     @Environment(LaunchScreenStateManager.self) private var launchScreenState
 
+    @State private var pushCurrentChannelId = ""
+    @State private var pushCurrentChannelPresentationState = ParraSheetPresentationState
+        .ready
+
     @ViewBuilder
     private func renderFailure(
         with errorInfo: ParraErrorWithUserInfo,
@@ -166,6 +170,28 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                             .presentationDetents([.medium, .large])
                             .presentationDragIndicator(.visible)
                     }
+            }
+            .presentParraChannelWidget(
+                channelId: pushCurrentChannelId,
+                presentationState: $pushCurrentChannelPresentationState
+            )
+            .onReceive(
+                NotificationCenter.default.publisher(
+                    for: Parra.openedChannelPushNotification
+                )
+            ) { notification in
+                guard let channelId = notification.userInfo?["channelId"] as? String else {
+                    return
+                }
+
+                if ParraChannelManager.shared.canPushChannel(with: channelId) {
+                    // There's a channel list presented that will handle the
+                    // presentation without another modal.
+                    return
+                }
+
+                pushCurrentChannelId = channelId
+                pushCurrentChannelPresentationState = .loading
             }
     }
 

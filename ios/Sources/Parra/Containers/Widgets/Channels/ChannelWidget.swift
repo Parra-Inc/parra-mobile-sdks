@@ -490,8 +490,6 @@ struct ChannelWidget: ParraContainer {
                     initialParams: ChannelWidget.ContentObserver.InitialParams(
                         config: .default,
                         channel: .validStates()[0],
-                        requiredEntitlement: "",
-                        context: nil,
                         api: parra.parraInternal.api
                     )
                 ),

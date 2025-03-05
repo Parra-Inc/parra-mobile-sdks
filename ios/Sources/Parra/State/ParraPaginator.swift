@@ -198,44 +198,51 @@ public class ParraPaginator<Item, Context>: ObservableObject
         }
     }
 
+    @MainActor
+    public func loadMissing(
+        since cursor: String?
+    ) async {
+        guard let missingPageFetcher else {
+            return
+        }
+
+        guard !isRefreshing else {
+            logger.trace("Already refreshing. Skipping refresh.")
+
+            return
+        }
+
+        guard !isLoading else {
+            logger.trace("Already loading. Skipping refresh.")
+
+            return
+        }
+
+        logger.trace("Beginning refresh for \(context)")
+
+        isLoading = true
+        error = nil
+
+        do {
+            let missingPage = try await missingPageFetcher(cursor, context)
+
+            await MainActor.run {
+                items.insert(contentsOf: missingPage, at: 0)
+                isLoading = false
+            }
+        } catch {
+            await MainActor.run {
+                self.error = error
+                isLoading = false
+            }
+        }
+    }
+
     public func loadMissing(
         since cursor: String?
     ) {
         Task { @MainActor in
-            guard let missingPageFetcher else {
-                return
-            }
-
-            guard !isRefreshing else {
-                logger.trace("Already refreshing. Skipping refresh.")
-
-                return
-            }
-
-            guard !isLoading else {
-                logger.trace("Already loading. Skipping refresh.")
-
-                return
-            }
-
-            logger.trace("Beginning refresh for \(context)")
-
-            isLoading = true
-            error = nil
-
-            do {
-                let missingPage = try await missingPageFetcher(cursor, context)
-
-                await MainActor.run {
-                    items.insert(contentsOf: missingPage, at: 0)
-                    isLoading = false
-                }
-            } catch {
-                await MainActor.run {
-                    self.error = error
-                    isLoading = false
-                }
-            }
+            await loadMissing(since: cursor)
         }
     }
 

@@ -9,6 +9,14 @@ import SwiftUI
 
 private let logger = Logger()
 
+struct ChannelParams: Equatable {
+    let channel: Channel
+}
+
+struct ChannelTransformParams: Equatable {
+    let channelId: String
+}
+
 struct ChannelListParams: Equatable {
     enum AutoPresentationMode: Equatable {
         case paywall(
@@ -56,6 +64,37 @@ extension ParraViewDataLoader {
                             requiredEntitlement: params.requiredEntitlement,
                             context: params.context,
                             autoPresentation: params.autoPresentation,
+                            api: parra.parraInternal.api
+                        ),
+                        config: config,
+                        contentTransformer: nil,
+                        navigationPath: navigationPath
+                    )
+
+                return container
+            }
+        )
+    }
+
+    static func channelLoader(
+        config: ParraChannelConfiguration
+    ) -> ParraViewDataLoader<
+        ChannelTransformParams,
+        ChannelParams,
+        ChannelWidget
+    > {
+        return ParraViewDataLoader<
+            ChannelTransformParams,
+            ChannelParams,
+            ChannelWidget
+        >(
+            renderer: { parra, params, navigationPath, _ in
+                let container: ChannelWidget = parra.parraInternal
+                    .containerRenderer
+                    .renderContainer(
+                        params: ChannelWidget.ContentObserver.InitialParams(
+                            config: config,
+                            channel: params.channel,
                             api: parra.parraInternal.api
                         ),
                         config: config,

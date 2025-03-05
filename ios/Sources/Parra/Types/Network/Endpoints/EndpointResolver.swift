@@ -233,6 +233,8 @@ enum EndpointResolver {
         // Chat
         case .postCreateChannel, .getListChatChannels:
             return "tenants/\(tenantId)/chat/channels"
+        case .getChannel(let channelId):
+            return "tenants/\(tenantId)/chat/channels/\(channelId)"
         case .getPaginateMessages(let channelId), .postSendMessage(let channelId):
             return "tenants/\(tenantId)/chat/channels/\(channelId)/messages"
         case .deleteMessage(let messageId):

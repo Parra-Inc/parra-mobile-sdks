@@ -14,72 +14,98 @@ extension ParraPushManager {
     func handleNotificationActivation(
         _ response: UNNotificationResponse
     ) async {
-        logger.info(
-            "Attempting to process push notification with app in background"
-        )
+        do {
+            logger.info(
+                "Attempting to handle actioned push notification",
+                [
+                    "actionId": response.actionIdentifier,
+                    "requestId": response.notification.request.identifier
+                ]
+            )
 
-        guard let payload = ParraPushPayload(
-            userInfo: response.notification.request.content.userInfo
-        ) else {
-            return
-        }
+            let payload = try ParraPushPayload.from(
+                userInfo: response.notification.request.content.userInfo
+            )
 
-        switch payload.type {
-        case .chatMessage:
-            break
+            switch payload.data {
+            case .chatMessage(let data):
+                await ParraNotificationCenter.default.postAsync(
+                    name: Parra.openedChannelPushNotification,
+                    object: nil,
+                    userInfo: [
+                        "channelId": data.channelId,
+                        "messageId": data.id
+                    ]
+                )
+            }
+        } catch {
+            logger.error("Error handling notification action", error)
         }
     }
 
     func handleNotificationPresentation(
         _ notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        logger.info(
-            "Attempting to process push notification with app in foreground"
-        )
+        do {
+            logger.info(
+                "Attempting to present push notification",
+                [
+                    "requestId": notification.request.identifier
+                ]
+            )
 
-        guard let payload = ParraPushPayload(
-            userInfo: notification.request.content.userInfo
-        ) else {
+            let payload = try ParraPushPayload.from(
+                userInfo: notification.request.content.userInfo
+            )
+
+            switch payload.data {
+            case .chatMessage(let data):
+                return await handleNewChatMessageNotificationPresentation(
+                    with: data
+                )
+            }
+        } catch {
+            logger.error("Error handling notification presentation", error)
+
             return await defaultNotificationPresentationOptions()
-        }
-
-        switch payload.type {
-        case .chatMessage:
-            return await handleNewChatMessage(with: payload.data)
         }
     }
 
-    private func handleNewChatMessage(
-        with data: [String: Any]
+    private func handleNewChatMessageNotificationPresentation(
+        with data: PushChatMessageData
     ) async -> UNNotificationPresentationOptions {
-        // Also contains "id" for message id.
-
-        // TODO: If looking at a channel list that contains the channel id, push to the channel
-        // TODO: Present a modal with just the chat.
-
-        guard let channelId = data["channel_id"] as? String else {
-            return await defaultNotificationPresentationOptions()
-        }
-
-        guard let currentChannel = ParraChannelManager.shared.visibleChannelId,
-              currentChannel == channelId else
-        {
-            logger.debug(
-                "Channel notification does not match the currently visible channel"
-            )
-
-            return await defaultNotificationPresentationOptions()
-        }
-
         await ParraNotificationCenter.default.postAsync(
             name: Parra.receivedChannelPushNotification,
             object: nil,
             userInfo: [
-                "channelId": channelId
+                "channelId": data.channelId,
+                "messageId": data.id
             ]
         )
 
-        return []
+        let channelManager = ParraChannelManager.shared
+
+        if let currentChannel = channelManager.visibleChannelId,
+           currentChannel == data.channelId
+        {
+            logger.debug("Channel is visible, don't show notification")
+
+            return []
+        }
+
+        if channelManager.canPushChannel(with: data.channelId) {
+            logger.debug(
+                "Channel list containing channel is visible. Only show banner."
+            )
+
+            return [.banner]
+        }
+
+        logger.debug(
+            "Channel notification does not match the currently visible channel"
+        )
+
+        return await defaultNotificationPresentationOptions()
     }
 
     private func defaultNotificationPresentationOptions() async

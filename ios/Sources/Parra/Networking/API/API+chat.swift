@@ -10,6 +10,25 @@ import Foundation
 extension API {
     // MARK: - Channels
 
+    func getChannel(
+        by channelId: String,
+        lastMessageId: String? = nil
+    ) async throws -> ChannelResponse {
+        var query: [String: String] = [:]
+
+        // The last message id of the most recent message the client has.
+        // All messages after this will be returned if present, otherwise the
+        // most recent 10 messages will be returned.
+        if let lastMessageId {
+            query["last_message_id"] = lastMessageId
+        }
+
+        return try await hitEndpoint(
+            .getChannel(channelId: channelId),
+            queryItems: query
+        )
+    }
+
     func createPaidDmChannel(
         key: String
     ) async throws -> ChannelResponse {

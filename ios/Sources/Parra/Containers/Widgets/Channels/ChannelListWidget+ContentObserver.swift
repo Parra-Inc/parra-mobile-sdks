@@ -44,12 +44,30 @@ extension ChannelListWidget {
                     self?.receiveChannelUpdate(notification)
                 }
             }
+
+            self.channelNotificationObserver = ParraNotificationCenter.default
+                .addObserver(
+                    forName: Parra.receivedChannelPushNotification,
+                    object: nil,
+                    queue: .main
+                ) { [weak self] notification in
+                    Task { @MainActor in
+                        self?.receiveChannelPushNotification(notification)
+                    }
+                }
         }
 
         deinit {
             if let channelObserver {
                 Task { @MainActor in
                     ParraNotificationCenter.default.removeObserver(channelObserver)
+                }
+            }
+
+            if let channelNotificationObserver {
+                Task { @MainActor in
+                    ParraNotificationCenter.default
+                        .removeObserver(channelNotificationObserver)
                 }
             }
         }
@@ -69,7 +87,15 @@ extension ChannelListWidget {
 
         var channels: [Channel]
 
+        func refresh() {
+            Task {
+                await refresh()
+            }
+        }
+
         func refresh() async {
+            logger.debug("Refreshing channels list")
+
             do {
                 let response = try await api.listChatChannels(
                     type: channelType
@@ -112,6 +138,7 @@ extension ChannelListWidget {
 
         private let key: String
         @ObservationIgnored private var channelObserver: NSObjectProtocol?
+        @ObservationIgnored private var channelNotificationObserver: NSObjectProtocol?
 
         private var paginatorSink: AnyCancellable? = nil
 
@@ -148,6 +175,34 @@ extension ChannelListWidget {
                 fromOffsets: IndexSet(integer: matchingChannelIndex),
                 toOffset: 0
             )
+        }
+
+        @MainActor
+        private func receiveChannelPushNotification(
+            _ notification: Notification
+        ) {
+            guard let userInfo = notification.userInfo as? [String: Any] else {
+                return
+            }
+
+            guard let channelId = userInfo["channelId"] as? String else {
+                return
+            }
+
+            if let visibleChannelId = ParraChannelManager.shared.visibleChannelId {
+                if visibleChannelId == channelId {
+                    // The currently visible channel widget was already presented
+                    // and can handle the notification.
+
+                    logger.debug(
+                        "Skipping updating channel list from push notification. Deferring to already visible channel"
+                    )
+
+                    return
+                }
+            }
+
+            refresh()
         }
     }
 }

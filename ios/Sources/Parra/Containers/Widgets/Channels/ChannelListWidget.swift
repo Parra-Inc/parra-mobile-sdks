@@ -86,6 +86,10 @@ struct ChannelListWidget: ParraContainer {
         .environment(componentFactory)
         .environmentObject(contentObserver)
         .onAppear {
+            ParraChannelManager.shared.updateVisibleChannelsListIds(
+                from: channels.wrappedValue
+            )
+
             switch contentObserver.autoPresentation {
             case .paywall:
                 if paywallPresentationState == .ready && !hasPerformedOnAppearAction {
@@ -106,6 +110,40 @@ struct ChannelListWidget: ParraContainer {
                 }
             }
         }
+        .onDisappear {
+            ParraChannelManager.shared.visibleChannelsListIds = nil
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: UIScene.willEnterForegroundNotification
+            )
+        ) { _ in
+            ParraChannelManager.shared.updateVisibleChannelsListIds(
+                from: channels.wrappedValue
+            )
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: UIScene.didEnterBackgroundNotification
+            )
+        ) { _ in
+            ParraChannelManager.shared.visibleChannelsListIds = nil
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: Parra.openedChannelPushNotification
+            )
+        ) { notification in
+            guard let channelId = notification.userInfo?["channelId"] as? String else {
+                return
+            }
+
+            if let match = contentObserver.channels.first(where: { channel in
+                channel.id == channelId
+            }) {
+                navigationPath.append(match)
+            }
+        }
         .navigationTitle(config.navigationTitle)
         .navigationDestination(for: Channel.self) { channel in
             let container: ChannelWidget = parra.parraInternal
@@ -114,8 +152,6 @@ struct ChannelListWidget: ParraContainer {
                     params: ChannelWidget.ContentObserver.InitialParams(
                         config: config.defaultChannelConfig,
                         channel: channel,
-                        requiredEntitlement: contentObserver.requiredEntitlement,
-                        context: contentObserver.context,
                         api: parra.parraInternal.api
                     ),
                     config: config.defaultChannelConfig,
@@ -302,8 +338,6 @@ struct ChannelListWidget: ParraContainer {
                     initialParams: ChannelWidget.ContentObserver.InitialParams(
                         config: .default,
                         channel: .validStates()[0],
-                        requiredEntitlement: "",
-                        context: nil,
                         api: parra.parraInternal.api
                     )
                 ),

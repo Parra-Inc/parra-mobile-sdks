@@ -23,8 +23,6 @@ extension ChannelWidget {
             self.channel = initialParams.channel
             self.config = initialParams.config
             self.api = initialParams.api
-            self.requiredEntitlement = initialParams.requiredEntitlement
-            self.context = initialParams.context
 
             self.content = Content(
                 emptyStateView: initialParams.config.emptyStateContent,
@@ -82,8 +80,6 @@ extension ChannelWidget {
         let api: API
 
         var channel: Channel
-        let requiredEntitlement: String
-        let context: String?
         let config: ParraChannelConfiguration
 
         var messagePaginator: ParraPaginator<
@@ -127,8 +123,14 @@ extension ChannelWidget {
             messagePaginator.refresh()
         }
 
-        @MainActor
         func checkForNewMessages() {
+            Task { @MainActor in
+                await checkForNewMessages()
+            }
+        }
+
+        @MainActor
+        func checkForNewMessages() async {
             logger.trace("Checking for new messages")
 
             let cursor = messagePaginator.items.first?.createdAt
@@ -139,7 +141,7 @@ extension ChannelWidget {
                     )
                 )
 
-            messagePaginator.loadMissing(since: cursor)
+            await messagePaginator.loadMissing(since: cursor)
         }
 
         @MainActor
@@ -326,7 +328,14 @@ extension ChannelWidget {
                     "Checking for new messages in response to push notification"
                 )
 
-                checkForNewMessages()
+                Task {
+                    // Get the most recent messages, then broadcast the change
+                    // so that the list presenting this channel's preview is
+                    // up to date.
+                    await checkForNewMessages()
+
+                    broadcastChanges()
+                }
             }
         }
 

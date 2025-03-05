@@ -48,6 +48,28 @@ final class ParraChannelManager {
     /// The channel that is currently being viewed by the user.
     var visibleChannelId: String?
 
+    var visibleChannelsListIds: [String]?
+
+    /// Whether a channel list capable of pushing to a supplied channel is
+    /// currently visible.
+    func canPushChannel(with id: String) -> Bool {
+        guard let visibleChannelsListIds else {
+            return false
+        }
+
+        return visibleChannelsListIds.contains(id)
+    }
+
+    func updateVisibleChannelsListIds(
+        from channels: [Channel]
+    ) {
+        if channels.isEmpty {
+            visibleChannelsListIds = nil
+        } else {
+            visibleChannelsListIds = channels.map(\.id)
+        }
+    }
+
     func newestViewedMessage(
         for channel: Channel
     ) -> ChannelInfo.ViewedMessage? {

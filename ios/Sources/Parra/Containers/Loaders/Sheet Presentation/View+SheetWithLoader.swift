@@ -46,6 +46,7 @@ public extension View {
         with loader: ParraViewDataLoader<TransformParams, Data, SheetContent>,
         detents: Set<PresentationDetent> = [],
         visibility: Visibility = .automatic,
+        showDismissButton: Bool = true,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View where SheetContent: View {
         return modifier(
@@ -57,6 +58,7 @@ public extension View {
                 loader: loader,
                 detents: detents,
                 visibility: visibility,
+                showDismissButton: showDismissButton,
                 onDismiss: onDismiss
             )
         )
