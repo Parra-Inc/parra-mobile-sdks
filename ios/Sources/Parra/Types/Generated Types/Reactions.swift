@@ -107,6 +107,36 @@ public struct ParraReactionOptionGroup: Codable, Equatable, Hashable, Identifiab
 }
 
 struct ParraUserNameStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    init(id: String, name: String) {
+        self.id = id
+        self.name = name
+    }
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.id = try container.decode(String.self, forKey: .id)
+
+        if let name = try container.decodeIfPresent(
+            String.self,
+            forKey: .name
+        ) {
+            self.name = name
+        } else {
+            if let first = id.split(separator: "-").first,
+               let num = Int(first, radix: 16)
+            {
+                self.name = "User \(num)"
+            } else {
+                self.name = "Unknown User"
+            }
+        }
+    }
+
+    // MARK: - Internal
+
     let id: String
     let name: String
 }
