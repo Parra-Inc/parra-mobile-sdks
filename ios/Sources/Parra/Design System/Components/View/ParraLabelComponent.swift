@@ -25,45 +25,62 @@ public struct ParraLabelComponent: View {
     public let attributes: ParraAttributes.Label
 
     public var body: some View {
-        Label(
-            title: {
-                Text(content.text)
-                    .applyTextAttributes(
-                        attributes.text,
-                        using: parraTheme
-                    )
-            },
-            icon: {
-                if content.isLoading {
-                    ProgressView()
-                        .tint(attributes.text.color ?? .black)
-                } else {
-                    withContent(
-                        content: content.icon
-                    ) { content in
-                        componentFactory.buildImage(
-                            content: content,
-                            localAttributes: attributes.icon
-                        )
-                        // Need to override resizable modifier from
-                        // general implementation.
-                        .fixedSize()
-                    }
-                }
-            }
-        )
-        .applyFrame(attributes.frame)
-        .applyLabelAttributes(
-            attributes,
-            using: parraTheme
-        )
-        .contentShape(.rect)
+        labelElement
+            .applyFrame(attributes.frame)
+            .applyLabelAttributes(
+                attributes,
+                using: parraTheme
+            )
+            .contentShape(.rect)
     }
 
     // MARK: - Private
 
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.parraComponentFactory) private var componentFactory
+
+    @ViewBuilder private var textElement: some View {
+        Text(content.text)
+            .applyTextAttributes(
+                attributes.text,
+                using: parraTheme
+            )
+    }
+
+    @ViewBuilder private var labelElement: some View {
+        // Avoid using Label when possible since it is heavier to render.
+        if content.isLoading || content.icon != nil {
+            Label(
+                title: {
+                    textElement
+                },
+                icon: {
+                    if content.isLoading {
+                        ProgressView()
+                            .tint(attributes.text.color ?? .black)
+                    } else {
+                        withContent(
+                            content: content.icon
+                        ) { content in
+                            componentFactory.buildImage(
+                                content: content,
+                                localAttributes: attributes.icon
+                            )
+                            // Need to override resizable modifier from
+                            // general implementation.
+                            .fixedSize()
+                        }
+                    }
+                }
+            )
+        } else {
+            Text(content.text)
+                .applyTextAttributes(
+                    attributes.text,
+                    using: parraTheme
+                )
+        }
+    }
 }
 
 #Preview {
