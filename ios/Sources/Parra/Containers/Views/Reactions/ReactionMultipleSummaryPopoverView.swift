@@ -37,24 +37,17 @@ struct ReactionMultipleSummaryPopoverView: View {
                         if let names = namesList(
                             for: reaction.wrappedValue
                         ) {
-                            (
-                                Text(names)
-                                    + Text(
-                                        " reacted with \(reaction.wrappedValue.name)"
-                                    ).foregroundStyle(
-                                        .secondary
-                                    )
-                            )
-                            .applyTextAttributes(
-                                .default(
-                                    with: .callout,
-                                    color: theme.palette.primaryText.toParraColor(),
-                                    alignment: .leading
-                                ),
-                                using: theme
-                            )
-                            .lineLimit(3)
-                            .fixedSize(horizontal: false, vertical: true)
+                            Text(names)
+
+                                .applyTextAttributes(
+                                    .default(
+                                        with: .callout,
+                                        color: theme.palette.primaryText.toParraColor(),
+                                        alignment: .leading
+                                    ),
+                                    using: theme
+                                )
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                 }
