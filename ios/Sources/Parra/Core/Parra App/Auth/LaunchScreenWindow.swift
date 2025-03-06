@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+private let logger = Logger()
+
 @MainActor
 struct LaunchScreenWindow<Content>: View where Content: View {
     // MARK: - Lifecycle
@@ -55,7 +57,16 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     }
 
     var body: some View {
-        view.onChange(
+        view.onReceive(
+            NotificationCenter.default.publisher(
+                for: Parra.cachedChannelPushNotification
+            )
+        ) { _ in
+            if case .complete = launchScreenState.current {
+                handlePushNotificationOpened()
+            }
+        }
+        .onChange(
             of: launchScreenState.current
         ) { oldValue, newValue in
             Logger.trace("Launch screen state changed: \(oldValue) -> \(newValue)")
@@ -78,6 +89,8 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                     object: nil,
                     userInfo: [:]
                 )
+
+                handlePushNotificationOpened()
             default:
                 break
             }
@@ -98,6 +111,16 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     @State private var pushCurrentChannelId = ""
     @State private var pushCurrentChannelPresentationState = ParraSheetPresentationState
         .ready
+
+    private func handlePushNotificationOpened() {
+        if let cachedNotification = parra.push.openedNotificationResponse {
+            logger.debug(
+                "Cached push notification response present. Activating."
+            )
+
+            parra.push.handleNotificationActivation(cachedNotification)
+        }
+    }
 
     @ViewBuilder
     private func renderFailure(

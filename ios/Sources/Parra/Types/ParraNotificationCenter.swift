@@ -26,6 +26,7 @@ class ParraNotificationCenter: NotificationCenterType, @unchecked Sendable {
 
     let underlyingNotificationCenter: NotificationCenter
 
+    @MainActor
     func post(
         name aName: NSNotification.Name,
         object anObject: Any? = nil,

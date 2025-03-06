@@ -131,4 +131,6 @@ public final class ParraPushManager {
 
     let parraInternal: ParraInternal
     let center = UNUserNotificationCenter.current()
+
+    var openedNotificationResponse: UNNotificationResponse?
 }

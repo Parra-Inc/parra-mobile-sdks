@@ -61,6 +61,9 @@ public extension Parra {
     internal static let receivedChannelPushNotification = NSNotification
         .Name("ParraReceivedChannelPushNotification")
 
+    internal static let cachedChannelPushNotification = NSNotification
+        .Name("ParraCachedChannelPushNotification")
+
     internal static let openedChannelPushNotification = NSNotification
         .Name("ParraOpenedChannelPushNotification")
 

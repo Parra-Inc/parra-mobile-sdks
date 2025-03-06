@@ -158,9 +158,9 @@ open class ParraAppDelegate<
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
-        await Parra.default.push.handleNotificationActivation(
-            response
-        )
+        await MainActor.run {
+            Parra.default.push.setNotificationActivation(response)
+        }
     }
 
     open nonisolated func userNotificationCenter(

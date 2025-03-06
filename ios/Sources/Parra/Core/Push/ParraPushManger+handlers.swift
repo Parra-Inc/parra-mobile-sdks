@@ -11,9 +11,27 @@ import UserNotifications
 private let logger = Logger()
 
 extension ParraPushManager {
+    @MainActor
+    func setNotificationActivation(
+        _ response: UNNotificationResponse
+    ) {
+        logger.info(
+            "Caching push notification action for after launch"
+        )
+
+        openedNotificationResponse = response
+
+        ParraNotificationCenter.default.post(
+            name: Parra.cachedChannelPushNotification
+        )
+    }
+
+    @MainActor
     func handleNotificationActivation(
         _ response: UNNotificationResponse
-    ) async {
+    ) {
+        openedNotificationResponse = nil
+
         do {
             logger.info(
                 "Attempting to handle actioned push notification",
@@ -29,9 +47,8 @@ extension ParraPushManager {
 
             switch payload.data {
             case .chatMessage(let data):
-                await ParraNotificationCenter.default.postAsync(
+                ParraNotificationCenter.default.post(
                     name: Parra.openedChannelPushNotification,
-                    object: nil,
                     userInfo: [
                         "channelId": data.channelId,
                         "messageId": data.id
@@ -43,6 +60,7 @@ extension ParraPushManager {
         }
     }
 
+    @MainActor
     func handleNotificationPresentation(
         _ notification: UNNotification
     ) async -> UNNotificationPresentationOptions {

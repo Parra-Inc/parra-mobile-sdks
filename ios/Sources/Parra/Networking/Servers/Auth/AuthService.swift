@@ -424,7 +424,7 @@ final class AuthService {
         ])
 
         if shouldBroadcast {
-            ParraNotificationCenter.default.post(
+            await ParraNotificationCenter.default.postAsync(
                 name: Parra.authenticationStateDidChangeNotification,
                 object: nil,
                 userInfo: [
