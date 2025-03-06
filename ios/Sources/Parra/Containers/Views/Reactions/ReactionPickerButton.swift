@@ -33,7 +33,20 @@ struct ReactionPickerButton: View {
                     toggleAnimation = false
                 }
             } else {
-                isRequiredSignInPresented = true
+                ParraNotificationCenter.default.post(
+                    name: Parra.signInRequiredNotification,
+                    object: ParraAuthenticationFlowConfig(
+                        landingScreen: .default(
+                            .defaultWith(
+                                title: "Sign in First",
+                                subtitle: "You must be signed in to add comments",
+                                using: theme,
+                                componentFactory: componentFactory,
+                                appInfo: appInfo
+                            )
+                        )
+                    )
+                )
             }
         } label: {
             VStack {
@@ -64,29 +77,11 @@ struct ReactionPickerButton: View {
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.impact, trigger: toggleAnimation)
-        .presentParraSignInWidget(
-            isPresented: $isRequiredSignInPresented,
-            config: ParraAuthenticationFlowConfig(
-                landingScreen: .default(
-                    .defaultWith(
-                        title: "Sign in First",
-                        subtitle: "You must be signed in to add reactions",
-                        using: theme,
-                        componentFactory: componentFactory,
-                        appInfo: appInfo
-                    )
-                )
-            ),
-            onDismiss: { type in
-                print("Dismissed \(type)")
-            }
-        )
     }
 
     // MARK: - Private
 
     @State private var toggleAnimation: Bool = .init()
-    @State private var isRequiredSignInPresented: Bool = false
 
     private var reactionOption: ParraReactionOption
     private var showLabels: Bool

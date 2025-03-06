@@ -100,6 +100,9 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     // MARK: - Private
 
     @Environment(\.parraAlertManager) private var alertManager
+    @Environment(\.parraTheme) private var theme
+    @Environment(\.parraAppInfo) private var appInfo
+    @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.openURL) private var openUrl
 
     @ViewBuilder private var content: () -> Content
@@ -117,6 +120,8 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     @State private var pushCurrentFeedItemPresentationState = ParraSheetPresentationState
         .ready
 
+    @State private var presentingSignInSheetConfig: ParraAuthenticationFlowConfig?
+
     @ViewBuilder
     private func renderFailure(
         with errorInfo: ParraErrorWithUserInfo,
@@ -126,7 +131,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
             errorInfo: errorInfo,
             retryHandler: retryHandler
         )
-        .tint(ParraThemeManager.shared.current.palette.primary)
+        .tint(theme.palette.primary)
         .preferredColorScheme(ParraThemeManager.shared.preferredColorScheme)
         .environment(\.parraAppInfo, ParraAppInfo.default)
     }
@@ -150,7 +155,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                 renderLaunchScreen(
                     launchScreenOptions: launchOptions
                 )
-                .tint(ParraThemeManager.shared.current.palette.primary)
+                .tint(theme.palette.primary)
                 .preferredColorScheme(ParraThemeManager.shared.preferredColorScheme)
             }
 
@@ -161,7 +166,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                     .preferredColorScheme(ParraThemeManager.shared.preferredColorScheme)
             }
         }
-        .background(ParraThemeManager.shared.current.palette.primaryBackground)
+        .background(theme.palette.primaryBackground)
     }
 
     @ViewBuilder
@@ -197,6 +202,24 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                 channelId: pushCurrentChannelId,
                 presentationState: $pushCurrentChannelPresentationState
             )
+            .presentParraSignInWidget(
+                config: $presentingSignInSheetConfig
+            )
+            .onReceive(
+                NotificationCenter.default.publisher(
+                    for: Parra.signInRequiredNotification
+                )
+            ) { notification in
+                guard let config = notification.object as? ParraAuthenticationFlowConfig else {
+                    logger.error(
+                        "Received sign in required notification without valid flow config"
+                    )
+
+                    return
+                }
+
+                presentingSignInSheetConfig = config
+            }
             .onReceive(
                 NotificationCenter.default.publisher(
                     for: Parra.openedPushNotification

@@ -67,5 +67,8 @@ public extension Parra {
     internal static let openedPushNotification = NSNotification
         .Name("ParraOpenedPushNotification")
 
+    internal static let signInRequiredNotification = NSNotification
+        .Name("ParraSignInRequiredNotification")
+
     static let authenticationStateKey = "ParraAuthenticationState"
 }

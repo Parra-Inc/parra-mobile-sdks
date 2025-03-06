@@ -27,14 +27,30 @@ struct PickerInlineReactionView: View {
         ) {
             ForEach($reactor.currentReactions) { $reaction in
                 ReactionButtonView(reaction: $reaction) { reacted, summary in
-                    print("Reacting: \(reacted) with \(summary.value)")
-                    if reacted {
-                        reactor.addExistingReaction(
-                            option: summary
-                        )
+                    if authState.isLoggedIn || UIDevice.isPreview {
+                        if reacted {
+                            reactor.addExistingReaction(
+                                option: summary
+                            )
+                        } else {
+                            reactor.removeExistingReaction(
+                                option: summary
+                            )
+                        }
                     } else {
-                        reactor.removeExistingReaction(
-                            option: summary
+                        ParraNotificationCenter.default.post(
+                            name: Parra.signInRequiredNotification,
+                            object: ParraAuthenticationFlowConfig(
+                                landingScreen: .default(
+                                    .defaultWith(
+                                        title: "Sign in First",
+                                        subtitle: "You must be signed in to add reactions",
+                                        using: theme,
+                                        componentFactory: componentFactory,
+                                        appInfo: appInfo
+                                    )
+                                )
+                            )
                         )
                     }
                 }
@@ -46,6 +62,11 @@ struct PickerInlineReactionView: View {
     // MARK: - Private
 
     @StateObject private var reactor: Reactor
+
+    @Environment(\.parraTheme) private var theme
+    @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraAuthState) private var authState
+    @Environment(\.parraAppInfo) private var appInfo
 }
 
 #Preview {

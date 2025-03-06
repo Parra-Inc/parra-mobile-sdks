@@ -56,7 +56,7 @@ struct FeedReactionView: View {
                         } else if authState.isLoggedIn {
                             isReactionPickerPresented = true
                         } else {
-                            isRequiredSignInPresented = true
+                            showLoginScreen()
                         }
                     }
 
@@ -105,23 +105,6 @@ struct FeedReactionView: View {
             context: attachmentPaywall?.context,
             presentationState: $paywallPresentationState
         )
-        .presentParraSignInWidget(
-            isPresented: $isRequiredSignInPresented,
-            config: ParraAuthenticationFlowConfig(
-                landingScreen: .default(
-                    .defaultWith(
-                        title: "Sign in First",
-                        subtitle: "You must be signed in to add reactions",
-                        using: theme,
-                        componentFactory: componentFactory,
-                        appInfo: appInfo
-                    )
-                )
-            ),
-            onDismiss: { type in
-                print("Dismissed \(type)")
-            }
-        )
         .sheet(
             isPresented: $isReactionPickerPresented
         ) {
@@ -146,7 +129,6 @@ struct FeedReactionView: View {
     @Environment(\.parraUserEntitlements) private var userEntitlements
 
     @State private var isReactionPickerPresented: Bool = false
-    @State private var isRequiredSignInPresented: Bool = false
     @State private var paywallPresentationState = ParraSheetPresentationState.ready
 
     @State private var pickerSelectedReaction: ParraReactionOption?
@@ -168,10 +150,27 @@ struct FeedReactionView: View {
                         )
                     }
                 } else {
-                    isRequiredSignInPresented = true
+                    showLoginScreen()
                 }
             }
         }
+    }
+
+    private func showLoginScreen() {
+        ParraNotificationCenter.default.post(
+            name: Parra.signInRequiredNotification,
+            object: ParraAuthenticationFlowConfig(
+                landingScreen: .default(
+                    .defaultWith(
+                        title: "Sign in First",
+                        subtitle: "You must be signed in to add reactions",
+                        using: theme,
+                        componentFactory: componentFactory,
+                        appInfo: appInfo
+                    )
+                )
+            )
+        )
     }
 }
 

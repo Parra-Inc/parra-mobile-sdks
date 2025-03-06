@@ -37,13 +37,30 @@ struct FeedCommentReactionView: View {
 
             ForEach($reactor.firstReactions) { $reaction in
                 ReactionButtonView(reaction: $reaction) { reacted, summary in
-                    if reacted {
-                        reactor.addExistingReaction(
-                            option: summary
-                        )
+                    if authState.isLoggedIn || UIDevice.isPreview {
+                        if reacted {
+                            reactor.addExistingReaction(
+                                option: summary
+                            )
+                        } else {
+                            reactor.removeExistingReaction(
+                                option: summary
+                            )
+                        }
                     } else {
-                        reactor.removeExistingReaction(
-                            option: summary
+                        ParraNotificationCenter.default.post(
+                            name: Parra.signInRequiredNotification,
+                            object: ParraAuthenticationFlowConfig(
+                                landingScreen: .default(
+                                    .defaultWith(
+                                        title: "Sign in First",
+                                        subtitle: "You must be signed in to add reactions",
+                                        using: theme,
+                                        componentFactory: componentFactory,
+                                        appInfo: appInfo
+                                    )
+                                )
+                            )
                         )
                     }
                 }
@@ -87,7 +104,8 @@ struct FeedCommentReactionView: View {
     // MARK: - Private
 
     @Environment(\.parraAuthState) private var authState
-
+    @Environment(\.parraTheme) private var theme
+    @Environment(\.parraAppInfo) private var appInfo
     @Environment(\.parraComponentFactory) private var componentFactory
 
     @Binding private var isReactionPickerPresented: Bool

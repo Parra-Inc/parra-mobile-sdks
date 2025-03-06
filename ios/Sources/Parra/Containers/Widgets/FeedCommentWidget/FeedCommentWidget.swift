@@ -191,30 +191,12 @@ struct FeedCommentWidget: ParraContainer {
             context: contentObserver.attachmentPaywall?.context,
             presentationState: $paywallPresentationState
         )
-        .presentParraSignInWidget(
-            isPresented: $isRequiredSignInPresented,
-            config: ParraAuthenticationFlowConfig(
-                landingScreen: .default(
-                    .defaultWith(
-                        title: "Sign in First",
-                        subtitle: "You must be signed in to add comments",
-                        using: theme,
-                        componentFactory: componentFactory,
-                        appInfo: appInfo
-                    )
-                )
-            ),
-            onDismiss: { type in
-                print("Dismissed \(type)")
-            }
-        )
     }
 
     // MARK: - Private
 
     @State private var headerHeight: CGFloat = 0
     @State private var footerHeight: CGFloat = 0
-    @State private var isRequiredSignInPresented: Bool = false
     @State private var paywallPresentationState = ParraSheetPresentationState.ready
 
     @Environment(\.parraComponentFactory) private var componentFactory
@@ -298,7 +280,20 @@ struct FeedCommentWidget: ParraContainer {
                 DispatchQueue.main.asyncAfter(
                     deadline: .now() + 0.1
                 ) {
-                    isRequiredSignInPresented = true
+                    ParraNotificationCenter.default.post(
+                        name: Parra.signInRequiredNotification,
+                        object: ParraAuthenticationFlowConfig(
+                            landingScreen: .default(
+                                .defaultWith(
+                                    title: "Sign in First",
+                                    subtitle: "You must be signed in to add comments",
+                                    using: theme,
+                                    componentFactory: componentFactory,
+                                    appInfo: appInfo
+                                )
+                            )
+                        )
+                    )
                 }
             }
 
