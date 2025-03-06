@@ -44,7 +44,19 @@ extension JSONDecoder {
         let container = try decoder.singleValueContainer()
         let dateString = try container.decode(String.self)
 
-        if let date = Date.fromIso8601String(dateString) {
+        if let date = Date.fromIso8601String(
+            dateString,
+            formatter: ParraInternal.Constants.Formatters.iso8601Formatter
+        ) {
+            return date
+        }
+
+        // Try again without fractional seconds.
+        if let date = Date.fromIso8601String(
+            dateString,
+            formatter: ParraInternal.Constants.Formatters
+                .iso8601FormatterWithoutFractionalSeconds
+        ) {
             return date
         }
 

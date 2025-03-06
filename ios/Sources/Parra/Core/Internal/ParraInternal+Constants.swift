@@ -38,6 +38,17 @@ extension ParraInternal {
                 return formatter
             }()
 
+            static let iso8601FormatterWithoutFractionalSeconds: ISO8601DateFormatter = {
+                // Format of dates from server: 2024-02-24T20:47:51Z
+
+                let formatter = ISO8601DateFormatter()
+                formatter.formatOptions = [
+                    .withInternetDateTime
+                ]
+
+                return formatter
+            }()
+
             static let dateComponentsFormatter = DateComponentsFormatter()
             static let dateIntervalFormatter = DateIntervalFormatter()
 
