@@ -71,13 +71,6 @@ struct FeedYouTubeVideoDetailView: View {
                     theme.palette.primaryBackground,
                     for: .navigationBar
                 )
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        ShareLink(item: youtubeVideo.url) {
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                    }
-                }
         }
     }
 

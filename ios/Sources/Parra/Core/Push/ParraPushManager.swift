@@ -132,5 +132,7 @@ public final class ParraPushManager {
     let parraInternal: ParraInternal
     let center = UNUserNotificationCenter.current()
 
-    var openedNotificationResponse: UNNotificationResponse?
+    /// The payload of a push notification which was received but hasn't been
+    /// actioned yet. Likely awaiting the app to launch.
+    var pendingNotificationPayload: ParraPushPayload?
 }

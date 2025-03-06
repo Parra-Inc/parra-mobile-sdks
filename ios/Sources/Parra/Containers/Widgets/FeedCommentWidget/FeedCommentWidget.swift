@@ -92,7 +92,7 @@ struct FeedCommentWidget: ParraContainer {
             when: contentObserver.commentPaginator.isShowingPlaceholders
         )
         .emptyPlaceholder(comments) {
-            if !contentObserver.commentPaginator.isLoading {
+            if !contentObserver.commentPaginator.isShowingPlaceholders {
                 componentFactory.buildEmptyState(
                     config: .init(
                         alignment: .center
@@ -103,6 +103,7 @@ struct FeedCommentWidget: ParraContainer {
                 .frame(
                     minHeight: 300
                 )
+                .padding(.horizontal, 30)
             } else {
                 EmptyView()
             }

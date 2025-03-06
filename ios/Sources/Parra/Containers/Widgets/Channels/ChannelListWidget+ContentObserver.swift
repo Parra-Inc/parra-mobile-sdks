@@ -47,7 +47,7 @@ extension ChannelListWidget {
 
             self.channelNotificationObserver = ParraNotificationCenter.default
                 .addObserver(
-                    forName: Parra.receivedChannelPushNotification,
+                    forName: Parra.receivedPushNotification,
                     object: nil,
                     queue: .main
                 ) { [weak self] notification in
@@ -181,16 +181,16 @@ extension ChannelListWidget {
         private func receiveChannelPushNotification(
             _ notification: Notification
         ) {
-            guard let userInfo = notification.userInfo as? [String: Any] else {
+            guard let payload = notification.object as? ParraPushPayload else {
                 return
             }
 
-            guard let channelId = userInfo["channelId"] as? String else {
+            guard case .chatMessage(let chatData) = payload.data else {
                 return
             }
 
             if let visibleChannelId = ParraChannelManager.shared.visibleChannelId {
-                if visibleChannelId == channelId {
+                if visibleChannelId == chatData.channelId {
                     // The currently visible channel widget was already presented
                     // and can handle the notification.
 

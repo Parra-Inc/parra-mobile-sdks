@@ -131,15 +131,19 @@ struct ChannelListWidget: ParraContainer {
         }
         .onReceive(
             NotificationCenter.default.publisher(
-                for: Parra.openedChannelPushNotification
+                for: Parra.openedPushNotification
             )
         ) { notification in
-            guard let channelId = notification.userInfo?["channelId"] as? String else {
+            guard let payload = notification.object as? ParraPushPayload else {
+                return
+            }
+
+            guard case .chatMessage(let chatData) = payload.data else {
                 return
             }
 
             if let match = contentObserver.channels.first(where: { channel in
-                channel.id == channelId
+                channel.id == chatData.channelId
             }) {
                 navigationPath.append(match)
             }

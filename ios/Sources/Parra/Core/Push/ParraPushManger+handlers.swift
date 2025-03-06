@@ -19,45 +19,45 @@ extension ParraPushManager {
             "Caching push notification action for after launch"
         )
 
-        openedNotificationResponse = response
-
-        ParraNotificationCenter.default.post(
-            name: Parra.cachedChannelPushNotification
-        )
-    }
-
-    @MainActor
-    func handleNotificationActivation(
-        _ response: UNNotificationResponse
-    ) {
-        openedNotificationResponse = nil
-
         do {
             logger.info(
-                "Attempting to handle actioned push notification",
+                "Attempting to decode push notification",
                 [
                     "actionId": response.actionIdentifier,
                     "requestId": response.notification.request.identifier
                 ]
             )
 
-            let payload = try ParraPushPayload.from(
+            pendingNotificationPayload = try ParraPushPayload.from(
                 userInfo: response.notification.request.content.userInfo
             )
-
-            switch payload.data {
-            case .chatMessage(let data):
-                ParraNotificationCenter.default.post(
-                    name: Parra.openedChannelPushNotification,
-                    userInfo: [
-                        "channelId": data.channelId,
-                        "messageId": data.id
-                    ]
-                )
-            }
         } catch {
             logger.error("Error handling notification action", error)
+
+            pendingNotificationPayload = nil
         }
+
+        ParraNotificationCenter.default.post(
+            name: Parra.cachedPushNotification
+        )
+    }
+
+    @MainActor
+    func handlePendingNotification() {
+        guard let pendingNotificationPayload else {
+            logger.debug("No notification is currently pending.")
+
+            return
+        }
+
+        logger.debug("Broadcasting notification payload")
+
+        ParraNotificationCenter.default.post(
+            name: Parra.openedPushNotification,
+            object: pendingNotificationPayload
+        )
+
+        self.pendingNotificationPayload = nil
     }
 
     @MainActor
@@ -77,6 +77,8 @@ extension ParraPushManager {
             )
 
             switch payload.data {
+            case .url, .feedItem:
+                return await defaultNotificationPresentationOptions()
             case .chatMessage(let data):
                 return await handleNewChatMessageNotificationPresentation(
                     with: data
@@ -93,7 +95,7 @@ extension ParraPushManager {
         with data: PushChatMessageData
     ) async -> UNNotificationPresentationOptions {
         await ParraNotificationCenter.default.postAsync(
-            name: Parra.receivedChannelPushNotification,
+            name: Parra.receivedPushNotification,
             object: nil,
             userInfo: [
                 "channelId": data.channelId,

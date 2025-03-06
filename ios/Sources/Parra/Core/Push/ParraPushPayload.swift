@@ -15,6 +15,14 @@ struct PushChatMessageData: Decodable, Equatable, Hashable, Sendable, Identifiab
     let channelId: String
 }
 
+struct PushUrlData: Decodable, Equatable, Hashable, Sendable {
+    let url: URL
+}
+
+struct PushFeedItemData: Decodable, Equatable, Hashable, Sendable {
+    let feedItemId: String
+}
+
 struct ParraPushPayload: Decodable {
     // MARK: - Lifecycle
 
@@ -28,6 +36,14 @@ struct ParraPushPayload: Decodable {
             self.data = try .chatMessage(
                 container.decode(PushChatMessageData.self, forKey: .data)
             )
+        case .url:
+            self.data = try .url(
+                container.decode(PushUrlData.self, forKey: .data)
+            )
+        case .feedItem:
+            self.data = try .feedItem(
+                container.decode(PushFeedItemData.self, forKey: .data)
+            )
         }
     }
 
@@ -40,10 +56,14 @@ struct ParraPushPayload: Decodable {
 
     enum PushType: String, Decodable {
         case chatMessage = "chat-message"
+        case url
+        case feedItem = "feed-item"
     }
 
     enum PushData: Decodable {
         case chatMessage(PushChatMessageData)
+        case url(PushUrlData)
+        case feedItem(PushFeedItemData)
     }
 
     let type: PushType

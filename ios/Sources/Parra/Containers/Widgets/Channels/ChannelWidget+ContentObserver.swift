@@ -63,8 +63,7 @@ extension ChannelWidget {
             }
 
             self.channelObserver = ParraNotificationCenter.default.addObserver(
-                forName: Parra.receivedChannelPushNotification,
-                object: nil,
+                forName: Parra.receivedPushNotification,
                 queue: .main
             ) { [weak self] notification in
                 Task { @MainActor in
@@ -315,15 +314,15 @@ extension ChannelWidget {
         private func receiveChannelUpdate(
             _ notification: Notification
         ) {
-            guard let userInfo = notification.userInfo as? [String: Any] else {
+            guard let payload = notification.object as? ParraPushPayload else {
                 return
             }
 
-            guard let channelId = userInfo["channelId"] as? String else {
+            guard case .chatMessage(let chatData) = payload.data else {
                 return
             }
 
-            if channelId == channel.id {
+            if chatData.channelId == channel.id {
                 logger.debug(
                     "Checking for new messages in response to push notification"
                 )

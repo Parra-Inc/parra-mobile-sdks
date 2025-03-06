@@ -59,11 +59,11 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     var body: some View {
         view.onReceive(
             NotificationCenter.default.publisher(
-                for: Parra.cachedChannelPushNotification
+                for: Parra.cachedPushNotification
             )
         ) { _ in
             if case .complete = launchScreenState.current {
-                handlePushNotificationOpened()
+                parra.push.handlePendingNotification()
             }
         }
         .onChange(
@@ -90,7 +90,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                     userInfo: [:]
                 )
 
-                handlePushNotificationOpened()
+                parra.push.handlePendingNotification()
             default:
                 break
             }
@@ -100,6 +100,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     // MARK: - Private
 
     @Environment(\.parraAlertManager) private var alertManager
+    @Environment(\.openURL) private var openUrl
 
     @ViewBuilder private var content: () -> Content
 
@@ -112,15 +113,9 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     @State private var pushCurrentChannelPresentationState = ParraSheetPresentationState
         .ready
 
-    private func handlePushNotificationOpened() {
-        if let cachedNotification = parra.push.openedNotificationResponse {
-            logger.debug(
-                "Cached push notification response present. Activating."
-            )
-
-            parra.push.handleNotificationActivation(cachedNotification)
-        }
-    }
+    @State private var pushCurrentFeedItemId = ""
+    @State private var pushCurrentFeedItemPresentationState = ParraSheetPresentationState
+        .ready
 
     @ViewBuilder
     private func renderFailure(
@@ -194,27 +189,40 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                             .presentationDragIndicator(.visible)
                     }
             }
+            .presentParraFeedItem(
+                by: pushCurrentFeedItemId,
+                presentationState: $pushCurrentFeedItemPresentationState
+            )
             .presentParraChannelWidget(
                 channelId: pushCurrentChannelId,
                 presentationState: $pushCurrentChannelPresentationState
             )
             .onReceive(
                 NotificationCenter.default.publisher(
-                    for: Parra.openedChannelPushNotification
+                    for: Parra.openedPushNotification
                 )
             ) { notification in
-                guard let channelId = notification.userInfo?["channelId"] as? String else {
+                guard let payload = notification.object as? ParraPushPayload else {
                     return
                 }
 
-                if ParraChannelManager.shared.canPushChannel(with: channelId) {
-                    // There's a channel list presented that will handle the
-                    // presentation without another modal.
-                    return
+                switch payload.data {
+                case .chatMessage(let chatData):
+                    if ParraChannelManager.shared.canPushChannel(
+                        with: chatData.channelId
+                    ) {
+                        // There's a channel list presented that will handle the
+                        // presentation without another modal.
+                    } else {
+                        pushCurrentChannelId = chatData.channelId
+                        pushCurrentChannelPresentationState = .loading
+                    }
+                case .url(let urlData):
+                    openUrl.callAsFunction(urlData.url)
+                case .feedItem(let feedItemData):
+                    pushCurrentFeedItemId = feedItemData.feedItemId
+                    pushCurrentFeedItemPresentationState = .loading
                 }
-
-                pushCurrentChannelId = channelId
-                pushCurrentChannelPresentationState = .loading
             }
     }
 

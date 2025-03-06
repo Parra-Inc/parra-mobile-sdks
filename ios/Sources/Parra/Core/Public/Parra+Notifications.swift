@@ -58,14 +58,14 @@ public extension Parra {
     internal static let channelDidUpdateNotification = NSNotification
         .Name("ParraChannelDidUpdateNotification")
 
-    internal static let receivedChannelPushNotification = NSNotification
-        .Name("ParraReceivedChannelPushNotification")
+    internal static let receivedPushNotification = NSNotification
+        .Name("ParraReceivedPushNotification")
 
-    internal static let cachedChannelPushNotification = NSNotification
-        .Name("ParraCachedChannelPushNotification")
+    internal static let cachedPushNotification = NSNotification
+        .Name("ParraCachedPushNotification")
 
-    internal static let openedChannelPushNotification = NSNotification
-        .Name("ParraOpenedChannelPushNotification")
+    internal static let openedPushNotification = NSNotification
+        .Name("ParraOpenedPushNotification")
 
     static let authenticationStateKey = "ParraAuthenticationState"
 }

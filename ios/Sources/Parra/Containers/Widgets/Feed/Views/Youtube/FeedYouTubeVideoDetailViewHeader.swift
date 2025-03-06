@@ -193,6 +193,12 @@ struct FeedYouTubeVideoDetailViewHeader: View {
                     )
                 }
             }
+
+            Spacer()
+
+            ShareLink(item: youtubeVideo.url) {
+                Image(systemName: "square.and.arrow.up")
+            }
         }
     }
 

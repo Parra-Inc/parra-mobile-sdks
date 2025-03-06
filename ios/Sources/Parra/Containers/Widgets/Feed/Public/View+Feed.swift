@@ -11,6 +11,45 @@ public extension View {
     /// Automatically fetches the feed with the provided id and
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
+    func presentParraFeedItem(
+        by feedItemId: String,
+        presentationState: Binding<ParraSheetPresentationState>,
+        config: ParraFeedConfiguration = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
+    ) -> some View {
+        let transformParams = FeedItemTransformParams(
+            feedItemId: feedItemId
+        )
+
+        let transformer: ParraViewDataLoader<
+            FeedItemTransformParams,
+            FeedItemParams,
+            ParraFeedItemView
+        >.Transformer = { parra, transformParams in
+            let feedItem = try await parra.parraInternal.api.getFeedItem(
+                by: transformParams.feedItemId
+            )
+
+            return FeedItemParams(
+                feedItem: feedItem
+            )
+        }
+
+        return loadAndPresentSheet(
+            name: "feed",
+            presentationState: presentationState,
+            transformParams: transformParams,
+            transformer: transformer,
+            with: .feedItemLoader(
+                config: config
+            ),
+            onDismiss: onDismiss
+        )
+    }
+
+    /// Automatically fetches the feed with the provided id and
+    /// presents it in a sheet based on the value of the `isPresented` binding.
+    @MainActor
     func presentParraFeedWidget(
         by feedId: String,
         presentationState: Binding<ParraSheetPresentationState>,

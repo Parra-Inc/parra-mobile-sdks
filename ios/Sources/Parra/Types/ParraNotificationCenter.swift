@@ -71,8 +71,8 @@ class ParraNotificationCenter: NotificationCenterType, @unchecked Sendable {
 
     func addObserver(
         forName name: NSNotification.Name?,
-        object obj: Any?,
-        queue: OperationQueue?,
+        object obj: Any? = nil,
+        queue: OperationQueue? = nil,
         using block: @escaping @Sendable (Notification) -> Void
     ) -> NSObjectProtocol {
         underlyingNotificationCenter.addObserver(
