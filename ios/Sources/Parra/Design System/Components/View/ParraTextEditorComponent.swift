@@ -45,6 +45,18 @@ public struct ParraTextEditorComponent: View {
                         Constant.contentInsets,
                         for: .automatic
                     )
+                    .contentMargins(
+                        .all,
+                        EdgeInsets(
+                            top: Constant.contentInsets.top,
+                            leading: Constant.contentInsets.leading,
+                            bottom: config.showCharacterCountLabel ? Constant
+                                .contentInsets.bottom + 22 : Constant.contentInsets
+                                .bottom,
+                            trailing: Constant.contentInsets.trailing
+                        ),
+                        for: .scrollIndicators
+                    )
                     .onChange(of: text) { _, newValue in
                         hasReceivedInput = true
 
