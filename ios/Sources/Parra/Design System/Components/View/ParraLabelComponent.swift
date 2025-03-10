@@ -74,7 +74,9 @@ public struct ParraLabelComponent: View {
                 }
             )
         } else {
-            Text(content.text)
+            // LocalizedStringKey variant is required to text with links to be
+            // automatically tappable.
+            Text(LocalizedStringKey(content.text))
                 .applyTextAttributes(
                     attributes.text,
                     using: parraTheme
