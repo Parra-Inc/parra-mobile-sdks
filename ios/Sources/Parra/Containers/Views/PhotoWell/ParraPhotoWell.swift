@@ -147,8 +147,6 @@ public struct ParraPhotoWell: View {
                 Text("This will delete your existing profile picture")
             }
         )
-        // TODO: Would be nice if this allowed us to specify that we don't want
-        // location metadata.
         .photosPicker(
             isPresented: $showingPhotoPicker,
             selection: $selectedPhoto,
