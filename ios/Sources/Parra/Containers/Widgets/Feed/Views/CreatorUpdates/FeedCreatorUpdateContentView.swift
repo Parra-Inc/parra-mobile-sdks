@@ -36,25 +36,24 @@ struct FeedCreatorUpdateContentView: View {
             }
 
             withContent(content: creatorUpdate.body) { content in
-                componentFactory.buildLabel(
-                    text: content,
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            style: .body
-                        ),
-                        padding: .custom(
-                            EdgeInsets(top: 3, leading: 0, bottom: 6, trailing: 0)
-                        ),
-                        frame: .flexible(
-                            FlexibleFrameAttributes(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                        )
+                Text(
+                    content.attributedStringWithHighlightedLinks(
+                        tint: theme.palette.primary.toParraColor(),
+                        font: .system(.callout),
+                        foregroundColor: theme.palette.secondaryText
+                            .toParraColor()
                     )
                 )
                 .textSelection(.enabled)
+                .font(.body)
+                .padding(.top, 3)
+                .padding(.bottom, 6)
+                .tint(theme.palette.primary.toParraColor())
                 .lineLimit(lineLimit)
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
             }
         }
     }
