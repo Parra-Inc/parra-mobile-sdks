@@ -79,4 +79,14 @@ public struct ParraTextInputContent {
     public let helper: ParraLabelContent?
     public internal(set) var errorMessage: String?
     public internal(set) var textChanged: ((String?) -> Void)?
+
+    // MARK: - Internal
+
+    var isEmpty: Bool {
+        guard let title else {
+            return true
+        }
+
+        return title.text.isEmpty
+    }
 }
