@@ -53,6 +53,7 @@ struct FeedCreatorUpdateContentView: View {
                         )
                     )
                 )
+                .textSelection(.enabled)
                 .lineLimit(lineLimit)
             }
         }

@@ -116,6 +116,7 @@ struct FeedYouTubeVideoDetailViewHeader: View {
                             .toParraColor()
                     )
                 )
+                .textSelection(.enabled)
                 .padding(.top, 12)
                 .tint(theme.palette.primary.toParraColor())
             } label: {
