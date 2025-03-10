@@ -221,9 +221,7 @@ private struct TestContentView: View {
                                 do {
                                     try await unlock()
                                 } catch {
-                                    print(
-                                        "Failed to unlock! \(error.localizedDescription)"
-                                    )
+                                    logger.error("Failed to unlock!", error)
                                 }
                             }
                         } label: {
