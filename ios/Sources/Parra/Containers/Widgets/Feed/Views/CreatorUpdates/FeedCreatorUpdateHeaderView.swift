@@ -51,6 +51,7 @@ struct FeedCreatorUpdateHeaderView: View {
             if let avatar = sender.avatar {
                 componentFactory.buildAsyncImage(
                     config: ParraAsyncImageConfig(
+                        contentMode: .fill,
                         cachePolicy: .returnCacheDataElseLoad
                     ),
                     content: ParraAsyncImageContent(
