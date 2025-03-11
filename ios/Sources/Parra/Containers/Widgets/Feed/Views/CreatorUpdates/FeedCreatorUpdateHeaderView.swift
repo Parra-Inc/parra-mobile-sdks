@@ -24,6 +24,7 @@ struct FeedCreatorUpdateHeaderView: View {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.redactionReasons) private var redactionReasons
 
     private var createdAt: some View {
         componentFactory.buildLabel(
@@ -79,14 +80,13 @@ struct FeedCreatorUpdateHeaderView: View {
                         )
                     )
 
-                    if sender.verified == true {
+                    if sender.verified == true && redactionReasons.isEmpty {
                         componentFactory.buildImage(
                             content: .name("CheckBadgeSolid", .module, .template),
-                            localAttributes: ParraAttributes
-                                .Image(
-                                    tint: .blue,
-                                    size: CGSize(width: 20, height: 20)
-                                )
+                            localAttributes: ParraAttributes.Image(
+                                tint: .blue,
+                                size: CGSize(width: 20, height: 20)
+                            )
                         )
                     }
 
