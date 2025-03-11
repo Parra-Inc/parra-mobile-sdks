@@ -27,6 +27,16 @@ struct MultipartFormField {
 
     init(
         name: String,
+        value: String
+    ) {
+        self.name = name
+        self.fileName = nil
+        self.value = value.data(using: .utf8)!
+        self.contentType = .plainText
+    }
+
+    init(
+        name: String,
         fileName: String? = nil,
         value: Data,
         contentType: Mimetype
@@ -40,7 +50,7 @@ struct MultipartFormField {
     // MARK: - Internal
 
     let name: String
-    let fileName: String
+    let fileName: String?
     let value: Data
     let contentType: Mimetype
 
@@ -54,8 +64,19 @@ struct MultipartFormField {
         )
 
         data.append(
-            "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(fileName)\"\r\n"
+            "Content-Disposition: form-data; name=\"\(name)\""
                 .data(using: .utf8)!
+        )
+
+        if let fileName {
+            data.append(
+                "; filename=\"\(fileName)\""
+                    .data(using: .utf8)!
+            )
+        }
+
+        data.append(
+            "\r\n".data(using: .utf8)!
         )
 
         data.append(
