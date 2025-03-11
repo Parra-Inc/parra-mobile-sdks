@@ -17,7 +17,7 @@ extension API {
         with pngData: Data,
         group: String? = nil
     ) async throws -> ParraImageAsset {
-        var formFields: [MultipartFormField] = try [
+        var formFields: [MultipartFormField] = [
             MultipartFormField(
                 name: "image",
                 fileName: "image.png",
@@ -27,7 +27,7 @@ extension API {
         ]
 
         if let group, !group.isEmpty {
-            try formFields.append(
+            formFields.append(
                 MultipartFormField(
                     name: "group", // server side requirement
                     value: group

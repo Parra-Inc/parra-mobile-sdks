@@ -104,6 +104,8 @@ extension AuthService {
                 "notInteractive"
             case .unknown:
                 "unknown"
+            @unknown default:
+                "unknown-default"
             }
 
             logger.debug("Authorization failure with code: \(authErrorName)")
