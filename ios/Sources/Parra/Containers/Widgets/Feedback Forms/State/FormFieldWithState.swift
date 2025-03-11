@@ -58,8 +58,10 @@ struct FormFieldWithState: Identifiable {
         case .feedbackFormTextFieldData(let data):
             var rules = [ParraTextValidatorRule]()
 
-            if let minCharacters = data.minCharacters, field.required == true {
+            if let minCharacters = data.minCharacters {
                 rules.append(.minLength(minCharacters))
+            } else if field.required == true {
+                rules.append(.minLength(1))
             }
 
             if let maxCharacters = data.maxCharacters {
@@ -67,7 +69,7 @@ struct FormFieldWithState: Identifiable {
             }
 
             let errorMessage = TextValidator.validate(
-                text: value,
+                text: value?.trimmingCharacters(in: .whitespacesAndNewlines),
                 against: rules
             )
 
