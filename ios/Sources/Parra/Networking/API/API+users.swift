@@ -6,12 +6,42 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import CoreImage
 import Foundation
 import UIKit
 
 private let logger = Logger()
 
 extension API {
+    func uploadAsset(
+        with pngData: Data,
+        group: String? = nil
+    ) async throws -> ParraImageAsset {
+        var formFields: [MultipartFormField] = try [
+            MultipartFormField(
+                name: "image",
+                fileName: "image.png",
+                value: pngData,
+                contentType: .imagePng
+            )
+        ]
+
+        if let group, !group.isEmpty {
+            try formFields.append(
+                MultipartFormField(
+                    name: "group", // server side requirement
+                    value: group
+                )
+            )
+        }
+
+        return try await hitUploadEndpoint(
+            .postCreateAsset,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+            formFields: formFields
+        )
+    }
+
     func uploadAvatar(
         image: UIImage
     ) async throws -> ParraImageAsset {

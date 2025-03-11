@@ -9,6 +9,9 @@
 import Foundation
 
 enum ApiEndpoint: Endpoint {
+    // Assets
+    case postCreateAsset
+
     // Auth
     case postLogin
     case postLogout
@@ -132,7 +135,8 @@ enum ApiEndpoint: Endpoint {
              .postFeedCommentReaction, .postCreateChannel, .postSendMessage,
              .postFlagMessage, .postLockChannel, .postUnlockChannel,
              .postLeaveChannel, .postCreateCreatorUpdate,
-             .postSendCreatorUpdate, .postCreateCreatorUpdateAttachment:
+             .postSendCreatorUpdate, .postCreateCreatorUpdateAttachment,
+             .postCreateAsset:
 
             return .post
         case .updateUserInfo, .putReplaceUserProperties,
@@ -158,6 +162,9 @@ enum ApiEndpoint: Endpoint {
 
     var slug: String {
         switch self {
+        // Assets
+        case .postCreateAsset:
+            return "tenants/:tenantId/assets/images"
         case .getAppInfo: // auth is optional for this one.
             return "tenants/:tenantId/applications/:applicationId/app-info"
         case .postLogin:

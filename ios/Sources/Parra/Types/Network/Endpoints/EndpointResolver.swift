@@ -89,6 +89,9 @@ enum EndpointResolver {
         let applicationId = appState.applicationId
 
         switch apiEndpoint {
+        // Assets
+        case .postCreateAsset:
+            return "tenants/\(tenantId)/assets/images"
         case .postLogin:
             return "tenants/\(tenantId)/auth/login"
         case .postLogout:
