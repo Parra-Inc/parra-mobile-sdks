@@ -28,28 +28,9 @@ public struct ParraAsyncImageComponent: View, Equatable {
     public let attributes: ParraAttributes.AsyncImage
 
     public var body: some View {
-        CachedAsyncImage(
-            urlRequest: URLRequest(
-                url: content.url,
-                cachePolicy: config.cachePolicy,
-                timeoutInterval: config.timeoutInterval
-            ),
-            urlCache: URLSessionConfiguration.apiConfiguration
-                .urlCache ?? .shared,
-            transaction: Transaction(
-                animation: .easeIn(duration: 0.35)
-            ),
-            content: { phase in
-                imageContent(for: phase)
-                    .transition(.opacity)
-                    .aspectRatio(
-                        config.aspectRatio,
-                        contentMode: config.contentMode
-                    )
-            }
-        )
-        .applyAsyncImageAttributes(attributes, using: parraTheme)
-        .clipped()
+        image
+            .applyAsyncImageAttributes(attributes, using: parraTheme)
+            .clipped()
     }
 
     public static func == (
@@ -66,6 +47,34 @@ public struct ParraAsyncImageComponent: View, Equatable {
     // MARK: - Private
 
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.redactionReasons) private var redactionReasons
+
+    @ViewBuilder private var image: some View {
+        if redactionReasons.isEmpty {
+            CachedAsyncImage(
+                urlRequest: URLRequest(
+                    url: content.url,
+                    cachePolicy: config.cachePolicy,
+                    timeoutInterval: config.timeoutInterval
+                ),
+                urlCache: URLSessionConfiguration.apiConfiguration
+                    .urlCache ?? .shared,
+                transaction: Transaction(
+                    animation: .easeIn(duration: 0.35)
+                ),
+                content: { phase in
+                    imageContent(for: phase)
+                        .transition(.opacity)
+                        .aspectRatio(
+                            config.aspectRatio,
+                            contentMode: config.contentMode
+                        )
+                }
+            )
+        } else {
+            Color.gray
+        }
+    }
 
     @MainActor
     @ViewBuilder

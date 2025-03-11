@@ -8,19 +8,30 @@
 import Foundation
 
 extension API {
+    func getCreatorUpdateTemplates() async throws
+        -> CreatorUpdateTemplateCollectionResponse
+    {
+        return try await hitEndpoint(
+            .getPaginateCreatorUpdateTemplates
+        )
+    }
+
+    @discardableResult
     func postCreateCreatorUpdate(
         publish: Bool? = nil,
+        scheduleAt: Date? = nil,
         templateId: String? = nil,
         topic: CreatorUpdateTopic? = nil,
         title: String? = nil,
         body: String? = nil,
-        attachmentIds: PartiallyDecodableArray<String>? = nil,
+        attachmentIds: [String]? = nil,
         entitlementId: String? = nil,
         postVisibility: CreatorUpdateVisibilityType? = nil,
         attachmentVisibility: CreatorUpdateVisibilityType? = nil
     ) async throws -> CreatorUpdate {
         let body = CreateCreatorUpdateRequestBody(
             publish: publish,
+            scheduleAt: scheduleAt,
             templateId: templateId,
             topic: topic,
             title: title,

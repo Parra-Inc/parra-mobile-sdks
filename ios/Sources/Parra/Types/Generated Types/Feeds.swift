@@ -452,7 +452,9 @@ public struct ParraCreatorUpdateAppStub: Codable, Equatable, Hashable, Identifia
     public let title: String?
     public let body: String?
     public let sender: ParraCreatorUpdateSenderStub?
-    public let attachments: PartiallyDecodableArray<ParraCreatorUpdateAttachmentStub>?
+    public internal(set) var attachments: PartiallyDecodableArray<
+        ParraCreatorUpdateAttachmentStub
+    >?
     public let attachmentPaywall: ParraAppPaywallConfiguration?
 
     // MARK: - Internal
@@ -467,6 +469,13 @@ public struct ParraCreatorUpdateAppStub: Codable, Equatable, Hashable, Identifia
         case sender
         case attachments
         case attachmentPaywall
+    }
+
+    func withoutAttachments() -> Self {
+        var updated = self
+        updated.attachments = nil
+
+        return updated
     }
 }
 
