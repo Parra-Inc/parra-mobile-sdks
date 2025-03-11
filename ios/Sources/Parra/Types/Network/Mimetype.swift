@@ -13,6 +13,7 @@ enum Mimetype {
     case applicationFormUrlEncoded
     case multipartFormData(boundary: String)
     case imagePng
+    case plainText
 
     // MARK: - Internal
 
@@ -26,6 +27,8 @@ enum Mimetype {
             return "multipart/form-data; boundary=\(boundary)"
         case .imagePng:
             return "image/png"
+        case .plainText:
+            return "text/plain"
         }
     }
 }
