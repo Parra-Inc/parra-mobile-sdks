@@ -8,10 +8,32 @@
 
 import SwiftUI
 
-public enum ParraSheetPresentationState: Equatable {
-    case ready
-    case loading
-    case presented
+public struct ParraSheetPresentationState: Equatable {
+    // MARK: - Lifecycle
+
+    init(state: State) {
+        self.state = state
+    }
+
+    // MARK: - Public
+
+    public static let ready = Self(state: .ready)
+    public static let loading = Self(state: .loading)
+    public static let presented = Self(state: .presented)
+
+    public mutating func present() {
+        state = .loading
+    }
+
+    // MARK: - Internal
+
+    enum State: Equatable {
+        case ready
+        case loading
+        case presented
+    }
+
+    var state: State
 }
 
 /// Facilitates loading data asynchonously then presenting a sheet with a view
