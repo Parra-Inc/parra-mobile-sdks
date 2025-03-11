@@ -163,7 +163,7 @@ extension Server {
     ) async throws -> (Data, HTTPURLResponse) {
         try await sleepInDev()
 
-        let (data, response) = try await configuration.urlSession
+        let (responseData, response) = try await configuration.urlSession
             .dataForRequest(
                 for: request,
                 delegate: urlSessionDelegateProxy
@@ -178,35 +178,9 @@ extension Server {
                 )
         }
 
-        #if DEBUG
-        // Auto display HTML errors like those from Cloudflare in a popup
-        // webview.
-        if httpResponse.statusCode >= 400 {
-            if let bodyString = String(data: data, encoding: .utf8) {
-                if let contentType = httpResponse.value(
-                    forHTTPHeaderField: "Content-Type"
-                ), contentType.lowercased().contains("text/html") {
-                    if bodyString.hasPrefix("<") {
-                        await MainActor.run {
-                            let webview = WKWebView()
-                            webview.loadHTMLString(bodyString, baseURL: nil)
+        await displayHtmlErrorInDev(for: httpResponse, with: responseData)
 
-                            let vc = UIViewController()
-                            vc.view = webview
-
-                            UIViewController.topMostViewController()?.present(
-                                vc,
-                                animated: true
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        #endif
-
-        return (data, httpResponse)
+        return (responseData, httpResponse)
     }
 
     func performAsyncMultipartUploadTask(
@@ -267,7 +241,42 @@ extension Server {
                 )
         }
 
+        await displayHtmlErrorInDev(for: httpResponse, with: responseData)
+
         return (responseData, httpResponse)
+    }
+
+    private func displayHtmlErrorInDev(
+        for httpResponse: HTTPURLResponse,
+        with data: Data
+    ) async {
+        #if DEBUG
+        // Auto display HTML errors like those from Cloudflare in a popup
+        // webview.
+        if httpResponse.statusCode >= 400 {
+            if let bodyString = String(data: data, encoding: .utf8) {
+                if let contentType = httpResponse.value(
+                    forHTTPHeaderField: "Content-Type"
+                ), contentType.lowercased().contains("text/html") {
+                    if bodyString.hasPrefix("<") {
+                        await MainActor.run {
+                            let webview = WKWebView()
+                            webview.loadHTMLString(bodyString, baseURL: nil)
+
+                            let vc = UIViewController()
+                            vc.view = webview
+
+                            UIViewController.topMostViewController()?.present(
+                                vc,
+                                animated: true
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        #endif
     }
 
     private func sleepInDev() async throws {
