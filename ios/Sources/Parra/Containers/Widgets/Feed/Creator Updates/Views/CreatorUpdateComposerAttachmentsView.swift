@@ -36,17 +36,17 @@ struct CreatorUpdateComposerAttachmentsView: View {
                             showingPhotoPicker = true
                         } label: {
                             Image(systemName: "plus")
+                                .contentShape(.rect)
+                                .frame(
+                                    width: 100,
+                                    height: 100,
+                                    alignment: .center
+                                )
+                                .background(
+                                    theme.palette.secondaryBackground
+                                )
                         }
                         .id("add-more-button")
-                        .contentShape(.rect)
-                        .frame(
-                            width: 100,
-                            height: 100,
-                            alignment: .center
-                        )
-                        .background(
-                            theme.palette.secondaryBackground
-                        )
                     }
                 }
             }
