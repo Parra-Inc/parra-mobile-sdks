@@ -188,7 +188,7 @@ struct CreatorUpdateComposerView: View {
                             .containedButtonAttributes(
                                 config: ParraTextButtonConfig(
                                     type: .primary,
-                                    size: .medium,
+                                    size: .large,
                                     isMaxWidth: true
                                 ),
                                 localAttributes: ParraAttributes.ContainedButton(
@@ -220,7 +220,12 @@ struct CreatorUpdateComposerView: View {
                         .safeAreaPadding(.horizontal)
                     }
                     .disabled(
-                        creatorUpdate.title.isEmpty || creatorUpdate.body
+                        creatorUpdate.title
+                            .trimmingCharacters(
+                                in: .whitespacesAndNewlines
+                            ).isEmpty || creatorUpdate.body.trimmingCharacters(
+                                in: .whitespacesAndNewlines
+                            )
                             .isEmpty || isLoading
                     )
                 },

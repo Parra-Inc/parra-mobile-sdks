@@ -84,14 +84,15 @@ struct CreatorUpdatePreviewView: View {
         .navigationTitle("Previewing Post")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                if contentObserver.isLoading || isShowingConfirmSchedule {
+                if contentObserver.isLoading {
                     ProgressView()
                 } else {
                     Button {
                         isShowingConfirmPublish = true
                     } label: {
-                        Image(systemName: "paperplane")
+                        Image(systemName: "arrow.right")
                     }
+                    .disabled(isShowingConfirmSchedule)
                 }
             }
         }
@@ -99,29 +100,52 @@ struct CreatorUpdatePreviewView: View {
             isPresented: $isShowingConfirmSchedule,
             content: {
                 NavigationStack {
-                    DatePicker(
-                        "Schedule your Post",
-                        selection: $selectedPublishDate,
-                        displayedComponents: [.date, .hourAndMinute]
-                    )
-                    .datePickerStyle(.graphical)
-                    .frame(
-                        height: 400
-                    )
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button {
-                                createPost(
-                                    scheduleAt: selectedPublishDate
-                                )
-                            } label: {
-                                Image(systemName: "paperplane")
+                    VStack {
+                        DatePicker(
+                            "Schedule your Post",
+                            selection: $selectedPublishDate,
+                            // 15 minutes from now through 1 year from now.
+                            in: Date.now
+                                .addingTimeInterval(900) ... Date.now
+                                .daysFromNow(365),
+                            displayedComponents: [.date, .hourAndMinute]
+                        )
+                        .datePickerStyle(.graphical)
+                        .frame(
+                            height: 400
+                        )
+                        .padding(.bottom, 32)
+
+                        Spacer()
+
+                        WidgetFooter(
+                            primaryActionBuilder: {
+                                componentFactory.buildContainedButton(
+                                    config: ParraTextButtonConfig(
+                                        type: .primary,
+                                        size: .large,
+                                        isMaxWidth: true
+                                    ),
+                                    content: ParraTextButtonContent(
+                                        text: "Submit Scheduled Post",
+                                        isLoading: contentObserver.isLoading
+                                    )
+                                ) {
+                                    createPost(
+                                        scheduleAt: selectedPublishDate
+                                    )
+                                }
+                            },
+                            secondaryActionBuilder: {
+                                // Just to hide branding here. This is a creator only screen.
+                                EmptyView()
                             }
-                        }
+                        )
                     }
                     .navigationTitle("Schedule your Post")
+                    .navigationBarTitleDisplayMode(.inline)
                 }
-                .presentationDetents([.height(540)])
+                .presentationDetents([.height(600)])
                 .presentationDragIndicator(.visible)
             }
         )
@@ -140,20 +164,24 @@ struct CreatorUpdatePreviewView: View {
             }
 
             Button("Cancel", role: .cancel) {}
-        } message: {}
+        } message: {
+            Text(
+                "Publish Now will make your post vislble to your users immediately. Schedule for Later will automatically publish your post at the selected date."
+            )
+        }
     }
 
     // MARK: - Private
 
     @Environment(\.parra) private var parra
     @Environment(\.parraAuthState) private var authState
+    @Environment(\.parraTheme) private var theme
+    @Environment(\.parraAlertManager) private var alertManager
+    @Environment(\.parraComponentFactory) private var componentFactory
 
     @State private var isShowingConfirmPublish = false
     @State private var isShowingConfirmSchedule = false
     @State private var selectedPublishDate = Date.now
-
-    @Environment(\.parraTheme) private var theme
-    @Environment(\.parraAlertManager) private var alertManager
 
     private func createPost(scheduleAt: Date? = nil) {
         let submittingNow = scheduleAt == nil

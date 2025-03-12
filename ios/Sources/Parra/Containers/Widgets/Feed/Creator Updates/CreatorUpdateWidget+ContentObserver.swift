@@ -91,8 +91,12 @@ extension CreatorUpdateWidget {
                     scheduleAt: scheduleAt,
                     templateId: creatorUpdate.selectedTemplate.id,
                     topic: creatorUpdate.topic,
-                    title: creatorUpdate.title,
-                    body: creatorUpdate.body,
+                    title: creatorUpdate.title.trimmingCharacters(
+                        in: .whitespacesAndNewlines
+                    ),
+                    body: creatorUpdate.body.trimmingCharacters(
+                        in: .whitespacesAndNewlines
+                    ),
                     attachmentIds: .init(
                         creatorUpdate.attachments.compactMap { attachment in
                             return attachment.asset?.id
@@ -124,98 +128,105 @@ extension CreatorUpdateWidget {
             )
 
             // Check if an attachment with this picker item already exists
-            if let match = findAttachment(for: item) {
-//                switch match {
-//                case .errored(<#T##message: String##String#>, <#T##item: PhotosPickerItem##PhotosPickerItem#>)
-//                }
-            } else {
-                // Add it to the list right away to show the processing state.
-                updateState(
-                    for: item,
-                    to: .processing(item, nil)
+            if let matchIndex = findAttachmentIndex(for: item),
+               let match = creatorUpdate?.attachments[matchIndex]
+            {
+                switch match {
+                case .processing, .uploaded:
+                    return
+                case .errored:
+                    logger.debug("Attachment had previously errored. Allowing retry.")
+
+                    creatorUpdate?.attachments.remove(at: matchIndex)
+                }
+            }
+
+            // Add it to the list right away to show the processing state.
+            updateState(
+                for: item,
+                to: .processing(item, nil)
+            )
+
+            onStart()
+
+            do {
+                let data = try await item.loadTransferable(
+                    type: Data.self
                 )
 
-                onStart()
-
-                do {
-                    let data = try await item.loadTransferable(
-                        type: Data.self
-                    )
-
-                    guard let data, let image = UIImage(data: data) else {
-                        throw ParraError.message(
-                            "Failed to load image data from selected photo"
-                        )
-                    }
-
-                    // Server won't allow above 50MB
-                    let resizedImage = image.resized(
-                        maxSize: 50,
-                        unit: .megabytes,
-                        removeAlpha: true
-                    )
-
-                    let thumb = resizedImage.resized(
-                        maxSize: CGSize(
-                            width: 500,
-                            height: 500
-                        ),
-                        removeAlpha: true
-                    )
-
-                    guard let ciImage = CIImage(
-                        image: resizedImage,
-                        options: [
-                            .applyOrientationProperty: true,
-                            .properties: [
-                                kCGImagePropertyOrientation: CGImagePropertyOrientation(
-                                    resizedImage.imageOrientation
-                                ).rawValue
-                            ]
-                        ]
-                    ) else {
-                        throw ParraError.message(
-                            "Failed to perform necessary image conversion"
-                        )
-                    }
-
-                    guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) else {
-                        throw ParraError.message("Failed to use sRGB colorspace")
-                    }
-
-                    let context = CIContext()
-                    guard let pngData = context.pngRepresentation(
-                        of: ciImage,
-                        format: .RGBA8,
-                        colorSpace: colorSpace
-                    ) else {
-                        throw ParraError.message("Failed to convert image to PNG")
-                    }
-
-                    updateState(
-                        for: item,
-                        to: .processing(item, thumb)
-                    )
-
-                    let asset = try await api.uploadAsset(
-                        with: pngData,
-                        group: "creator-update-attachment"
-                    )
-
-                    updateState(
-                        for: item,
-                        to: .uploaded(asset, item, thumb)
-                    )
-                } catch {
-                    logger.error(
-                        "Error uploading attachment for creator update", error
-                    )
-
-                    updateState(
-                        for: item,
-                        to: .errored(error.localizedDescription, item)
+                guard let data, let image = UIImage(data: data) else {
+                    throw ParraError.message(
+                        "Failed to load image data from selected photo"
                     )
                 }
+
+                // Server won't allow above 50MB
+                let resizedImage = image.resized(
+                    maxSize: 50,
+                    unit: .megabytes,
+                    removeAlpha: true
+                )
+
+                let thumb = resizedImage.resized(
+                    maxSize: CGSize(
+                        width: 500,
+                        height: 500
+                    ),
+                    removeAlpha: true
+                )
+
+                guard let ciImage = CIImage(
+                    image: resizedImage,
+                    options: [
+                        .applyOrientationProperty: true,
+                        .properties: [
+                            kCGImagePropertyOrientation: CGImagePropertyOrientation(
+                                resizedImage.imageOrientation
+                            ).rawValue
+                        ]
+                    ]
+                ) else {
+                    throw ParraError.message(
+                        "Failed to perform necessary image conversion"
+                    )
+                }
+
+                guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) else {
+                    throw ParraError.message("Failed to use sRGB colorspace")
+                }
+
+                let context = CIContext()
+                guard let pngData = context.pngRepresentation(
+                    of: ciImage,
+                    format: .RGBA8,
+                    colorSpace: colorSpace
+                ) else {
+                    throw ParraError.message("Failed to convert image to PNG")
+                }
+
+                updateState(
+                    for: item,
+                    to: .processing(item, thumb)
+                )
+
+                let asset = try await api.uploadAsset(
+                    with: pngData,
+                    group: "creator-update-attachment"
+                )
+
+                updateState(
+                    for: item,
+                    to: .uploaded(asset, item, thumb)
+                )
+            } catch {
+                logger.error(
+                    "Error uploading attachment for creator update", error
+                )
+
+                updateState(
+                    for: item,
+                    to: .errored(error.localizedDescription, item)
+                )
             }
         }
 
@@ -225,21 +236,25 @@ extension CreatorUpdateWidget {
 
         private let config: ParraCreatorUpdateConfiguration
 
-        private func findAttachment(
+        private func findAttachmentIndex(
             for pickerItem: PhotosPickerItem
-        ) -> StatefulAttachment? {
+        ) -> Int? {
             guard let creatorUpdate else {
                 return nil
             }
 
-            return creatorUpdate.attachments.first { attachment in
+            guard let itemIdentifier = pickerItem.itemIdentifier else {
+                return nil
+            }
+
+            return creatorUpdate.attachments.firstIndex { attachment in
                 switch attachment {
                 case .errored(_, let erroredItem):
-                    return pickerItem == erroredItem
+                    return itemIdentifier == erroredItem.itemIdentifier
                 case .processing(let processingItem, _):
-                    return pickerItem == processingItem
+                    return itemIdentifier == processingItem.itemIdentifier
                 case .uploaded(_, let uploadedItem, _):
-                    return pickerItem == uploadedItem
+                    return itemIdentifier == uploadedItem.itemIdentifier
                 }
             }
         }
@@ -269,25 +284,10 @@ extension CreatorUpdateWidget {
                 )
             }
 
-            guard let creatorUpdate else {
-                return
-            }
-
-            let matchIndex = creatorUpdate.attachments.firstIndex { attachment in
-                switch attachment {
-                case .errored(_, let erroredItem):
-                    return pickerItem == erroredItem
-                case .processing(let processingItem, _):
-                    return pickerItem == processingItem
-                case .uploaded(_, let uploadedItem, _):
-                    return pickerItem == uploadedItem
-                }
-            }
-
-            if let matchIndex {
-                self.creatorUpdate?.attachments[matchIndex] = newState
+            if let matchIndex = findAttachmentIndex(for: pickerItem) {
+                creatorUpdate?.attachments[matchIndex] = newState
             } else {
-                self.creatorUpdate?.attachments.append(newState)
+                creatorUpdate?.attachments.append(newState)
             }
         }
     }
