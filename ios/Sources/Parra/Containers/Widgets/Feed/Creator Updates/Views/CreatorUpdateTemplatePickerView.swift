@@ -26,7 +26,7 @@ struct CreatorUpdateTemplatePickerView: View {
                 Text("Templates")
             } footer: {
                 Text(
-                    "Creat and edit templates in the [Parra dashboard](https://parra.io/dashboard/creator/updates/configuration)"
+                    "Create and edit templates in the [Parra dashboard](https://parra.io/dashboard/creator/updates/configuration)"
                 )
                 .frame(
                     maxWidth: .infinity,
