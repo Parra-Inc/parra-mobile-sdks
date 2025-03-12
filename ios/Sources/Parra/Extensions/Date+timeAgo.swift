@@ -52,12 +52,12 @@ extension Date {
         ) ?? timeAgo(dateTimeStyle: .named, unitStyle: .abbreviated)
     }
 
-    func daysAgo(_ daysAgo: TimeInterval) -> Date {
-        return addingTimeInterval(-(day * daysAgo))
+    func daysAgo(_ days: Double) -> Date {
+        return addingTimeInterval(-(day * days))
     }
 
-    func daysFromNow(_ daysAgo: TimeInterval) -> Date {
-        return self.daysAgo(-daysAgo)
+    func daysFromNow(_ days: Double) -> Date {
+        return daysAgo(-days)
     }
 }
 
