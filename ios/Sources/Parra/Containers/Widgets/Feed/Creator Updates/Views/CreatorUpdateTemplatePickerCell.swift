@@ -56,7 +56,11 @@ struct CreatorUpdateTemplatePickerCell: View {
                         "eye.slash.fill"
                     }
 
-                    CreatorUpdateTagBadge(title: "post", icon: postSymbol)
+                    CreatorUpdateTagBadge(
+                        title: "post",
+                        icon: postSymbol,
+                        style: .secondary
+                    )
 
                     let attachmentSymbol: String? = switch template.visibility
                         .attachmentVisibility
@@ -72,7 +76,8 @@ struct CreatorUpdateTemplatePickerCell: View {
                     if let attachmentSymbol {
                         CreatorUpdateTagBadge(
                             title: "attachments",
-                            icon: attachmentSymbol
+                            icon: attachmentSymbol,
+                            style: .secondary
                         )
                     }
 

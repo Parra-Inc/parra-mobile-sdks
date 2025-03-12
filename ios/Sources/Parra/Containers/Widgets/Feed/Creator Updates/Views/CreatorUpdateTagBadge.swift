@@ -30,16 +30,26 @@ struct CreatorUpdateTagBadge: View {
     var body: some View {
         let background = switch style {
         case .primary:
-            theme.palette.primaryBackground
+            theme.palette.primaryChipBackground
         case .secondary:
-            theme.palette.secondaryBackground
+            theme.palette.secondaryChipBackground
+        }
+
+        let textColor = switch style {
+        case .primary:
+            theme.palette.primaryChipText.toParraColor()
+        case .secondary:
+            theme.palette.secondaryChipText.toParraColor()
         }
 
         HStack(alignment: .center) {
             Label {
                 componentFactory.buildLabel(
                     text: title,
-                    localAttributes: .default(with: .callout)
+                    localAttributes: .default(
+                        with: .callout,
+                        color: textColor
+                    )
                 )
             } icon: {
                 Image(systemName: icon)
@@ -62,4 +72,5 @@ struct CreatorUpdateTagBadge: View {
     // MARK: - Private
 
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraTheme) private var theme
 }
