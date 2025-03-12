@@ -23,7 +23,8 @@ struct CreatorUpdateTemplatePickerView: View {
                     )
                 }
             } header: {
-                Text("Templates")
+                // Same space as if there was a header
+                Color.clear
             } footer: {
                 Text(
                     "Create and edit templates in the [Parra dashboard](https://parra.io/dashboard/creator/updates/configuration)"
@@ -34,6 +35,7 @@ struct CreatorUpdateTemplatePickerView: View {
                 )
                 .multilineTextAlignment(.center)
                 .tint(theme.palette.primary)
+                .padding(.top, 8)
             }
             .listRowBackground(theme.palette.secondaryBackground)
         }

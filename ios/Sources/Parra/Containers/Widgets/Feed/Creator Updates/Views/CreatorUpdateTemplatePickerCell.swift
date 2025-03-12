@@ -28,7 +28,7 @@ struct CreatorUpdateTemplatePickerCell: View {
         Button {
             contentObserver.creatorUpdate = .init(template: template)
         } label: {
-            VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     componentFactory.buildLabel(
                         text: template.name,
@@ -36,16 +36,6 @@ struct CreatorUpdateTemplatePickerCell: View {
                     )
 
                     Spacer()
-
-                    withContent(content: template.topic) { content in
-                        componentFactory.buildLabel(
-                            text: "#\(content)",
-                            localAttributes: .default(
-                                with: .caption,
-                                color: theme.palette.secondaryText.toParraColor()
-                            )
-                        )
-                    }
                 }
 
                 HStack {
@@ -77,6 +67,14 @@ struct CreatorUpdateTemplatePickerCell: View {
                         CreatorUpdateTagBadge(
                             title: "attachments",
                             icon: attachmentSymbol,
+                            style: .secondary
+                        )
+                    }
+
+                    withContent(content: template.topic) { content in
+                        CreatorUpdateTagBadge(
+                            title: content.rawValue,
+                            icon: "number",
                             style: .secondary
                         )
                     }

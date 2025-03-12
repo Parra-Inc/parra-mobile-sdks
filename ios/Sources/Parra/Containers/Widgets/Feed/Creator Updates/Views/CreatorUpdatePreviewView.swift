@@ -53,61 +53,101 @@ struct CreatorUpdatePreviewView: View {
 
     var body: some View {
         GeometryReader { proxy in
-            ScrollView {
-                VStack {
-                    if let previewCreatorUpdate {
-                        CreatorUpdatePreview(
-                            creatorUpdate: previewCreatorUpdate,
-                            spacing: 8,
-                            containerGeometry: proxy
-                        )
-                        .id("preview-update-unredacted-1")
-                    }
+            VStack {
+                ScrollView {
+                    VStack {
+                        if let previewCreatorUpdate {
+                            CreatorUpdatePreview(
+                                creatorUpdate: previewCreatorUpdate,
+                                spacing: 8,
+                                containerGeometry: proxy
+                            )
+                            .id("preview-update-unredacted-1")
+                        }
 
-                    ForEach(
-                        ParraCreatorUpdateAppStub.validStates().indexed(),
-                        id: \.element
-                    ) { index, redacted in
-                        CreatorUpdatePreview(
-                            creatorUpdate: redacted.withoutAttachments(),
-                            spacing: 8,
-                            containerGeometry: proxy
-                        )
-                        .id("preview-update-redacted-\(index)")
-                        .redacted(reason: .placeholder)
+                        ForEach(
+                            ParraCreatorUpdateAppStub.validStates().indexed(),
+                            id: \.element
+                        ) { index, redacted in
+                            CreatorUpdatePreview(
+                                creatorUpdate: redacted.withoutAttachments(),
+                                spacing: 8,
+                                containerGeometry: proxy
+                            )
+                            .id("preview-update-redacted-\(index)")
+                            .redacted(reason: .placeholder)
+                        }
                     }
                 }
+                .background(theme.palette.primaryBackground)
+
+                WidgetFooter(
+                    primaryActionBuilder: {
+                        componentFactory.buildContainedButton(
+                            config: ParraTextButtonConfig(
+                                type: .primary,
+                                size: .medium,
+                                isMaxWidth: true
+                            ),
+                            content: ParraTextButtonContent(
+                                text: "Publish Now",
+                                isDisabled: isShowingSchedulePicker || contentObserver
+                                    .isLoading,
+                                isLoading: contentObserver.isLoading
+                            ),
+                            localAttributes: ParraAttributes.ContainedButton(
+                                normal: .init(
+                                    padding: .zero
+                                )
+                            )
+                        ) {
+                            isShowingConfirmPublish = true
+                        }
+                    },
+                    secondaryActionBuilder: {
+                        componentFactory.buildPlainButton(
+                            config: ParraTextButtonConfig(
+                                type: .primary,
+                                size: .small,
+                                isMaxWidth: true
+                            ),
+                            text: "Schedule for Later",
+                            localAttributes: ParraAttributes.PlainButton(
+                                normal: .init(
+                                    padding: .zero
+                                )
+                            )
+                        ) {
+                            isShowingSchedulePicker = true
+                            selectedPublishDate = Date.now
+                        }
+                    },
+                    contentPadding: .init(vertical: 16, horizontal: 16),
+                    actionSpacing: 10
+                )
             }
-            .background(theme.palette.primaryBackground)
         }
         .renderToast(toast: $alertManager.currentToast)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle("Previewing Post")
+        .navigationTitle("Preview")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 if contentObserver.isLoading {
                     ProgressView()
-                } else {
-                    Button {
-                        isShowingConfirmPublish = true
-                    } label: {
-                        Image(systemName: "arrow.right")
-                    }
-                    .disabled(isShowingConfirmSchedule)
                 }
             }
         }
         .sheet(
-            isPresented: $isShowingConfirmSchedule,
+            isPresented: $isShowingSchedulePicker,
             content: {
                 NavigationStack {
                     VStack {
                         DatePicker(
-                            "Schedule your Post",
+                            "Schedule Post",
                             selection: $selectedPublishDate,
-                            // 15 minutes from now through 1 year from now.
+                            // 5 minutes from now through 1 year from now.
                             in: Date.now
-                                .addingTimeInterval(900) ... Date.now
+                                .addingTimeInterval(300) ... Date.now
                                 .daysFromNow(365),
                             displayedComponents: [.date, .hourAndMinute]
                         )
@@ -124,17 +164,17 @@ struct CreatorUpdatePreviewView: View {
                                 componentFactory.buildContainedButton(
                                     config: ParraTextButtonConfig(
                                         type: .primary,
-                                        size: .large,
+                                        size: .medium,
                                         isMaxWidth: true
                                     ),
                                     content: ParraTextButtonContent(
-                                        text: "Submit Scheduled Post",
+                                        text: "Confirm Scheduled Post",
                                         isLoading: contentObserver.isLoading
                                     )
                                 ) {
-                                    createPost(
-                                        scheduleAt: selectedPublishDate
-                                    )
+                                    isShowingSchedulePicker = false
+
+                                    createPost(scheduleAt: selectedPublishDate)
                                 }
                             },
                             secondaryActionBuilder: {
@@ -143,33 +183,29 @@ struct CreatorUpdatePreviewView: View {
                             }
                         )
                     }
-                    .navigationTitle("Schedule your Post")
+                    .navigationTitle("Schedule Post")
                     .navigationBarTitleDisplayMode(.inline)
                 }
                 .presentationDetents([.height(600)])
                 .presentationDragIndicator(.visible)
             }
         )
-        .confirmationDialog(
+        .alert(
             "Publish Post",
             isPresented: $isShowingConfirmPublish,
-            titleVisibility: .visible
-        ) {
-            Button("Publish Now") {
-                createPost()
-            }
+            actions: {
+                Button("Publish", role: .destructive) {
+                    createPost()
+                }
 
-            Button("Schedule for Later") {
-                isShowingConfirmSchedule = true
-                selectedPublishDate = Date.now
+                Button("Cancel", role: .cancel) {}
+            },
+            message: {
+                Text(
+                    "When you publish your post, it will be visible to your users immediately."
+                )
             }
-
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text(
-                "Publish Now will make your post vislble to your users immediately. Schedule for Later will automatically publish your post at the selected date."
-            )
-        }
+        )
     }
 
     // MARK: - Private
@@ -181,16 +217,26 @@ struct CreatorUpdatePreviewView: View {
 
     @State private var alertManager: ParraAlertManager = .shared
     @State private var isShowingConfirmPublish = false
-    @State private var isShowingConfirmSchedule = false
+    @State private var isShowingSchedulePicker = false
     @State private var selectedPublishDate = Date.now
 
     private func createPost(scheduleAt: Date? = nil) {
         let submittingNow = scheduleAt == nil
 
-        let successMessage = if let scheduleAt {
-            "Your post will go live in \(scheduleAt.timeFromNowDisplay()). You can edit it or cancel this from the Parra dashboard."
-        } else {
+        let date = selectedPublishDate.formatted(
+            date: .complete,
+            time: .omitted
+        )
+
+        let time = selectedPublishDate.formatted(
+            date: .omitted,
+            time: .complete
+        )
+
+        let successMessage = if submittingNow {
             "Your post is live. Edits can be made from the Parra dashboard."
+        } else {
+            "Your post will go live on \(date) at \(time). You can edit it or cancel it from the Parra dashboard."
         }
 
         let errorTitle = submittingNow ? "Error Publishing Post" : "Error Scheduling Post"

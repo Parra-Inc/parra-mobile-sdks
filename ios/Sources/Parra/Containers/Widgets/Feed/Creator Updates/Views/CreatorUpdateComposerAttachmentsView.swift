@@ -29,6 +29,7 @@ struct CreatorUpdateComposerAttachmentsView: View {
                                 isShowingFullScreen = true
                             }
                         }
+                        .applyCornerRadii(size: .lg, from: theme)
                     }
 
                     if attachments.count < maxAttachments {
@@ -46,6 +47,7 @@ struct CreatorUpdateComposerAttachmentsView: View {
                                     theme.palette.secondaryBackground
                                 )
                         }
+                        .applyCornerRadii(size: .lg, from: theme)
                         .id("add-more-button")
                     }
                 }

@@ -17,11 +17,13 @@ struct WidgetFooter<Primary>: View where Primary: View {
         contentPadding: EdgeInsets = EdgeInsets(
             vertical: 12,
             horizontal: 20
-        )
+        ),
+        actionSpacing: CGFloat = 16.0
     ) {
         self.primaryActionBuilder = primaryActionBuilder
         self.secondaryActionBuilder = secondaryActionBuilder
         self.contentPadding = contentPadding
+        self.actionSpacing = actionSpacing
     }
 
     // MARK: - Internal
@@ -35,7 +37,7 @@ struct WidgetFooter<Primary>: View where Primary: View {
                 Divider()
                     .overlay(parraTheme.palette.secondarySeparator.toParraColor())
 
-                VStack(alignment: .center, spacing: 16) {
+                VStack(alignment: .center, spacing: actionSpacing) {
                     primaryAction
 
                     if let secondaryActionBuilder {
@@ -49,7 +51,7 @@ struct WidgetFooter<Primary>: View where Primary: View {
             }
             .ignoresSafeArea()
             .frame(maxWidth: .infinity)
-            .padding([.bottom], from: contentPadding)
+            .padding(.bottom, from: contentPadding)
         }
     }
 
@@ -58,4 +60,5 @@ struct WidgetFooter<Primary>: View where Primary: View {
     @Environment(\.parraTheme) private var parraTheme
 
     private let contentPadding: EdgeInsets
+    private let actionSpacing: CGFloat
 }

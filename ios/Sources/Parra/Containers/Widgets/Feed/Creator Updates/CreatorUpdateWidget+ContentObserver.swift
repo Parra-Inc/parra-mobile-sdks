@@ -11,10 +11,6 @@ import SwiftUI
 
 private let logger = Logger()
 
-// 1. Store current WIP state for creator update.
-// 2. Allow save as draft, discard, publish (with scheduling)
-// 3. Allow uploading assets
-
 // MARK: - FeedWidget.ContentObserver
 
 extension CGImagePropertyOrientation {

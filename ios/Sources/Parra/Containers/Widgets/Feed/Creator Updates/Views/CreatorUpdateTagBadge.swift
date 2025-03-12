@@ -10,7 +10,7 @@ import SwiftUI
 struct CreatorUpdateTagBadge: View {
     // MARK: - Lifecycle
 
-    init(title: String, icon: String, style: Style = .primary) {
+    init(title: String, icon: String? = nil, style: Style = .primary) {
         self.title = title
         self.icon = icon
         self.style = style
@@ -24,7 +24,7 @@ struct CreatorUpdateTagBadge: View {
     }
 
     var title: String
-    var icon: String
+    var icon: String?
     var style: Style
 
     var body: some View {
@@ -47,23 +47,26 @@ struct CreatorUpdateTagBadge: View {
                 componentFactory.buildLabel(
                     text: title,
                     localAttributes: .default(
-                        with: .callout,
+                        with: .caption,
                         color: textColor
                     )
                 )
             } icon: {
-                Image(systemName: icon)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(
-                        maxHeight: 14
-                    )
+                if let icon {
+                    Image(systemName: icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(
+                            maxHeight: 10
+                        )
+                        .foregroundStyle(theme.palette.primary)
+                }
             }
-            .labelStyle(CustomLabel(spacing: 6))
+            .labelStyle(CustomLabel(spacing: 4))
         }
         .padding(.horizontal, 10)
         .frame(
-            height: 32
+            height: 26
         )
         .background(background)
         .applyCornerRadii(size: .md, from: theme)
