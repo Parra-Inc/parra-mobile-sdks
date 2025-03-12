@@ -198,8 +198,7 @@ struct CreatorUpdateComposerView: View {
                                                 cornerRadius: .lg,
                                                 padding: .xl,
                                                 background: theme.palette.primary
-                                                    .toParraColor(
-                                                    ),
+                                                    .toParraColor(),
                                                 frame: .flexible(
                                                     FlexibleFrameAttributes(
                                                         maxWidth: .infinity

@@ -133,6 +133,10 @@ extension CreatorUpdateWidget {
             {
                 switch match {
                 case .processing, .uploaded:
+                    logger.warn("Attachment already existed. Skipping", [
+                        "itemId": item.itemIdentifier ?? "<null>"
+                    ])
+
                     return
                 case .errored:
                     logger.debug("Attachment had previously errored. Allowing retry.")

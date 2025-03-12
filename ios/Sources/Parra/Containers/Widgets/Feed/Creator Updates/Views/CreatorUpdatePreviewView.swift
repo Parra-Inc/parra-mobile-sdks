@@ -80,7 +80,8 @@ struct CreatorUpdatePreviewView: View {
             }
             .background(theme.palette.primaryBackground)
         }
-        .navigationBarTitleDisplayMode(.large)
+        .renderToast(toast: $alertManager.currentToast)
+        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("Previewing Post")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -176,9 +177,9 @@ struct CreatorUpdatePreviewView: View {
     @Environment(\.parra) private var parra
     @Environment(\.parraAuthState) private var authState
     @Environment(\.parraTheme) private var theme
-    @Environment(\.parraAlertManager) private var alertManager
     @Environment(\.parraComponentFactory) private var componentFactory
 
+    @State private var alertManager: ParraAlertManager = .shared
     @State private var isShowingConfirmPublish = false
     @State private var isShowingConfirmSchedule = false
     @State private var selectedPublishDate = Date.now
@@ -192,6 +193,16 @@ struct CreatorUpdatePreviewView: View {
             "Your post is live. Edits can be made from the Parra dashboard."
         }
 
+        let errorTitle = submittingNow ? "Error Publishing Post" : "Error Scheduling Post"
+
+        let defaultError = { (error: Error) in
+            alertManager.showErrorToast(
+                title: errorTitle,
+                userFacingMessage: "Try again and report this issue if it persists.",
+                underlyingError: error
+            )
+        }
+
         Task { @MainActor in
             do {
                 try await contentObserver.createPost(
@@ -202,12 +213,22 @@ struct CreatorUpdatePreviewView: View {
                     title: submittingNow ? "Post Published" : "Post Scheduled",
                     subtitle: successMessage
                 )
+            } catch let error as ParraError {
+                if case .networkError(_, let response, _) = error {
+                    if response.statusCode == 403 {
+                        alertManager.showErrorToast(
+                            title: errorTitle,
+                            userFacingMessage: "This account is not authorized to create posts.",
+                            underlyingError: error
+                        )
+                    } else {
+                        defaultError(error)
+                    }
+                } else {
+                    defaultError(error)
+                }
             } catch {
-                alertManager.showErrorToast(
-                    title: "",
-                    userFacingMessage: "",
-                    underlyingError: error
-                )
+                defaultError(error)
             }
         }
     }
