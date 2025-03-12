@@ -80,7 +80,9 @@ struct FeedCreatorUpdateHeaderView: View {
                         )
                     )
 
-                    if sender.verified == true && redactionReasons.isEmpty {
+                    if sender.verified == true && !redactionReasons
+                        .contains(.placeholder)
+                    {
                         componentFactory.buildImage(
                             content: .name("CheckBadgeSolid", .module, .template),
                             localAttributes: ParraAttributes.Image(

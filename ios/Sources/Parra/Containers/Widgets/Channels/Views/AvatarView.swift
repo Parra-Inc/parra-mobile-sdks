@@ -103,6 +103,6 @@ struct AvatarView: View {
     @Environment(\.redactionReasons) private var redactionReasons
 
     private var showBadge: Bool {
-        return showVerifiedBadge && redactionReasons.isEmpty
+        return showVerifiedBadge && !redactionReasons.contains(.placeholder)
     }
 }

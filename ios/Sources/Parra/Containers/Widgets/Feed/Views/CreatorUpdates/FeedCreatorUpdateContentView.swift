@@ -61,5 +61,5 @@ struct FeedCreatorUpdateContentView: View {
     // MARK: - Private
 
     @Environment(\.parraComponentFactory) private var componentFactory
-    @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraTheme) private var theme
 }

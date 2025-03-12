@@ -75,7 +75,7 @@ struct FeedCommentContentView<ReactionView>: View where ReactionView: View {
                         )
                     }
                 } else {
-                    if redactionReasons.isEmpty {
+                    if !redactionReasons.contains(.placeholder) {
                         reactionView()
                     }
                 }

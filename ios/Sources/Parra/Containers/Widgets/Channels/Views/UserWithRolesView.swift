@@ -28,7 +28,7 @@ struct UserWithRolesView: View {
                 )
             )
 
-            if user.verified == true && redactionReasons.isEmpty {
+            if user.verified == true && !redactionReasons.contains(.placeholder) {
                 componentFactory.buildImage(
                     content: .name("CheckBadgeSolid", .module, .template),
                     localAttributes: ParraAttributes.Image(
@@ -39,7 +39,9 @@ struct UserWithRolesView: View {
                 )
             }
 
-            if let role = user.roles?.elements.first, redactionReasons.isEmpty {
+            if let role = user.roles?.elements.first,
+               !redactionReasons.contains(.placeholder)
+            {
                 componentFactory.buildLabel(
                     text: role.name,
                     localAttributes: ParraAttributes.Label(

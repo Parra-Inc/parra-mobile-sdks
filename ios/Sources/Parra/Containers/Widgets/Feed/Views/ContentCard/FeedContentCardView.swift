@@ -92,12 +92,12 @@ struct FeedContentCardView: View {
         .applyCornerRadii(size: .xl, from: parraTheme)
         .safeAreaPadding(.horizontal, 16)
         .padding(.vertical, spacing)
-        .disabled(!hasAction || !redactionReasons.isEmpty)
+        .disabled(!hasAction || redactionReasons.contains(.placeholder))
         .presentParraFeedbackFormWidget(
             with: $feedbackForm
         )
         .onAppear {
-            if redactionReasons.isEmpty {
+            if !redactionReasons.contains(.placeholder) {
                 // Don't track impressions for placeholder cells.
                 Parra.default.logEvent(
                     .view(element: "content-card"),
@@ -195,7 +195,7 @@ struct FeedContentCardView: View {
         let backgroundColor = palette.secondary.toParraColor().opacity(0.8)
 
         HStack(alignment: .top) {
-            if let badge = contentCard.badge, redactionReasons.isEmpty {
+            if let badge = contentCard.badge, !redactionReasons.contains(.placeholder) {
                 componentFactory.buildLabel(
                     text: badge,
                     localAttributes: ParraAttributes.Label(
@@ -218,7 +218,7 @@ struct FeedContentCardView: View {
 
             Spacer()
 
-            if let action = contentCard.action, redactionReasons.isEmpty {
+            if let action = contentCard.action, !redactionReasons.contains(.placeholder) {
                 ZStack(alignment: .center) {
                     backgroundColor
                         .frame(width: 20, height: 20)
@@ -248,7 +248,7 @@ struct FeedContentCardView: View {
     }
 
     @ViewBuilder private var overlayInfo: some View {
-        if hasOverlayContent && redactionReasons.isEmpty {
+        if hasOverlayContent && !redactionReasons.contains(.placeholder) {
             VStack(alignment: .leading) {
                 withContent(content: contentCard.title) { content in
                     componentFactory.buildLabel(

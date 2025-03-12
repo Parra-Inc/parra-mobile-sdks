@@ -142,14 +142,14 @@ struct FeedYouTubeVideoView: View {
             }
             .contentShape(.rect)
         }
-        .disabled(!redactionReasons.isEmpty && hasPaywallEntitlement)
+        .disabled(redactionReasons.contains(.placeholder) && hasPaywallEntitlement)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
         .buttonStyle(.plain)
         .safeAreaPadding(.horizontal, 16)
         .padding(.vertical, spacing)
         .onAppear {
-            if redactionReasons.isEmpty {
+            if !redactionReasons.contains(.placeholder) {
                 // Don't track impressions for placeholder cells.
                 Parra.default.logEvent(
                     .view(element: "youtube-video"),

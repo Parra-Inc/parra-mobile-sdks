@@ -29,7 +29,7 @@ public struct ParraAsyncImageComponent: View, Equatable {
 
     public var body: some View {
         image
-            .applyAsyncImageAttributes(attributes, using: parraTheme)
+            .applyAsyncImageAttributes(attributes, using: theme)
             .clipped()
     }
 
@@ -46,11 +46,11 @@ public struct ParraAsyncImageComponent: View, Equatable {
 
     // MARK: - Private
 
-    @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraTheme) private var theme
     @Environment(\.redactionReasons) private var redactionReasons
 
     @ViewBuilder private var image: some View {
-        if redactionReasons.isEmpty {
+        if !redactionReasons.contains(.placeholder) {
             CachedAsyncImage(
                 urlRequest: URLRequest(
                     url: content.url,
@@ -72,7 +72,8 @@ public struct ParraAsyncImageComponent: View, Equatable {
                 }
             )
         } else {
-            Color.gray
+            Color(theme.palette.secondaryBackground)
+                .opacity(0.4)
         }
     }
 

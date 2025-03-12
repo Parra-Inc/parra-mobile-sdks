@@ -34,13 +34,13 @@ struct ProductGridView: View {
                             ProductCell(product: product)
                         }
                         .buttonStyle(ProductCellButtonStyle())
-                        .disabled(!redactionReasons.isEmpty)
+                        .disabled(redactionReasons.contains(.placeholder))
                     }
                 }
                 .padding(.horizontal, cellSpacing)
                 .padding(.bottom, cellSpacing)
             }
-            .scrollDisabled(!redactionReasons.isEmpty)
+            .scrollDisabled(redactionReasons.contains(.placeholder))
             .refreshable {
                 await contentObserver.refresh()
             }

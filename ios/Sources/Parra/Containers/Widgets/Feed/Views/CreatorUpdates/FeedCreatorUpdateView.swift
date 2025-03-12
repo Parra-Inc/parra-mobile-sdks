@@ -141,7 +141,7 @@ struct FeedCreatorUpdateView: View {
                 }
             }
         }
-        .disabled(!redactionReasons.isEmpty && hasPaywallEntitlement)
+        .disabled(redactionReasons.contains(.placeholder) && hasPaywallEntitlement)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
         .buttonStyle(.plain)
