@@ -149,7 +149,6 @@ extension FeedCommentWidget {
         }
 
         @MainActor
-        @discardableResult
         func deleteComment(
             commentId: String
         ) {

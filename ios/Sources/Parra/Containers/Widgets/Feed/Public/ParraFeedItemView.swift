@@ -37,7 +37,8 @@ struct ParraFeedItemView: View {
 
     @ViewBuilder private var content: some View {
         switch feedItem.data {
-        case .contentCard(let contentCard):
+        case .contentCard:
+            // TODO: Also need a content card detail view to present here.
             EmptyView()
         case .creatorUpdate(let creatorUpdate):
             FeedCreatorUpdateDetailView(

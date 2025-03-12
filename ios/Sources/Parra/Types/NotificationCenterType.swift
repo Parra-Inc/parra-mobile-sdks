@@ -9,6 +9,7 @@
 import Foundation
 
 protocol NotificationCenterType {
+    @MainActor
     func post(
         name aName: NSNotification.Name,
         object anObject: Any?,
