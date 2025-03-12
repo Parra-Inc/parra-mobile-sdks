@@ -11,6 +11,7 @@ import SwiftUI
 struct CreatorUpdateComposerAttachmentsView: View {
     // MARK: - Internal
 
+    var maxAttachments: Int
     @StateObject var contentObserver: CreatorUpdateWidget.ContentObserver
 
     var body: some View {
@@ -30,7 +31,7 @@ struct CreatorUpdateComposerAttachmentsView: View {
                         }
                     }
 
-                    if attachments.count < 10 {
+                    if attachments.count < maxAttachments {
                         Button {
                             showingPhotoPicker = true
                         } label: {

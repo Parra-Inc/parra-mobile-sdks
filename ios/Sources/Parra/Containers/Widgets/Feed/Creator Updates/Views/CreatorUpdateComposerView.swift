@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+private let maxAttachments = 10
+
 struct CreatorUpdateComposerView: View {
     // MARK: - Lifecycle
 
@@ -37,25 +39,6 @@ struct CreatorUpdateComposerView: View {
 
     var creatorUpdate: NewCreatorUpdate
     @StateObject var contentObserver: CreatorUpdateWidget.ContentObserver
-
-    var isLoading: Bool {
-        let attachments = contentObserver.creatorUpdate?.attachments ?? []
-
-        if attachments.isEmpty {
-            return false
-        }
-
-        for attachment in attachments {
-            switch attachment {
-            case .processing:
-                return true
-            default:
-                continue
-            }
-        }
-
-        return false
-    }
 
     var body: some View {
         VStack {
@@ -145,12 +128,13 @@ struct CreatorUpdateComposerView: View {
                     }
 
                     componentFactory.buildLabel(
-                        text: "Attachments",
+                        text: attachmentTitle,
                         localAttributes: .default(with: .headline, alignment: .leading)
                     )
                     .padding(.top, 32)
 
                     CreatorUpdateComposerAttachmentsView(
+                        maxAttachments: maxAttachments,
                         contentObserver: contentObserver
                     )
 
@@ -261,6 +245,35 @@ struct CreatorUpdateComposerView: View {
 
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
+
+    private var isLoading: Bool {
+        let attachments = contentObserver.creatorUpdate?.attachments ?? []
+
+        if attachments.isEmpty {
+            return false
+        }
+
+        for attachment in attachments {
+            switch attachment {
+            case .processing:
+                return true
+            default:
+                continue
+            }
+        }
+
+        return false
+    }
+
+    private var attachmentTitle: String {
+        let attachments = contentObserver.creatorUpdate?.attachments ?? []
+
+        if attachments.isEmpty {
+            return "Attachments"
+        }
+
+        return "Attachments \(attachments.count)/\(maxAttachments)"
+    }
 }
 
 private let primaryColor = Color(red: 255 / 255.0, green: 201 / 255.0, blue: 6 / 255.0)
