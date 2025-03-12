@@ -48,6 +48,8 @@ struct CreatorUpdateComposerAttachmentView: View {
                 }
 
                 ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .tint(ParraColorSwatch.gray.shade300)
             }
         case .uploaded(_, _, let image):
             // Even thought we just uploaded the asset, show the local one

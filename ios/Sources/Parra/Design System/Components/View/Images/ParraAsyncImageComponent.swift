@@ -104,6 +104,8 @@ public struct ParraAsyncImageComponent: View, Equatable {
         case .empty:
             if config.showLoadingIndicator {
                 ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .tint(ParraColorSwatch.gray.shade300)
             }
         case .failure:
             if config.showFailureIndicator {
