@@ -17,6 +17,22 @@ enum CreatorUpdateTopic: String, Codable, Hashable, Equatable, Sendable {
     case giveaway
     case live
     case general
+    case qa
+
+    // MARK: - Internal
+
+    var displayName: String {
+        switch self {
+        case .giveaway:
+            return "Giveaway"
+        case .live:
+            return "Live"
+        case .general:
+            return "General"
+        case .qa:
+            return "Q&A"
+        }
+    }
 }
 
 enum CreatorUpdateVisibilityType: String, Codable, Hashable, Equatable, Sendable,
@@ -101,7 +117,7 @@ struct CreatorUpdateTemplate: Codable, Hashable, Equatable, Sendable, Identifiab
     let senderId: String?
     let feedViewId: String?
     let notificationTemplateId: String?
-    let topic: CreatorUpdateTopic?
+    let topic: NilFailureDecodable<CreatorUpdateTopic>
     let title: String?
     let body: String?
     let visibility: CreatorUpdateVisibility

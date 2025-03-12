@@ -8,6 +8,7 @@
 import SwiftUI
 
 private let maxAttachments = 10
+private let logger = Logger()
 
 struct CreatorUpdateComposerView: View {
     // MARK: - Lifecycle
@@ -31,132 +32,39 @@ struct CreatorUpdateComposerView: View {
     @StateObject var contentObserver: CreatorUpdateWidget.ContentObserver
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        CreatorUpdateTagBadge(
-                            title: creatorUpdate.selectedTemplate.name,
-                            style: .secondary
-                        )
+                badgeBar
 
-                        withContent(content: creatorUpdate.topic) { content in
-                            CreatorUpdateTagBadge(
-                                title: content.rawValue,
-                                icon: "number",
-                                style: .secondary
-                            )
-                        }
+                inputFields
 
-                        Spacer()
-                    }
-                    .padding(.bottom, 16)
+                attachments
 
-                    VStack(alignment: .leading) {
-                        componentFactory.buildTextInput(
-                            config: ParraTextInputConfig(
-                                shouldAutoFocus: false
-                            ),
-                            content: .init(
-                                defaultText: creatorUpdate.title,
-                                placeholder: ParraLabelContent(text: "Title"),
-                                textChanged: { text in
-                                    contentObserver.creatorUpdate?.title = text ?? ""
-                                }
-                            ),
-                            localAttributes: ParraAttributes.TextInput(
-                                padding: .zero,
-                                textInputAutocapitalization: .sentences,
-                                autocorrectionDisabled: false
-                            )
-                        )
-                        .focused($focusedField, equals: .title)
-                        .submitLabel(.next)
-                        .onSubmit {
-                            focusedField = .body
-                        }
-
-                        componentFactory.buildTextEditor(
-                            config: .init(
-                                shouldAutoFocus: false
-                            ),
-                            content: .init(
-                                defaultText: creatorUpdate.body,
-                                placeholder: ParraLabelContent(text: "Body"),
-                                textChanged: { text in
-                                    contentObserver.creatorUpdate?.body = text ?? ""
-                                }
-                            ),
-                            localAttributes: ParraAttributes.TextEditor(
-                                padding: .zero,
-                                textInputAutocapitalization: .sentences,
-                                autocorrectionDisabled: false
-                            )
-                        )
-                        .focused($focusedField, equals: .body)
-                        .submitLabel(.continue)
-                        .padding(0)
-                    }
-
-                    VStack(alignment: .leading) {
-                        HStack {
-                            componentFactory.buildLabel(
-                                text: "Attachments",
-                                localAttributes: .default(
-                                    with: .headline,
-                                    alignment: .leading
-                                )
-                            )
-
-                            Spacer()
-
-                            if let attachments = contentObserver.creatorUpdate?
-                                .attachments, !attachments.isEmpty
-                            {
-                                componentFactory.buildLabel(
-                                    text: "\(attachments.count)/\(maxAttachments)",
-                                    localAttributes: .default(
-                                        with: .caption,
-                                        alignment: .trailing
-                                    )
-                                )
-                            }
-                        }
-
-                        CreatorUpdateComposerAttachmentsView(
-                            maxAttachments: maxAttachments,
-                            contentObserver: contentObserver
-                        )
-                    }
-                    .padding(.bottom, 16)
-
-                    VStack(alignment: .leading) {
-                        componentFactory.buildLabel(
-                            text: "Visibility",
-                            localAttributes: .default(
-                                with: .headline,
-                                alignment: .leading
-                            )
-                        )
-
-                        postVisibility
-
-                        if !creatorUpdate.attachments.isEmpty {
-                            attachmentVisibility
-                                .padding(.top, 8)
-                        }
-                    }
-                }
-                .padding()
+                visibility
             }
+            .contentMargins(20, for: .scrollContent)
             .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.immediately)
 
             footer
         }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
         .background(theme.palette.primaryBackground)
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle("New Post")
+    }
+
+    var shouldDisablePreviewButton: Bool {
+        creatorUpdate.title
+            .trimmingCharacters(
+                in: .whitespacesAndNewlines
+            ).isEmpty || creatorUpdate.body.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+            .isEmpty || isLoading
     }
 
     // MARK: - Private
@@ -166,68 +74,208 @@ struct CreatorUpdateComposerView: View {
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
 
-    @ViewBuilder private var postVisibility: some View {
+    @ViewBuilder private var badgeBar: some View {
         HStack {
-            componentFactory.buildLabel(
-                text: "Who can see this post?",
-                localAttributes: .default(with: .callout)
+            CreatorUpdateTagBadge(
+                title: creatorUpdate.selectedTemplate.name,
+                style: .secondary
             )
 
-            Spacer()
-
-            Picker(
-                "Who can see this post?",
-                selection: .init(
-                    get: {
-                        return contentObserver.creatorUpdate?.visibility.postVisibility
-                            ?? creatorUpdate.selectedTemplate.visibility.postVisibility
-                    },
-                    set: { newValue in
-                        contentObserver.creatorUpdate?.visibility
-                            .postVisibility = newValue
-                    }
+            withContent(content: creatorUpdate.topic) { content in
+                CreatorUpdateTagBadge(
+                    title: content.displayName,
+                    icon: "number",
+                    style: .secondary
                 )
-            ) {
-                ForEach(CreatorUpdateVisibilityType.allCases) { type in
-                    Text(type.composerName)
-                        .tag(type)
+            }
+
+            Spacer()
+        }
+        .padding(.bottom, 16)
+    }
+
+    private var textEditorAttributes: ParraAttributes.TextEditor {
+        ParraAttributes.TextEditor(
+            titleLabel: .default(with: .body),
+            padding: .zero,
+            textInputAutocapitalization: .sentences,
+            autocorrectionDisabled: false
+        )
+    }
+
+//    private var textEditorContent: ParraTextEditorContent {
+//        ParraTextEditorContent(
+//            title: ParraLabelContent(text: ""),
+//            defaultText: creatorUpdate.body,
+//            placeholder: ParraLabelContent(text: "Body"),
+//            helper: ParraLabelContent(text: ""),
+//            textChanged: { text in
+//
+//            }
+//        )
+//    }
+
+    @ViewBuilder private var inputFields: some View {
+        VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
+                componentFactory.buildLabel(
+                    text: "Title",
+                    localAttributes: .defaultInputTitle(for: theme)
+                )
+
+//                TextField(text: <#T##Binding<String>#>, label: <#T##() -> View#>)
+                componentFactory.buildTextInput(
+                    config: ParraTextInputConfig(
+                        shouldAutoFocus: false
+                    ),
+                    content: .init(
+                        defaultText: creatorUpdate.title,
+                        placeholder: ParraLabelContent(text: ""),
+                        textChanged: { text in
+                            contentObserver.creatorUpdate?.title = text ?? ""
+                        }
+                    ),
+                    localAttributes: ParraAttributes.TextInput(
+                        padding: .zero,
+                        textInputAutocapitalization: .sentences,
+                        autocorrectionDisabled: false
+                    )
+                )
+                .focused($focusedField, equals: .title)
+                .submitLabel(.next)
+                .onSubmit {
+                    focusedField = .body
                 }
             }
-            .pickerStyle(.menu)
+
+            VStack(alignment: .leading, spacing: 0) {
+                componentFactory.buildLabel(
+                    text: "Body",
+                    localAttributes: .defaultInputTitle(for: theme)
+                )
+
+                let attributes = componentFactory.attributeProvider.textEditorAttributes(
+                    config: .default,
+                    localAttributes: nil,
+                    theme: theme
+                )
+
+                // Can't currently figure out why but using the text editor
+                // component componentFactory.buildTextEditor is causing this
+                // https://console.firebase.google.com/u/0/project/kb-app-f1338/crashlytics/app/ios:com.kurt-benkert.kb-ios/issues/e08c202a8fbcf80ab06cdf8acef2c4b9?time=last-seven-days&types=crash&sessionEventKey=af1ccae153c649228675152425179952_2059485690314412986
+                // crash
+
+                TextEditor(
+                    text: Binding<String>(
+                        get: {
+                            contentObserver.creatorUpdate?.body ?? ""
+                        },
+                        set: { newValue in
+                            contentObserver.creatorUpdate?.body = newValue
+                        }
+                    )
+                )
+                .applyTextEditorAttributes(attributes, using: theme)
+                .focused($focusedField, equals: .body)
+                .submitLabel(.continue)
+            }
+        }
+        .padding(.bottom, 12)
+    }
+
+    @ViewBuilder private var attachments: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                componentFactory.buildLabel(
+                    text: "Attachments",
+                    localAttributes: .default(
+                        with: .headline,
+                        alignment: .leading
+                    )
+                )
+
+                Spacer()
+
+                if let attachments = contentObserver.creatorUpdate?
+                    .attachments, !attachments.isEmpty
+                {
+                    componentFactory.buildLabel(
+                        text: "\(attachments.count)/\(maxAttachments)",
+                        localAttributes: .default(
+                            with: .caption,
+                            alignment: .trailing
+                        )
+                    )
+                }
+            }
+
+            CreatorUpdateComposerAttachmentsView(
+                maxAttachments: maxAttachments,
+                contentObserver: contentObserver
+            )
+        }
+        .padding(.bottom, 16)
+    }
+
+    @ViewBuilder private var visibility: some View {
+        VStack(alignment: .leading) {
+            componentFactory.buildLabel(
+                text: "Visibility",
+                localAttributes: .default(
+                    with: .headline,
+                    alignment: .leading
+                )
+            )
+
+            postVisibility
+
+            if !creatorUpdate.attachments.isEmpty {
+                attachmentVisibility
+                    .padding(.top, 8)
+            }
         }
     }
 
-    @ViewBuilder private var attachmentVisibility: some View {
-        HStack {
-            componentFactory.buildLabel(
-                text: "Who can see attachments?",
-                localAttributes: .default(with: .callout)
-            )
+    @ViewBuilder private var postVisibility: some View {
+        CreatorUpdateVisibilitySettingView(
+            currentVisibility: .init(
+                get: {
+                    return contentObserver.creatorUpdate?.visibility.postVisibility
+                        ?? creatorUpdate.selectedTemplate.visibility.postVisibility
+                },
+                set: { newValue in
+                    logger.debug("Updated post visibility", [
+                        "visibility": newValue.rawValue
+                    ])
 
-            Spacer()
-
-            Picker(
-                "Who can see attachments?",
-                selection: .init(
-                    get: {
-                        return contentObserver.creatorUpdate?.visibility
-                            .attachmentVisibility
-                            ?? creatorUpdate.selectedTemplate.visibility
-                            .attachmentVisibility
-                    },
-                    set: { newValue in
-                        contentObserver.creatorUpdate?.visibility
-                            .attachmentVisibility = newValue
-                    }
-                )
-            ) {
-                ForEach(CreatorUpdateVisibilityType.allCases) { type in
-                    Text(type.composerName)
-                        .tag(type)
+                    contentObserver.creatorUpdate?.visibility
+                        .postVisibility = newValue
                 }
-            }
-            .pickerStyle(.menu)
-        }
+            ),
+            title: "Who can see this post?"
+        )
+    }
+
+    @ViewBuilder private var attachmentVisibility: some View {
+        CreatorUpdateVisibilitySettingView(
+            currentVisibility: .init(
+                get: {
+                    return contentObserver.creatorUpdate?.visibility
+                        .attachmentVisibility
+                        ?? creatorUpdate.selectedTemplate.visibility
+                        .attachmentVisibility ?? .public
+                },
+                set: { newValue in
+                    logger.debug("Updated attachment visibility", [
+                        "visibility": newValue.rawValue
+                    ])
+
+                    contentObserver.creatorUpdate?.visibility
+                        .attachmentVisibility = newValue
+                }
+            ),
+            title: "Who can see attachments?"
+        )
     }
 
     @ViewBuilder private var footer: some View {
@@ -251,7 +299,12 @@ struct CreatorUpdateComposerView: View {
                                         label: ParraAttributes.Label(
                                             cornerRadius: .lg,
                                             padding: .xl,
-                                            background: theme.palette.primary
+                                            background: shouldDisablePreviewButton ? theme
+                                                .palette.primary
+                                                .toParraColor()
+                                                .opacity(
+                                                    0.6
+                                                ) : theme.palette.primary
                                                 .toParraColor(),
                                             frame: .flexible(
                                                 FlexibleFrameAttributes(
@@ -272,15 +325,7 @@ struct CreatorUpdateComposerView: View {
                     )
                     .safeAreaPadding(.horizontal)
                 }
-                .disabled(
-                    creatorUpdate.title
-                        .trimmingCharacters(
-                            in: .whitespacesAndNewlines
-                        ).isEmpty || creatorUpdate.body.trimmingCharacters(
-                            in: .whitespacesAndNewlines
-                        )
-                        .isEmpty || isLoading
-                )
+                .disabled(shouldDisablePreviewButton)
             },
             secondaryActionBuilder: {
                 // Just to hide branding here. This is a creator only screen.
@@ -312,127 +357,10 @@ struct CreatorUpdateComposerView: View {
 
 private let primaryColor = Color(red: 255 / 255.0, green: 201 / 255.0, blue: 6 / 255.0)
 
-let theme = ParraTheme(
-    lightPalette: ParraColorPalette(
-        primary: ParraColorSwatch(
-            primary: primaryColor,
-            name: "Primary"
-        ),
-        secondary: ParraColorSwatch(
-            primary: .black,
-            name: "Secondary"
-        ),
-        primaryBackground: Color(red: 246 / 255.0, green: 243 / 255.0, blue: 233 / 255.0),
-        secondaryBackground: .white,
-        primaryText: ParraColorSwatch(
-            primary: Color(red: 60 / 255.0, green: 60 / 255.0, blue: 67 / 255.0),
-            name: "Primary Text"
-        ),
-        secondaryText: ParraColorSwatch(
-            primary: Color(red: 17 / 255.0, green: 24 / 255.0, blue: 39 / 255.0),
-            name: "Secondary Text"
-        ),
-        primarySeparator: ParraColorSwatch(
-            primary: Color(red: 229 / 255.0, green: 231 / 255.0, blue: 235 / 255.0),
-            name: "Primary Separator"
-        ),
-        secondarySeparator: ParraColorSwatch(
-            primary: Color(red: 198 / 255.0, green: 198 / 255.0, blue: 198 / 255.0),
-            name: "Secondary Separator"
-        ),
-        primaryChipText: ParraColorSwatch(
-            primary: Color(UIColor.systemBlue),
-            name: "Primary Chip Text"
-        ).shade700.toSwatch(),
-        secondaryChipText: ParraColorSwatch(
-            primary: ParraColorSwatch.gray.shade800,
-            name: "Secondary Chip Text"
-        ),
-        primaryChipBackground: ParraColorSwatch(
-            primary: Color(UIColor.systemBlue),
-            name: "Primary Chip Background"
-        ).shade400.toSwatch(),
-        secondaryChipBackground: ParraColorSwatch(
-            primary: ParraColorSwatch.zinc.shade200,
-            name: "Secondary Chip Background"
-        ),
-        error: ParraColorSwatch(
-            primary: Color(red: 225 / 255.0, green: 82 / 255.0, blue: 65 / 255.0),
-            name: "Error"
-        ),
-        warning: ParraColorSwatch(
-            primary: Color(red: 253 / 255.0, green: 169 / 255.0, blue: 66 / 255.0),
-            name: "Warning"
-        ),
-        info: ParraColorSwatch(
-            primary: Color(red: 38 / 255.0, green: 139 / 255.0, blue: 210 / 255.0),
-            name: "Info"
-        ),
-        success: ParraColorSwatch(primary: .green, name: "Success")
-    ),
-    darkPalette: ParraColorPalette(
-        primary: ParraColorSwatch(
-            primary: primaryColor,
-            name: "Primary"
-        ),
-        secondary: ParraColorSwatch(
-            primary: .white,
-            name: "Secondary"
-        ),
-        primaryBackground: Color(red: 54 / 255.0, green: 65 / 255.0, blue: 85 / 255.0),
-        secondaryBackground: Color(red: 26 / 255.0, green: 31 / 255.0, blue: 41 / 255.0),
-        primaryText: ParraColorSwatch(
-            primary: Color(red: 235 / 255.0, green: 237 / 255.0, blue: 240 / 255.0),
-            name: "Primary Text"
-        ),
-        secondaryText: ParraColorSwatch(
-            primary: Color(red: 187 / 255.0, green: 189 / 255.0, blue: 191 / 255.0),
-            name: "Secondary Text"
-        ),
-        primarySeparator: ParraColorSwatch(
-            primary: Color(red: 44 / 255.0, green: 55 / 255.0, blue: 75 / 255.0),
-            name: "Primary Separator"
-        ),
-        secondarySeparator: ParraColorSwatch(
-            primary: Color(red: 71 / 255.0, green: 76 / 255.0, blue: 86 / 255.0),
-            name: "Secondary Separator"
-        ),
-        primaryChipText: ParraColorSwatch(
-            primary: ParraColorSwatch.gray.shade50,
-            name: "Primary Chip Text"
-        ),
-        secondaryChipText: ParraColorSwatch(
-            primary: ParraColorSwatch.gray.shade50,
-            name: "Secondary Chip Text"
-        ),
-        primaryChipBackground: ParraColorSwatch(
-            primary: Color(UIColor.systemBlue).opacity(0.65),
-            name: "Primary Chip Background"
-        ).shade500.toSwatch(),
-        secondaryChipBackground: ParraColorSwatch(
-            primary: ParraColorSwatch.zinc.shade600,
-            name: "Secondary Chip Background"
-        ),
-        error: ParraColorSwatch(
-            primary: Color(red: 225 / 255.0, green: 82 / 255.0, blue: 65 / 255.0),
-            name: "Error"
-        ),
-        warning: ParraColorSwatch(
-            primary: Color(red: 253 / 255.0, green: 169 / 255.0, blue: 66 / 255.0),
-            name: "Warning"
-        ),
-        info: ParraColorSwatch(
-            primary: Color(red: 38 / 255.0, green: 139 / 255.0, blue: 210 / 255.0),
-            name: "Info"
-        ),
-        success: ParraColorSwatch(primary: .green, name: "Success")
-    )
-)
-
 #Preview {
     ParraContainerPreview<CreatorUpdateWidget>(
         config: .default,
-        theme: theme,
+        theme: .default,
         authState: .authenticatedPreview
     ) { parra, _, config in
 
@@ -449,7 +377,7 @@ let theme = ParraTheme(
                         senderId: .uuid,
                         feedViewId: nil,
                         notificationTemplateId: nil,
-                        topic: nil,
+                        topic: .init(nil),
                         title: nil,
                         body: nil,
                         visibility: .init(

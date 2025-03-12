@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+private let logger = Logger()
+
 struct CreatorUpdatePreviewView: View {
     // MARK: - Internal
 
@@ -101,6 +103,8 @@ struct CreatorUpdatePreviewView: View {
                                 )
                             )
                         ) {
+                            logger.debug("Publish now")
+
                             isShowingConfirmPublish = true
                         }
                     },
@@ -118,6 +122,8 @@ struct CreatorUpdatePreviewView: View {
                                 )
                             )
                         ) {
+                            logger.debug("Publish now")
+
                             isShowingSchedulePicker = true
                             selectedPublishDate = Date.now
                         }

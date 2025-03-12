@@ -12,7 +12,7 @@ struct NewCreatorUpdate: Hashable {
 
     init(template: CreatorUpdateTemplate) {
         self.selectedTemplate = template
-        self.topic = template.topic
+        self.topic = template.topic.value
         self.title = template.title ?? ""
         self.body = template.body ?? ""
         self.attachments = []

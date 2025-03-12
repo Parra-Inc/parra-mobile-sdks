@@ -26,6 +26,11 @@ struct CreatorUpdateTemplatePickerCell: View {
 
     var body: some View {
         Button {
+            Logger.debug("Selected creator update template", [
+                "id": template.id,
+                "name": template.name
+            ])
+
             contentObserver.creatorUpdate = .init(template: template)
         } label: {
             VStack(alignment: .leading, spacing: 16) {
@@ -47,7 +52,7 @@ struct CreatorUpdateTemplatePickerCell: View {
                     }
 
                     CreatorUpdateTagBadge(
-                        title: "post",
+                        title: "Post",
                         icon: postSymbol,
                         style: .secondary
                     )
@@ -65,15 +70,15 @@ struct CreatorUpdateTemplatePickerCell: View {
 
                     if let attachmentSymbol {
                         CreatorUpdateTagBadge(
-                            title: "attachments",
+                            title: "Attachments",
                             icon: attachmentSymbol,
                             style: .secondary
                         )
                     }
 
-                    withContent(content: template.topic) { content in
+                    withContent(content: template.topic.value) { content in
                         CreatorUpdateTagBadge(
-                            title: content.rawValue,
+                            title: content.displayName,
                             icon: "number",
                             style: .secondary
                         )
