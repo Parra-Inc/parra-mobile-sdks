@@ -55,7 +55,8 @@ extension ParraFeedItemYoutubeVideoData: ParraFixture {
                     )
                 ),
                 publishedAt: .now.daysAgo(1),
-                liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none
+                liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none,
+                attachmentPaywall: nil
             ),
             ParraFeedItemYoutubeVideoData(
                 videoId: "fLsyFO-bgW0",
@@ -102,7 +103,8 @@ extension ParraFeedItemYoutubeVideoData: ParraFixture {
                     )
                 ),
                 publishedAt: .now.daysAgo(12),
-                liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none
+                liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none,
+                attachmentPaywall: nil
             ),
             ParraFeedItemYoutubeVideoData(
                 videoId: "UtHjPskLgV4",
@@ -137,7 +139,8 @@ extension ParraFeedItemYoutubeVideoData: ParraFixture {
                     maxres: nil
                 ),
                 publishedAt: .now.daysAgo(13),
-                liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none
+                liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none,
+                attachmentPaywall: nil
             )
         ]
     }

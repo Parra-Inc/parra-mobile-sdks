@@ -82,7 +82,8 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         description: String?,
         thumbnails: ParraYoutubeThumbnails,
         publishedAt: Date,
-        liveBroadcastContent: ParraFeedItemLiveBroadcastContent?
+        liveBroadcastContent: ParraFeedItemLiveBroadcastContent?,
+        attachmentPaywall: ParraAppPaywallConfiguration?
     ) {
         self.videoId = videoId
         self.url = url
@@ -93,6 +94,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         self.thumbnails = thumbnails
         self.publishedAt = publishedAt
         self.liveBroadcastContent = liveBroadcastContent
+        self.attachmentPaywall = attachmentPaywall
     }
 
     // MARK: - Public
@@ -106,6 +108,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
     public let thumbnails: ParraYoutubeThumbnails
     public let publishedAt: Date
     public let liveBroadcastContent: ParraFeedItemLiveBroadcastContent?
+    public let attachmentPaywall: ParraAppPaywallConfiguration?
 
     // MARK: - Internal
 
@@ -119,6 +122,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         case thumbnails
         case publishedAt
         case liveBroadcastContent
+        case attachmentPaywall
     }
 }
 

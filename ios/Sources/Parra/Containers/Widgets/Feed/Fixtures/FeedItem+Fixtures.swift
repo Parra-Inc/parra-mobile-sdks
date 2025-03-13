@@ -98,7 +98,8 @@ extension ParraFeedItem: ParraFixture {
                         )
                     ),
                     publishedAt: .now.daysAgo(1),
-                    liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none
+                    liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none,
+                    attachmentPaywall: nil
                 )
             ),
             reactionOptions: nil,
