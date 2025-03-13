@@ -23,11 +23,6 @@ struct CreatorUpdateComposerView: View {
 
     // MARK: - Internal
 
-    enum Field: Hashable {
-        case title
-        case body
-    }
-
     var creatorUpdate: NewCreatorUpdate
     @StateObject var contentObserver: CreatorUpdateWidget.ContentObserver
 
@@ -36,7 +31,9 @@ struct CreatorUpdateComposerView: View {
             ScrollView {
                 badgeBar
 
-                inputFields
+                CreatorUpdateComposerFieldsView(
+                    contentObserver: contentObserver
+                )
 
                 attachments
 
@@ -69,8 +66,6 @@ struct CreatorUpdateComposerView: View {
 
     // MARK: - Private
 
-    @FocusState private var focusedField: Field?
-
     @Environment(\.parraTheme) private var theme
     @Environment(\.parraComponentFactory) private var componentFactory
 
@@ -92,95 +87,6 @@ struct CreatorUpdateComposerView: View {
             Spacer()
         }
         .padding(.bottom, 16)
-    }
-
-    private var textEditorAttributes: ParraAttributes.TextEditor {
-        ParraAttributes.TextEditor(
-            titleLabel: .default(with: .body),
-            padding: .zero,
-            textInputAutocapitalization: .sentences,
-            autocorrectionDisabled: false
-        )
-    }
-
-//    private var textEditorContent: ParraTextEditorContent {
-//        ParraTextEditorContent(
-//            title: ParraLabelContent(text: ""),
-//            defaultText: creatorUpdate.body,
-//            placeholder: ParraLabelContent(text: "Body"),
-//            helper: ParraLabelContent(text: ""),
-//            textChanged: { text in
-//
-//            }
-//        )
-//    }
-
-    @ViewBuilder private var inputFields: some View {
-        VStack(alignment: .leading) {
-            VStack(alignment: .leading, spacing: 0) {
-                componentFactory.buildLabel(
-                    text: "Title",
-                    localAttributes: .defaultInputTitle(for: theme)
-                )
-
-//                TextField(text: <#T##Binding<String>#>, label: <#T##() -> View#>)
-                componentFactory.buildTextInput(
-                    config: ParraTextInputConfig(
-                        shouldAutoFocus: false
-                    ),
-                    content: .init(
-                        defaultText: creatorUpdate.title,
-                        placeholder: ParraLabelContent(text: ""),
-                        textChanged: { text in
-                            contentObserver.creatorUpdate?.title = text ?? ""
-                        }
-                    ),
-                    localAttributes: ParraAttributes.TextInput(
-                        padding: .zero,
-                        textInputAutocapitalization: .sentences,
-                        autocorrectionDisabled: false
-                    )
-                )
-                .focused($focusedField, equals: .title)
-                .submitLabel(.next)
-                .onSubmit {
-                    focusedField = .body
-                }
-            }
-
-            VStack(alignment: .leading, spacing: 0) {
-                componentFactory.buildLabel(
-                    text: "Body",
-                    localAttributes: .defaultInputTitle(for: theme)
-                )
-
-                let attributes = componentFactory.attributeProvider.textEditorAttributes(
-                    config: .default,
-                    localAttributes: nil,
-                    theme: theme
-                )
-
-                // Can't currently figure out why but using the text editor
-                // component componentFactory.buildTextEditor is causing this
-                // https://console.firebase.google.com/u/0/project/kb-app-f1338/crashlytics/app/ios:com.kurt-benkert.kb-ios/issues/e08c202a8fbcf80ab06cdf8acef2c4b9?time=last-seven-days&types=crash&sessionEventKey=af1ccae153c649228675152425179952_2059485690314412986
-                // crash
-
-                TextEditor(
-                    text: Binding<String>(
-                        get: {
-                            contentObserver.creatorUpdate?.body ?? ""
-                        },
-                        set: { newValue in
-                            contentObserver.creatorUpdate?.body = newValue
-                        }
-                    )
-                )
-                .applyTextEditorAttributes(attributes, using: theme)
-                .focused($focusedField, equals: .body)
-                .submitLabel(.continue)
-            }
-        }
-        .padding(.bottom, 12)
     }
 
     @ViewBuilder private var attachments: some View {
