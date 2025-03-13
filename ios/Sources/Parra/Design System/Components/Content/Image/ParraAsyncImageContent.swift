@@ -34,7 +34,7 @@ public struct ParraAsyncImageContent: Hashable, Equatable {
     public init(
         url: URL,
         blurHash: String? = nil,
-        originalSize: CGSize? = nil
+        originalSize: CGSize
     ) {
         self.url = url
         self.blurHash = blurHash
@@ -45,5 +45,5 @@ public struct ParraAsyncImageContent: Hashable, Equatable {
 
     let url: URL
     let blurHash: String?
-    let originalSize: _ParraSize?
+    let originalSize: _ParraSize
 }

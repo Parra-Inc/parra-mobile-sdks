@@ -63,121 +63,18 @@ public struct ParraAsyncImageComponent: View, Equatable {
                     animation: .easeIn(duration: 0.35)
                 ),
                 content: { phase in
-                    imageContent(for: phase)
-                        .transition(.opacity)
-                        .aspectRatio(
-                            config.aspectRatio,
-                            contentMode: config.contentMode
-                        )
+                    AsyncImageContent(
+                        phase: phase,
+                        config: config,
+                        content: content,
+                        attributes: attributes
+                    )
                 }
             )
         } else {
             Color(theme.palette.secondaryBackground)
                 .opacity(0.4)
         }
-    }
-
-    @MainActor
-    @ViewBuilder
-    private func imageContent(
-        for phase: AsyncImagePhase
-    ) -> some View {
-        switch phase {
-        case .empty:
-            renderBlurHash(for: phase)
-        case .success(let image):
-            image
-                .resizable()
-                .blur(radius: config.blurContent ? 10 : 0, opaque: true)
-        case .failure:
-            renderBlurHash(for: phase)
-                .transition(.opacity)
-        @unknown default:
-            EmptyView()
-        }
-    }
-
-    @ViewBuilder
-    private func renderBlurHashOverlay(
-        for phase: AsyncImagePhase
-    ) -> some View {
-        switch phase {
-        case .empty:
-            if config.showLoadingIndicator {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .tint(ParraColorSwatch.gray.shade300)
-            }
-        case .failure:
-            if config.showFailureIndicator {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.white)
-            }
-        case .success:
-            EmptyView()
-        default:
-            EmptyView()
-        }
-    }
-
-    @ViewBuilder
-    private func renderBlurHash(
-        for phase: AsyncImagePhase
-    ) -> some View {
-        ZStack(alignment: .center) {
-            Color.clear.frame(
-                maxWidth: .infinity,
-                maxHeight: .infinity
-            )
-
-            if config.showBlurHash {
-                GeometryReader { geometry in
-                    let imageSize = content.originalSize?.toCGSize ?? geometry.size
-                    let aspectRatio = imageSize.width / imageSize.height
-
-                    let size = if imageSize.width > imageSize.height {
-                        CGSize(width: 32, height: 32 / aspectRatio)
-                    } else if imageSize.width == imageSize.height {
-                        CGSize(width: 32, height: 32)
-                    } else {
-                        CGSize(width: 32 / aspectRatio, height: 32)
-                    }
-
-                    VStack(alignment: .center) {
-                        Spacer()
-
-                        if let blurHash = content.blurHash, let blurImage = Image(
-                            blurHash: blurHash,
-                            size: size
-                        ) {
-                            blurImage
-                                .resizable()
-                                .aspectRatio(
-                                    config.aspectRatio,
-                                    contentMode: config.contentMode
-                                )
-                                .clipped()
-
-                        } else if let background = attributes.background {
-                            Color(background)
-                        }
-
-                        Spacer()
-                    }
-                    .overlay(alignment: .center) {
-                        renderBlurHashOverlay(for: phase)
-                    }
-                    .frame(
-                        maxWidth: .infinity,
-                        maxHeight: .infinity
-                    )
-                }
-            }
-        }
-        .frame(
-            maxWidth: .infinity,
-            maxHeight: .infinity
-        )
     }
 }
 
@@ -201,7 +98,8 @@ public struct ParraAsyncImageComponent: View, Equatable {
                     content: ParraAsyncImageContent(
                         url: URL(
                             string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
-                        )!
+                        )!,
+                        originalSize: CGSize(width: 320, height: 140)
                     ),
                     localAttributes: .init(
                         size: CGSize(width: 320, height: 140)
@@ -214,7 +112,8 @@ public struct ParraAsyncImageComponent: View, Equatable {
                     content: ParraAsyncImageContent(
                         url: URL(
                             string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100"
-                        )!
+                        )!,
+                        originalSize: CGSize(width: 320, height: 140)
                     ),
                     localAttributes: .init(
                         size: CGSize(width: 320, height: 140)
@@ -226,7 +125,8 @@ public struct ParraAsyncImageComponent: View, Equatable {
                     content: ParraAsyncImageContent(
                         url: URL(
                             string: "https://images.unsplash.com/photo-1636819488524-1f019c4efsdfsd"
-                        )!
+                        )!,
+                        originalSize: CGSize(width: 320, height: 140)
                     ),
                     localAttributes: .init(
                         size: CGSize(width: 320, height: 140)

@@ -14,7 +14,7 @@ public extension Image {
     init?(
         blurHash: String?,
         size: CGSize,
-        punch: Float = 1
+        punch: Float = 0.3
     ) {
         guard let uiImage = UIImage(
             blurHash: blurHash,

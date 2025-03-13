@@ -44,7 +44,10 @@ struct CartLineItemView: View {
                         ),
                         content: ParraAsyncImageContent(
                             url: image.url,
-                            originalSize: image.size
+                            originalSize: image.size ?? CGSize(
+                                width: 110,
+                                height: 110
+                            )
                         )
                     )
                     .cornerRadius(16)

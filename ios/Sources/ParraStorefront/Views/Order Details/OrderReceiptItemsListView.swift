@@ -75,7 +75,8 @@ struct OrderReceiptItemsListView: View {
             ) {
                 componentFactory.buildAsyncImage(
                     content: ParraAsyncImageContent(
-                        url: imageUrl
+                        url: imageUrl,
+                        originalSize: CGSize(width: 60, height: 60)
                     ),
                     localAttributes: ParraAttributes.AsyncImage(
                         cornerRadius: .md,

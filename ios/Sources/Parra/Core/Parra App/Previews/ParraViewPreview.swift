@@ -16,7 +16,7 @@ struct ParraViewPreview<Content>: View where Content: View {
 
     init(
         theme: ParraTheme = .default,
-        content: @escaping (_ factory: ParraComponentFactory) -> Content
+        @ViewBuilder content: @escaping (_ factory: ParraComponentFactory) -> Content
     ) {
         self.content = content
         self.configuration = .init(theme: theme)

@@ -113,7 +113,11 @@ struct ReactionPickerButton: View {
                             contentMode: .fit
                         ),
                         content: ParraAsyncImageContent(
-                            url: url
+                            url: url,
+                            originalSize: CGSize(
+                                width: 40.0,
+                                height: 40.0
+                            )
                         ),
                         localAttributes: ParraAttributes.AsyncImage(
                             size: CGSize(

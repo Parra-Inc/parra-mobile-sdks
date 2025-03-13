@@ -37,7 +37,10 @@ struct ReactionIconView: View {
                         aspectRatio: 1.0,
                         contentMode: .fit
                     ),
-                    content: ParraAsyncImageContent(url: url),
+                    content: ParraAsyncImageContent(
+                        url: url,
+                        originalSize: CGSize(width: size, height: size)
+                    ),
                     localAttributes: ParraAttributes.AsyncImage(
                         size: CGSize(width: size, height: size)
                     )

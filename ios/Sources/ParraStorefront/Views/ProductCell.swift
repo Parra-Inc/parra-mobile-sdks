@@ -87,7 +87,11 @@ struct ProductCell: View {
                             contentMode: .fill
                         ),
                         content: ParraAsyncImageContent(
-                            url: cdnUrl
+                            url: cdnUrl,
+                            originalSize: CGSize(
+                                width: proxy.size.width,
+                                height: proxy.size.height
+                            )
                         )
                     )
                     .frame(

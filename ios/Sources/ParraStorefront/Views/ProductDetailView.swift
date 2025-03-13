@@ -116,58 +116,63 @@ struct ProductDetailView: View {
     @State private var selectedVariant: ParraProductVariant
 
     private var images: some View {
-        TabView {
-            ForEach(product.images, id: \.self) { image in
-                ZStack {
-                    let cdnUrl = shopifyCdnUrl(for: image.url)
+        GeometryReader { proxy in
+            TabView {
+                ForEach(product.images, id: \.self) { image in
+                    ZStack {
+                        let cdnUrl = shopifyCdnUrl(for: image.url)
 
-                    componentFactory.buildAsyncImage(
-                        config: ParraAsyncImageConfig(
-                            aspectRatio: 1.0,
-                            contentMode: .fill
-                        ),
-                        content: ParraAsyncImageContent(
-                            url: cdnUrl,
-                            originalSize: image.size
+                        componentFactory.buildAsyncImage(
+                            config: ParraAsyncImageConfig(
+                                aspectRatio: 1.0,
+                                contentMode: .fill
+                            ),
+                            content: ParraAsyncImageContent(
+                                url: cdnUrl,
+                                originalSize: image.size ?? CGSize(
+                                    width: proxy.size.width,
+                                    height: proxy.size.width
+                                )
+                            )
                         )
-                    )
-                    .cornerRadius(16)
-                    .overlay(
-                        alignment: .topLeading
-                    ) {
-                        if let altText = image.altText {
-                            componentFactory.buildLabel(
-                                text: altText,
-                                localAttributes: ParraAttributes.Label(
-                                    text: ParraAttributes.Text(
-                                        style: .caption,
-                                        color: parraTheme.palette.secondaryText
-                                            .shade600
-                                            .toParraColor(),
-                                        alignment: .leading
+                        .cornerRadius(16)
+                        .overlay(
+                            alignment: .topLeading
+                        ) {
+                            if let altText = image.altText {
+                                componentFactory.buildLabel(
+                                    text: altText,
+                                    localAttributes: ParraAttributes.Label(
+                                        text: ParraAttributes.Text(
+                                            style: .caption,
+                                            color: parraTheme.palette.secondaryText
+                                                .shade600
+                                                .toParraColor(),
+                                            alignment: .leading
+                                        )
                                     )
                                 )
-                            )
-                            .lineLimit(3)
-                            .truncationMode(.tail)
-                            .padding()
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .topLeading
-                            )
-                            .background {
-                                LinearGradient(
-                                    gradient: Gradient(
-                                        colors: [
-                                            .clear,
-                                            .black.opacity(0.3),
-                                            .black.opacity(0.7),
-                                            .black.opacity(0.7)
-                                        ]
-                                    ),
-                                    startPoint: .bottom,
-                                    endPoint: .top
+                                .lineLimit(3)
+                                .truncationMode(.tail)
+                                .padding()
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .topLeading
                                 )
+                                .background {
+                                    LinearGradient(
+                                        gradient: Gradient(
+                                            colors: [
+                                                .clear,
+                                                .black.opacity(0.3),
+                                                .black.opacity(0.7),
+                                                .black.opacity(0.7)
+                                            ]
+                                        ),
+                                        startPoint: .bottom,
+                                        endPoint: .top
+                                    )
+                                }
                             }
                         }
                     }
