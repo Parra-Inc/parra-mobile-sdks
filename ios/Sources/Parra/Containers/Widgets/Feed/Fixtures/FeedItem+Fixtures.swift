@@ -99,7 +99,7 @@ extension ParraFeedItem: ParraFixture {
                     ),
                     publishedAt: .now.daysAgo(1),
                     liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none,
-                    attachmentPaywall: nil
+                    paywall: nil
                 )
             ),
             reactionOptions: nil,
