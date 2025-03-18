@@ -251,18 +251,44 @@ struct MessageCollectionResponse: Codable, Equatable, Hashable {
     let data: PartiallyDecodableArray<Message>
 }
 
+struct CreateMessageAttachment: Codable, Equatable, Hashable {
+    let type: AttachmentType
+    let imageAssetId: String?
+}
+
 struct CreateMessageRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        content: String
+        content: String,
+        attachments: [CreateMessageAttachment]
     ) {
         self.content = content
+        self.attachments = attachments
     }
 
     // MARK: - Internal
 
     let content: String
+    let attachments: [CreateMessageAttachment]
+}
+
+enum AttachmentType: String, Codable {
+    case image
+
+    // not supported yet
+//    case video = "video"
+//    case audio = "audio"
+//    case file = "file"
+}
+
+struct MessageAttachment: Codable, Equatable, Hashable, Identifiable {
+    let id: String
+    let createdAt: Date
+    let updatedAt: Date
+    let deletedAt: Date?
+    let type: AttachmentType
+    let image: ParraImageAsset?
 }
 
 struct Message: Codable, Equatable, Hashable, Identifiable {
@@ -278,6 +304,7 @@ struct Message: Codable, Equatable, Hashable, Identifiable {
         memberId: String,
         user: ParraUserStub?,
         content: String,
+        attachments: [MessageAttachment]?,
         isTemporary: Bool? = nil,
         submissionErrorMessage: String? = nil
     ) {
@@ -290,6 +317,7 @@ struct Message: Codable, Equatable, Hashable, Identifiable {
         self.memberId = memberId
         self.user = user
         self.content = content
+        self.attachments = .init(attachments)
         self.isTemporary = isTemporary
         self.submissionErrorMessage = submissionErrorMessage
     }
@@ -305,6 +333,7 @@ struct Message: Codable, Equatable, Hashable, Identifiable {
     let memberId: String
     let user: ParraUserStub?
     let content: String
+    let attachments: PartiallyDecodableArray<MessageAttachment>?
 
     /// The comment has been created locally for display to the user but hasn't been stored in the database yet.
     let isTemporary: Bool?
