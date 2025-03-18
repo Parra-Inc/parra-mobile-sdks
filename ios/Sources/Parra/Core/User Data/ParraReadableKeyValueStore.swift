@@ -28,8 +28,8 @@ public extension ParraReadableKeyValueStore {
     }
 
     @MainActor
-    func bool(for key: String) -> Bool? {
-        return number(for: key)?.boolValue
+    func bool(for key: String) -> Bool {
+        return number(for: key)?.boolValue ?? false
     }
 
     @MainActor
