@@ -12,7 +12,10 @@ extension API {
         -> CreatorUpdateTemplateCollectionResponse
     {
         return try await hitEndpoint(
-            .getPaginateCreatorUpdateTemplates
+            .getPaginateCreatorUpdateTemplates,
+            queryItems: [
+                "limit": String(100)
+            ]
         )
     }
 
