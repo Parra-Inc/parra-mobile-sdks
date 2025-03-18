@@ -10,11 +10,12 @@ import SwiftUI
 
 struct ErrorPlaceholderModifier: ViewModifier {
     let error: Error?
+    let showIfError: Bool
     let placeholder: AnyView
 
     @ViewBuilder
     func body(content: Content) -> some View {
-        if error == nil {
+        if error == nil || !showIfError {
             content
         } else {
             placeholder
@@ -25,11 +26,13 @@ struct ErrorPlaceholderModifier: ViewModifier {
 public extension View {
     func errorPlaceholder(
         _ error: Error?,
+        _ showIfError: Bool = true,
         _ placeholder: @escaping () -> some View
     ) -> some View {
         modifier(
             ErrorPlaceholderModifier(
                 error: error,
+                showIfError: showIfError,
                 placeholder: AnyView(placeholder())
             )
         )
