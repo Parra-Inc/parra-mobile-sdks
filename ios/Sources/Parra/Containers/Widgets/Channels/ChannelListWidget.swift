@@ -62,15 +62,21 @@ struct ChannelListWidget: ParraContainer {
                             )
                         ),
                         onPress: {
-                            if let entitlement = userEntitlements.getEntitlement(
-                                for: contentObserver.requiredEntitlement
-                            ), entitlement.isConsumable {
-                                // The user already has the entitlement required
-                                // for this action. Let them confirm using existing
-                                // credits
-                                currentEntitlement = entitlement
+                            if let requiredEntitlement = contentObserver
+                                .requiredEntitlement
+                            {
+                                if let entitlement = userEntitlements.getEntitlement(
+                                    for: requiredEntitlement
+                                ), entitlement.isConsumable {
+                                    // The user already has the entitlement required
+                                    // for this action. Let them confirm using existing
+                                    // credits
+                                    currentEntitlement = entitlement
+                                } else {
+                                    paywallPresentationState = .loading
+                                }
                             } else {
-                                paywallPresentationState = .loading
+                                startNewConversation()
                             }
                         }
                     )
@@ -166,20 +172,26 @@ struct ChannelListWidget: ParraContainer {
             container
         }
         .presentParraPaywall(
-            entitlement: contentObserver.requiredEntitlement,
+            entitlement: contentObserver.requiredEntitlement ?? "",
             context: contentObserver.context,
             presentationState: $paywallPresentationState,
             config: ParraPaywallConfig(
                 dismissOnSuccess: true
             )
         ) { dismissType in
+            // Won't actually be nil, since this would have prevented the
+            // paywall from being displayed in the first place
+            guard let requiredEntitlement = contentObserver.requiredEntitlement else {
+                return
+            }
+
             switch dismissType {
             case .cancelled:
                 logger.debug("User cancelled paywall to start new conversation")
 
             case .completed:
                 if userEntitlements.isEntitled(
-                    to: contentObserver.requiredEntitlement
+                    to: requiredEntitlement
                 ) {
                     startNewConversation()
                 } else {
@@ -187,7 +199,7 @@ struct ChannelListWidget: ParraContainer {
                         title: "Error Starting Conversation",
                         userFacingMessage: "You are not permitted to start new conversations at this time.",
                         underlyingError: ParraError.missingEntitlement(
-                            entitlement: contentObserver.requiredEntitlement,
+                            entitlement: requiredEntitlement,
                             context: contentObserver.context
                         )
                     )

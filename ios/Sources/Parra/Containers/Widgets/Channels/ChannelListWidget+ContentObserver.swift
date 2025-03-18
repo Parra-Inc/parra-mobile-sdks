@@ -81,7 +81,7 @@ extension ChannelListWidget {
 
         let channelType: ParraChatChannelType
         let config: ParraChannelListConfiguration
-        let requiredEntitlement: String
+        let requiredEntitlement: String?
         let context: String?
         let autoPresentation: ChannelListParams.AutoPresentationMode?
 

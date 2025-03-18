@@ -56,7 +56,7 @@ public extension View {
     @MainActor
     func presentParraPaidDirectMessageWidget(
         for key: String,
-        requiredEntitlement entitlement: String,
+        requiredEntitlement entitlement: String?,
         context: String?,
         presentationState: Binding<ParraSheetPresentationState>,
         config: ParraChannelListConfiguration = .default,
@@ -89,41 +89,51 @@ public extension View {
             if channelListResponse.elements.isEmpty {
                 logger.debug("Channel list is empty.")
 
-                if ParraUserEntitlements.shared.isEntitled(
-                    to: entitlement
-                ) {
-                    logger.debug("User is entitled, creating new channel.")
+                if let entitlement {
+                    if ParraUserEntitlements.shared.isEntitled(
+                        to: entitlement
+                    ) {
+                        logger.debug("User is entitled, creating new channel.")
+                        let channel = try await api.createPaidDmChannel(
+                            key: key
+                        )
+
+                        logger.debug("Channel is created. Presentation mode is channel")
+
+                        autoPresentation = .channel(channel)
+                    } else {
+                        logger.debug("User is not entitled. Presenting paywall.")
+
+                        let paywall = try await api.getPaywall(
+                            for: entitlement,
+                            context: context
+                        )
+
+                        let paywallProducts: PaywallProducts = if let productIds = paywall
+                            .productIds
+                        {
+                            try await .products(Product.products(for: productIds))
+                        } else if let groupId = paywall.groupId {
+                            .groupId(groupId)
+                        } else {
+                            .productIds([])
+                        }
+
+                        logger
+                            .debug(
+                                "Paywall successfully fetched. Presentation mode is paywall."
+                            )
+
+                        autoPresentation = .paywall(paywall, paywallProducts)
+                    }
+                } else {
+                    logger.debug("Entitlement is not required. Creating new channel.")
+
                     let channel = try await api.createPaidDmChannel(
                         key: key
                     )
 
-                    logger.debug("Channel is created. Presentation mode is channel")
-
                     autoPresentation = .channel(channel)
-                } else {
-                    logger.debug("User is not entitled. Presenting paywall.")
-
-                    let paywall = try await api.getPaywall(
-                        for: entitlement,
-                        context: context
-                    )
-
-                    let paywallProducts: PaywallProducts = if let productIds = paywall
-                        .productIds
-                    {
-                        try await .products(Product.products(for: productIds))
-                    } else if let groupId = paywall.groupId {
-                        .groupId(groupId)
-                    } else {
-                        .productIds([])
-                    }
-
-                    logger
-                        .debug(
-                            "Paywall successfully fetched. Presentation mode is paywall."
-                        )
-
-                    autoPresentation = .paywall(paywall, paywallProducts)
                 }
             } else {
                 logger.debug("Channel list not empty. Pesentation mode is channelList.")

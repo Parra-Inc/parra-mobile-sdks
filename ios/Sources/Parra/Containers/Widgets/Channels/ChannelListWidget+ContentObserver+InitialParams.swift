@@ -13,7 +13,7 @@ extension ChannelListWidget.ContentObserver {
         let key: String
         let channelType: ParraChatChannelType
         let channelsResponse: ChannelListResponse?
-        let requiredEntitlement: String
+        let requiredEntitlement: String?
         let context: String?
         let autoPresentation: ChannelListParams.AutoPresentationMode?
         let api: API
