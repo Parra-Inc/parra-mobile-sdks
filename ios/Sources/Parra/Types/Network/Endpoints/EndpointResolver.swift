@@ -177,7 +177,7 @@ enum EndpointResolver {
         case .getFeedItem(let feedItemId):
             return "tenants/\(tenantId)/feed/items/\(feedItemId)"
         // Feed Admin
-        case .getListCreatorUpdateTemplates:
+        case .getPaginateCreatorUpdateTemplates:
             return "tenants/\(tenantId)/creator/updates/templates"
         case .postCreateCreatorUpdate:
             return "tenants/\(tenantId)/creator/updates"

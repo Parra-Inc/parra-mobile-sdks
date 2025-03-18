@@ -79,7 +79,7 @@ enum ApiEndpoint: Endpoint {
     case getFeedItem(feedItemId: String)
 
     // Feed Admin
-    case getListCreatorUpdateTemplates
+    case getPaginateCreatorUpdateTemplates
     case postCreateCreatorUpdate
     case putUpdateCreatorUpdate(creatorUpdateId: String)
     case postSendCreatorUpdate(creatorUpdateId: String)
@@ -124,7 +124,7 @@ enum ApiEndpoint: Endpoint {
              .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall,
              .getPaginateComments, .getListChatChannels, .getPaginateMessages,
              .listUserEntitlements, .getFeedItem,
-             .getListCreatorUpdateTemplates, .getChannel:
+             .getPaginateCreatorUpdateTemplates, .getChannel:
 
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
@@ -214,7 +214,7 @@ enum ApiEndpoint: Endpoint {
         case .getFeedItem:
             return "tenants/:tenantId/feed/items/:feedItemId"
         // Feed Admin
-        case .getListCreatorUpdateTemplates:
+        case .getPaginateCreatorUpdateTemplates:
             return "tenants/:tenantId/creator/updates/templates"
         case .postCreateCreatorUpdate:
             return "tenants/:tenantId/creator/updates"

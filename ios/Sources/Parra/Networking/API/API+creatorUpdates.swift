@@ -12,7 +12,7 @@ extension API {
         -> CreatorUpdateTemplateCollectionResponse
     {
         return try await hitEndpoint(
-            .getListCreatorUpdateTemplates
+            .getPaginateCreatorUpdateTemplates
         )
     }
 
