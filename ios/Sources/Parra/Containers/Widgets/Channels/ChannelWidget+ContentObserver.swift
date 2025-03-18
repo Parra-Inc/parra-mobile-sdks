@@ -364,7 +364,7 @@ extension ChannelWidget {
         ) async throws -> [Message] {
             let response = try await api.paginateMessagesForChannel(
                 channelId: channelId,
-                sort: "created_at,desc",
+                sort: "created_at desc",
                 createdAt: cursor
             )
 

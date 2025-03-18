@@ -282,7 +282,7 @@ extension FeedCommentWidget {
         ) async throws -> [ParraComment] {
             let response = try await api.paginateFeedItemComments(
                 feedItemId: feedItemId,
-                sort: "created_at,desc",
+                sort: "created_at desc",
                 createdAt: cursor
             )
 
@@ -300,7 +300,7 @@ extension FeedCommentWidget {
                 feedItemId: feedItemId,
                 limit: limit,
                 offset: offset,
-                sort: "created_at,desc",
+                sort: "created_at desc",
                 createdAt: nil
             )
 
