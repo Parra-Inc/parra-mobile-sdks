@@ -58,15 +58,22 @@ struct AccountView: View {
                     }
                     .presentParraSignInWidget(isPresented: $isSigningIn)
                 } else {
-                    Section("Login Methods") {
-                        ForEach(user.info.identities) { identity in
-                            HStack {
-                                Text(identity.name)
 
-                                Spacer()
+                    let identities = user.info.identities.filter { identity in
+                        identity.type != .anonymous
+                    }
 
-                                Text(identity.value ?? "")
-                                    .foregroundStyle(.gray)
+                    if !identities.isEmpty {
+                        Section("Login Methods") {
+                            ForEach(identities) { identity in
+                                HStack {
+                                    Text(identity.name)
+
+                                    Spacer()
+
+                                    Text(identity.value ?? "")
+                                        .foregroundStyle(.gray)
+                                }
                             }
                         }
                     }
