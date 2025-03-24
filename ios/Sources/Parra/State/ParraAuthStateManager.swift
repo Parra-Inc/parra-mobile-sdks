@@ -30,6 +30,11 @@ public class ParraAuthStateManager {
 
     @MainActor public private(set) var current: ParraAuthState
 
+    @MainActor
+    public func triggerAuthRefresh() {
+        Parra.default.parraInternal.authService.performAuthStateRefresh()
+    }
+
     // MARK: - Internal
 
     @MainActor static let shared = ParraAuthStateManager(

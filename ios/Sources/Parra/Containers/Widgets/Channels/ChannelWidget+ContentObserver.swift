@@ -110,10 +110,14 @@ extension ChannelWidget {
         func loadInitialMessages() {
             // Can't guard on showing placeholders. This view is pre-populated
             // with preview messages from the channel
-            if messagePaginator.isShowingPlaceholders || messagePaginator.items == channel
-                .latestMessages?.elements
-            {
+            if messagePaginator.isShowingPlaceholders {
                 messagePaginator.loadMore(after: nil)
+            } else if messagePaginator.items == channel.latestMessages?.elements {
+                if messagePaginator.items.isEmpty {
+                    messagePaginator.loadMore(after: nil)
+                } else {
+                    messagePaginator.loadMore(after: messagePaginator.items.count)
+                }
             }
         }
 
@@ -147,6 +151,7 @@ extension ChannelWidget {
         @discardableResult
         func sendMessage(
             with text: String,
+            attachments: [Attachment],
             from user: ParraUser
         ) throws -> Message {
             logger.info("Sending new message")
@@ -175,6 +180,21 @@ extension ChannelWidget {
                 memberId: currentMember.id,
                 user: currentMember.user,
                 content: text,
+                attachments: attachments.compactMap { attachment in
+                    switch attachment {
+                    case .image(let asset):
+                        return MessageAttachment(
+                            id: .uuid,
+                            createdAt: .now,
+                            updatedAt: .now,
+                            deletedAt: nil,
+                            type: .image,
+                            image: asset
+                        )
+                    @unknown default:
+                        return nil
+                    }
+                },
                 isTemporary: true,
                 submissionErrorMessage: nil
             )
@@ -185,6 +205,7 @@ extension ChannelWidget {
                 do {
                     let realMessage = try await api.createMessage(
                         for: channel.id,
+                        with: attachments,
                         content: text
                     )
 

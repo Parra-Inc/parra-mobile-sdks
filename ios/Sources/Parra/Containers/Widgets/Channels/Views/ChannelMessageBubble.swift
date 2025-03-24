@@ -10,15 +10,22 @@ import SwiftUI
 struct ChannelMessageBubble: View {
     // MARK: - Internal
 
+    enum Constant {
+        static let imageSpacing: CGFloat = 4.0
+        static let gutter: CGFloat = 16.0
+        static let avatarSize = CGSize(width: 34, height: 34)
+        static let avatarSpacing: CGFloat = 12.0
+    }
+
     @Binding var message: Message
     var isCurrentUser: Bool
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .top, spacing: Constant.avatarSpacing) {
             avatar
             content
         }
-        .padding(.horizontal)
+        .padding(.horizontal, Constant.gutter)
         .padding(.top, 4)
         .padding(.bottom, 8)
         .frame(
@@ -34,7 +41,10 @@ struct ChannelMessageBubble: View {
     @Environment(\.redactionReasons) private var redactionReasons
 
     @ViewBuilder private var avatar: some View {
-        AvatarView(avatar: message.user?.avatar)
+        AvatarView(
+            avatar: message.user?.avatar,
+            size: Constant.avatarSize
+        )
     }
 
     @ViewBuilder private var content: some View {
@@ -58,22 +68,30 @@ struct ChannelMessageBubble: View {
                 )
             }
 
-            componentFactory.buildLabel(
-                text: message.content,
-                localAttributes: ParraAttributes.Label(
-                    text: .default(
-                        with: .body,
-                        color: isCurrentUser ? theme.palette.primaryChipText
-                            .toParraColor() : theme.palette.secondaryChipText
-                            .toParraColor()
-                    ),
-                    cornerRadius: .lg,
-                    padding: .xl,
-                    background: isCurrentUser ? theme.palette.primaryChipBackground
-                        .toParraColor() : theme.palette.secondaryChipBackground
-                        .toParraColor()
+            if let attachments = message.attachments?.elements, !attachments.isEmpty {
+                ChannelMessageAttachmentsView(
+                    attachments: attachments
                 )
-            )
+            }
+
+            if let content = message.content, !content.isEmpty {
+                componentFactory.buildLabel(
+                    text: content,
+                    localAttributes: ParraAttributes.Label(
+                        text: .default(
+                            with: .body,
+                            color: isCurrentUser ? theme.palette.primaryChipText
+                                .toParraColor() : theme.palette.secondaryChipText
+                                .toParraColor()
+                        ),
+                        cornerRadius: .lg,
+                        padding: .xl,
+                        background: isCurrentUser ? theme.palette.primaryChipBackground
+                            .toParraColor() : theme.palette.secondaryChipBackground
+                            .toParraColor()
+                    )
+                )
+            }
         }
     }
 }

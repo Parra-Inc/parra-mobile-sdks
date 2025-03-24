@@ -125,9 +125,21 @@ extension API {
 
     func createMessage(
         for channelId: String,
+        with attachments: [Attachment],
         content: String
     ) async throws -> Message {
-        let body = CreateMessageRequestBody(content: content)
+        let body = CreateMessageRequestBody(
+            content: content,
+            attachments: attachments.map { attachment in
+                switch attachment {
+                case .image(let asset):
+                    return CreateMessageAttachment(
+                        type: .image,
+                        imageAssetId: asset.id
+                    )
+                }
+            }
+        )
 
         return try await hitEndpoint(
             .postSendMessage(channelId: channelId),

@@ -61,7 +61,11 @@ struct ChannelWidget: ParraContainer {
         .onAppear {
             ParraChannelManager.shared.visibleChannelId = contentObserver.channel.id
 
-            contentObserver.loadInitialMessages()
+            // This is a slightly nicer visual since they load in too quickly
+            // half way through transitioning to the screen.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                contentObserver.refresh()
+            }
 
             newestViewedMessage = ParraChannelManager.shared.newestViewedMessage(
                 for: contentObserver.channel
@@ -285,6 +289,7 @@ struct ChannelWidget: ParraContainer {
                     message: message,
                     isCurrentUser: isCurrentUser
                 )
+                .id("message-bubble-\(message.id)")
                 .redacted(
                     when: contentObserver.messagePaginator.isShowingPlaceholders
                 )
@@ -342,8 +347,9 @@ struct ChannelWidget: ParraContainer {
         with proxy: ScrollViewProxy
     ) -> some View {
         AddCommentBarView(
-            allowSubmission: $allowSubmission
-        ) { text in
+            allowSubmission: $allowSubmission,
+            allowAttachments: true
+        ) { text, attachments in
             guard let user = authState.user else {
                 Logger.error("Tried to submit a comment without a user")
 
@@ -354,6 +360,7 @@ struct ChannelWidget: ParraContainer {
                 try withAnimation {
                     let newMessage = try contentObserver.sendMessage(
                         with: text,
+                        attachments: attachments,
                         from: user
                     )
 
@@ -439,7 +446,10 @@ struct ChannelWidget: ParraContainer {
                 .emptyPlaceholder(messages) {
                     emptyContent
                 }
-                .errorPlaceholder(contentObserver.messagePaginator.error) {
+                .errorPlaceholder(
+                    contentObserver.messagePaginator.error,
+                    messages.isEmpty
+                ) {
                     errorContent
                 }
                 .refreshable {

@@ -12,7 +12,7 @@ private let blurSize: CGFloat = 32
 struct AsyncImageContent: View {
     // MARK: - Internal
 
-    var phase: AsyncImagePhase
+    var phase: CachedAsyncImagePhase
     var config: ParraAsyncImageConfig
     var content: ParraAsyncImageContent
     var attributes: ParraAttributes.AsyncImage
@@ -28,11 +28,11 @@ struct AsyncImageContent: View {
         switch phase {
         case .empty:
             renderBlurHash(for: phase)
-        case .success(let image):
+        case .success(let image, let size):
             image
                 .resizable()
                 .aspectRatio(
-                    config.aspectRatio,
+                    config.aspectRatio ?? size.width / size.height,
                     contentMode: config.contentMode
                 )
                 .blur(radius: config.blurContent ? 10 : 0, opaque: true)
@@ -45,7 +45,7 @@ struct AsyncImageContent: View {
 
     @ViewBuilder
     private func renderBlurHashOverlay(
-        for phase: AsyncImagePhase
+        for phase: CachedAsyncImagePhase
     ) -> some View {
         switch phase {
         case .empty:
@@ -80,7 +80,7 @@ struct AsyncImageContent: View {
 
     @ViewBuilder
     private func renderBlurHash(
-        for phase: AsyncImagePhase
+        for phase: CachedAsyncImagePhase
     ) -> some View {
         let imageSize = content.originalSize.toCGSize
         let aspectRatio = config.aspectRatio ?? imageSize.width / imageSize.height

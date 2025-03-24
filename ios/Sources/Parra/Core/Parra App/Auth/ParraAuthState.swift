@@ -117,6 +117,11 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
         }
     }
 
+    @MainActor
+    public func triggerAuthRefresh() {
+        Parra.default.parraInternal.authService.performAuthStateRefresh()
+    }
+
     // MARK: - Internal
 
     var hasResolvedAuth: Bool {

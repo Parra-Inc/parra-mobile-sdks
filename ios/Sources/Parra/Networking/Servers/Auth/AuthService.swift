@@ -171,14 +171,6 @@ final class AuthService {
     }
 
     func logout() async {
-        guard case .parra = authenticationMethod else {
-            logger
-                .warn(
-                    "Parra authentication wasn't used. Skipping logout in Parra auth service."
-                )
-            return
-        }
-
         logger.debug("Logging out")
 
         modalScreenManager

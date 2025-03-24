@@ -235,7 +235,7 @@ struct FeedCommentWidget: ParraContainer {
     ) -> some View {
         AddCommentBarView(
             allowSubmission: $allowSubmission
-        ) { text in
+        ) { text, _ in
             guard let user = authState.user else {
                 Logger.error("Tried to submit a comment without a user")
 

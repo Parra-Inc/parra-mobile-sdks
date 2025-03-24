@@ -18,7 +18,8 @@ extension Message: ParraFixture {
             channelId: .uuid,
             memberId: .uuid,
             user: .validStates()[0],
-            content: "Some text that you should never see. If you do, report it please :)"
+            content: "Some text that you should never see. If you do, report it please :)",
+            attachments: []
         )
     }
 
@@ -44,7 +45,8 @@ extension Message: ParraFixture {
                 channelId: .uuid,
                 memberId: .uuid,
                 user: .validStates()[index % 2],
-                content: element
+                content: element,
+                attachments: []
             )
         }
     }

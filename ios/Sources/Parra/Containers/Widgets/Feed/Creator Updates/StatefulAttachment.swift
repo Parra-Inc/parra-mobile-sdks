@@ -8,6 +8,10 @@
 import PhotosUI
 import SwiftUI
 
+enum Attachment: Hashable {
+    case image(ParraImageAsset)
+}
+
 enum StatefulAttachment: Hashable {
     case processing(
         _ item: PhotosPickerItem,
@@ -33,6 +37,17 @@ enum StatefulAttachment: Hashable {
             return asset
         case .errored:
             return nil
+        }
+    }
+
+    var item: PhotosPickerItem {
+        switch self {
+        case .errored(_, let erroredItem):
+            return erroredItem
+        case .processing(let processingItem, _):
+            return processingItem
+        case .uploaded(_, let uploadedItem, _):
+            return uploadedItem
         }
     }
 }

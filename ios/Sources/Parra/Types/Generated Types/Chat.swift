@@ -303,7 +303,7 @@ struct Message: Codable, Equatable, Hashable, Identifiable {
         channelId: String,
         memberId: String,
         user: ParraUserStub?,
-        content: String,
+        content: String?,
         attachments: [MessageAttachment]?,
         isTemporary: Bool? = nil,
         submissionErrorMessage: String? = nil
@@ -332,7 +332,7 @@ struct Message: Codable, Equatable, Hashable, Identifiable {
     let channelId: String
     let memberId: String
     let user: ParraUserStub?
-    let content: String
+    let content: String?
     let attachments: PartiallyDecodableArray<MessageAttachment>?
 
     /// The comment has been created locally for display to the user but hasn't been stored in the database yet.
