@@ -41,9 +41,9 @@ public extension ParraComponentFactory {
         // If a config wasn't provided, create a default one based on the
         // image's expected aspect ratio.
         let finalConfig: ParraAsyncImageConfig = if let config {
-            if config.aspectRatio == nil {
+            if let originalSize = content.originalSize, config.aspectRatio == nil {
                 ParraAsyncImageConfig(
-                    aspectRatio: content.originalSize.width / content.originalSize.height,
+                    aspectRatio: originalSize.width / originalSize.height,
                     contentMode: config.contentMode,
                     blurContent: config.blurContent,
                     showBlurHash: config.showBlurHash,
@@ -56,9 +56,13 @@ public extension ParraComponentFactory {
                 config
             }
         } else {
-            ParraAsyncImageConfig(
-                aspectRatio: content.originalSize.width / content.originalSize.height
-            )
+            if let originalSize = content.originalSize {
+                ParraAsyncImageConfig(
+                    aspectRatio: originalSize.width / originalSize.height
+                )
+            } else {
+                ParraAsyncImageConfig()
+            }
         }
 
         return ParraAsyncImageComponent(

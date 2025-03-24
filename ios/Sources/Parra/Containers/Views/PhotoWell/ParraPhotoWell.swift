@@ -399,7 +399,7 @@ public struct ParraPhotoWell: View {
 
     @ViewBuilder
     private func imageContent(
-        for phase: AsyncImagePhase
+        for phase: CachedAsyncImagePhase
     ) -> some View {
         switch phase {
         case .empty:
@@ -408,7 +408,7 @@ public struct ParraPhotoWell: View {
 
                 loadingView
             }
-        case .success(let image):
+        case .success(let image, _):
             image
                 .resizable()
                 .transition(.opacity)

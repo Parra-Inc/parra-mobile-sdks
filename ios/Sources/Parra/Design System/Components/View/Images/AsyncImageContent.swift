@@ -82,7 +82,16 @@ struct AsyncImageContent: View {
     private func renderBlurHash(
         for phase: CachedAsyncImagePhase
     ) -> some View {
-        let imageSize = content.originalSize.toCGSize
+        let imageSize = switch phase {
+        case .empty, .failure:
+            content.originalSize?.toCGSize ?? CGSize(
+                width: blurSize,
+                height: blurSize
+            )
+        case .success(let image, let cGSize):
+            content.originalSize?.toCGSize ?? cGSize
+        }
+
         let aspectRatio = config.aspectRatio ?? imageSize.width / imageSize.height
 
         let size = if imageSize.width > imageSize.height {
