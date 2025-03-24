@@ -61,7 +61,7 @@ struct AsyncImageContent: View {
             }
         case .success:
             EmptyView()
-        default:
+        @unknown default:
             EmptyView()
         }
     }
@@ -88,7 +88,7 @@ struct AsyncImageContent: View {
                 width: blurSize,
                 height: blurSize
             )
-        case .success(let image, let cGSize):
+        case .success(_, let cGSize):
             content.originalSize?.toCGSize ?? cGSize
         }
 

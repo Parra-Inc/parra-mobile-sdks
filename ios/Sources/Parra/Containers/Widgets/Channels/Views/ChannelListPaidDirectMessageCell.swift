@@ -132,9 +132,47 @@ struct ChannelListPaidDirectMessageCell: View {
         return false // is the current user
     }
 
+    private var attachmentType: (Int, String)? {
+        guard let attachments = latestMessage?.attachments?.elements,
+              !attachments.isEmpty else
+        {
+            return nil
+        }
+
+        let type: AttachmentType = attachments[0].type
+
+        for attachment in attachments[1...] {
+            // When there are mixed attachment types, just say "attachment"
+            if type != attachment.type {
+                return (attachments.count, "attachment")
+            }
+        }
+
+        switch type {
+        case .image:
+            return (attachments.count, "photo")
+        @unknown default:
+            return (attachments.count, "attachment")
+        }
+    }
+
     @ViewBuilder private var previewView: some View {
+        let previewMessage = if let latestMessage {
+            if let content = latestMessage.content {
+                content
+            } else {
+                if let (count, type) = attachmentType {
+                    "\(count) \(count.simplePluralized(singularString: type))"
+                } else {
+                    "" // ???
+                }
+            }
+        } else {
+            "No messages yet"
+        }
+
         componentFactory.buildLabel(
-            text: latestMessage?.content ?? "No message yet",
+            text: previewMessage,
             localAttributes: ParraAttributes.Label(
                 text: .default(
                     with: .body,

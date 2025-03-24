@@ -47,7 +47,7 @@ struct AddCommentBarView: View {
         let cornerRadius = theme.cornerRadius.value(for: .xxxl)
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        VStack {
+        VStack(spacing: 16) {
             if !attachmentManager.attachments.isEmpty {
                 attachmentsView
             }
@@ -151,6 +151,25 @@ struct AddCommentBarView: View {
             y: -2
         )
         .mask(Rectangle().padding(.top, -20))
+        .sheet(isPresented: $isShowingFullScreen) {
+            let attachments = attachmentManager.attachments
+            let assets: [ParraImageAsset] = attachments.compactMap { attachment in
+                switch attachment {
+                case .processing, .errored:
+                    return nil
+                case .uploaded(let asset, _, _):
+                    return asset
+                }
+            }
+
+            NavigationStack {
+                FullScreenGalleryView(
+                    photos: assets,
+                    selectedPhoto: $currentPreviewAsset
+                )
+            }
+            .transition(.opacity)
+        }
         .photosPicker(
             isPresented: $attachmentManager.showingPhotoPicker,
             selection: $attachmentManager.selectedPhotos,
@@ -202,6 +221,8 @@ struct AddCommentBarView: View {
     @State private var text = ""
     @State private var submitButtonContent: ParraImageButtonContent
     @State private var attachmentButtonContent: ParraImageButtonContent
+    @State private var isShowingFullScreen = false
+    @State private var currentPreviewAsset: ParraImageAsset?
 
     @FocusState private var isFocused: Bool
 
@@ -218,10 +239,10 @@ struct AddCommentBarView: View {
                     CreatorUpdateComposerAttachmentView(
                         attachment: attachment
                     ) {
-//                        if let asset = attachment.asset {
-//                            currentPreviewAsset = asset
-//                            isShowingFullScreen = true
-//                        }
+                        if let asset = attachment.asset {
+                            currentPreviewAsset = asset
+                            isShowingFullScreen = true
+                        }
                     }
                     .applyCornerRadii(size: .lg, from: theme)
                     .overlay(alignment: .topTrailing) {
@@ -249,6 +270,7 @@ struct AddCommentBarView: View {
             }
         }
         .scrollIndicators(.never)
+        .padding(.top, 12)
     }
 
     private var attachmentButton: some View {
@@ -289,11 +311,14 @@ struct AddCommentBarView: View {
                 }
             }
 
-        let attachmentsValid = attachmentManager.attachments
-            .isEmpty || allAttachmentsProcessed
+        let textValid = !trimmed.isEmpty && trimmed.count <= characterLimit
 
         let isEnabled = if allowSubmission {
-            (!trimmed.isEmpty && trimmed.count <= characterLimit) && attachmentsValid
+            if attachmentManager.attachments.isEmpty {
+                textValid
+            } else {
+                allAttachmentsProcessed
+            }
         } else {
             false
         }

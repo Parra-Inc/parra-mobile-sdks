@@ -348,7 +348,7 @@ struct ChannelWidget: ParraContainer {
     ) -> some View {
         AddCommentBarView(
             allowSubmission: $allowSubmission,
-            allowAttachments: false
+            allowAttachments: true
         ) { text, attachments in
             guard let user = authState.user else {
                 Logger.error("Tried to submit a comment without a user")

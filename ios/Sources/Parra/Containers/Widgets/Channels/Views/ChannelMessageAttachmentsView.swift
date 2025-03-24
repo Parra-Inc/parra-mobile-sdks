@@ -87,6 +87,7 @@ struct ChannelMessageAttachmentsView: View {
                 .clipShape(.rect)
         }
         .id("message-attachment-button-\(asset.id)")
+        .clipped()
     }
 
     @ViewBuilder
@@ -123,6 +124,7 @@ struct ChannelMessageAttachmentsView: View {
                 renderSquareImage(for: asset)
             }
         }
+        .clipped()
     }
 
     @ViewBuilder
@@ -154,6 +156,7 @@ struct ChannelMessageAttachmentsView: View {
                     }
             }
         }
+        .clipped()
     }
 
     @ViewBuilder
@@ -166,17 +169,17 @@ struct ChannelMessageAttachmentsView: View {
             renderSquareImage(for: assets[0])
                 .containerRelativeFrame(
                     .horizontal,
-                    alignment: .center
+                    alignment: .leading
                 ) { length, _ in
                     let constants = ChannelMessageBubble.Constant.self
                     let availableWidth = length - constants.gutter * 2 - constants
-                        .avatarSize.width - constants.avatarSpacing - constants
-                        .imageSpacing
+                        .avatarSize.width - constants.avatarSpacing
 
                     return (availableWidth * 2.0 / 3.0).rounded(
                         .down
                     )
                 }
+                .clipped()
 
             VStack(spacing: ChannelMessageBubble.Constant.imageSpacing) {
                 renderSquareImage(for: assets[1])
@@ -184,14 +187,15 @@ struct ChannelMessageAttachmentsView: View {
             }
             .containerRelativeFrame(
                 .horizontal,
-                alignment: .center
+                alignment: .trailing
             ) { length, _ in
                 let constants = ChannelMessageBubble.Constant.self
                 let availableWidth = length - constants.gutter * 2 - constants.avatarSize
-                    .width - constants.avatarSpacing - constants.imageSpacing
+                    .width - constants.avatarSpacing
 
                 return (availableWidth / 3.0).rounded(.up)
             }
+            .clipped()
         }
     }
 

@@ -215,6 +215,8 @@ public struct ParraPhotoWell: View {
                     }
                 } catch {
                     state = .error(error)
+                    editingImage = nil
+                    self.selectedPhoto = nil
                 }
             }
         }
