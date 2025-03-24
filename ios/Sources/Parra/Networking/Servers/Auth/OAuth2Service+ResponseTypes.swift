@@ -19,6 +19,7 @@ extension OAuth2Service {
 
     struct RefreshResponse: Codable {
         let accessToken: String
+        let refreshToken: String?
         let expiresIn: TimeInterval
         let scope: String
         let tokenType: String

@@ -95,7 +95,7 @@ final class OAuth2Service {
                 accessToken: response.accessToken,
                 tokenType: response.tokenType,
                 expiresIn: response.expiresIn,
-                refreshToken: refreshToken,
+                refreshToken: response.refreshToken,
                 type: token.type
             )
         }
