@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Parra-Inc/parra-mobile-sdks",
       "state" : {
-        "revision" : "f2f22be243a33b432e882aca140ded83cab08299",
-        "version" : "0.30.2"
+        "revision" : "0c0d55bad495d7b2588dcef54bc0672b9c38de3f",
+        "version" : "0.31.0"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "64e4daa41b0f22affa94a6063d509c137c26909c",
-        "version" : "2.8.5"
+        "revision" : "bba848db50462894e7fc0891d018dfecad4ef11e",
+        "version" : "2.8.7"
       }
     }
   ],
