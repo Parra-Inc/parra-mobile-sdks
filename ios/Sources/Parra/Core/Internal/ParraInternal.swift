@@ -177,19 +177,27 @@ class ParraInternal {
             taskGroup.addTask {
                 logger.debug("Fetching user properties")
 
-                let userProperties = try await self.api.getUserProperties()
+                do {
+                    let userProperties = try await self.api.getUserProperties()
 
-                await ParraUserProperties.shared.forceSetStore(userProperties)
+                    await ParraUserProperties.shared.forceSetStore(userProperties)
+                } catch {
+                    logger.error("Error fetching user properties", error)
+                }
             }
 
             taskGroup.addTask {
                 logger.debug("Fetching user entitlements")
 
-                let userEntitlements = try await self.api.getUserEntitlements()
+                do {
+                    let userEntitlements = try await self.api.getUserEntitlements()
 
-                await ParraUserEntitlements.shared.updateEntitlements(
-                    userEntitlements
-                )
+                    await ParraUserEntitlements.shared.updateEntitlements(
+                        userEntitlements
+                    )
+                } catch {
+                    logger.error("Error fetching user entitlements", error)
+                }
             }
         }
     }
