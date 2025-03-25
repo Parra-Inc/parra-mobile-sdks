@@ -31,7 +31,7 @@ executors:
 
   macos-m1-runner:
     macos:
-      xcode: 16.1.0
+      xcode: 16.2.0
     resource_class: macos.m1.medium.gen1
     environment:
       PARRA_TEST_DERIVED_DATA_DIRECTORY: build/unit-tests/derivedData
