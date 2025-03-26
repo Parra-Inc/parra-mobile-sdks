@@ -77,20 +77,20 @@ struct FeedYouTubeVideoView: View {
     @Binding var navigationPath: NavigationPath
 
     var body: some View {
-        let hasPaywallEntitlement = true
-        // TODO: When doing paywalled youtube videos
-//        entitlements.hasEntitlement(
-//            youtubeVideo.attachmentPaywall?.entitlement
-//        )
-
         CellButton(action: {
-            performYouTubeVideoUpdateSelection(
-                FeedYouTubeVideoDetailParams(
-                    youtubeVideo: youtubeVideo,
-                    feedItem: feedItem,
-                    reactor: _reactor
+            if entitlements.hasEntitlement(
+                youtubeVideo.paywall?.entitlement
+            ) {
+                performYouTubeVideoUpdateSelection(
+                    FeedYouTubeVideoDetailParams(
+                        youtubeVideo: youtubeVideo,
+                        feedItem: feedItem,
+                        reactor: _reactor
+                    )
                 )
-            )
+            } else {
+                paywallPresentationState.present()
+            }
         }) {
             VStack {
                 thumbnail
@@ -128,7 +128,8 @@ struct FeedYouTubeVideoView: View {
                         FeedReactionView(
                             feedItem: feedItem,
                             reactor: _reactor,
-                            showCommentCount: showCommentCount
+                            showCommentCount: showCommentCount,
+                            attachmentPaywall: youtubeVideo.paywall
                         )
                     }
                     .padding(
@@ -142,7 +143,7 @@ struct FeedYouTubeVideoView: View {
             }
             .contentShape(.rect)
         }
-        .disabled(redactionReasons.contains(.placeholder) && hasPaywallEntitlement)
+        .disabled(redactionReasons.contains(.placeholder))
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
         .buttonStyle(.plain)
@@ -159,6 +160,21 @@ struct FeedYouTubeVideoView: View {
                 )
             }
         }
+        .presentParraPaywall(
+            entitlement: youtubeVideo.paywall?.entitlement.key ?? "",
+            context: youtubeVideo.paywall?.context,
+            presentationState: $paywallPresentationState
+        ) { dismissType in
+            if case .completed = dismissType {
+                performYouTubeVideoUpdateSelection(
+                    FeedYouTubeVideoDetailParams(
+                        youtubeVideo: youtubeVideo,
+                        feedItem: feedItem,
+                        reactor: _reactor
+                    )
+                )
+            }
+        }
     }
 
     // MARK: - Private
@@ -170,21 +186,54 @@ struct FeedYouTubeVideoView: View {
 
     @StateObject private var reactor: Reactor
 
+    @State private var paywallPresentationState = ParraSheetPresentationState.ready
+
     @ViewBuilder private var thumbnail: some View {
         let thumb = youtubeVideo.thumbnails.maxAvailable
         let width = containerGeometry.size.width - 32
         let minHeight = (width / (thumb.width / thumb.height)).rounded(.down)
 
-        YouTubeThumbnailView(
-            thumb: thumb
-        ) {
-            performActionForFeedItemData(
-                .feedItemYoutubeVideo(youtubeVideo)
+        ParraPaywalledContentView(
+            entitlement: youtubeVideo.paywall?.entitlement,
+            context: youtubeVideo.paywall?.context
+        ) { requiredEntitlement, unlock in
+            YouTubeThumbnailView(
+                thumb: thumb,
+                requiredEntitlement: requiredEntitlement
+            ) {
+                Task { @MainActor in
+                    try await unlock()
+                }
+            }
+            .frame(
+                width: width,
+                height: minHeight
+            )
+        } unlockedContentBuilder: {
+            YouTubeThumbnailView(
+                thumb: thumb,
+                requiredEntitlement: youtubeVideo.paywall?.entitlement
+            ) {
+                // For paid videos, always push to the detail screen to control
+                // viewing and not expose the unlisted URL.
+                if youtubeVideo.paywall == nil {
+                    performActionForFeedItemData(
+                        .feedItemYoutubeVideo(youtubeVideo)
+                    )
+                } else {
+                    performYouTubeVideoUpdateSelection(
+                        FeedYouTubeVideoDetailParams(
+                            youtubeVideo: youtubeVideo,
+                            feedItem: feedItem,
+                            reactor: _reactor
+                        )
+                    )
+                }
+            }
+            .frame(
+                width: width,
+                height: minHeight
             )
         }
-        .frame(
-            width: width,
-            height: minHeight
-        )
     }
 }

@@ -6,18 +6,71 @@
 //
 
 import SwiftUI
+import YouTubePlayerKit
 
 struct FeedYouTubeVideoDetailViewHeader: View {
+    // MARK: - Lifecycle
+
+    init(
+        youtubeVideo: ParraFeedItemYoutubeVideoData,
+        feedItem: ParraFeedItem,
+        containerGeometry: GeometryProxy,
+        reactor: StateObject<Reactor>
+    ) {
+        self.youtubeVideo = youtubeVideo
+        self.feedItem = feedItem
+        self.containerGeometry = containerGeometry
+        self._reactor = reactor
+        self.youTubePlayer = YouTubePlayer(
+            source: .video(id: youtubeVideo.videoId),
+            parameters: .init(
+                autoPlay: false,
+                showControls: false,
+                showFullscreenButton: false,
+                restrictRelatedVideosToSameChannel: true
+            ),
+            configuration: .init(
+                fullscreenMode: .system,
+                allowsInlineMediaPlayback: false,
+                allowsAirPlayForMediaPlayback: false,
+                allowsPictureInPictureMediaPlayback: false,
+                useNonPersistentWebsiteDataStore: false,
+                automaticallyAdjustsContentInsets: true,
+                customUserAgent: nil
+            )
+        )
+    }
+
     // MARK: - Internal
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
     let feedItem: ParraFeedItem
     let containerGeometry: GeometryProxy
     @StateObject var reactor: Reactor
+    @State var youTubePlayer: YouTubePlayer
 
     var body: some View {
         VStack {
-            thumbnail
+            if isPaywalled {
+                YouTubePlayerView(youTubePlayer) { state in
+                    // An optional overlay view for the current state of the player
+                    switch state {
+                    case .idle:
+                        thumbnail
+                            .overlay(alignment: .topLeading) {
+                                ProgressView()
+                                    .padding()
+                            }
+                    case .ready:
+                        thumbnail
+                    case .error(let error):
+                        Text(error.localizedDescription)
+                    }
+                }
+                .aspectRatio(thumbAspectRatio, contentMode: .fit)
+            } else {
+                thumbnail
+            }
 
             VStack(alignment: .leading, spacing: 8) {
                 componentFactory.buildLabel(
@@ -50,7 +103,7 @@ struct FeedYouTubeVideoDetailViewHeader: View {
                     )
                 }
 
-                description
+                descriptionLabel
             }
             .padding(.top, 6)
             .safeAreaPadding(.horizontal)
@@ -65,14 +118,23 @@ struct FeedYouTubeVideoDetailViewHeader: View {
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
 
+    private var thumbAspectRatio: CGFloat {
+        let thumb = youtubeVideo.thumbnails.maxAvailable
+
+        return thumb.width / thumb.height
+    }
+
+    private var isPaywalled: Bool {
+        return youtubeVideo.paywall != nil
+    }
+
     @ViewBuilder
-    @MainActor private var description: some View {
-        withContent(content: youtubeVideo.description) { content in
-            DisclosureGroup(
-                isExpanded: $isDescriptionExpanded
-            ) {
+    @MainActor private var descriptionLabel: some View {
+        if let description = youtubeVideo.description, !description.isEmpty {
+            ViewThatFits(in: .vertical) {
+                // TODO: Test this with actual long content
                 Text(
-                    content.attributedStringWithHighlightedLinks(
+                    description.attributedStringWithHighlightedLinks(
                         tint: theme.palette.primary.toParraColor(),
                         font: .system(.callout),
                         foregroundColor: theme.palette.secondaryText
@@ -82,10 +144,26 @@ struct FeedYouTubeVideoDetailViewHeader: View {
                 .textSelection(.enabled)
                 .padding(.top, 12)
                 .tint(theme.palette.primary.toParraColor())
-            } label: {
-                EmptyView()
+
+                DisclosureGroup(
+                    isExpanded: $isDescriptionExpanded
+                ) {
+                    Text(
+                        description.attributedStringWithHighlightedLinks(
+                            tint: theme.palette.primary.toParraColor(),
+                            font: .system(.callout),
+                            foregroundColor: theme.palette.secondaryText
+                                .toParraColor()
+                        )
+                    )
+                    .textSelection(.enabled)
+                    .padding(.top, 12)
+                    .tint(theme.palette.primary.toParraColor())
+                } label: {
+                    EmptyView()
+                }
+                .disclosureGroupStyle(YouTubeDescriptionDisclosureStyle())
             }
-            .disclosureGroupStyle(YouTubeDescriptionDisclosureStyle())
         }
     }
 
@@ -160,24 +238,37 @@ struct FeedYouTubeVideoDetailViewHeader: View {
 
             Spacer()
 
-            ShareLink(item: youtubeVideo.url) {
-                Image(systemName: "square.and.arrow.up")
+            if youtubeVideo.paywall == nil {
+                ShareLink(item: youtubeVideo.url) {
+                    Image(systemName: "square.and.arrow.up")
+                }
             }
         }
     }
 
     @ViewBuilder @MainActor private var thumbnail: some View {
-        let thumb = youtubeVideo.thumbnails.maxAvailable
-
         CellButton {
-            contentObserver.performActionForFeedItemData(
-                .feedItemYoutubeVideo(youtubeVideo)
-            )
+            if isPaywalled {
+                Task { @MainActor in
+                    do {
+                        if youTubePlayer.isPlaying {
+                            try await youTubePlayer.pause()
+                        } else {
+                            try await youTubePlayer.play()
+                        }
+                    } catch {}
+                }
+            } else {
+                contentObserver.performActionForFeedItemData(
+                    .feedItemYoutubeVideo(youtubeVideo)
+                )
+            }
         } label: {
             YouTubeThumbnailView(
-                thumb: thumb
+                thumb: youtubeVideo.thumbnails.maxAvailable,
+                requiredEntitlement: youtubeVideo.paywall?.entitlement
             )
-            .aspectRatio(thumb.width / thumb.height, contentMode: .fit)
+            .aspectRatio(thumbAspectRatio, contentMode: .fit)
         }
         .buttonStyle(.plain)
     }
@@ -192,16 +283,18 @@ struct FeedYouTubeVideoDetailViewHeader: View {
                 youtubeVideo: .validStates()[0],
                 feedItem: .validStates()[0],
                 containerGeometry: proxy,
-                reactor: Reactor(
-                    feedItemId: .uuid,
-                    reactionOptionGroups: [],
-                    reactions: [],
-                    api: parra.parraInternal.api,
-                    submitReaction: { _, _, _ in
-                        return .validStates()[0]
-                    },
-                    removeReaction: { _, _, _ in
-                    }
+                reactor: StateObject(
+                    wrappedValue: Reactor(
+                        feedItemId: .uuid,
+                        reactionOptionGroups: [],
+                        reactions: [],
+                        api: parra.parraInternal.api,
+                        submitReaction: { _, _, _ in
+                            return .validStates()[0]
+                        },
+                        removeReaction: { _, _, _ in
+                        }
+                    )
                 )
             )
             .environmentObject(

@@ -50,7 +50,7 @@ struct FeedYouTubeVideoDetailView: View {
                                 youtubeVideo: youtubeVideo,
                                 feedItem: feedItem,
                                 containerGeometry: geometry,
-                                reactor: reactor
+                                reactor: _reactor
                             )
                             .clipShape(
                                 .rect(
