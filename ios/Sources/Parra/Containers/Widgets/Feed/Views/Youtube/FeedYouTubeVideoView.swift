@@ -198,7 +198,7 @@ struct FeedYouTubeVideoView: View {
             context: youtubeVideo.paywall?.context
         ) { requiredEntitlement, unlock in
             YouTubeThumbnailView(
-                thumb: thumb,
+                youtubeVideo: youtubeVideo,
                 requiredEntitlement: requiredEntitlement
             ) {
                 Task { @MainActor in
@@ -211,7 +211,7 @@ struct FeedYouTubeVideoView: View {
             )
         } unlockedContentBuilder: {
             YouTubeThumbnailView(
-                thumb: thumb,
+                youtubeVideo: youtubeVideo,
                 requiredEntitlement: youtubeVideo.paywall?.entitlement
             ) {
                 // For paid videos, always push to the detail screen to control

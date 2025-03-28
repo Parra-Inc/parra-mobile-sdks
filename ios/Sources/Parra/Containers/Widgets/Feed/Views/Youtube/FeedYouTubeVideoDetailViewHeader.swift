@@ -265,7 +265,7 @@ struct FeedYouTubeVideoDetailViewHeader: View {
             }
         } label: {
             YouTubeThumbnailView(
-                thumb: youtubeVideo.thumbnails.maxAvailable,
+                youtubeVideo: youtubeVideo,
                 requiredEntitlement: youtubeVideo.paywall?.entitlement
             )
             .aspectRatio(thumbAspectRatio, contentMode: .fit)

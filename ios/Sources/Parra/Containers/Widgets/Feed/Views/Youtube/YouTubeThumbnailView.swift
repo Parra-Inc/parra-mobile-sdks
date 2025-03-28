@@ -11,23 +11,27 @@ struct YouTubeThumbnailView: View {
     // MARK: - Lifecycle
 
     init(
-        thumb: ParraYoutubeThumbnail,
+        youtubeVideo: ParraFeedItemYoutubeVideoData,
         requiredEntitlement: ParraEntitlement? = nil,
         onTapPlay: (@MainActor () -> Void)? = nil
     ) {
-        self.thumb = thumb
+        self.youtubeVideo = youtubeVideo
         self.requiredEntitlement = requiredEntitlement
         self.onTapPlay = onTapPlay
     }
 
     // MARK: - Internal
 
-    let thumb: ParraYoutubeThumbnail
+    let youtubeVideo: ParraFeedItemYoutubeVideoData
     let requiredEntitlement: ParraEntitlement?
     let onTapPlay: (@MainActor () -> Void)?
 
     var paywalled: Bool {
         requiredEntitlement != nil
+    }
+
+    var thumb: ParraYoutubeThumbnail {
+        return youtubeVideo.thumbnails.maxAvailable
     }
 
     var body: some View {
@@ -78,6 +82,39 @@ struct YouTubeThumbnailView: View {
                     }
                 } else {
                     youtubePlayButton
+                }
+            }
+            .overlay(alignment: .bottomLeading) {
+                let liveStatus = youtubeVideo.liveBroadcastContent
+                    ?? ParraFeedItemLiveBroadcastContent.none
+
+                switch liveStatus {
+                case .none, .unknown:
+                    EmptyView()
+
+                case .upcoming:
+                    Label("UPCOMING", systemImage: "dot.radiowaves.left.and.right")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .fontDesign(.monospaced)
+                        .foregroundStyle(.white)
+                        .padding(.vertical, 2)
+                        .padding(.horizontal, 4)
+                        .background(.gray)
+                        .applyCornerRadii(size: .sm, from: theme)
+                        .padding()
+
+                case .live:
+                    Label("LIVE", systemImage: "dot.radiowaves.left.and.right")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .fontDesign(.monospaced)
+                        .foregroundStyle(.white)
+                        .padding(.vertical, 2)
+                        .padding(.horizontal, 4)
+                        .background(.red)
+                        .applyCornerRadii(size: .sm, from: theme)
+                        .padding()
                 }
             }
         }

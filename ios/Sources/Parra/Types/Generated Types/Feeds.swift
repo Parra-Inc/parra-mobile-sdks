@@ -70,6 +70,14 @@ public enum ParraFeedItemLiveBroadcastContent: String, ParraUnknownCaseCodable {
     case unknown
 }
 
+public struct ParraYoutubeStatistics: Codable, Equatable, Hashable {
+    let viewCount: Int?
+    let likeCount: Int?
+    let dislikeCount: Int?
+    let favoriteCount: Int?
+    let commentCount: Int?
+}
+
 public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
@@ -83,7 +91,8 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         thumbnails: ParraYoutubeThumbnails,
         publishedAt: Date,
         liveBroadcastContent: ParraFeedItemLiveBroadcastContent?,
-        paywall: ParraAppPaywallConfiguration?
+        paywall: ParraAppPaywallConfiguration?,
+        statistics: ParraYoutubeStatistics?
     ) {
         self.videoId = videoId
         self.url = url
@@ -95,6 +104,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         self.publishedAt = publishedAt
         self.liveBroadcastContent = liveBroadcastContent
         self.paywall = paywall
+        self.statistics = statistics
     }
 
     // MARK: - Public
@@ -109,6 +119,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
     public let publishedAt: Date
     public let liveBroadcastContent: ParraFeedItemLiveBroadcastContent?
     public let paywall: ParraAppPaywallConfiguration?
+    public let statistics: ParraYoutubeStatistics?
 
     // MARK: - Internal
 
@@ -123,6 +134,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         case publishedAt
         case liveBroadcastContent
         case paywall
+        case statistics
     }
 }
 
