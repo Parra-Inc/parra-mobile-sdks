@@ -464,50 +464,6 @@ struct UserInfoResponse: Codable, Equatable, Hashable {
     }
 }
 
-struct ListUsersQuery: Codable, Equatable, Hashable {
-    // MARK: - Lifecycle
-
-    public init(
-        select: String?,
-        top: Int?,
-        skip: Int?,
-        orderBy: String?,
-        filter: String?,
-        expand: String?,
-        search: String?
-    ) {
-        self.select = select
-        self.top = top
-        self.skip = skip
-        self.orderBy = orderBy
-        self.filter = filter
-        self.expand = expand
-        self.search = search
-    }
-
-    // MARK: - Public
-
-    public let select: String?
-    public let top: Int?
-    public let skip: Int?
-    public let orderBy: String?
-    public let filter: String?
-    public let expand: String?
-    public let search: String?
-
-    // MARK: - Internal
-
-    enum CodingKeys: String, CodingKey {
-        case select = "$select"
-        case top = "$top"
-        case skip = "$skip"
-        case orderBy = "$orderBy"
-        case filter = "$filter"
-        case expand = "$expand"
-        case search = "$search"
-    }
-}
-
 struct WebAuthnAuthenticateChallengeRequest: Codable, Equatable, Hashable {
     let username: String?
 }

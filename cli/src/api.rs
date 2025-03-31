@@ -166,7 +166,7 @@ pub async fn paginate_applications(
     // paginate-applications-for-tenant-by-id
 
     let authorized_user = ensure_auth().await?;
-    let query = vec![("$top", "10000")];
+    let query = vec![("limit", "1000")];
 
     let endpoint = format!("/tenants/{}/applications", tenant_id);
     let response: ApplicationCollectionResponse =
