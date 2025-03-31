@@ -40,8 +40,8 @@ executors:
       PARRA_TEST_SCHEME_NAME: Parra
       PARRA_TEST_CONFIGURATION: Debug
       PARRA_TEST_DEVICE_NAME: iPhone 16
-      PARRA_TEST_DEVICE_OS_VERSION: 18.0
-      PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.0
+      PARRA_TEST_DEVICE_OS_VERSION: 18.2
+      PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.2
       PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
     working_directory: /tmp/workspace
 
@@ -83,7 +83,7 @@ jobs:
       - macos/preboot-simulator:
           device: iPhone 16
           platform: iOS
-          version: "18.0"
+          version: "18.2"
 
       - macos/wait-until-simulator-booted
 
@@ -164,7 +164,7 @@ jobs:
       - macos/preboot-simulator:
           device: iPhone 16
           platform: iOS
-          version: "18.0"
+          version: "18.2"
 
       - macos/wait-until-simulator-booted
 

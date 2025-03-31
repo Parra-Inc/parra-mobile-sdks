@@ -16,7 +16,7 @@ const DEFAULT_XCODE_BUILD_OPTIONS: CommonXcodeBuildOptions = {
   configuration: 'Debug',
   scheme: 'Parra',
   project: 'Parra.xcodeproj',
-  destination: 'platform=iOS Simulator,name=iPhone 16,OS=18.0',
+  destination: 'platform=iOS Simulator,name=iPhone 16,OS=18.2',
   derivedDataPath: 'build/unit-tests/derivedData',
   showBuildTimingSummary: true,
   outputPath: 'artifacts/xcode-build-log.txt',
