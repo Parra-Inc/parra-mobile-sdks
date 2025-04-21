@@ -66,6 +66,7 @@ struct SettingsTab: View {
                 }
 
                 Section {
+                    CreatorUpdateCell()
                     FeedCell()
                     StorefrontCell()
                     RestorePurchasesCell()

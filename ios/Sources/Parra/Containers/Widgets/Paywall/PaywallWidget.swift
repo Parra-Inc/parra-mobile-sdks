@@ -372,7 +372,7 @@ private extension View {
     func versionedSubscriptionStoreControlStyle() -> some View {
         if #available(iOS 18.0, *) {
             subscriptionStoreControlStyle(
-                .compactPicker
+                .automatic
             )
         } else {
             subscriptionStoreControlStyle(

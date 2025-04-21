@@ -1,5 +1,5 @@
 {
-  "originHash" : "21ef5e6ceb84f726a8bc95451f36cc883445dd1f114bffc404e060e141309273",
+  "originHash" : "8a238a694f1332c47517177bae680f807f8ce9f5b822f39c907aa8dfd4da0a22",
   "pins" : [
     {
       "identity" : "checkout-sheet-kit-swift",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "18ad8b8ff0f03f3c0a5544ffccfa2ea1c051ae6e",
-        "version" : "2.8.0"
+        "revision" : "bba848db50462894e7fc0891d018dfecad4ef11e",
+        "version" : "2.8.7"
       }
     },
     {

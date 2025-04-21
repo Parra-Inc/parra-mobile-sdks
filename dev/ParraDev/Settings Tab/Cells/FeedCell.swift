@@ -20,7 +20,7 @@ struct FeedCell: View {
         ListItemLoadingButton(
             presentationState: $presentationState,
             text: "Social Feed",
-            symbol: "megaphone"
+            symbol: "list.bullet.rectangle.portrait"
         )
         .presentParraFeedWidget(
             by: "content",
