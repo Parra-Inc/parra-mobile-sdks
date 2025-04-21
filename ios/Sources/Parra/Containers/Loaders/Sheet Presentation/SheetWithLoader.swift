@@ -17,23 +17,21 @@ public struct ParraSheetPresentationState: Equatable {
 
     // MARK: - Public
 
-    public static let ready = Self(state: .ready)
-    public static let loading = Self(state: .loading)
-    public static let presented = Self(state: .presented)
-
-    public mutating func present() {
-        state = .loading
-    }
-
-    // MARK: - Internal
-
-    enum State: Equatable {
+    public enum State: Equatable {
         case ready
         case loading
         case presented
     }
 
-    var state: State
+    public static let ready = Self(state: .ready)
+    public static let loading = Self(state: .loading)
+    public static let presented = Self(state: .presented)
+
+    public internal(set) var state: State
+
+    public mutating func present() {
+        state = .loading
+    }
 }
 
 /// Facilitates loading data asynchonously then presenting a sheet with a view

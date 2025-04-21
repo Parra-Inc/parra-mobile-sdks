@@ -48,6 +48,19 @@ public final class Parra: Observable, Equatable {
         return true
     }
 
+    /// If auth has been determined, refresh it. If it hasn't, aquire the
+    /// tokens.
+    @MainActor
+    public static func performAuthStateRefresh() {
+        Parra.default.parraInternal.authService.performAuthStateRefresh()
+    }
+
+    /// If auth has been determined, refresh it. If it hasn't, aquire the
+    /// tokens.
+    public static func performAuthStateRefresh() async throws {
+        try await Parra.default.parraInternal.authService.performAuthStateRefresh()
+    }
+
     // MARK: - Internal
 
     /// Need a common instance that will never be nil to provide as an

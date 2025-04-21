@@ -491,59 +491,63 @@ final class AuthService {
     /// tokens.
     func performAuthStateRefresh() {
         Task {
-            guard await dataManager.getCurrentUser() != nil else {
-                // The only way this will happen is if the getQuickestAuthState
-                // flow resulted in an error, in which case there's no valid
-                // state to refresh.
+            try await performAuthStateRefresh()
+        }
+    }
 
-                return
-            }
+    func performAuthStateRefresh() async throws {
+        guard await dataManager.getCurrentUser() != nil else {
+            // The only way this will happen is if the getQuickestAuthState
+            // flow resulted in an error, in which case there's no valid
+            // state to refresh.
 
-            // printInvalidAuth(error: error)
-            logger.debug("Performing reauthentication for Parra")
+            return
+        }
 
-            // Using a short timeout since these requests are made on app launch
-            let timeout: TimeInterval = 5.0
+        // printInvalidAuth(error: error)
+        logger.debug("Performing reauthentication for Parra")
 
-            guard let credential = try await performCredentialRefresh(
-                forceRefresh: false,
-                timeout: timeout
-            ) else {
-                // The refresh token provider returning nil indicates that a
-                // logout should take place.
+        // Using a short timeout since these requests are made on app launch
+        let timeout: TimeInterval = 5.0
 
-                await logout()
+        guard let credential = try await performCredentialRefresh(
+            forceRefresh: false,
+            timeout: timeout
+        ) else {
+            // The refresh token provider returning nil indicates that a
+            // logout should take place.
 
-                return
-            }
+            await logout()
 
-            // Must updated persisted credential before get user info api call
-            // since API service requires being able to load this value.
-            await dataManager.updateCurrentUserCredential(credential)
+            return
+        }
 
-            let response = try await Parra.default.parraInternal.api.getUserInfo(
-                timeout: timeout
-            )
+        // Must updated persisted credential before get user info api call
+        // since API service requires being able to load this value.
+        await dataManager.updateCurrentUserCredential(credential)
 
-            let user = ParraUser(
-                credential: credential,
-                info: response.user
-            )
+        let response = try await Parra.default.parraInternal.api.getUserInfo(
+            timeout: timeout
+        )
 
-            await ParraUserProperties.shared
-                .forceSetStore(response.user.properties)
+        let user = ParraUser(
+            credential: credential,
+            info: response.user
+        )
 
-            await ParraUserSettings.shared
-                .updateSettings(response.user.settings)
+        await ParraUserProperties.shared
+            .forceSetStore(response.user.properties)
 
-            await ParraUserEntitlements.shared
-                .updateEntitlements(response.user.entitlements)
+        await ParraUserSettings.shared
+            .updateSettings(response.user.settings)
 
-            if user.info.isAnonymous {
-                await applyUserUpdate(.anonymous(user))
-            } else {
-                await applyUserUpdate(.authenticated(user))
-            }
+        await ParraUserEntitlements.shared
+            .updateEntitlements(response.user.entitlements)
+
+        if user.info.isAnonymous {
+            await applyUserUpdate(.anonymous(user))
+        } else {
+            await applyUserUpdate(.authenticated(user))
         }
     }
 

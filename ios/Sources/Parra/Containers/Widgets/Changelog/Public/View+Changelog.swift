@@ -27,11 +27,10 @@ public extension View {
             ParraChangelogInfo,
             ChangelogWidget
         >.Transformer = { parra, transformParams in
-            let response = try await parra.parraInternal.api
-                .paginateReleases(
-                    limit: transformParams.limit,
-                    offset: transformParams.offset
-                )
+            let response = try await parra.parraInternal.api.paginateReleases(
+                limit: transformParams.limit,
+                offset: transformParams.offset
+            )
 
             return ParraChangelogInfo(
                 appReleaseCollection: response

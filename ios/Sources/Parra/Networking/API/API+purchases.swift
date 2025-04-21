@@ -22,7 +22,8 @@ extension API {
 
         return try await hitEndpoint(
             .getPaywall,
-            queryItems: queryItems
+            queryItems: queryItems,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
         )
     }
 

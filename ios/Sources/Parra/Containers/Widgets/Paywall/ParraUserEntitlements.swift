@@ -15,7 +15,10 @@ private let logger = ParraLogger(category: "Parra User Entitlements")
 public final class ParraUserEntitlements {
     // MARK: - Lifecycle
 
-    init() {
+    public init(
+        current: [ParraUserEntitlement] = []
+    ) {
+        self.current = current
         self.updates = newTransactionListenerTask()
     }
 

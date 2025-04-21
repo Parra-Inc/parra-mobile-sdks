@@ -9,6 +9,30 @@
 import Foundation
 
 public struct ParraUserEntitlement: Codable, Equatable, Hashable, Identifiable, Sendable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        entitlementId: String,
+        key: String,
+        title: String,
+        isConsumable: Bool,
+        isFree: Bool,
+        quantityAvailable: Int? = nil,
+        quantityConsumed: Int? = nil
+    ) {
+        self.id = id
+        self.entitlementId = entitlementId
+        self.key = key
+        self.title = title
+        self.isConsumable = isConsumable
+        self.isFree = isFree
+        self.quantityAvailable = quantityAvailable
+        self.quantityConsumed = quantityConsumed
+    }
+
+    // MARK: - Public
+
     // The ID of this entitlement, specific to this user.
     public let id: String
 

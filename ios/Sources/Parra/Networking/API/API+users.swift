@@ -81,8 +81,8 @@ extension API {
         let requestBody = UpdateUserRequestBody(
             firstName: firstName,
             lastName: lastName,
-            name: nil,
-            properties: [:]
+            name: name,
+            properties: properties
         )
 
         return try await hitEndpoint(

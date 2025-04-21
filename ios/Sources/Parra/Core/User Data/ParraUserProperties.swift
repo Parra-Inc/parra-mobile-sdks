@@ -23,6 +23,14 @@ private let logger = ParraLogger(category: "Parra User Properties")
 /// on the backend.
 @Observable
 public final class ParraUserProperties: ParraReadableKeyValueStore {
+    // MARK: - Lifecycle
+
+    public init(
+        rawValue: [String: ParraAnyCodable] = [:]
+    ) {
+        self.rawValue = rawValue
+    }
+
     // MARK: - Public
 
     public static let shared = ParraUserProperties()
