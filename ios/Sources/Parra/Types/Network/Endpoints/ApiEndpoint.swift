@@ -281,11 +281,10 @@ enum ApiEndpoint: Endpoint {
         switch self {
         // MUST check backend before removing any from this list
         case .postBulkSubmitSessions, .postPushTokens,
-             .postLogin, .postLogout, .getUserInfo:
+             .postLogin, .postLogout, .getUserInfo, .getAppInfo:
+
             return true
-
         default:
-
             return false
         }
     }
