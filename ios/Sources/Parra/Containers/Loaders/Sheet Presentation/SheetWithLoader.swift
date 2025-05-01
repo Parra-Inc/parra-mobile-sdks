@@ -29,6 +29,10 @@ public struct ParraSheetPresentationState: Equatable {
 
     public internal(set) var state: State
 
+    public var isLoading: Bool {
+        return self == .loading
+    }
+
     public mutating func present() {
         state = .loading
     }
