@@ -150,11 +150,12 @@ struct PaywallWidget: ParraContainer {
                                             icon: .symbol("checkmark.circle.fill")
                                         ),
                                         localAttributes: .init(
-                                            text: ParraAttributes
-                                                .Text(
-                                                    style: .subheadline,
-                                                    alignment: .leading
-                                                ),
+                                            text: ParraAttributes.Text(
+                                                style: .subheadline,
+                                                color: theme.palette.primaryText
+                                                    .toParraColor(),
+                                                alignment: .leading
+                                            ),
                                             icon: ParraAttributes.Image(
                                                 tint: theme.palette.primary.toParraColor()
                                             )
