@@ -108,7 +108,7 @@ public struct ParraWhatsNewOptions: ParraConfigurationOptionType {
 
     public static let `default`: ParraWhatsNewOptions = .init(
         presentationStyle: .modal,
-        presentationMode: .automatic(.default)
+        presentationMode: .delayed(.default, 5.0)
     )
 
     public let presentationStyle: PresentationStyle

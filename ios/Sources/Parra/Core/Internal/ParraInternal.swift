@@ -241,10 +241,12 @@ class ParraInternal {
 
         await sessionManager.initializeSessions()
 
-        do {
-            try await authService.refreshUserInfo()
-        } catch {
-            logger.error("Failed to refresh user info on app launch", error)
+        Task {
+            do {
+                try await authService.refreshUserInfo()
+            } catch {
+                logger.error("Failed to refresh user info on app launch", error)
+            }
         }
 
         addEventObservers()
@@ -264,7 +266,7 @@ class ParraInternal {
     }
 
     private func performPostLoginSingleRunActions() async {
-        logger.debug("Performing post login actions")
+        let start = logger.debug("Performing post login actions")
 
         let whatsNewOptions = configuration.whatsNewOptions
 
@@ -286,6 +288,8 @@ class ParraInternal {
                 break
             }
         }
+
+        logger.measureTime(since: start, "Finished performing post login actions")
     }
 
     private func registerShortcutItems() {

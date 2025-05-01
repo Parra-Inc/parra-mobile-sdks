@@ -17,6 +17,10 @@ public final class ParraAuth {
 
     // MARK: - Public
 
+    public func triggerAuthRefresh() async throws {
+        try await parraInternal.authService.performAuthStateRefresh()
+    }
+
     // MARK: - Account Management
 
     @discardableResult
@@ -64,7 +68,9 @@ public final class ParraAuth {
     /// ``Parra/Parra/logout()``, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
     @discardableResult
-    public func logout() async -> Bool {
+    public func logout(
+        postLogoutTasks: (() async throws -> Void)? = nil
+    ) async -> Bool {
         // immediately kick off a sync that we don't wait for. Then present the
         // user the opportunity to confirm/cancel. If they confirm logout,
         // enqueue another sync and wait for it to complete before logging out.
@@ -90,7 +96,9 @@ public final class ParraAuth {
             waitUntilSyncCompletes: true
         )
 
-        await parraInternal.authService.logout()
+        await parraInternal.authService.logout(
+            postLogoutTasks: postLogoutTasks
+        )
 
         return true
     }

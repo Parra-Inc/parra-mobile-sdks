@@ -170,7 +170,9 @@ final class AuthService {
         )
     }
 
-    func logout() async {
+    func logout(
+        postLogoutTasks: (() async throws -> Void)? = nil
+    ) async {
         logger.debug("Logging out")
 
         modalScreenManager
@@ -208,6 +210,8 @@ final class AuthService {
             )
 
             await applyUserUpdate(result)
+
+            try await postLogoutTasks?()
         } catch {
             logger.error("Error sending logout request", error)
 
@@ -358,11 +362,13 @@ final class AuthService {
             return nil
         }
 
-        logger.debug("Refreshing user info")
+        let start = logger.debug("Refreshing user info")
 
         let response = try await Parra.default.parraInternal.api.getUserInfo(
             timeout: 10.0
         )
+
+        logger.measureTime(since: start, message: "Finished refreshing user info")
 
         await ParraUserProperties.shared
             .forceSetStore(response.user.properties)
