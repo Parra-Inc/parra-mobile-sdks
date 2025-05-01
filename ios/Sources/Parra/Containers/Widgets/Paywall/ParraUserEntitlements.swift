@@ -119,7 +119,7 @@ public final class ParraUserEntitlements {
         to entitlementKey: String
     ) -> Bool {
         if let firstMatch = getEntitlement(for: entitlementKey) {
-            logger.debug("Current user has entitlement", [
+            logger.trace("Current user has entitlement", [
                 "entitlementKey": entitlementKey,
                 "isConsumable": String(firstMatch.isConsumable),
                 "isFree": String(firstMatch.isFree),
@@ -130,7 +130,7 @@ public final class ParraUserEntitlements {
             return true
         }
 
-        logger.debug("Current user is missing entitlement", [
+        logger.trace("Current user is missing entitlement", [
             "entitlement": entitlementKey
         ])
 
@@ -151,7 +151,7 @@ public final class ParraUserEntitlements {
                 "entitlement": key
             ])
         } else {
-            logger.warn("Current user is missing entitlement", [
+            logger.trace("Current user is missing entitlement", [
                 "entitlement": key
             ])
         }
