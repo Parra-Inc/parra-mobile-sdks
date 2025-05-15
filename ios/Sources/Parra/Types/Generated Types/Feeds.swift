@@ -11,6 +11,7 @@ public enum ParraFeedItemType: String, Codable {
     case youtubeVideo = "youtube_video"
     case contentCard = "content_card"
     case creatorUpdate = "creator_update"
+    case rssItem = "rss_item"
 }
 
 public struct ParraYoutubeThumbnail: Codable, Equatable, Hashable {
@@ -243,10 +244,66 @@ public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
     }
 }
 
+public struct ParraRssEnclosure: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        url: String,
+        type: String,
+        length: Double?
+    ) {
+        self.url = url
+        self.type = type
+        self.length = length
+    }
+
+    // MARK: - Public
+
+    public let url: String
+    public let type: String
+    public let length: Double?
+}
+
+public struct ParraAppRssItemData: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        title: String,
+        description: String,
+        imageUrl: String?,
+        link: String?,
+        author: String?,
+        enclosures: [ParraRssEnclosure]?,
+        publishedAt: String?
+    ) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.imageUrl = imageUrl
+        self.link = link
+        self.author = author
+        self.enclosures = enclosures
+        self.publishedAt = publishedAt
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let title: String
+    public let description: String
+    public let imageUrl: String?
+    public let link: String?
+    public let author: String?
+    public let enclosures: [ParraRssEnclosure]?
+    public let publishedAt: String?
+}
+
 public enum ParraFeedItemData: Codable, Equatable, Hashable {
     case feedItemYoutubeVideo(ParraFeedItemYoutubeVideoData)
     case contentCard(ParraContentCard)
     case creatorUpdate(ParraCreatorUpdateAppStub)
+    case appRssItem(ParraAppRssItemData)
 
     // MARK: - Internal
 
@@ -255,6 +312,7 @@ public enum ParraFeedItemData: Codable, Equatable, Hashable {
         case .feedItemYoutubeVideo: return "youtube-video"
         case .contentCard: return "content-card"
         case .creatorUpdate: return "creator-update"
+        case .appRssItem: return "rss-item"
         }
     }
 }
@@ -313,6 +371,13 @@ public struct ParraFeedItem: Codable, Equatable, Hashable, Identifiable {
             self.data = try .creatorUpdate(
                 container.decode(
                     ParraCreatorUpdateAppStub.self,
+                    forKey: .data
+                )
+            )
+        case .rssItem:
+            self.data = try .appRssItem(
+                container.decode(
+                    ParraAppRssItemData.self,
                     forKey: .data
                 )
             )
