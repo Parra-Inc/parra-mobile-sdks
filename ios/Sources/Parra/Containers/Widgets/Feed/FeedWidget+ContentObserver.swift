@@ -164,6 +164,13 @@ extension FeedWidget {
                         "creator_update": creatorUpdate.id
                     ]
                 )
+            case .appRssItem(let rssItem):
+                Parra.default.logEvent(
+                    .tap(element: "rss-item-action"),
+                    [
+                        "rss_item": rssItem.id
+                    ]
+                )
             }
         }
 
@@ -184,7 +191,7 @@ extension FeedWidget {
                         ParraLinkManager.shared.open(url: url)
                     }
                 }
-            case .creatorUpdate:
+            case .creatorUpdate, .appRssItem:
                 break
             }
         }

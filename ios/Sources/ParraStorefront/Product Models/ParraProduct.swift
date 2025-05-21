@@ -153,7 +153,7 @@ public struct ParraProduct: Identifiable, Equatable, Hashable, Codable {
 
     static func markdownFromHTML(_ html: String) -> String? {
         do {
-            let document = BasicHTML(rawHTML: html)
+            let document = ParraBasicHtmlParser(rawHTML: html)
             try document.parse()
 
             return try document.asMarkdown()

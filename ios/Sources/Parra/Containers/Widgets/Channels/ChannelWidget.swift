@@ -422,7 +422,16 @@ struct ChannelWidget: ParraContainer {
                     .mask(Rectangle().padding(.bottom, -20))
                 }
 
-                ScrollView {
+                ParraMediaAwareScrollView(
+                    additionalScrollContentMargins: EdgeInsets(
+                        top: showCommentBar ? contentPadding.bottom / 2 + size
+                            .height : 44,
+                        leading: contentPadding.leading,
+                        bottom: contentPadding.bottom,
+                        trailing: contentPadding.trailing
+                    ),
+                    inverted: true
+                ) {
                     messageStack
                 }
                 .scrollDismissesKeyboard(.interactively)
@@ -431,17 +440,6 @@ struct ChannelWidget: ParraContainer {
                 // Don't allow scrolling past them while loading.
                 .scrollDisabled(
                     contentObserver.messagePaginator.isShowingPlaceholders
-                )
-                .contentMargins(
-                    [.top, .bottom],
-                    EdgeInsets(
-                        top: showCommentBar ? contentPadding.bottom / 2 + size
-                            .height : 44,
-                        leading: 0,
-                        bottom: contentPadding.bottom / 2,
-                        trailing: 0
-                    ),
-                    for: .scrollContent
                 )
                 .emptyPlaceholder(messages) {
                     emptyContent

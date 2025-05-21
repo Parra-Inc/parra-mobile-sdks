@@ -85,6 +85,29 @@ public struct ParraFeedListView: View {
                 }
             }
         )
+        .navigationDestination(
+            isPresented: Binding<Bool>(
+                get: {
+                    return presentedRssItem != nil
+                },
+                set: { value in
+                    if !value {
+                        presentedRssItem = nil
+                    }
+                }
+            ),
+            destination: {
+                if let presentedRssItem {
+                    FeedRssItemDetailView(
+                        rssItem: presentedRssItem.rssItem,
+                        feedItem: presentedRssItem.feedItem,
+                        reactor: presentedRssItem.reactor,
+                        navigationPath: $navigationPath
+                    )
+                    .environmentObject(contentObserver)
+                }
+            }
+        )
     }
 
     // MARK: - Internal
@@ -95,6 +118,8 @@ public struct ParraFeedListView: View {
 
     @State private var presentedCreatorUpdate: FeedCreatorUpdateDetailParams?
     @State private var presentedYouTubeVideo: FeedYouTubeVideoDetailParams?
+    @State private var presentedRssItem: FeedRssItemDetailParams?
+
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
     @Environment(\.parra) private var parra
 
@@ -165,6 +190,22 @@ public struct ParraFeedListView: View {
                 .onAppear {
                     itemAtIndexDidAppear(index)
                 }
+            } else if case .appRssItem(let data) = item.data {
+                FeedRssItemView(
+                    params: FeedRssItemParams(
+                        rssItem: data,
+                        feedItem: item,
+                        reactionOptions: item.reactionOptions?.elements,
+                        reactions: item.reactions?.elements,
+                        containerGeometry: containerGeometry,
+                        spacing: spacing,
+                        performActionForFeedItemData: performActionForFeedItemData,
+                        performRssItemSelection: { detailParams in
+                            presentedRssItem = detailParams
+                        },
+                        api: parra.parraInternal.api
+                    )
+                )
             } else {
                 EmptyView()
                     .id(item.id)

@@ -193,7 +193,13 @@ struct ReleaseWidget: ParraContainer {
                 0.0
             )
 
-            ScrollView {
+            ParraMediaAwareScrollView(
+                additionalScrollContentMargins: .padding(
+                    leading: contentPadding.leading,
+                    bottom: contentPadding.bottom,
+                    trailing: contentPadding.trailing
+                )
+            ) {
                 VStack(alignment: .leading, spacing: 20.0) {
                     header
 
@@ -253,11 +259,6 @@ struct ReleaseWidget: ParraContainer {
             )
         }
         .clipped()
-        .contentMargins(
-            [.horizontal, .bottom],
-            contentPadding,
-            for: .scrollContent
-        )
     }
 
     // MARK: - Private

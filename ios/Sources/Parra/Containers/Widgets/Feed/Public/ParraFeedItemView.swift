@@ -54,6 +54,13 @@ struct ParraFeedItemView: View {
                 reactor: _reactor,
                 navigationPath: $navigationPath
             )
+        case .appRssItem(let rssItem):
+            FeedRssItemDetailView(
+                rssItem: rssItem,
+                feedItem: feedItem,
+                reactor: _reactor,
+                navigationPath: $navigationPath
+            )
         }
     }
 }

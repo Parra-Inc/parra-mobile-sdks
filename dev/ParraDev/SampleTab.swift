@@ -17,6 +17,9 @@ struct SampleTab: View {
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.openURL) private var openURL
 
+    @State private var paidDmPresentationState = ParraSheetPresentationState.ready
+    @State private var rssFeedresentationState = ParraSheetPresentationState.ready
+
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack(spacing: 24) {
@@ -39,10 +42,28 @@ struct SampleTab: View {
                     Text("Get started")
                         .font(.headline)
                 }
+
+                Button("DM") {
+                    paidDmPresentationState.present()
+                }
+
+                Button("RSS") {
+                    rssFeedresentationState.present()
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationTitle("App")
             .background(parraTheme.palette.primaryBackground)
+            .presentParraPaidDirectMessageWidget(
+                for: "mick",
+                requiredEntitlement: nil,
+                context: nil,
+                presentationState: $paidDmPresentationState
+            )
+            .presentParraFeedWidget(
+                by: "rss",
+                presentationState: $rssFeedresentationState
+            )
         }
     }
 }

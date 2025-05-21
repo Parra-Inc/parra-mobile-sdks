@@ -122,6 +122,8 @@ struct LaunchScreenWindow<Content>: View where Content: View {
 
     @State private var presentingSignInSheetConfig: ParraAuthenticationFlowConfig?
 
+    @State private var showMiniMediaPlayer = false
+
     @ViewBuilder
     private func renderFailure(
         with errorInfo: ParraErrorWithUserInfo,
@@ -246,6 +248,20 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                     pushCurrentFeedItemId = feedItemData.feedItemId
                     pushCurrentFeedItemPresentationState = .loading
                 }
+            }
+            .onChange(
+                of: MediaPlaybackManager.shared.state,
+                initial: true
+            ) { _, newValue in
+                showMiniMediaPlayer = switch newValue {
+                case .loading, .paused, .playing:
+                    true
+                default:
+                    false
+                }
+            }
+            .universalOverlay(show: $showMiniMediaPlayer) {
+                ExpandableMusicPlayer()
             }
     }
 

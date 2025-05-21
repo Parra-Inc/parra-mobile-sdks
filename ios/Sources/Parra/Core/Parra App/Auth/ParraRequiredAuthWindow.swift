@@ -32,6 +32,27 @@ public struct ParraRequiredAuthWindow<
         LaunchScreenWindow {
             content
         }
+        .environment(properties)
+        .onAppear {
+            if let windowScene = (
+                UIApplication.shared.connectedScenes
+                    .first as? UIWindowScene
+            ), properties.window == nil {
+                let window = PassThroughWindow(windowScene: windowScene)
+                window.isHidden = false
+                window.isUserInteractionEnabled = true
+                /// Setting Up SwiftUI Based RootView Controller
+                let rootViewController =
+                    UIHostingController(
+                        rootView: UniversalOverlayViews()
+                            .environment(properties)
+                    )
+                rootViewController.view.backgroundColor = .clear
+                window.rootViewController = rootViewController
+
+                properties.window = window
+            }
+        }
     }
 
     public func authenticatedContent() -> AuthenticatedContent {
@@ -47,6 +68,8 @@ public struct ParraRequiredAuthWindow<
     }
 
     // MARK: - Internal
+
+    var properties = UniversalOverlayProperties()
 
     @Environment(\.parra) var parra
 

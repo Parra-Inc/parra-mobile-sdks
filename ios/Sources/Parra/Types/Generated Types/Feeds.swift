@@ -244,6 +244,60 @@ public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
     }
 }
 
+struct UrlMedia {
+    // MARK: - Lifecycle
+
+    init(
+        id: String,
+        title: String,
+        description: String,
+        imageUrl: URL?,
+        link: URL?,
+        author: String?,
+        enclosure: ParraRssEnclosure,
+        publishedAt: Date?
+    ) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.imageUrl = imageUrl
+        self.link = link
+        self.author = author
+        self.enclosure = enclosure
+        self.publishedAt = publishedAt
+    }
+
+    // MARK: - Internal
+
+    let id: String
+    let title: String
+    let description: String
+    let imageUrl: URL?
+    let link: URL?
+    let author: String?
+    let enclosure: ParraRssEnclosure
+    let publishedAt: Date?
+
+    static func from(
+        _ rssItem: ParraAppRssItemData
+    ) -> UrlMedia? {
+        guard let enclosure = rssItem.enclosures?.elements.first else {
+            return nil
+        }
+
+        return UrlMedia(
+            id: rssItem.id,
+            title: rssItem.title,
+            description: rssItem.description,
+            imageUrl: rssItem.imageUrl,
+            link: rssItem.link,
+            author: rssItem.author,
+            enclosure: enclosure,
+            publishedAt: rssItem.publishedAt
+        )
+    }
+}
+
 public struct ParraRssEnclosure: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
@@ -261,6 +315,7 @@ public struct ParraRssEnclosure: Codable, Equatable, Hashable {
 
     public let url: String
     public let type: String
+    // This is the file size in bytes, not the duration of the file.
     public let length: Double?
 }
 
@@ -271,11 +326,11 @@ public struct ParraAppRssItemData: Codable, Equatable, Hashable, Identifiable {
         id: String,
         title: String,
         description: String,
-        imageUrl: String?,
-        link: String?,
+        imageUrl: URL?,
+        link: URL?,
         author: String?,
         enclosures: [ParraRssEnclosure]?,
-        publishedAt: String?
+        publishedAt: Date?
     ) {
         self.id = id
         self.title = title
@@ -283,7 +338,7 @@ public struct ParraAppRssItemData: Codable, Equatable, Hashable, Identifiable {
         self.imageUrl = imageUrl
         self.link = link
         self.author = author
-        self.enclosures = enclosures
+        self.enclosures = .init(enclosures)
         self.publishedAt = publishedAt
     }
 
@@ -292,11 +347,11 @@ public struct ParraAppRssItemData: Codable, Equatable, Hashable, Identifiable {
     public let id: String
     public let title: String
     public let description: String
-    public let imageUrl: String?
-    public let link: String?
+    public let imageUrl: URL?
+    public let link: URL?
     public let author: String?
-    public let enclosures: [ParraRssEnclosure]?
-    public let publishedAt: String?
+    public let enclosures: PartiallyDecodableArray<ParraRssEnclosure>?
+    public let publishedAt: Date?
 }
 
 public enum ParraFeedItemData: Codable, Equatable, Hashable {

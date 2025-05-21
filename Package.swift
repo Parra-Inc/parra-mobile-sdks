@@ -38,7 +38,8 @@ let package = Package(
         .target(
             name: "Parra",
             dependencies: [
-                .product(name: "YouTubePlayerKit", package: "YouTubePlayerKit")
+                .product(name: "YouTubePlayerKit", package: "YouTubePlayerKit"),
+                .product(name: "SwiftSoup", package: "SwiftSoup")
             ],
             path: "\(iosSdkDir)/Sources/Parra",
             resources: [
@@ -52,8 +53,7 @@ let package = Package(
             dependencies: [
                 .target(name: "Parra"),
                 .product(name: "Buy", package: "mobile-buy-sdk-ios"),
-                .product(name: "ShopifyCheckoutSheetKit", package: "checkout-sheet-kit-swift"),
-                .product(name: "SwiftSoup", package: "SwiftSoup")
+                .product(name: "ShopifyCheckoutSheetKit", package: "checkout-sheet-kit-swift")
             ],
             path: "\(iosSdkDir)/Sources/ParraStorefront",
             resources: [

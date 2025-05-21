@@ -123,7 +123,20 @@ struct FeedCommentWidget: ParraContainer {
     }
 
     @ViewBuilder var scrollView: some View {
-        ScrollView {
+        ParraMediaAwareScrollView(
+            additionalScrollContentMargins: EdgeInsets(
+                top: 0,
+                leading: 0,
+                bottom: 65,
+                trailing: 0
+            ),
+            additionalScrollIndicatorMargins: EdgeInsets(
+                top: 0,
+                leading: 0,
+                bottom: 70,
+                trailing: 0
+            )
+        ) {
             VStack(spacing: 0) {
                 AnyView(config.headerViewBuilder())
 
@@ -147,17 +160,7 @@ struct FeedCommentWidget: ParraContainer {
     var body: some View {
         VStack(spacing: 0) {
             ScrollViewReader { proxy in
-                scrollView.contentMargins(
-                    .bottom,
-                    EdgeInsets(top: 0, leading: 0, bottom: 65, trailing: 0),
-                    for: .scrollContent
-                )
-                .contentMargins(
-                    .bottom,
-                    EdgeInsets(top: 0, leading: 0, bottom: 70, trailing: 0),
-                    for: .scrollIndicators
-                )
-                .overlay(
+                scrollView.overlay(
                     alignment: .bottom
                 ) {
                     if let commentInfo = contentObserver.feedItem.comments {

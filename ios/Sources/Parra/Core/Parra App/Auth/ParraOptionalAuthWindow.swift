@@ -32,6 +32,27 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
                 AnyView(unauthenticatedContent())
             }
         }
+        .environment(properties)
+        .onAppear {
+            if let windowScene = (
+                UIApplication.shared.connectedScenes
+                    .first as? UIWindowScene
+            ), properties.window == nil {
+                let window = PassThroughWindow(windowScene: windowScene)
+                window.isHidden = false
+                window.isUserInteractionEnabled = true
+                /// Setting Up SwiftUI Based RootView Controller
+                let rootViewController =
+                    UIHostingController(
+                        rootView: UniversalOverlayViews()
+                            .environment(properties)
+                    )
+                rootViewController.view.backgroundColor = .clear
+                window.rootViewController = rootViewController
+
+                properties.window = window
+            }
+        }
     }
 
     public func authenticatedContent() -> Content {
@@ -41,6 +62,10 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
     public func unauthenticatedContent() -> some View {
         return content()
     }
+
+    // MARK: - Internal
+
+    var properties = UniversalOverlayProperties()
 
     // MARK: - Private
 

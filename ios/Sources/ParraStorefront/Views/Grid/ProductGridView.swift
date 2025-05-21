@@ -5,6 +5,7 @@
 //  Created by Mick MacCallum on 9/30/24.
 //
 
+import Parra
 import SwiftUI
 import UIKit
 
@@ -22,7 +23,7 @@ struct ProductGridView: View {
                 with: cellSpacing
             )
 
-            ScrollView {
+            ParraMediaAwareScrollView {
                 LazyVGrid(
                     columns: columns,
                     spacing: cellSpacing

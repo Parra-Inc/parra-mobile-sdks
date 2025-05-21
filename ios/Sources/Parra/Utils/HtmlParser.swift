@@ -8,27 +8,27 @@
 import Foundation
 import SwiftSoup
 
-class BasicHTML {
+public class ParraBasicHtmlParser {
     // MARK: - Lifecycle
 
     required init() {
         self.rawHTML = "Document not initialized correctly"
     }
 
-    convenience init(rawHTML: String) {
+    public convenience init(rawHTML: String) {
         self.init()
         self.rawHTML = rawHTML
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    func parse() throws {
+    public func parse() throws {
         let doc = try SwiftSoup.parse(rawHTML)
         document = doc
         rawText = try doc.text()
     }
 
-    func asMarkdown() throws -> String? {
+    public func asMarkdown() throws -> String? {
         guard let document else {
             return nil
         }
