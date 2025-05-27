@@ -9,6 +9,8 @@ import AVFoundation
 import Combine
 import MediaPlayer
 
+private let logger = Logger()
+
 public enum PlaybackState: Equatable {
     case idle
     case loading
@@ -277,7 +279,7 @@ public final class MediaPlaybackManager {
 
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
-            print("Failed to set up audio session: \(error)")
+            logger.error("Failed to set up audio session", error)
         }
     }
 
