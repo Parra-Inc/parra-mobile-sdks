@@ -301,14 +301,7 @@ struct ChannelListWidget: ParraContainer {
         with contentPadding: EdgeInsets
     ) -> some View {
         GeometryReader { _ in
-            ParraMediaAwareScrollView(
-                additionalScrollContentMargins: EdgeInsets(
-                    top: contentPadding.bottom / 2,
-                    leading: 0,
-                    bottom: contentPadding.bottom / 2,
-                    trailing: 0
-                )
-            ) {
+            ScrollView {
                 cells
             }
             .emptyPlaceholder(channels) {
@@ -317,6 +310,11 @@ struct ChannelListWidget: ParraContainer {
                     content: contentObserver.content.emptyStateView
                 )
             }
+            .contentMargins(
+                .vertical,
+                contentPadding.bottom / 2,
+                for: .scrollContent
+            )
             .refreshable {
                 await contentObserver.refresh()
             }

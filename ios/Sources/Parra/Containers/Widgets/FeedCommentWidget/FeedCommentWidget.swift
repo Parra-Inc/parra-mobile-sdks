@@ -123,20 +123,7 @@ struct FeedCommentWidget: ParraContainer {
     }
 
     @ViewBuilder var scrollView: some View {
-        ParraMediaAwareScrollView(
-            additionalScrollContentMargins: EdgeInsets(
-                top: 0,
-                leading: 0,
-                bottom: 65,
-                trailing: 0
-            ),
-            additionalScrollIndicatorMargins: EdgeInsets(
-                top: 0,
-                leading: 0,
-                bottom: 70,
-                trailing: 0
-            )
-        ) {
+        ScrollView {
             VStack(spacing: 0) {
                 AnyView(config.headerViewBuilder())
 
@@ -160,7 +147,17 @@ struct FeedCommentWidget: ParraContainer {
     var body: some View {
         VStack(spacing: 0) {
             ScrollViewReader { proxy in
-                scrollView.overlay(
+                scrollView.contentMargins(
+                    .bottom,
+                    EdgeInsets(top: 0, leading: 0, bottom: 65, trailing: 0),
+                    for: .scrollContent
+                )
+                .contentMargins(
+                    .bottom,
+                    EdgeInsets(top: 0, leading: 0, bottom: 70, trailing: 0),
+                    for: .scrollIndicators
+                )
+                .overlay(
                     alignment: .bottom
                 ) {
                     if let commentInfo = contentObserver.feedItem.comments {
@@ -182,6 +179,9 @@ struct FeedCommentWidget: ParraContainer {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 contentObserver.loadComments()
             }
+        }
+        .task(priority: .userInitiated) {
+            await contentObserver.onAppear()
         }
         .refreshable {
             await contentObserver.refresh()
@@ -328,7 +328,8 @@ struct FeedCommentWidget: ParraContainer {
                         config: .default,
                         commentsResponse: .validStates()[0],
                         attachmentPaywall: nil,
-                        api: parra.parraInternal.api
+                        api: parra.parraInternal.api,
+                        refreshOnAppear: false
                     )
                 ),
                 navigationPath: .constant(.init())

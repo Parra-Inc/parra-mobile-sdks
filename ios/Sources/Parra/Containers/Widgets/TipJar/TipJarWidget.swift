@@ -26,7 +26,7 @@ struct TipJarWidget: ParraContainer {
     let config: ParraTipJarConfig
 
     @ViewBuilder var body: some View {
-        ParraMediaAwareScrollView {
+        ScrollView {
             VStack(alignment: .center) {
                 marketingContent
 

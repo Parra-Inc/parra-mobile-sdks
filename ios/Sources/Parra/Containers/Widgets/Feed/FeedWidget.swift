@@ -61,11 +61,7 @@ struct FeedWidget: ParraContainer {
         with contentPadding: EdgeInsets
     ) -> some View {
         GeometryReader { geometry in
-            ParraMediaAwareScrollView(
-                additionalScrollContentMargins: EdgeInsets(
-                    vertical: headerSpace(from: contentPadding) / 2
-                )
-            ) {
+            ScrollView {
                 VStack(spacing: 0) {
                     AnyView(config.headerViewBuilder())
                         .layoutPriority(10)
@@ -140,6 +136,11 @@ struct FeedWidget: ParraContainer {
             // Don't allow scrolling past them while loading.
             .scrollDisabled(
                 contentObserver.feedPaginator.isShowingPlaceholders
+            )
+            .contentMargins(
+                .vertical,
+                headerSpace(from: contentPadding) / 2,
+                for: .scrollContent
             )
             .refreshable {
                 contentObserver.refresh()

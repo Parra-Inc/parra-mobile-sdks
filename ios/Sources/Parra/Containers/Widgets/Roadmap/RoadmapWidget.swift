@@ -133,14 +133,7 @@ struct RoadmapWidget: ParraContainer {
         with contentPadding: EdgeInsets
     ) -> some View {
         ScrollViewReader { scrollViewProxy in
-            ParraMediaAwareScrollView(
-                additionalScrollContentMargins: .init(
-                    top: headerSpace(from: contentPadding) / 2,
-                    leading: contentPadding.leading,
-                    bottom: contentPadding.bottom,
-                    trailing: contentPadding.trailing
-                )
-            ) {
+            ScrollView {
                 LazyVStack(alignment: .leading, spacing: 12) {
                     ScrollToTopView(
                         reader: scrollViewProxy,
@@ -188,6 +181,16 @@ struct RoadmapWidget: ParraContainer {
             // Don't allow scrolling past them while loading.
             .scrollDisabled(
                 contentObserver.ticketPaginator.isShowingPlaceholders
+            )
+            .contentMargins(
+                .top,
+                headerSpace(from: contentPadding) / 2,
+                for: .scrollContent
+            )
+            .contentMargins(
+                [.leading, .trailing, .bottom],
+                contentPadding,
+                for: .scrollContent
             )
             .scrollIndicatorsFlash(trigger: contentObserver.selectedTab)
             .refreshable {

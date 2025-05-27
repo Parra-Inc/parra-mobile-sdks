@@ -14,12 +14,14 @@ struct FeedRssItemDetailView: View {
         rssItem: ParraAppRssItemData,
         feedItem: ParraFeedItem,
         reactor: StateObject<Reactor>,
-        navigationPath: Binding<NavigationPath>
+        navigationPath: Binding<NavigationPath>,
+        refreshOnAppear: Bool
     ) {
         self.rssItem = rssItem
         self.feedItem = feedItem
         self._reactor = reactor
         self._navigationPath = navigationPath
+        self.refreshOnAppear = refreshOnAppear
     }
 
     // MARK: - Internal
@@ -28,6 +30,7 @@ struct FeedRssItemDetailView: View {
     let feedItem: ParraFeedItem
     @StateObject var reactor: Reactor
     @Binding var navigationPath: NavigationPath
+    let refreshOnAppear: Bool
 
     var body: some View {
         GeometryReader { geometry in
@@ -38,7 +41,8 @@ struct FeedRssItemDetailView: View {
                         config: .default,
                         commentsResponse: nil,
                         attachmentPaywall: nil,
-                        api: parra.parraInternal.api
+                        api: parra.parraInternal.api,
+                        refreshOnAppear: refreshOnAppear
                     ),
                     config: ParraFeedCommentWidgetConfig(
                         headerViewBuilder: {

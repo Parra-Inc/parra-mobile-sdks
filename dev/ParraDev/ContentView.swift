@@ -11,12 +11,9 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var navigationState = AppNavigationState.shared
-    @Environment(\.parra) private var parra
-
-    @State var isPresentingPurchaseSheet: Bool = false
 
     var body: some View {
-        TabView(selection: $navigationState.selectedTab) {
+        ParraTabView(selection: $navigationState.selectedTab) {
             SampleTab(
                 navigationPath: $navigationState.appTabNavigationPath
             )
@@ -40,9 +37,6 @@ struct ContentView: View {
 
             return .systemAction(url)
         })
-        .onAppear {
-            parra.push.requestPushPermission()
-        }
     }
 }
 

@@ -244,6 +244,11 @@ public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
     }
 }
 
+struct UrlMediaContext {
+    let rssItem: ParraAppRssItemData
+    let feedItem: ParraFeedItem
+}
+
 struct UrlMedia {
     // MARK: - Lifecycle
 
@@ -255,7 +260,8 @@ struct UrlMedia {
         link: URL?,
         author: String?,
         enclosure: ParraRssEnclosure,
-        publishedAt: Date?
+        publishedAt: Date?,
+        context: UrlMediaContext
     ) {
         self.id = id
         self.title = title
@@ -265,6 +271,7 @@ struct UrlMedia {
         self.author = author
         self.enclosure = enclosure
         self.publishedAt = publishedAt
+        self.context = context
     }
 
     // MARK: - Internal
@@ -277,9 +284,11 @@ struct UrlMedia {
     let author: String?
     let enclosure: ParraRssEnclosure
     let publishedAt: Date?
+    let context: UrlMediaContext
 
     static func from(
-        _ rssItem: ParraAppRssItemData
+        rssItem: ParraAppRssItemData,
+        on feedItem: ParraFeedItem
     ) -> UrlMedia? {
         guard let enclosure = rssItem.enclosures?.elements.first else {
             return nil
@@ -293,7 +302,11 @@ struct UrlMedia {
             link: rssItem.link,
             author: rssItem.author,
             enclosure: enclosure,
-            publishedAt: rssItem.publishedAt
+            publishedAt: rssItem.publishedAt,
+            context: UrlMediaContext(
+                rssItem: rssItem,
+                feedItem: feedItem
+            )
         )
     }
 }

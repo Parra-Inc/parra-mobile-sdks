@@ -59,63 +59,184 @@ struct FeedRssItemDetailHeaderView: View {
                 alignment: .leading
             )
 
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    VStack(alignment: .leading) {
-                        withContent(content: rssItem.author) { content in
-                            componentFactory.buildLabel(
-                                text: content,
-                                localAttributes: .default(with: .subheadline)
-                            )
-                        }
+            HStack {
+                VStack {
+                    withContent(content: rssItem.author) { content in
+                        componentFactory.buildLabel(
+                            text: content,
+                            localAttributes: .default(with: .subheadline)
+                        )
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    }
 
-                        withContent(content: rssItem.publishedAt) { content in
-                            componentFactory.buildLabel(
-                                text: content.formatted(
-                                    date: .complete,
-                                    time: .omitted
-                                ),
-                                localAttributes: .default(with: .caption)
-                            )
+                    withContent(content: rssItem.publishedAt) { content in
+                        componentFactory.buildLabel(
+                            text: content.formatted(
+                                date: .complete,
+                                time: .omitted
+                            ),
+                            localAttributes: .default(with: .caption)
+                        )
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    }
+                }
+
+                Spacer()
+
+                if let urlMedia = UrlMedia.from(
+                    rssItem: rssItem,
+                    on: feedItem
+                ) {
+                    RssPlayButton(
+                        urlMedia: urlMedia
+                    )
+                    .font(.title3)
+                    .foregroundStyle(theme.palette.primaryChipText)
+                    .padding()
+                    .background(theme.palette.primaryChipBackground)
+                    .applyCornerRadii(size: .full, from: theme)
+                }
+            }
+
+            reactions
+
+            mediaStack
+
+            description
+        }
+        .padding(.top, 20)
+        .padding(.horizontal, 20)
+    }
+
+    @ViewBuilder var mediaStack: some View {
+        if let media = player.currentMedia, media.id == rssItem.id {
+            VStack {
+                ScrubbingProgressView(
+                    progress: .init(
+                        get: {
+                            return player.progress
+                        },
+                        set: { value in
+                            player.seek(fraction: value)
                         }
+                    ),
+                    duration: player.duration
+                )
+
+                HStack {
+                    componentFactory.buildLabel(
+                        text: Duration.seconds(player.currentTime).formatted(
+                            .time(pattern: .hourMinuteSecond)
+                        ),
+                        localAttributes: .default(
+                            with: .callout,
+                            alignment: .leading
+                        )
+                    )
+
+                    Spacer()
+
+                    componentFactory.buildLabel(
+                        text: Duration.seconds(player.currentTime - player.duration)
+                            .formatted(
+                                .time(pattern: .hourMinuteSecond)
+                            ),
+                        localAttributes: .default(
+                            with: .callout,
+                            alignment: .trailing
+                        )
+                    )
+                }
+
+                HStack(spacing: 0) {
+                    Menu {
+                        ForEach([0.5, 1.0, 1.2, 1.5, 1.8, 2.0], id: \.self) { rate in
+                            Button {
+                                player.setRate(rate)
+                            } label: {
+                                Text("\(rate.formatted())x")
+                                    .font(.title)
+                            }
+                        }
+                    } label: {
+                        Text("\(player.playbackRate.formatted())x")
+                            .font(.title3)
+                            .foregroundStyle(theme.palette.primaryText.toParraColor())
                     }
 
                     Spacer()
 
-                    if let urlMedia = UrlMedia.from(rssItem) {
-                        RssPlayButton(
-                            urlMedia: urlMedia
-                        )
-                        .font(.title3)
-                        .foregroundStyle(theme.palette.primaryChipText)
-                        .padding()
-                        .background(theme.palette.primaryChipBackground)
-                        .applyCornerRadii(size: .full, from: theme)
+                    Button(
+                        "",
+                        systemImage: "15.arrow.trianglehead.counterclockwise"
+                    ) {
+                        player.skipBackward()
                     }
-                }
+                    .font(.largeTitle)
+                    .foregroundStyle(theme.palette.primaryText.toParraColor())
 
-                if reactor.showReactions {
-                    VStack {
-                        FeedReactionView(
-                            feedItem: feedItem,
-                            reactor: _reactor,
-                            showCommentCount: false
-                        )
+                    Spacer()
+
+                    RssPlayButton(
+                        urlMedia: media
+                    )
+                    .foregroundStyle(theme.palette.primaryText.toParraColor())
+                    .font(.largeTitle)
+
+                    Spacer()
+
+                    Button("", systemImage: "15.arrow.trianglehead.clockwise") {
+                        player.skipForward()
                     }
-                    .padding(
-                        .padding(top: 8, leading: 0, bottom: 8, trailing: 0)
+                    .font(.largeTitle)
+                    .foregroundStyle(theme.palette.primaryText.toParraColor())
+
+                    Spacer()
+
+                    DevicePickerView(
+                        activeTintColor: theme.palette.primary.toParraColor(),
+                        tintColor: theme.palette.primaryText.toParraColor()
                     )
                     .frame(
-                        maxWidth: .infinity,
-                        alignment: .leading
+                        width: 26,
+                        height: 26
                     )
                 }
-
-                description
+                .frame(
+                    maxWidth: .infinity
+                )
+                .padding(.top, 24)
             }
+            .frame(
+                maxWidth: .infinity
+            )
+            .padding(.vertical, 32)
         }
-        .padding(.top, 20)
-        .padding(.horizontal, 20)
+    }
+
+    @ViewBuilder var reactions: some View {
+        if reactor.showReactions {
+            VStack {
+                FeedReactionView(
+                    feedItem: feedItem,
+                    reactor: _reactor,
+                    showCommentCount: false
+                )
+            }
+            .padding(
+                .padding(top: 8, leading: 0, bottom: 8, trailing: 0)
+            )
+            .frame(
+                maxWidth: .infinity,
+                alignment: .leading
+            )
+        }
     }
 
     // MARK: - Private

@@ -140,7 +140,7 @@ struct OrderReceiptView: View {
     }
 
     var body: some View {
-        ParraMediaAwareScrollView {
+        ScrollView {
             content
         }
         .background(

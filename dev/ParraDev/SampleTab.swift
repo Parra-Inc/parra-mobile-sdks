@@ -19,28 +19,31 @@ struct SampleTab: View {
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            VStack(spacing: 24) {
-                Image(systemName: "app.dashed")
-                    .resizable()
-                    .foregroundStyle(.gray)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 96)
+            ScrollView {
+                VStack(spacing: 24) {
+                    Image(systemName: "app.dashed")
+                        .resizable()
+                        .foregroundStyle(.gray)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 96)
 
-                Text("We can't wait to see\nwhat you build!")
-                    .font(.title)
-                    .bold()
-                    .multilineTextAlignment(.center)
+                    Text("We can't wait to see\nwhat you build!")
+                        .font(.title)
+                        .bold()
+                        .multilineTextAlignment(.center)
 
-                Link(
-                    destination: URL(
-                        string: "https://docs.parra.io/cli/templates/default?platform=ios"
-                    )!
-                ) {
-                    Text("Get started")
-                        .font(.headline)
+                    Link(
+                        destination: URL(
+                            string: "https://docs.parra.io/cli/templates/default?platform=ios"
+                        )!
+                    ) {
+                        Text("Get started")
+                            .font(.headline)
+                    }
                 }
+                .padding(.top, 140)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationTitle("App")
             .background(parraTheme.palette.primaryBackground)
         }

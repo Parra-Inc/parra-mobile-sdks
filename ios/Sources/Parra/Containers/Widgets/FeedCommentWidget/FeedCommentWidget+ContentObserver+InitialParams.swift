@@ -14,5 +14,6 @@ extension FeedCommentWidget.ContentObserver {
         let commentsResponse: PaginateCommentsCollectionResponse?
         let attachmentPaywall: ParraAppPaywallConfiguration?
         let api: API
+        let refreshOnAppear: Bool
     }
 }

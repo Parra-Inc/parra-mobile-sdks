@@ -137,20 +137,23 @@ struct ChangelogWidget: ParraContainer {
             for: attributes.contentPadding
         )
 
-        ParraMediaAwareScrollView(
-            additionalScrollContentMargins: EdgeInsets(
-                top: contentPadding.bottom, // intentional
-                leading: contentPadding.leading,
-                bottom: contentPadding.bottom,
-                trailing: contentPadding.trailing
-            )
-        ) {
+        ScrollView {
             items(with: attributes)
         }
         // A limited number of placeholder cells will be generated.
         // Don't allow scrolling past them while loading.
         .scrollDisabled(
             contentObserver.releasePaginator.isShowingPlaceholders
+        )
+        .contentMargins(
+            .top,
+            contentPadding.bottom,
+            for: .scrollContent
+        )
+        .contentMargins(
+            [.leading, .trailing, .bottom],
+            contentPadding,
+            for: .scrollContent
         )
         .emptyPlaceholder(contentObserver.releasePaginator.items) {
             componentFactory.buildEmptyState(

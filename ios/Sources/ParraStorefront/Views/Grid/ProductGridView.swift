@@ -23,7 +23,7 @@ struct ProductGridView: View {
                 with: cellSpacing
             )
 
-            ParraMediaAwareScrollView {
+            ScrollView {
                 LazyVGrid(
                     columns: columns,
                     spacing: cellSpacing

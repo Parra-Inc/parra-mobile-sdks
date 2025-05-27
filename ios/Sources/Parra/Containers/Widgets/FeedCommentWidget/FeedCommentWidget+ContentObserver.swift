@@ -24,6 +24,7 @@ extension FeedCommentWidget {
             self.feedConfig = initialParams.config
             self.api = initialParams.api
             self.attachmentPaywall = initialParams.attachmentPaywall
+            self.refreshOnAppear = initialParams.refreshOnAppear
 
             self.content = Content(
                 emptyStateView: initialParams.config.emptyStateContent,
@@ -92,13 +93,14 @@ extension FeedCommentWidget {
 
         // MARK: - Internal
 
-        let feedItem: ParraFeedItem
+        private(set) var feedItem: ParraFeedItem
 
         private(set) var content: Content
 
         var totalComments: Int
 
         let attachmentPaywall: ParraAppPaywallConfiguration?
+        let refreshOnAppear: Bool
 
         var commentPaginator: ParraPaginator<
             ParraComment,
@@ -134,6 +136,19 @@ extension FeedCommentWidget {
                 )
 
             commentPaginator.loadMissing(since: cursor)
+        }
+
+        @MainActor
+        func onAppear() async {
+            if refreshOnAppear {
+                do {
+                    feedItem = try await api.getFeedItem(
+                        by: feedItem.id
+                    )
+                } catch {
+                    Logger.error("Error refreshing RSS item detail", error)
+                }
+            }
         }
 
         @MainActor

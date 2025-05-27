@@ -33,7 +33,9 @@ struct RssPlayButton: View {
             }
         } else {
             Button {
-                MediaPlaybackManager.shared.play(urlMedia)
+                withAnimation {
+                    MediaPlaybackManager.shared.play(urlMedia)
+                }
             } label: {
                 Image(systemName: "play.fill")
             }

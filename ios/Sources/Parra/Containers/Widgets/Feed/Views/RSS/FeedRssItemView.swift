@@ -89,7 +89,10 @@ struct FeedRssItemView: View {
         )
         .clipped()
         .overlay {
-            if let urlMedia = UrlMedia.from(rssItem) {
+            if let urlMedia = UrlMedia.from(
+                rssItem: rssItem,
+                on: params.feedItem
+            ) {
                 RssPlayButton(
                     urlMedia: urlMedia
                 )

@@ -9,16 +9,16 @@ import AVFoundation
 import Combine
 import MediaPlayer
 
-enum PlaybackState: Equatable {
+public enum PlaybackState: Equatable {
     case idle
     case loading
     case playing
     case paused
     case error(Error)
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    static func == (lhs: PlaybackState, rhs: PlaybackState) -> Bool {
+    public static func == (lhs: PlaybackState, rhs: PlaybackState) -> Bool {
         switch (lhs, rhs) {
         case (.idle, .idle):
             return true
@@ -37,22 +37,43 @@ enum PlaybackState: Equatable {
 }
 
 @Observable
-final class MediaPlaybackManager {
+public final class MediaPlaybackManager {
     // MARK: - Lifecycle
 
     private init() {
         setupAudioSession()
         setupRemoteTransportControls()
         setupNotifications()
+
+        $lastRequestedSeek
+            .throttle(
+                for: .seconds(0.5),
+                scheduler: DispatchQueue.main,
+                latest: true
+            )
+            .asyncMap(applySeek)
+            .sink(receiveValue: { _ in
+                self.updateNowPlayingInfoPlaybackState()
+            })
+            .store(in: &seekBag)
     }
 
     deinit {
         cleanupPlayer()
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    static let shared = MediaPlaybackManager()
+    public static let shared = MediaPlaybackManager()
+
+    // Playback state
+    public private(set) var state: PlaybackState = .idle {
+        didSet {
+            isPlaying = state == .playing
+        }
+    }
+
+    // MARK: - Internal
 
     // Current media being played
     private(set) var currentMedia: UrlMedia?
@@ -65,12 +86,7 @@ final class MediaPlaybackManager {
 
     var progress: Double = 0 // 0 to 1
 
-    // Playback state
-    private(set) var state: PlaybackState = .idle {
-        didSet {
-            isPlaying = state == .playing
-        }
-    }
+    var playbackRate: Double = 1.0
 
     // MARK: - Public Methods
 
@@ -190,21 +206,21 @@ final class MediaPlaybackManager {
         seek(by: -15)
     }
 
-    func seek(to time: TimeInterval) {
+    func setRate(_ rate: Double) {
         guard let player else {
             return
         }
 
-        let targetTime = CMTime(
-            seconds: max(0, min(time, duration)),
-            preferredTimescale: 600
-        )
+        playbackRate = rate
+        player.rate = Float(rate)
 
-        player.seek(to: targetTime) { [weak self] finished in
-            if finished {
-                self?.updateNowPlayingInfoPlaybackState()
-            }
-        }
+        updateNowPlayingInfo()
+    }
+
+    func seek(fraction: Double) {
+        let newTime = max(min(fraction * duration, duration), 0)
+
+        seek(to: newTime)
     }
 
     func seek(by offsetSeconds: TimeInterval) {
@@ -217,18 +233,48 @@ final class MediaPlaybackManager {
         seek(to: targetTime)
     }
 
+    func seek(to time: TimeInterval) {
+        lastRequestedSeek = time
+        currentTime = time
+        progress = time / duration
+    }
+
     // MARK: - Private
+
+    @ObservationIgnored
+    @Published private var lastRequestedSeek: TimeInterval?
+    private var seekBag = Set<AnyCancellable>()
 
     // AVPlayer for media playback
     private var player: AVPlayer?
     private var timeObserver: Any?
     private var cancellables = Set<AnyCancellable>()
 
+    private func applySeek(_ time: TimeInterval?) async {
+        guard let player, let time else {
+            return
+        }
+
+        let targetTime = CMTime(
+            seconds: max(0, min(time, duration)),
+            preferredTimescale: 600
+        )
+
+        await player.seek(to: targetTime)
+    }
+
     // MARK: - Private Methods
 
     private func setupAudioSession() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession
+                .sharedInstance()
+                .setCategory(
+                    .playback,
+                    mode: .default,
+                    policy: .longFormAudio
+                )
+
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             print("Failed to set up audio session: \(error)")
@@ -319,7 +365,8 @@ final class MediaPlaybackManager {
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
 
         // Set playback rate (0.0 = paused, 1.0 = playing)
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = state == .playing ? 1.0 :
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = state == .playing ?
+            playbackRate :
             0.0
 
         // Load and set artwork if available
@@ -353,7 +400,8 @@ final class MediaPlaybackManager {
             return
         }
 
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = state == .playing ? 1.0 :
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = state == .playing ?
+            playbackRate :
             0.0
 
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
@@ -421,9 +469,14 @@ final class MediaPlaybackManager {
                 return
             }
 
-            currentTime = duration
-            progress = 1.0
+            currentMedia = nil
+            currentTime = 0
+            progress = 0
+            duration = 0
             state = .idle
+
+            // Clean up existing player if any
+            cleanupPlayer()
         }
         .store(in: &cancellables)
     }

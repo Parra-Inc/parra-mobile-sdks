@@ -102,7 +102,8 @@ public struct ParraFeedListView: View {
                         rssItem: presentedRssItem.rssItem,
                         feedItem: presentedRssItem.feedItem,
                         reactor: presentedRssItem.reactor,
-                        navigationPath: $navigationPath
+                        navigationPath: $navigationPath,
+                        refreshOnAppear: false
                     )
                     .environmentObject(contentObserver)
                 }

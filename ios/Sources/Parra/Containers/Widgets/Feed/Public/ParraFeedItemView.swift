@@ -59,7 +59,8 @@ struct ParraFeedItemView: View {
                 rssItem: rssItem,
                 feedItem: feedItem,
                 reactor: _reactor,
-                navigationPath: $navigationPath
+                navigationPath: $navigationPath,
+                refreshOnAppear: false
             )
         }
     }

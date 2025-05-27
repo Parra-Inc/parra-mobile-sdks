@@ -30,7 +30,7 @@ struct ProductDetailView: View {
     var body: some View {
         @Bindable var dataModel = dataModel
 
-        ParraMediaAwareScrollView {
+        ScrollView {
             VStack(alignment: .leading, spacing: 5) {
                 images
                     .padding(.bottom, 15)

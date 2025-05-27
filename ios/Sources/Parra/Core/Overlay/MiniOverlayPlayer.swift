@@ -10,71 +10,55 @@ import SwiftUI
 struct MiniOverlayPlayer: View {
     // MARK: - Internal
 
+    enum Constant {
+        static let height = 60.0
+    }
+
     var media: UrlMedia
     @Binding var expandPlayer: Bool
-    var animation: Namespace.ID
     var onTap: () -> Void
 
     var body: some View {
-        VStack {
-            HStack(spacing: 12) {
+        HStack(alignment: .center, spacing: 12) {
+            if !expandPlayer, let imageUrl = media.imageUrl {
                 ZStack {
-                    if !expandPlayer, let imageUrl = media.imageUrl {
-                        componentFactory.buildAsyncImage(
-                            content: .init(url: imageUrl)
-                        )
-                        .matchedGeometryEffect(id: "Artwork", in: animation)
-                    }
-                }
-                .frame(width: 45, height: 45)
-
-                componentFactory.buildLabel(
-                    text: media.title,
-                    localAttributes: .default(with: .body)
-                )
-                .lineLimit(2)
-                .truncationMode(.tail)
-
-                Spacer(minLength: 0)
-
-                Group {
-                    RssPlayButton(
-                        urlMedia: media
+                    componentFactory.buildAsyncImage(
+                        content: .init(url: imageUrl)
                     )
-
-                    Button("", systemImage: "15.arrow.trianglehead.clockwise") {
-                        player.skipForward()
-                    }
+                    .applyCornerRadii(size: .sm, from: theme)
                 }
-                .font(.title3)
-                .foregroundStyle(Color.primary)
             }
-            .padding(.horizontal, 12)
-            .padding(.top, 12)
-            .padding(.bottom, 6)
 
-            ProgressView(value: player.progress)
-                .progressViewStyle(.linear)
-                .frame(
-                    maxWidth: .infinity
+            MarqueeText(
+                text: media.title,
+                animationEnabled: .init(
+                    get: {
+                        return !expandPlayer
+                    },
+                    set: { _ in
+                    }
                 )
-                .padding(.horizontal, 12)
-                .padding(.bottom, 12)
+            )
+
+            Spacer(minLength: 0)
+
+            HStack(alignment: .center, spacing: 10) {
+                RssPlayButton(
+                    urlMedia: media
+                )
+
+                Button {
+                    player.skipForward()
+                } label: {
+                    Image(systemName: "15.arrow.trianglehead.clockwise")
+                }
+            }
+            .foregroundStyle(Color.primary)
         }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 8)
         .background(theme.palette.secondaryChipBackground)
         .applyCornerRadii(size: .lg, from: theme)
-        .shadow(
-            color: .black.opacity(0.20),
-            radius: 5,
-            x: 5,
-            y: 5
-        )
-        .shadow(
-            color: .black.opacity(0.2),
-            radius: 5,
-            x: -5,
-            y: -5
-        )
         .onTapGesture {
             onTap()
         }

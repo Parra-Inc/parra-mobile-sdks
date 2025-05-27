@@ -14,7 +14,7 @@ struct ParraFAQView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            ParraMediaAwareScrollView {
+            ScrollView {
                 withContent(content: layout.description) { content in
                     componentFactory.buildLabel(
                         text: content,
