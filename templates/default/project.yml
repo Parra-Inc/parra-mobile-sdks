@@ -34,6 +34,8 @@ targets:
             CFBundleURLName: "{{ app.bundle_id }}"
             CFBundleURLSchemes:
               - "{{ app.name.kebab }}"
+        UIBackgroundModes:
+          - audio
     settings:
       base:
         DEVELOPMENT_TEAM: {{ app.team_id }}
