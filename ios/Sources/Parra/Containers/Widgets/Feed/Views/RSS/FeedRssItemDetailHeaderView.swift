@@ -161,14 +161,18 @@ struct FeedRssItemDetailHeaderView: View {
                                 player.setRate(rate)
                             } label: {
                                 Text("\(rate.formatted())x")
-                                    .font(.title)
                             }
                         }
                     } label: {
                         Text("\(player.playbackRate.formatted())x")
-                            .font(.title3)
+                            .font(.callout)
                             .foregroundStyle(theme.palette.primaryText.toParraColor())
+                            .minimumScaleFactor(0.8)
                     }
+                    .frame(
+                        width: 26,
+                        height: 26
+                    )
 
                     Spacer()
 

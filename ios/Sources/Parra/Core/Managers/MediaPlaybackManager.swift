@@ -53,6 +53,7 @@ public final class MediaPlaybackManager {
                 scheduler: DispatchQueue.main,
                 latest: true
             )
+            .receive(on: DispatchQueue.main)
             .asyncMap(applySeek)
             .sink(receiveValue: { _ in
                 self.updateNowPlayingInfoPlaybackState()
@@ -89,6 +90,8 @@ public final class MediaPlaybackManager {
     var progress: Double = 0 // 0 to 1
 
     var playbackRate: Double = 1.0
+
+    var seekedSinceLastTick = false
 
     // MARK: - Public Methods
 
@@ -128,17 +131,20 @@ public final class MediaPlaybackManager {
         player!.audiovisualBackgroundPlaybackPolicy = .continuesIfPossible
 
         // Observe player item status to know when it's ready to play
-        playerItem.publisher(for: \.status)
+        playerItem
+            .publisher(for: \.status)
             .sink { [weak self] status in
                 guard let self else {
                     return
                 }
+
                 switch status {
                 case .readyToPlay:
                     duration = playerItem.duration.seconds
                     player?.play()
                     state = .playing
                     updateNowPlayingInfo()
+
                 case .failed:
                     state = .error(
                         playerItem.error ?? NSError(
@@ -147,6 +153,7 @@ public final class MediaPlaybackManager {
                             userInfo: [NSLocalizedDescriptionKey: "Failed to load media"]
                         )
                     )
+
                 default:
                     break
                 }
@@ -154,26 +161,7 @@ public final class MediaPlaybackManager {
             .store(in: &cancellables)
 
         // Add time observer to track playback progress
-        timeObserver = player?.addPeriodicTimeObserver(
-            forInterval: CMTime(
-                seconds: 0.5,
-                preferredTimescale: 600
-            ),
-            queue: .main
-        ) { [weak self] time in
-            guard let self, let player, let currentItem = player.currentItem else {
-                return
-            }
-
-            currentTime = time.seconds
-
-            if currentItem.duration.seconds > 0 {
-                progress = time.seconds / currentItem.duration.seconds
-            }
-
-            // Update now playing info with current time
-            updateNowPlayingInfoPlaybackTime()
-        }
+        resetTimeTracker()
 
         updateNowPlayingInfo()
     }
@@ -200,14 +188,6 @@ public final class MediaPlaybackManager {
         updateNowPlayingInfoPlaybackState()
     }
 
-    func skipForward() {
-        seek(by: 15)
-    }
-
-    func skipBackward() {
-        seek(by: -15)
-    }
-
     func setRate(_ rate: Double) {
         guard let player else {
             return
@@ -219,26 +199,45 @@ public final class MediaPlaybackManager {
         updateNowPlayingInfo()
     }
 
+    func skipForward() {
+        seek(by: 15, instantUpdate: false)
+    }
+
+    func skipBackward() {
+        seek(by: -15, instantUpdate: false)
+    }
+
     func seek(fraction: Double) {
         let newTime = max(min(fraction * duration, duration), 0)
 
-        seek(to: newTime)
+        seek(to: newTime, instantUpdate: true)
     }
 
-    func seek(by offsetSeconds: TimeInterval) {
+    func seek(
+        by offsetSeconds: TimeInterval,
+        instantUpdate: Bool
+    ) {
         if player == nil {
             return
         }
 
         let targetTime = currentTime + offsetSeconds
 
-        seek(to: targetTime)
+        seek(to: targetTime, instantUpdate: instantUpdate)
     }
 
-    func seek(to time: TimeInterval) {
+    func seek(
+        to time: TimeInterval,
+        instantUpdate: Bool
+    ) {
         lastRequestedSeek = time
-        currentTime = time
-        progress = time / duration
+
+        if instantUpdate {
+            currentTime = time
+            progress = time / duration
+        }
+
+        resetTimeTracker()
     }
 
     // MARK: - Private
@@ -252,7 +251,47 @@ public final class MediaPlaybackManager {
     private var timeObserver: Any?
     private var cancellables = Set<AnyCancellable>()
 
-    private func applySeek(_ time: TimeInterval?) async {
+    private func resetTimeTracker() {
+        if let timeObserver, let player {
+            player.removeTimeObserver(timeObserver)
+            self.timeObserver = nil
+        }
+
+        timeObserver = player?.addPeriodicTimeObserver(
+            forInterval: CMTime(
+                seconds: 1.0,
+                preferredTimescale: 600
+            ),
+            queue: .main
+        ) { [weak self] time in
+            guard let self else {
+                return
+            }
+
+            if seekedSinceLastTick {
+                seekedSinceLastTick = false
+                return
+            }
+
+            guard let player, let currentItem = player.currentItem else {
+                return
+            }
+
+            currentTime = time.seconds
+
+            if currentItem.duration.seconds > 0 {
+                progress = time.seconds / currentItem.duration.seconds
+            }
+
+            // Update now playing info with current time
+            updateNowPlayingInfoPlaybackTime()
+        }
+    }
+
+    @MainActor
+    private func applySeek(
+        _ time: TimeInterval?
+    ) async {
         guard let player, let time else {
             return
         }
@@ -261,6 +300,11 @@ public final class MediaPlaybackManager {
             seconds: max(0, min(time, duration)),
             preferredTimescale: 600
         )
+
+        currentTime = time
+        progress = time / duration
+
+        seekedSinceLastTick = true
 
         await player.seek(to: targetTime)
     }
@@ -318,7 +362,7 @@ public final class MediaPlaybackManager {
                 return .commandFailed
             }
             if let event = event as? MPSkipIntervalCommandEvent {
-                seek(by: event.interval)
+                seek(by: event.interval, instantUpdate: false)
                 return .success
             }
             return .commandFailed
@@ -331,7 +375,7 @@ public final class MediaPlaybackManager {
                 return .commandFailed
             }
             if let event = event as? MPSkipIntervalCommandEvent {
-                seek(by: -event.interval)
+                seek(by: -event.interval, instantUpdate: false)
                 return .success
             }
             return .commandFailed
@@ -344,7 +388,7 @@ public final class MediaPlaybackManager {
             {
                 return .commandFailed
             }
-            seek(to: event.positionTime)
+            seek(to: event.positionTime, instantUpdate: false)
             return .success
         }
     }
