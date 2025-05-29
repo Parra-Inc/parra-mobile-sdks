@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "ios/Sources/Parra"
+		}
+	],
+	"settings": {},
+	"extensions": {
+		"recommendations": [
+			"sweetpad.sweetpad"
+		]
+	}
+}

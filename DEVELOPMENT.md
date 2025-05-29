@@ -24,3 +24,8 @@ Most templates build off of the default template. To facilitate this, the standa
    ln -s default/App/Something.liquid.swift revenue-cat/App/Something.liquid.swift
    ```
 4. Repeat to other templates as needed.
+
+### Development with Cursor/VSCode
+
+1. Install xcode-build-server with `brew install xcode-build-server --head`
+2. Install the Sweetpad extension for Cursor
