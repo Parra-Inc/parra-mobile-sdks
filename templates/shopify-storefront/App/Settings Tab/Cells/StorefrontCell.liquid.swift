@@ -37,6 +37,7 @@ struct StorefrontCell: View {
             )
         }
         .disabled(isPresented)
+        {% if shopify and shopify.domain and shopify.api_key %}
         .presentParraStorefront(
             isPresented: $isPresented,
             config: ParraStorefrontWidgetConfig(
@@ -47,6 +48,7 @@ struct StorefrontCell: View {
                 showDismissButton: true
             )
         )
+        {% endif %}
     }
 }
 

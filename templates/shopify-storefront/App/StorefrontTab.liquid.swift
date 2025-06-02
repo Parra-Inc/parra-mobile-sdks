@@ -12,12 +12,16 @@ import SwiftUI
 
 struct StorefrontTab: View {
     var body: some View {
+        {% if shopify and shopify.domain and shopify.api_key %}
         ParraStorefrontWidget(
             config: ParraStorefrontWidgetConfig(
                 shopifyDomain: "{{ shopify.domain }}",
                 shopifyApiKey: "{{ shopify.api_key }}"
             )
         )
+        {% else %}
+        EmptyView()
+        {% endif %}
     }
 }
 
