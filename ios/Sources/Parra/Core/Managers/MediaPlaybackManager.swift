@@ -129,6 +129,7 @@ public final class MediaPlaybackManager {
         let playerItem = AVPlayerItem(url: url)
         player = AVPlayer(playerItem: playerItem)
         player!.audiovisualBackgroundPlaybackPolicy = .continuesIfPossible
+        player!.automaticallyWaitsToMinimizeStalling = false
 
         // Observe player item status to know when it's ready to play
         playerItem
