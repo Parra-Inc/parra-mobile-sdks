@@ -410,15 +410,20 @@ fn resolve_template_symlinks(
         if ty.is_dir() {
             // recurse
             resolve_template_symlinks(templates_dir, &entry.path())?;
-        } else if ty.is_symlink() {
-            let target_path = &fs::read_link(entry.path())?;
-            let full_target = templates_dir.join(target_path);
+        } else {
+            let mut target = entry.path().clone();
+
+            while target.is_symlink() {
+                let followed = fs::read_link(target)?;
+                println!("        Followed: {}", followed.to_str().unwrap());
+                target = templates_dir.join(followed);
+            }
+
+            let full_target = templates_dir.join(target);
 
             // replace the symlink with a copy of the linked file
             fs::remove_file(entry.path())?;
             fs::copy(full_target, entry.path())?;
-        } else {
-            // Do nothing
         }
     }
 
