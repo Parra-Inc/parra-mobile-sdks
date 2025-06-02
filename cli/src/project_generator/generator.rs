@@ -12,7 +12,7 @@ use reqwest::get;
 
 use crate::api;
 use crate::project_generator::renderer;
-use crate::types::api::Icon;
+use crate::types::api::{AppBootstrapResponseBody, Icon};
 use crate::types::templates::{CliInput, ProjectContext};
 
 pub async fn generate_xcode_project(
@@ -20,6 +20,7 @@ pub async fn generate_xcode_project(
     template_base_dir: &PathBuf,
     template_app_dir: &PathBuf,
     template: &str,
+    server_driven_template: Option<&AppBootstrapResponseBody>,
     context: &ProjectContext,
     prompt_for_override: bool,
 ) -> Result<PathBuf, Box<dyn Error>> {

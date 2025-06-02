@@ -2,10 +2,11 @@ use crate::{
     auth,
     types::{
         api::{
-            ApplicationCollectionResponse, ApplicationRequest,
-            ApplicationResponse, ApplicationType, AuthorizedUser, EmptyRequest,
-            EmptyResponse, EventRequest, SessionRequest, TenantRequest,
-            TenantResponse, UserInfoResponse, UserResponse,
+            AppBootstrapResponseBody, ApplicationCollectionResponse,
+            ApplicationRequest, ApplicationResponse, ApplicationType,
+            AuthorizedUser, BootstrapRequest, EmptyRequest, EmptyResponse,
+            EventRequest, SessionRequest, TenantRequest, TenantResponse,
+            UserInfoResponse, UserResponse,
         },
         auth::Credential,
     },
@@ -274,6 +275,30 @@ async fn get_cached_user_if_present() -> Option<AuthorizedUser> {
     }
 }
 
+pub async fn post_bootstrap_request(
+    tenant_id: &str,
+    application_id: &str,
+    template: Option<String>,
+) -> Result<AppBootstrapResponseBody, Box<dyn Error>> {
+    // bootstrap-tenant-application
+
+    let authorized_user = ensure_auth().await?;
+
+    let endpoint = format!(
+        "/tenants/{}/applications/{}/bootstrap",
+        tenant_id, application_id
+    );
+
+    let response: AppBootstrapResponseBody = perform_request_with_body(
+        Some(&authorized_user.credential),
+        &endpoint,
+        reqwest::Method::POST,
+        BootstrapRequest { template },
+    )
+    .await?;
+
+    Ok(response)
+}
 async fn perform_get_request<T: DeserializeOwned>(
     credential: &Credential,
     endpoint: &str,
@@ -338,6 +363,8 @@ async fn perform_request_with_body<T: DeserializeOwned, U: Serialize>(
     if body.is_empty() {
         body = "{}".to_string();
     }
+
+    println!("{}", body);
 
     parse_json_response(&body)
 }

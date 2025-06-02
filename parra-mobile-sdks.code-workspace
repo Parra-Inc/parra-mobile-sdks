@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "ios/Sources/Parra"
+		},
+		{
+			"path": "cli"
+		},
+		{
+			"path": "templates"
 		}
 	],
 	"settings": {},

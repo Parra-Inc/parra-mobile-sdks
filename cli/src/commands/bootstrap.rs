@@ -172,6 +172,7 @@ pub async fn execute_sample_bootstrap(
             &template_dir,
             &template_app_dir,
             &template,
+            None,
             &context,
             false,
         )
@@ -208,6 +209,15 @@ pub async fn execute_bootstrap(
         "cli_bootstrap_application_selected",
         Some(HashMap::from([("application_id", application.id.as_str())])),
     );
+
+    let server_driven_template = api::post_bootstrap_request(
+        &tenant.id,
+        &application.id,
+        Some(template_name.clone()),
+    )
+    .await?;
+
+    let _ = api::report_event("cli_bootstrap_template_selected", None);
 
     let display_name: String = application
         .name
@@ -327,6 +337,7 @@ pub async fn execute_bootstrap(
         &templates_dir,
         &template_app_dir,
         &template,
+        Some(&server_driven_template),
         &context,
         true,
     )

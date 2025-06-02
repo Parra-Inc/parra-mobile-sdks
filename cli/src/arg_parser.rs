@@ -13,6 +13,7 @@ pub struct Cli {
 // converted to/from kebab-case by default, which matches template directory names.
 pub enum TemplateName {
     Default,
+    Podcast,
     RevenueCat,
     ShopifyStorefront,
     YC,
@@ -22,6 +23,7 @@ impl Display for TemplateName {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let output = match self {
             TemplateName::Default => "default",
+            TemplateName::Podcast => "podcast",
             TemplateName::RevenueCat => "revenue-cat",
             TemplateName::ShopifyStorefront => "shopify-storefront",
             TemplateName::YC => "yc",
