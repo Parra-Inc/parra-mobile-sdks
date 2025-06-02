@@ -52,6 +52,9 @@ struct MiniOverlayPlayer: View {
                 } label: {
                     Image(systemName: "15.arrow.trianglehead.clockwise")
                 }
+                .disabled(
+                    player.state != .playing && player.state != .paused
+                )
             }
             .foregroundStyle(Color.primary)
         }
