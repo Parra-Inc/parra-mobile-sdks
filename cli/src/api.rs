@@ -364,8 +364,6 @@ async fn perform_request_with_body<T: DeserializeOwned, U: Serialize>(
         body = "{}".to_string();
     }
 
-    println!("{}", body);
-
     parse_json_response(&body)
 }
 
