@@ -11,8 +11,8 @@ public final class ParraFAQConfiguration: ParraContainerConfig {
     // MARK: - Lifecycle
 
     public init() {
-        self.emptyStateContent = ParraFeedConfiguration.defaultEmptyStateContent
-        self.errorStateContent = ParraFeedConfiguration.defaultErrorStateContent
+        self.emptyStateContent = ParraFAQConfiguration.defaultEmptyStateContent
+        self.errorStateContent = ParraFAQConfiguration.defaultErrorStateContent
     }
 
     public init(
@@ -29,17 +29,17 @@ public final class ParraFAQConfiguration: ParraContainerConfig {
 
     public static let defaultEmptyStateContent = ParraEmptyStateContent(
         title: ParraLabelContent(
-            text: "No settings available"
+            text: "No FAQs Yet"
         ),
         subtitle: ParraLabelContent(
-            text: "This settings view is empty."
+            text: "Check back later"
         )
     )
 
     public static let defaultErrorStateContent = ParraEmptyStateContent(
         title: ParraEmptyStateContent.errorGeneric.title,
         subtitle: ParraLabelContent(
-            text: "Failed to load settings. Please try again later."
+            text: "Failed to load FAQs. Please try again later."
         ),
         icon: .symbol("network.slash", .monochrome)
     )

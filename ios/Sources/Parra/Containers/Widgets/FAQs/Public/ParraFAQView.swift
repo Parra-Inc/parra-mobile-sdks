@@ -11,6 +11,7 @@ struct ParraFAQView: View {
     // MARK: - Internal
 
     var layout: ParraAppFaqLayout
+    var config: ParraFAQConfiguration
 
     var body: some View {
         VStack(spacing: 0) {
@@ -40,6 +41,12 @@ struct ParraFAQView: View {
                 }
 
                 Spacer()
+            }
+            .emptyPlaceholder(layout.sections) {
+                componentFactory.buildEmptyState(
+                    config: .default,
+                    content: config.emptyStateContent
+                )
             }
 
             WidgetFooter { () -> ParraContainedButtonComponent? in

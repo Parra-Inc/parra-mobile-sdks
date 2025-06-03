@@ -46,15 +46,22 @@ struct FAQWidget: ParraContainer {
                 }
             }
         case .loaded(let layout):
-            ParraFAQView(layout: layout)
-        default:
-            EmptyView()
+            ParraFAQView(
+                layout: layout,
+                config: config
+            )
+        case .error(let error):
+            componentFactory.buildEmptyState(
+                config: .errorDefault,
+                content: config.errorStateContent
+            )
         }
     }
 
     // MARK: - Private
 
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraComponentFactory) private var componentFactory
 }
 
 #Preview {
