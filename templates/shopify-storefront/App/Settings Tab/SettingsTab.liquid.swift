@@ -56,9 +56,14 @@ struct SettingsTab: View {
                 Section {
                     ReviewAppCell()
                     ShareCell()
-                } footer: {
-                    SettingsFooter()
                 }
+
+                SettingsFooter()
+                    .frame(
+                        height: 24
+                    )
+                    .listRowBackground(EmptyView())
+
             }
             .navigationTitle("Profile")
         }

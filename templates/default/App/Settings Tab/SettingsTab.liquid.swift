@@ -76,9 +76,13 @@ struct SettingsTab: View {
                     } icon: {
                         Image(systemName: "flask")
                     }
-                } footer: {
-                    SettingsFooter()
                 }
+
+                SettingsFooter()
+                    .frame(
+                        height: 24
+                    )
+                    .listRowBackground(EmptyView())
             }
             .navigationTitle("Profile")
             .navigationDestination(for: String.self) { destination in

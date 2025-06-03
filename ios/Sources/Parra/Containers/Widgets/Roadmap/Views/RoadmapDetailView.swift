@@ -88,7 +88,9 @@ struct RoadmapDetailView: View {
                 Divider()
                     .padding(.top, 20)
 
-                ScrollView {
+                ParraMediaAwareScrollView(
+                    additionalScrollContentMargins: .init(20)
+                ) {
                     componentFactory.buildLabel(
                         content: description,
                         localAttributes: ParraAttributes.Label(
@@ -104,11 +106,6 @@ struct RoadmapDetailView: View {
                         )
                     )
                 }
-                .contentMargins(
-                    .all,
-                    20,
-                    for: .scrollContent
-                )
                 .padding(.bottom, 16)
             }
 

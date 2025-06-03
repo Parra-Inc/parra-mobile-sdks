@@ -92,7 +92,7 @@ struct CartView: View {
     ) -> some View {
         let allStillAvailable = canProceedToCheckout(state: state)
 
-        ScrollView {
+        ParraMediaAwareScrollView {
             LazyVStack {
                 ForEach(state.lineItems) { lineItem in
                     CartLineItemView(

@@ -68,12 +68,7 @@ public struct ParraTabView<SelectionValue, Content>: View
             initial: true
         ) { _, newValue in
             withAnimation {
-                showMiniMediaPlayer = switch newValue {
-                case .loading, .paused, .playing:
-                    true
-                default:
-                    false
-                }
+                showMiniMediaPlayer = newValue.showMiniPlayer
             }
         }
         .onAppear {

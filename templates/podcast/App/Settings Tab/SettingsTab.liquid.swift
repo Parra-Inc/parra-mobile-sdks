@@ -66,19 +66,16 @@ struct SettingsTab: View {
                 }
 
                 Section {
-                    FeedCell()
                     RestorePurchasesCell()
                     TipJarCell()
                     SubscriptionUpsellCell()
-                } header: {
-                    Label {
-                        Text("Experimental Features")
-                    } icon: {
-                        Image(systemName: "flask")
-                    }
-                } footer: {
-                    SettingsFooter()
                 }
+
+                SettingsFooter()
+                    .frame(
+                        height: 24
+                    )
+                    .listRowBackground(EmptyView())
             }
             .navigationTitle("Profile")
             .navigationDestination(for: String.self) { destination in

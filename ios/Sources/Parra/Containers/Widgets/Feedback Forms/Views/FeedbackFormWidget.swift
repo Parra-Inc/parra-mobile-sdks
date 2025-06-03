@@ -35,7 +35,11 @@ struct FeedbackFormWidget: ParraContainer {
         )
 
         VStack(alignment: .leading, spacing: 0) {
-            ScrollView {
+            ParraMediaAwareScrollView(
+                additionalScrollContentMargins: .padding(
+                    bottom: contentPadding.bottom
+                )
+            ) {
                 if let descriptionContent = contentObserver.content.description {
                     componentFactory.buildLabel(
                         content: descriptionContent,
@@ -62,13 +66,6 @@ struct FeedbackFormWidget: ParraContainer {
 
                 fieldViews
             }
-            .contentMargins(
-                .all,
-                .padding(
-                    bottom: contentPadding.bottom
-                ),
-                for: .scrollContent
-            )
             .scrollDismissesKeyboard(.interactively)
 
             WidgetFooter(

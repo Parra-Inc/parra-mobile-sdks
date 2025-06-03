@@ -36,6 +36,17 @@ public enum PlaybackState: Equatable {
             return false
         }
     }
+
+    // MARK: - Internal
+
+    var showMiniPlayer: Bool {
+        switch self {
+        case .loading, .paused, .playing:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 @Observable
