@@ -15,7 +15,7 @@ public struct ProfileCell: View {
 
     public var body: some View {
         switch parraAuthState {
-        case .anonymous, .authenticated:
+        case .authenticated:
             AuthenticatedProfileInfoView()
         default:
             UnauthenticatedProfileInfoView()
@@ -31,18 +31,26 @@ struct IdentityLabels: View {
         let identityNames = user?.info.identityNames ?? []
 
         if identityNames.isEmpty {
-            Text(user?.info.displayName ?? "Anonymous")
+            Text(user?.info.personalName ?? "Anonymous")
                 .font(.headline)
+                .minimumScaleFactor(0.8)
+                .lineLimit(1)
         } else if identityNames.count == 1 {
             Text(identityNames[0])
                 .font(.headline)
+                .minimumScaleFactor(0.8)
+                .lineLimit(1)
         } else {
             Text(identityNames[0])
                 .font(.headline)
+                .minimumScaleFactor(0.8)
+                .lineLimit(1)
 
             Text(identityNames[1])
                 .font(.subheadline)
                 .foregroundStyle(.gray)
+                .minimumScaleFactor(0.8)
+                .lineLimit(1)
         }
     }
 }
@@ -80,7 +88,9 @@ struct UnauthenticatedProfileInfoView: View {
         }, label: {
             Text("Sign in")
         })
-        .presentParraSignInWidget(isPresented: $isSigningIn)
+        .presentParraSignInWidget(
+            isPresented: $isSigningIn
+        )
     }
 }
 
