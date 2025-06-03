@@ -66,6 +66,7 @@ struct ProductDetailOptionsView: View {
 
             buyButtons
         }
+        .animation(.default, value: selectedVariant)
         .onChange(
             of: selectedVariant,
             initial: true

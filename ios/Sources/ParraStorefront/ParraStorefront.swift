@@ -106,8 +106,9 @@ public class ParraStorefront {
         )
 
         let response = ParraProductResponse(
-            products: rawResponse.products.edges
-                .map { ParraProduct(shopProduct: $0.node) },
+            products: rawResponse.products.edges.map {
+                ParraProduct(shopProduct: $0.node)
+            },
             productPageInfo: ParraProductResponse.PageInfo(
                 startCursor: rawResponse.products.pageInfo.startCursor,
                 endCursor: rawResponse.products.pageInfo.endCursor,
