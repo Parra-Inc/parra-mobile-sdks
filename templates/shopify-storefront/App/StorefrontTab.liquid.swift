@@ -11,14 +11,14 @@ import ParraStorefront
 import SwiftUI
 
 struct StorefrontTab: View {
+    @State var navigationPath = NavigationPath()
+
     var body: some View {
         {% if shopify and shopify.domain and shopify.api_key %}
         ParraStorefrontWidget(
-            config: ParraStorefrontWidgetConfig(
-                shopifyDomain: "{{ shopify.domain }}",
-                shopifyApiKey: "{{ shopify.api_key }}"
-            )
+            navigationPath: $navigationPath
         )
+        .navigationTitle("{{ template.tabs.shop.title }}")
         {% else %}
         EmptyView()
         {% endif %}

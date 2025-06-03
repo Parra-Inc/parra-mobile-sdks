@@ -1,5 +1,11 @@
 use serde::{Deserialize, Serialize};
 
+use crate::types::api::{
+    AppBootstrapResponseBody, AppFeedContentType, AppFeedTabData,
+    AppSampleTabData, AppSettingsTabData, AppShopTabData, AppTab,
+    AppTabDescriptor, AppTabEmptyState, AppTabType,
+};
+
 use super::api::Icon;
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
@@ -106,8 +112,168 @@ pub struct SdkContextInfo {
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct TabInfo {
+    pub name: String,
+    pub sf_symbol: String,
+    pub empty_state: Option<AppTabEmptyState>,
+}
+
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct TabsInfo {
+    pub sample: AppSampleTabData,
+    pub episodes: AppFeedTabData,
+    pub videos: AppFeedTabData,
+    pub shop: AppShopTabData,
+    pub settings: AppSettingsTabData,
+}
+
+#[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct TemplateInfo {
     pub name: String,
+    pub tabs: TabsInfo,
+}
+
+impl TemplateInfo {
+    fn find_sample_tab(
+        bootstrap_response: &AppBootstrapResponseBody,
+    ) -> Option<&AppSampleTabData> {
+        bootstrap_response.tabs.iter().find_map(|tab| {
+            if let AppTab::AppSampleTab(data) = tab {
+                Some(data)
+            } else {
+                None
+            }
+        })
+    }
+
+    fn find_feed_tab(
+        bootstrap_response: &AppBootstrapResponseBody,
+        content_type: AppFeedContentType,
+    ) -> Option<&AppFeedTabData> {
+        bootstrap_response.tabs.iter().find_map(|tab| {
+            if let AppTab::AppFeedTab(data) = tab {
+                if data.content_type == Some(content_type) {
+                    Some(data)
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
+        })
+    }
+
+    fn find_shop_tab(
+        bootstrap_response: &AppBootstrapResponseBody,
+    ) -> Option<&AppShopTabData> {
+        bootstrap_response.tabs.iter().find_map(|tab| {
+            if let AppTab::AppShopTab(data) = tab {
+                Some(data)
+            } else {
+                None
+            }
+        })
+    }
+
+    fn find_settings_tab(
+        bootstrap_response: &AppBootstrapResponseBody,
+    ) -> Option<&AppSettingsTabData> {
+        bootstrap_response.tabs.iter().find_map(|tab| {
+            if let AppTab::AppSettingsTab(data) = tab {
+                Some(data)
+            } else {
+                None
+            }
+        })
+    }
+
+    pub fn with_bootstrap_response(
+        template_name: &str,
+        bootstrap_response: Option<&AppBootstrapResponseBody>,
+    ) -> TemplateInfo {
+        let default_sample_tab = AppSampleTabData {
+            title: "Sample".to_string(),
+            tab: AppTabDescriptor {
+                name: "Sample".to_string(),
+                sf_symbol: "app.dashed".to_string(),
+            },
+            empty_state: None,
+        };
+
+        let default_episodes_tab = AppFeedTabData {
+            title: "Episodes".to_string(),
+            feed_id: None,
+            content_type: Some(AppFeedContentType::Episode),
+            empty_state: None,
+            tab: AppTabDescriptor {
+                name: "Episodes".to_string(),
+                sf_symbol: "rectangle.stack.badge.play".to_string(),
+            },
+        };
+
+        let default_videos_tab = AppFeedTabData {
+            title: "Videos".to_string(),
+            feed_id: None,
+            content_type: Some(AppFeedContentType::Videos),
+            empty_state: None,
+            tab: AppTabDescriptor {
+                name: "Videos".to_string(),
+                sf_symbol: "rectangle.stack".to_string(),
+            },
+        };
+
+        let default_shop_tab = AppShopTabData {
+            title: "Shop".to_string(),
+            shopify: None,
+            tab: AppTabDescriptor {
+                name: "Shop".to_string(),
+                sf_symbol: "cart".to_string(),
+            },
+        };
+
+        let default_settings_tab = AppSettingsTabData {
+            title: "Settings".to_string(),
+            tab: AppTabDescriptor {
+                name: "Settings".to_string(),
+                sf_symbol: "gearshape.fill".to_string(),
+            },
+        };
+
+        let sample_tab =
+            Self::find_sample_tab(bootstrap_response.as_ref().unwrap())
+                .unwrap_or(&default_sample_tab);
+
+        let episodes_tab = Self::find_feed_tab(
+            bootstrap_response.as_ref().unwrap(),
+            AppFeedContentType::Episode,
+        )
+        .unwrap_or(&default_episodes_tab);
+
+        let videos_tab = Self::find_feed_tab(
+            bootstrap_response.as_ref().unwrap(),
+            AppFeedContentType::Videos,
+        )
+        .unwrap_or(&default_videos_tab);
+
+        let shop_tab =
+            Self::find_shop_tab(bootstrap_response.as_ref().unwrap())
+                .unwrap_or(&default_shop_tab);
+
+        let settings_tab =
+            Self::find_settings_tab(bootstrap_response.as_ref().unwrap())
+                .unwrap_or(&default_settings_tab);
+
+        TemplateInfo {
+            name: template_name.to_string(),
+            tabs: TabsInfo {
+                sample: sample_tab.clone(),
+                episodes: episodes_tab.clone(),
+                videos: videos_tab.clone(),
+                shop: shop_tab.clone(),
+                settings: settings_tab.clone(),
+            },
+        }
+    }
 }
 
 /// In order to be able to effectively recycle logic between the sample app

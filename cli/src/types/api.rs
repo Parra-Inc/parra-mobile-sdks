@@ -162,34 +162,6 @@ pub struct AppTabEmptyState {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
-#[serde(rename_all = "kebab-case")]
-pub enum AppTabType {
-    Sample,
-    Feed,
-    Shop,
-    Settings,
-    Webview,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct AppSampleTab {
-    pub title: String,
-    pub tab: AppTabDescriptor,
-    #[serde(rename = "empty_state")]
-    pub empty_state: Option<AppTabEmptyState>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct AppFeedTab {
-    pub title: String,
-    #[serde(rename = "feed_id")]
-    pub feed_id: Option<String>,
-    pub tab: AppTabDescriptor,
-    #[serde(rename = "empty_state")]
-    pub empty_state: Option<AppTabEmptyState>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct AppShopTabShopifyConfiguration {
     pub domain: String,
     #[serde(rename = "api_key")]
@@ -201,38 +173,74 @@ pub struct AppShopTabShopifyConfiguration {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct AppShopTab {
-    pub tab: AppTabDescriptor,
+#[serde(rename_all = "kebab-case")]
+pub enum AppTabType {
+    Sample,
+    Feed,
+    Shop,
+    Settings,
+    Webview,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash, Copy)]
+pub enum AppFeedContentType {
+    #[serde(rename = "videos")]
+    Videos,
+    #[serde(rename = "episodes")]
+    Episode,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub struct AppSampleTabData {
     pub title: String,
+    pub tab: AppTabDescriptor,
+    #[serde(rename = "empty_state")]
+    pub empty_state: Option<AppTabEmptyState>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub struct AppFeedTabData {
+    pub title: String,
+    pub tab: AppTabDescriptor,
+    #[serde(rename = "feed_id")]
+    pub feed_id: Option<String>,
+    pub content_type: Option<AppFeedContentType>,
+    #[serde(rename = "empty_state")]
+    pub empty_state: Option<AppTabEmptyState>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub struct AppShopTabData {
+    pub title: String,
+    pub tab: AppTabDescriptor,
     pub shopify: Option<AppShopTabShopifyConfiguration>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct AppSettingsTab {
-    pub tab: AppTabDescriptor,
+pub struct AppSettingsTabData {
     pub title: String,
+    pub tab: AppTabDescriptor,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct AppWebViewTab {
-    pub tab: AppTabDescriptor,
+pub struct AppWebViewTabData {
     pub title: String,
+    pub tab: AppTabDescriptor,
     pub url: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 #[serde(tag = "type")]
+
 pub enum AppTab {
     #[serde(rename = "sample")]
-    AppSampleTab(AppSampleTab),
+    AppSampleTab(AppSampleTabData),
     #[serde(rename = "feed")]
-    AppFeedTab(AppFeedTab),
+    AppFeedTab(AppFeedTabData),
     #[serde(rename = "shop")]
-    AppShopTab(AppShopTab),
+    AppShopTab(AppShopTabData),
     #[serde(rename = "settings")]
-    AppSettingsTab(AppSettingsTab),
-    #[serde(rename = "webview")]
-    AppWebViewTab(AppWebViewTab),
+    AppSettingsTab(AppSettingsTabData),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]

@@ -161,9 +161,7 @@ pub async fn execute_sample_bootstrap(
             name: "Parra Inc.".to_owned(),
         },
         config: project_config,
-        template: TemplateInfo {
-            name: template_name.into(),
-        },
+        template: TemplateInfo::with_bootstrap_response(&template_name, None),
     };
 
     let xcode_project_path =
@@ -172,7 +170,6 @@ pub async fn execute_sample_bootstrap(
             &template_dir,
             &template_app_dir,
             &template,
-            None,
             &context,
             false,
         )
@@ -322,9 +319,10 @@ pub async fn execute_bootstrap(
             name: tenant.name,
         },
         config: project_config,
-        template: TemplateInfo {
-            name: template_name,
-        },
+        template: TemplateInfo::with_bootstrap_response(
+            &template_name,
+            Some(&server_driven_template),
+        ),
     };
 
     let mut templates_dir = template_dir.clone();
@@ -337,7 +335,6 @@ pub async fn execute_bootstrap(
         &templates_dir,
         &template_app_dir,
         &template,
-        Some(&server_driven_template),
         &context,
         true,
     )
