@@ -145,77 +145,116 @@ pub struct TemplateInfo {
 
 impl TemplateInfo {
     fn find_sample_tab(
-        bootstrap_response: &AppBootstrapResponseBody,
+        bootstrap_response: Option<&AppBootstrapResponseBody>,
     ) -> Option<&AppSampleTabData> {
-        bootstrap_response.tabs.iter().find_map(|tab| {
-            if let AppTab::AppSampleTab(data) = tab {
-                Some(data)
-            } else {
-                None
-            }
-        })
-    }
+        if bootstrap_response.is_none() {
+            return None;
+        }
 
-    fn find_feed_tab(
-        bootstrap_response: &AppBootstrapResponseBody,
-        content_type: AppFeedContentType,
-    ) -> Option<&AppFeedTabData> {
-        bootstrap_response.tabs.iter().find_map(|tab| {
-            if let AppTab::AppFeedTab(data) = tab {
-                if data.content_type == Some(content_type) {
+        bootstrap_response
+            .as_ref()
+            .unwrap()
+            .tabs
+            .iter()
+            .find_map(|tab| {
+                if let AppTab::AppSampleTab(data) = tab {
                     Some(data)
                 } else {
                     None
                 }
-            } else {
-                None
-            }
-        })
+            })
     }
 
-    fn find_shop_tab(
-        bootstrap_response: &AppBootstrapResponseBody,
-    ) -> Option<&AppShopTabData> {
-        bootstrap_response.tabs.iter().find_map(|tab| {
-            if let AppTab::AppShopTab(data) = tab {
-                Some(data)
-            } else {
-                None
-            }
-        })
-    }
+    fn find_feed_tab(
+        bootstrap_response: Option<&AppBootstrapResponseBody>,
+        content_type: AppFeedContentType,
+    ) -> Option<&AppFeedTabData> {
+        if bootstrap_response.is_none() {
+            return None;
+        }
 
-    fn find_settings_tab(
-        bootstrap_response: &AppBootstrapResponseBody,
-    ) -> Option<&AppSettingsTabData> {
-        bootstrap_response.tabs.iter().find_map(|tab| {
-            if let AppTab::AppSettingsTab(data) = tab {
-                Some(data)
-            } else {
-                None
-            }
-        })
-    }
-
-    fn find_themes(
-        bootstrap_response: &AppBootstrapResponseBody,
-    ) -> (Option<ResolvedTheme>, Option<ResolvedTheme>) {
-        let default_theme =
-            bootstrap_response.themes.iter().find_map(|theme| {
-                if theme.is_default {
-                    Some(theme)
+        bootstrap_response
+            .as_ref()
+            .unwrap()
+            .tabs
+            .iter()
+            .find_map(|tab| {
+                if let AppTab::AppFeedTab(data) = tab {
+                    if data.content_type == Some(content_type) {
+                        Some(data)
+                    } else {
+                        None
+                    }
                 } else {
                     None
                 }
-            });
+            })
+    }
 
-        let dark_theme = bootstrap_response.themes.iter().find_map(|theme| {
-            if theme.is_dark {
-                Some(theme)
-            } else {
-                None
-            }
-        });
+    fn find_shop_tab(
+        bootstrap_response: Option<&AppBootstrapResponseBody>,
+    ) -> Option<&AppShopTabData> {
+        if bootstrap_response.is_none() {
+            return None;
+        }
+
+        bootstrap_response
+            .as_ref()
+            .unwrap()
+            .tabs
+            .iter()
+            .find_map(|tab| {
+                if let AppTab::AppShopTab(data) = tab {
+                    Some(data)
+                } else {
+                    None
+                }
+            })
+    }
+
+    fn find_settings_tab(
+        bootstrap_response: Option<&AppBootstrapResponseBody>,
+    ) -> Option<&AppSettingsTabData> {
+        if bootstrap_response.is_none() {
+            return None;
+        }
+
+        bootstrap_response
+            .as_ref()
+            .unwrap()
+            .tabs
+            .iter()
+            .find_map(|tab| {
+                if let AppTab::AppSettingsTab(data) = tab {
+                    Some(data)
+                } else {
+                    None
+                }
+            })
+    }
+
+    fn find_themes(
+        bootstrap_response: Option<&AppBootstrapResponseBody>,
+    ) -> (Option<ResolvedTheme>, Option<ResolvedTheme>) {
+        if bootstrap_response.is_none() {
+            return (None, None);
+        }
+
+        let default_theme =
+            bootstrap_response.as_ref().unwrap().themes.iter().find_map(
+                |theme| {
+                    if theme.is_default {
+                        Some(theme)
+                    } else {
+                        None
+                    }
+                },
+            );
+
+        let dark_theme =
+            bootstrap_response.as_ref().unwrap().themes.iter().find_map(
+                |theme| if theme.is_dark { Some(theme) } else { None },
+            );
 
         (default_theme.cloned(), dark_theme.cloned())
     }
@@ -272,32 +311,26 @@ impl TemplateInfo {
             },
         };
 
-        let sample_tab =
-            Self::find_sample_tab(bootstrap_response.as_ref().unwrap())
-                .unwrap_or(&default_sample_tab);
+        let sample_tab = Self::find_sample_tab(bootstrap_response)
+            .unwrap_or(&default_sample_tab);
 
         let episodes_tab = Self::find_feed_tab(
-            bootstrap_response.as_ref().unwrap(),
+            bootstrap_response,
             AppFeedContentType::Episode,
         )
         .unwrap_or(&default_episodes_tab);
 
-        let videos_tab = Self::find_feed_tab(
-            bootstrap_response.as_ref().unwrap(),
-            AppFeedContentType::Videos,
-        )
-        .unwrap_or(&default_videos_tab);
+        let videos_tab =
+            Self::find_feed_tab(bootstrap_response, AppFeedContentType::Videos)
+                .unwrap_or(&default_videos_tab);
 
-        let shop_tab =
-            Self::find_shop_tab(bootstrap_response.as_ref().unwrap())
-                .unwrap_or(&default_shop_tab);
+        let shop_tab = Self::find_shop_tab(bootstrap_response)
+            .unwrap_or(&default_shop_tab);
 
-        let settings_tab =
-            Self::find_settings_tab(bootstrap_response.as_ref().unwrap())
-                .unwrap_or(&default_settings_tab);
+        let settings_tab = Self::find_settings_tab(bootstrap_response)
+            .unwrap_or(&default_settings_tab);
 
-        let (default_theme, dark_theme) =
-            Self::find_themes(bootstrap_response.as_ref().unwrap());
+        let (default_theme, dark_theme) = Self::find_themes(bootstrap_response);
 
         TemplateInfo {
             name: template_name.to_string(),
