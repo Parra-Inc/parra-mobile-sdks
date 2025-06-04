@@ -60,7 +60,7 @@ struct MiniOverlayPlayer: View {
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 8)
-        .background(theme.palette.secondaryChipBackground)
+        .background(theme.palette.primaryBackground)
         .applyCornerRadii(size: .lg, from: theme)
         .onTapGesture {
             onTap()

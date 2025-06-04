@@ -2,6 +2,8 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
+use crate::types::theme::ResolvedTheme;
+
 use super::auth::Credential;
 
 #[allow(dead_code)]
@@ -57,7 +59,7 @@ pub struct Icon {
 }
 
 #[derive(
-    Debug, Deserialize, Serialize, Clone, PartialEq, Eq, PartialOrd, Ord, Copy,
+    Debug, Deserialize, Serialize, Clone, PartialEq, PartialOrd, Eq, Ord, Copy,
 )]
 pub enum TenantDomainType {
     #[serde(rename = "managed")]
@@ -141,19 +143,19 @@ pub struct BootstrapRequest {
     pub template: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppTabDescriptor {
     pub name: String,
     pub sf_symbol: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppTabEmptyStateCta {
     pub title: String,
     pub url: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppTabEmptyState {
     pub title: String,
     pub subtitle: Option<String>,
@@ -161,7 +163,7 @@ pub struct AppTabEmptyState {
     pub cta: Option<AppTabEmptyStateCta>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppShopTabShopifyConfiguration {
     pub domain: String,
     #[serde(rename = "api_key")]
@@ -172,7 +174,7 @@ pub struct AppShopTabShopifyConfiguration {
     pub attribution_source: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub enum AppTabType {
     Sample,
@@ -182,7 +184,7 @@ pub enum AppTabType {
     Webview,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash, Copy)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Copy)]
 pub enum AppFeedContentType {
     #[serde(rename = "videos")]
     Videos,
@@ -190,7 +192,7 @@ pub enum AppFeedContentType {
     Episode,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppSampleTabData {
     pub title: String,
     pub tab: AppTabDescriptor,
@@ -198,7 +200,7 @@ pub struct AppSampleTabData {
     pub empty_state: Option<AppTabEmptyState>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppFeedTabData {
     pub title: String,
     pub tab: AppTabDescriptor,
@@ -209,27 +211,27 @@ pub struct AppFeedTabData {
     pub empty_state: Option<AppTabEmptyState>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppShopTabData {
     pub title: String,
     pub tab: AppTabDescriptor,
     pub shopify: Option<AppShopTabShopifyConfiguration>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppSettingsTabData {
     pub title: String,
     pub tab: AppTabDescriptor,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppWebViewTabData {
     pub title: String,
     pub tab: AppTabDescriptor,
     pub url: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type")]
 
 pub enum AppTab {
@@ -243,7 +245,7 @@ pub enum AppTab {
     AppSettingsTab(AppSettingsTabData),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub enum AppTemplate {
     Default,
@@ -253,12 +255,12 @@ pub enum AppTemplate {
     YC,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppBootstrapTemplate {
     pub tabs: Vec<AppTab>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AppBootstrapResponseBody {
     #[serde(rename = "tenant_id")]
     pub tenant_id: String,
@@ -267,4 +269,5 @@ pub struct AppBootstrapResponseBody {
     #[serde(rename = "template")]
     pub template: AppTemplate,
     pub tabs: Vec<AppTab>,
+    pub themes: Vec<ResolvedTheme>,
 }

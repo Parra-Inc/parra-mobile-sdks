@@ -20,9 +20,7 @@ struct {{ app.name.upper_camel }}: App {
             tenantId: "{{ tenant.id }}",
             applicationId: "{{ app.id }}",
             appDelegate: appDelegate,
-            configuration: ParraConfiguration(
-                pushNotificationOptions: .allWithoutProvisional
-            )
+            configuration: .shared
         ) {
             WindowGroup {
                 // Use the ParraOptionalAuthWindow if you don't support user sign-in

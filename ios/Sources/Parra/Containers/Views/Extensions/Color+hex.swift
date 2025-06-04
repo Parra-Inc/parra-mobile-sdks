@@ -55,37 +55,42 @@ extension Color {
         }
 
         // Ensure the hex string has an even number of characters
-        guard hex.count % 2 == 0 else {
+        guard cString.count % 2 == 0 else {
             return .black
         }
 
         let r, g, b, a: UInt64
 
-        let start = hex.index(hex.startIndex, offsetBy: 1)
-        let hexColor = String(hex[start...])
+        let scanner = Scanner(string: cString)
+        var hexNumber: UInt64 = 0
 
-        if hexColor.count >= 6 {
-            let scanner = Scanner(string: hexColor)
-            var hexNumber: UInt64 = 0
+        guard scanner.scanHexInt64(&hexNumber) else {
+            return .black
+        }
 
-            if scanner.scanHexInt64(&hexNumber) {
-                r = hexNumber & 0xFF00_0000 >> 24
-                g = hexNumber & 0x00FF_0000 >> 16
-                b = hexNumber & 0x0000_FF00 >> 8
+        if cString.count == 8 {
+            r = hexNumber & 0xFF00_0000
+            g = hexNumber & 0x00FF_0000
+            b = hexNumber & 0x0000_FF00
+            a = hexNumber & 0x0000_00FF
 
-                if hexColor.count > 6 {
-                    a = hexNumber & 0x0000_00FF
-                } else {
-                    a = 255
-                }
+            return Color(
+                red: Int(r),
+                green: Int(g),
+                blue: Int(b),
+                opacity: CGFloat(a) / 255
+            )
+        } else if cString.count == 6 {
+            r = (hexNumber & 0xFF0000) >> 16
+            g = (hexNumber & 0x00FF00) >> 8
+            b = (hexNumber & 0x0000FF) >> 0
 
-                return Color(
-                    red: Int(r),
-                    green: Int(g),
-                    blue: Int(b),
-                    opacity: CGFloat(a) / 255
-                )
-            }
+            return Color(
+                red: Int(r),
+                green: Int(g),
+                blue: Int(b),
+                opacity: 1.0
+            )
         }
 
         return .black

@@ -1,9 +1,12 @@
 use serde::{Deserialize, Serialize};
 
-use crate::types::api::{
-    AppBootstrapResponseBody, AppFeedContentType, AppFeedTabData,
-    AppSampleTabData, AppSettingsTabData, AppShopTabData, AppTab,
-    AppTabDescriptor, AppTabEmptyState, AppTabType,
+use crate::types::{
+    api::{
+        AppBootstrapResponseBody, AppFeedContentType, AppFeedTabData,
+        AppSampleTabData, AppSettingsTabData, AppShopTabData, AppTab,
+        AppTabDescriptor, AppTabEmptyState,
+    },
+    theme::ResolvedTheme,
 };
 
 use super::api::Icon;
@@ -128,9 +131,16 @@ pub struct TabsInfo {
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct ThemeInfo {
+    pub default: Option<ResolvedTheme>,
+    pub dark: Option<ResolvedTheme>,
+}
+
+#[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct TemplateInfo {
     pub name: String,
     pub tabs: TabsInfo,
+    pub theme: ThemeInfo,
 }
 
 impl TemplateInfo {
@@ -185,6 +195,29 @@ impl TemplateInfo {
                 None
             }
         })
+    }
+
+    fn find_themes(
+        bootstrap_response: &AppBootstrapResponseBody,
+    ) -> (Option<ResolvedTheme>, Option<ResolvedTheme>) {
+        let default_theme =
+            bootstrap_response.themes.iter().find_map(|theme| {
+                if theme.is_default {
+                    Some(theme)
+                } else {
+                    None
+                }
+            });
+
+        let dark_theme = bootstrap_response.themes.iter().find_map(|theme| {
+            if theme.is_dark {
+                Some(theme)
+            } else {
+                None
+            }
+        });
+
+        (default_theme.cloned(), dark_theme.cloned())
     }
 
     pub fn with_bootstrap_response(
@@ -263,6 +296,9 @@ impl TemplateInfo {
             Self::find_settings_tab(bootstrap_response.as_ref().unwrap())
                 .unwrap_or(&default_settings_tab);
 
+        let (default_theme, dark_theme) =
+            Self::find_themes(bootstrap_response.as_ref().unwrap());
+
         TemplateInfo {
             name: template_name.to_string(),
             tabs: TabsInfo {
@@ -271,6 +307,10 @@ impl TemplateInfo {
                 videos: videos_tab.clone(),
                 shop: shop_tab.clone(),
                 settings: settings_tab.clone(),
+            },
+            theme: ThemeInfo {
+                default: default_theme,
+                dark: dark_theme,
             },
         }
     }
