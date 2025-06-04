@@ -17,7 +17,9 @@ struct ShopTab: View {
         NavigationStack(path: $navigationPath) {
             {% if template.tabs.shop.shopify %}ParraStorefrontWidget(
                 config: ParraStorefrontWidgetConfig(
-                    navigationTitle: "{{ template.tabs.shop.title }}"
+                    navigationTitle: "{{ template.tabs.shop.title }}",
+                    checkoutAttributes: {% if template.tabs.shop.shopify.attribution_source %}["attribution_source": "{{ template.tabs.shop.shopify.attribution_source }}"]{% else %}[:]{% endif %},
+                    checkoutDiscountCodes: [{% if template.tabs.shop.shopify.discount_code %}"{{ template.tabs.shop.shopify.discount_code }}"{% endif %}]
                 ),
                 navigationPath: $navigationPath
             ){% else %}EmptyView(){% endif %}

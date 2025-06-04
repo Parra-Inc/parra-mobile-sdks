@@ -23,6 +23,7 @@ struct SettingsTab: View {
                 Section {
                     ProfileCell()
                 }
+                .listRowBackground(parraTheme.palette.secondaryBackground)
 
                 // The appearance picker should only be shown in your app
                 // supports light/dark mode. To enable this, define a dark color
@@ -31,6 +32,7 @@ struct SettingsTab: View {
                     Section("Appearance") {
                         ThemeCell()
                     }
+                    .listRowBackground(parraTheme.palette.secondaryBackground)
                 }
 
                 Section("General") {
@@ -40,11 +42,13 @@ struct SettingsTab: View {
                     FaqCell()
                     LatestReleaseCell()
                 }
+                .listRowBackground(parraTheme.palette.secondaryBackground)
 
                 if parraAuthState.hasUser && parraConfiguration.pushNotificationOptions.enabled {
                     Section("Settings") {
                         NotificationSettingsCell()
                     }
+                    .listRowBackground(parraTheme.palette.secondaryBackground)
                 }
 
                 if parraAppInfo.legal.hasDocuments {
@@ -58,18 +62,21 @@ struct SettingsTab: View {
                             .id(document.id)
                         }
                     }
+                    .listRowBackground(parraTheme.palette.secondaryBackground)
                 }
 
                 Section {
                     ReviewAppCell()
                     ShareCell()
                 }
+                .listRowBackground(parraTheme.palette.secondaryBackground)
 
                 Section {
                     RestorePurchasesCell()
                     TipJarCell()
                     SubscriptionUpsellCell()
                 }
+                .listRowBackground(parraTheme.palette.secondaryBackground)
 
                 SettingsFooter()
                     .frame(
@@ -77,6 +84,8 @@ struct SettingsTab: View {
                     )
                     .listRowBackground(EmptyView())
             }
+            .background(parraTheme.palette.primaryBackground)
+            .scrollContentBackground(.hidden)
             .navigationTitle("Profile")
             .navigationDestination(for: String.self) { destination in
                 if destination == "notification-settings" {

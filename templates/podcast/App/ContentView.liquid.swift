@@ -12,6 +12,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var navigationState = AppNavigationState.shared
+    @Environment(\.parraTheme) private var theme
 
     var body: some View {
         ParraTabView(selection: $navigationState.selectedTab) {
@@ -55,6 +56,7 @@ struct ContentView: View {
             }
             .tag(AppNavigationState.Tab.settings)
         }
+        .tint(theme.palette.primary.toParraColor())
         .onAppear {
         {% if template.tabs.shop.shopify %}
             if !ParraStorefront.isInitialized {
