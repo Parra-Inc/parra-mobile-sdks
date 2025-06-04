@@ -329,7 +329,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.32.5;
+				MARKETING_VERSION = 0.33.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-client";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -358,7 +358,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.32.5;
+				MARKETING_VERSION = 0.33.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-client";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -516,7 +516,7 @@
 			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.32.5;
+				minimumVersion = 0.33.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
