@@ -109,6 +109,7 @@ struct FeedRssItemView: View {
                             .isPlaying ? 0.75 : 0.3
                     )
                 )
+                .applyCornerRadii(size: .sm, from: theme)
             }
         }
     }
