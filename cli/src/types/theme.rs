@@ -289,15 +289,15 @@ pub struct BackgroundTheme {
     pub secondary: HexValue,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum BorderStyle {
-    #[serde(rename = "solid")]
-    Solid,
-    #[serde(rename = "dashed")]
-    Dashed,
-    #[serde(rename = "dotted")]
-    Dotted,
-}
+// #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+// pub enum BorderStyle {
+//     #[serde(rename = "solid")]
+//     Solid,
+//     #[serde(rename = "dashed")]
+//     Dashed,
+//     #[serde(rename = "dotted")]
+//     Dotted,
+// }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum PxValueType {
@@ -321,7 +321,7 @@ pub enum PxValueType {
 pub struct BadgeSize {
     pub font_size: RemValue,
     pub padding: Padding,
-    pub border_radius: PxValue,
+    // pub border_radius: PxValue,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -329,19 +329,19 @@ pub struct BadgeBase {
     pub font_size: RemValue,
     pub font_weight: FontWeightToken,
     pub padding: Padding,
-    pub border_width: PxValue,
-    pub border_radius: PxValue,
+    // pub border_width: PxValue,
+    // pub border_radius: PxValue,
     pub background_color: HexValue,
     pub color: HexValue,
-    pub border_style: BorderStyle,
-    pub border_color: HexValue,
+    // pub border_style: BorderStyle,
+    // pub border_color: HexValue,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BadgeVariant {
     pub background_color: HexValue,
     pub color: HexValue,
-    pub border_color: HexValue,
+    // pub border_color: HexValue,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -380,20 +380,20 @@ pub struct BadgeTheme {
 pub struct CardBase {
     pub background_color: HexValue,
     pub padding: Option<Padding>,
-    pub border_width: Option<PxValue>,
-    pub border_style: Option<BorderStyle>,
-    pub border_color: Option<HexValue>,
-    pub border_radius: Option<PxValue>,
+    // pub border_width: Option<PxValue>,
+    // pub border_style: Option<BorderStyle>,
+    // pub border_color: Option<HexValue>,
+    // pub border_radius: Option<PxValue>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CardVariant {
     pub background_color: Option<HexValue>,
     pub padding: Option<Padding>,
-    pub border_width: Option<PxValue>,
-    pub border_style: Option<BorderStyle>,
-    pub border_color: Option<HexValue>,
-    pub border_radius: Option<PxValue>,
+    // pub border_width: Option<PxValue>,
+    // pub border_style: Option<BorderStyle>,
+    // pub border_color: Option<HexValue>,
+    // pub border_radius: Option<PxValue>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -424,20 +424,20 @@ pub struct SeparatorTheme {
 pub struct ChipBase {
     pub background_color: Option<HexValue>,
     pub color: Option<HexValue>,
-    pub border_width: Option<PxValue>,
-    pub border_style: Option<BorderStyle>,
-    pub border_color: Option<HexValue>,
-    pub border_radius: Option<PxValue>,
+    // pub border_width: Option<PxValue>,
+    // pub border_style: Option<BorderStyle>,
+    // pub border_color: Option<HexValue>,
+    // pub border_radius: Option<PxValue>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ChipVariant {
     pub background_color: HexValue,
     pub color: HexValue,
-    pub border_width: Option<PxValue>,
-    pub border_style: Option<BorderStyle>,
-    pub border_color: Option<HexValue>,
-    pub border_radius: Option<PxValue>,
+    // pub border_width: Option<PxValue>,
+    // pub border_style: Option<BorderStyle>,
+    // pub border_color: Option<HexValue>,
+    // pub border_radius: Option<PxValue>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -450,7 +450,7 @@ pub struct ChipVariants {
 pub struct ChipSize {
     pub font_size: RemValue,
     pub padding: Padding,
-    pub border_radius: PxValue,
+    // pub border_radius: PxValue,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
