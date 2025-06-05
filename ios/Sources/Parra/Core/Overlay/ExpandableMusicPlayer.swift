@@ -21,7 +21,6 @@ struct ExpandableMusicPlayer: View {
                         expandPlayer = true
                     }
                 }
-//                .opacity(expandPlayer ? 0 : 1)
                 .shadow(
                     color: .black.opacity(0.2),
                     radius: 5,

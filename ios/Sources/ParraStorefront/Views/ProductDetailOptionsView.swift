@@ -59,6 +59,7 @@ struct ProductDetailOptionsView: View {
                     value: $selectedQuantity,
                     maxQuantity: availableQuantity
                 )
+                .disabled(!selectedVariant.allowPurchase)
             }
 
             Divider()

@@ -276,19 +276,28 @@ struct FeedRssItemDetailHeaderView: View {
                 failurePolicy: .returnPartiallyParsedIfPossible
             )
         ) {
-            DisclosureGroup(
-                isExpanded: $isDescriptionExpanded
-            ) {
+            ViewThatFits(in: .vertical) {
                 Text(attr)
                     .applyTextAttributes(
                         .default(with: .body),
                         using: theme
                     )
                     .textSelection(.enabled)
-            } label: {
-                EmptyView()
+
+                DisclosureGroup(
+                    isExpanded: $isDescriptionExpanded
+                ) {
+                    Text(attr)
+                        .applyTextAttributes(
+                            .default(with: .body),
+                            using: theme
+                        )
+                        .textSelection(.enabled)
+                } label: {
+                    EmptyView()
+                }
+                .disclosureGroupStyle(DescriptionDisclosureStyle())
             }
-            .disclosureGroupStyle(DescriptionDisclosureStyle())
         } else if !rssItem.description.isEmpty {
             DisclosureGroup(
                 isExpanded: $isDescriptionExpanded

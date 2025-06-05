@@ -28,7 +28,7 @@ struct AddReactionButtonView: View {
                 width: 18,
                 height: 18
             )
-            .tint(
+            .foregroundStyle(
                 theme.palette.secondaryChipText.toParraColor()
             )
             .aspectRatio(contentMode: .fit)

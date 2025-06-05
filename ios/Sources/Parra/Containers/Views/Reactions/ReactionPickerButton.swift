@@ -51,12 +51,12 @@ struct ReactionPickerButton: View {
         } label: {
             VStack {
                 RoundedRectangle(cornerRadius: 16)
-                    .fill((
+                    .fill(
                         reactor.currentActiveReactionIds
-                            .contains(reactionOption.id) ? .blue :
-                            Color
-                            .gray
-                    ).opacity(0.4))
+                            .contains(reactionOption.id)
+                            ? theme.palette.primaryChipBackground.toParraColor()
+                            : theme.palette.secondaryChipBackground.toParraColor()
+                    )
                     .frame(width: 64, height: 64)
                     .overlay {
                         reactionContent(for: reactionOption)

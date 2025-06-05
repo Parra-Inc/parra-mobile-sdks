@@ -86,12 +86,6 @@ struct StorefrontWidget: ParraContainer {
             }
         }
         .navigationDestination(
-            for: ParraProduct.self
-        ) { product in
-            ProductDetailView(product: product)
-                .environment(contentObserver)
-        }
-        .navigationDestination(
             for: ParraCartLineItem.self
         ) { lineItem in
             if let product = contentObserver.findProduct(for: lineItem) {

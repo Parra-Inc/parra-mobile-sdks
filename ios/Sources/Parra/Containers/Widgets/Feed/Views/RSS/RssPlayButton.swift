@@ -17,7 +17,7 @@ struct RssPlayButton: View {
             switch player.state {
             case .loading:
                 ProgressView()
-                    .tint(.primary)
+                    .tint(theme.palette.primaryText.toParraColor())
             case .playing:
                 Button {
                     player.pausePlayback()
@@ -45,4 +45,6 @@ struct RssPlayButton: View {
     // MARK: - Private
 
     @State private var player = MediaPlaybackManager.shared
+
+    @Environment(\.parraTheme) private var theme
 }

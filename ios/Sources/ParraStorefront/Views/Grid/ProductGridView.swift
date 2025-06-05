@@ -29,9 +29,10 @@ struct ProductGridView: View {
                     spacing: cellSpacing
                 ) {
                     ForEach(products) { product in
-                        NavigationLink(
-                            value: product
-                        ) {
+                        NavigationLink {
+                            ProductDetailView(product: product)
+                                .environment(contentObserver)
+                        } label: {
                             ProductCell(product: product)
                         }
                         .buttonStyle(ProductCellButtonStyle())
