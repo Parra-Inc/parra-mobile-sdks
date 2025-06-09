@@ -33,7 +33,7 @@ struct YouTubeDescriptionDisclosureStyle: DisclosureGroupStyle {
 
                     Spacer()
 
-                    Text(configuration.isExpanded ? "Say less" : "...more")
+                    Text(configuration.isExpanded ? "show less" : "... more")
                         .font(.caption)
                         .foregroundColor(.accentColor)
                 }

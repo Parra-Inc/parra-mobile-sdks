@@ -80,6 +80,9 @@ public final class MediaPlaybackManager {
 
     public static let shared = MediaPlaybackManager()
 
+    // An override to allow the mini player to be hidden even if it is currently playing
+    public internal(set) var shouldHideMiniPlayer = false
+
     // Playback state
     public private(set) var state: PlaybackState = .idle {
         didSet {
@@ -138,6 +141,8 @@ public final class MediaPlaybackManager {
         }
 
         let playerItem = AVPlayerItem(url: url)
+        playerItem.preferredForwardBufferDuration = 30
+
         player = AVPlayer(playerItem: playerItem)
         player!.audiovisualBackgroundPlaybackPolicy = .continuesIfPossible
         player!.automaticallyWaitsToMinimizeStalling = false

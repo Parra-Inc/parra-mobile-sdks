@@ -39,13 +39,16 @@ struct ReactionPickerGridView: View {
                     }
                 } header: {
                     VStack {
-                        Text(group.name)
-                            .font(.headline)
+                        componentFactory.buildLabel(
+                            text: group.name,
+                            localAttributes: .default(with: .headline)
+                        )
 
                         if let description = group.description {
-                            Text(description)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                            componentFactory.buildLabel(
+                                text: description,
+                                localAttributes: .default(with: .caption)
+                            )
                         }
                     }
                     .frame(

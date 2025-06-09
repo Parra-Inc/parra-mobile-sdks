@@ -145,7 +145,7 @@ struct AddCommentBarView: View {
             )
         )
         .shadow(
-            color: theme.palette.secondaryBackground.opacity(0.7),
+            color: theme.palette.secondarySeparator.toParraColor().opacity(0.7),
             radius: 4,
             x: 0,
             y: -2

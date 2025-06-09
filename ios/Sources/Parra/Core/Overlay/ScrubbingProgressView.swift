@@ -150,6 +150,10 @@ struct ScrubbingProgressView: View {
     }
 
     private func formatTime(_ time: TimeInterval) -> String {
+        guard time.isFinite && !time.isNaN else {
+            return ""
+        }
+
         let hours = Int(time) / 3_600
         let minutes = Int(time) % 3_600 / 60
         let seconds = Int(time) % 60

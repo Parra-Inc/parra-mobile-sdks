@@ -64,11 +64,11 @@ public struct ParraTabView<SelectionValue, Content>: View
                 )
         }
         .onChange(
-            of: MediaPlaybackManager.shared.state,
+            of: __showMiniMediaPlayer,
             initial: true
         ) { _, newValue in
             withAnimation {
-                showMiniMediaPlayer = newValue.showMiniPlayer
+                showMiniMediaPlayer = newValue
             }
         }
         .onAppear {
@@ -87,9 +87,14 @@ public struct ParraTabView<SelectionValue, Content>: View
 
     // MARK: - Private
 
+    @State private var player = MediaPlaybackManager.shared
     @State private var showMiniMediaPlayer = false
 
     @Environment(\.parra) private var parra
+
+    private var __showMiniMediaPlayer: Bool {
+        return !player.shouldHideMiniPlayer && player.state.showMiniPlayer
+    }
 
     private var miniPlayerOffset: Double {
         return MiniOverlayPlayer.Constant

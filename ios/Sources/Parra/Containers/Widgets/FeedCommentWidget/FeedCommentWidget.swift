@@ -182,6 +182,11 @@ struct FeedCommentWidget: ParraContainer {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 contentObserver.loadComments()
             }
+
+            MediaPlaybackManager.shared.shouldHideMiniPlayer = true
+        }
+        .onDisappear {
+            MediaPlaybackManager.shared.shouldHideMiniPlayer = false
         }
         .task(priority: .userInitiated) {
             await contentObserver.onAppear()

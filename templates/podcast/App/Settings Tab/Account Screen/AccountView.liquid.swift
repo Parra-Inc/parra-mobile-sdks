@@ -23,6 +23,7 @@ struct AccountView: View {
             Section {
                 AccountHeader()
             }
+            .listRowBackground(parraTheme.palette.secondaryBackground)
 
             Section() {
                 Button {
@@ -43,6 +44,7 @@ struct AccountView: View {
                     }
                 }
             }
+            .listRowBackground(parraTheme.palette.secondaryBackground)
 
             // Anonymous users can't sign out, change password, etc.
             if let user {
@@ -56,6 +58,7 @@ struct AccountView: View {
                             Text("Link an email")
                         }
                     }
+                    .listRowBackground(parraTheme.palette.secondaryBackground)
                     .presentParraSignInWidget(isPresented: $isSigningIn)
                 } else {
                     let identities = user.info.identities.filter { identity in
@@ -75,24 +78,30 @@ struct AccountView: View {
                                 }
                             }
                         }
+                        .listRowBackground(parraTheme.palette.secondaryBackground)
                     }
 
                     if user.info.hasPassword {
                         Section("Security") {
                             ChangePasswordCell()
                         }
+                        .listRowBackground(parraTheme.palette.secondaryBackground)
                     }
 
                     Section {
                         LogoutCell()
                     }
+                    .listRowBackground(parraTheme.palette.secondaryBackground)
 
                     Section("Danger Zone") {
                         DeleteAccountCell()
                     }
+                    .listRowBackground(parraTheme.palette.secondaryBackground)
                 }
             }
         }
+        .background(parraTheme.palette.primaryBackground)
+        .scrollContentBackground(.hidden)
         .navigationTitle("Account")
         .sheet(isPresented: $isEditProfilePresented) {
             NavigationStack {
