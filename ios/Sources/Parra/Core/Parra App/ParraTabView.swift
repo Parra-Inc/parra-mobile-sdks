@@ -64,11 +64,27 @@ public struct ParraTabView<SelectionValue, Content>: View
                 )
         }
         .onChange(
-            of: __showMiniMediaPlayer,
+            of: player.shouldHideMiniPlayer,
             initial: true
         ) { _, newValue in
-            withAnimation {
-                showMiniMediaPlayer = newValue
+            let next = !newValue || player.state.showMiniPlayer
+
+            if next != showMiniMediaPlayer {
+                withAnimation {
+                    showMiniMediaPlayer = next
+                }
+            }
+        }
+        .onChange(
+            of: player.state.showMiniPlayer,
+            initial: true
+        ) { _, newValue in
+            let next = !player.shouldHideMiniPlayer || newValue
+
+            if next != showMiniMediaPlayer {
+                withAnimation {
+                    showMiniMediaPlayer = next
+                }
             }
         }
         .onAppear {
@@ -91,10 +107,6 @@ public struct ParraTabView<SelectionValue, Content>: View
     @State private var showMiniMediaPlayer = false
 
     @Environment(\.parra) private var parra
-
-    private var __showMiniMediaPlayer: Bool {
-        return !player.shouldHideMiniPlayer && player.state.showMiniPlayer
-    }
 
     private var miniPlayerOffset: Double {
         return MiniOverlayPlayer.Constant

@@ -8,6 +8,7 @@
 import AVFoundation
 import Combine
 import MediaPlayer
+import SwiftUI
 
 private let logger = Logger()
 
@@ -59,13 +60,9 @@ public final class MediaPlaybackManager {
         setupNotifications()
 
         $lastRequestedSeek
-            .throttle(
-                for: .seconds(0.5),
-                scheduler: DispatchQueue.main,
-                latest: true
-            )
+            .subscribe(on: DispatchQueue.main)
             .receive(on: DispatchQueue.main)
-            .asyncMap(applySeek)
+            .map(applySeek)
             .sink(receiveValue: { _ in
                 self.updateNowPlayingInfoPlaybackState()
             })
@@ -247,14 +244,37 @@ public final class MediaPlaybackManager {
         to time: TimeInterval,
         instantUpdate: Bool
     ) {
-        lastRequestedSeek = time
-
         if instantUpdate {
             currentTime = time
             progress = time / duration
         }
 
-        resetTimeTracker()
+        lastRequestedSeek = time
+    }
+
+    func applySeek(fraction: Double) {
+        guard let player else {
+            return
+        }
+
+        let time = max(min(fraction * duration, duration), 0)
+        let targetTime = CMTime(
+            seconds: max(0, min(time, duration)),
+            preferredTimescale: 600
+        )
+
+        player.seek(to: targetTime) { success in
+            withAnimation {
+                self.currentTime = time
+                self.progress = time / self.duration
+
+                self.seekedSinceLastTick = true
+            }
+
+            if success {
+                player.play()
+            }
+        }
     }
 
     // MARK: - Private
@@ -267,6 +287,8 @@ public final class MediaPlaybackManager {
     private var player: AVPlayer?
     private var timeObserver: Any?
     private var cancellables = Set<AnyCancellable>()
+
+    private var isSeeking = false
 
     private func resetTimeTracker() {
         if let timeObserver, let player {
@@ -294,10 +316,16 @@ public final class MediaPlaybackManager {
                 return
             }
 
-            currentTime = time.seconds
+            guard !isSeeking else {
+                return
+            }
 
-            if currentItem.duration.seconds > 0 {
-                progress = time.seconds / currentItem.duration.seconds
+            withAnimation {
+                self.currentTime = time.seconds
+
+                if currentItem.duration.seconds > 0 {
+                    self.progress = time.seconds / currentItem.duration.seconds
+                }
             }
 
             // Update now playing info with current time
@@ -305,25 +333,43 @@ public final class MediaPlaybackManager {
         }
     }
 
-    @MainActor
     private func applySeek(
         _ time: TimeInterval?
-    ) async {
+    ) {
         guard let player, let time else {
             return
         }
 
-        let targetTime = CMTime(
-            seconds: max(0, min(time, duration)),
-            preferredTimescale: 600
-        )
+        DispatchQueue.main.async {
+            let targetTime = CMTime(
+                seconds: max(0, min(time, self.duration)),
+                preferredTimescale: 600
+            )
 
-        currentTime = time
-        progress = time / duration
+            withAnimation {
+                self.currentTime = time
+                self.progress = time / self.duration
 
-        seekedSinceLastTick = true
+                self.seekedSinceLastTick = true
+            }
 
-        await player.seek(to: targetTime)
+            if self.isSeeking {
+                return
+            }
+
+            self.isSeeking = true
+
+            player.seek(to: targetTime) { _ in
+                self.isSeeking = false
+
+                withAnimation {
+                    self.currentTime = time
+                    self.progress = time / self.duration
+
+                    self.seekedSinceLastTick = true
+                }
+            }
+        }
     }
 
     // MARK: - Private Methods

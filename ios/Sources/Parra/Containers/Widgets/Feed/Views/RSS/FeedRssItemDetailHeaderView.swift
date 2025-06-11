@@ -127,7 +127,9 @@ struct FeedRssItemDetailHeaderView: View {
                         }
                     ),
                     duration: player.duration
-                )
+                ) { finalProgess in
+                    player.applySeek(fraction: finalProgess)
+                }
 
                 HStack {
                     componentFactory.buildLabel(
@@ -276,40 +278,27 @@ struct FeedRssItemDetailHeaderView: View {
                 failurePolicy: .returnPartiallyParsedIfPossible
             )
         ) {
-            ViewThatFits(in: .vertical) {
-                Text(attr)
-                    .applyTextAttributes(
-                        .default(with: .body),
-                        using: theme
-                    )
-                    .textSelection(.enabled)
-
-                DisclosureGroup(
-                    isExpanded: $isDescriptionExpanded
-                ) {
-                    Text(attr)
-                        .applyTextAttributes(
-                            .default(with: .body),
-                            using: theme
-                        )
-                        .textSelection(.enabled)
-                } label: {
-                    EmptyView()
-                }
-                .disclosureGroupStyle(DescriptionDisclosureStyle())
+            LongDescriptionText(
+                text: attr,
+                style: .chevron
+            ) { text in
+                text.applyTextAttributes(
+                    .default(with: .body),
+                    using: theme
+                )
+                .textSelection(.enabled)
             }
         } else if !rssItem.description.isEmpty {
-            DisclosureGroup(
-                isExpanded: $isDescriptionExpanded
-            ) {
-                componentFactory.buildLabel(
-                    text: rssItem.description,
-                    localAttributes: .default(with: .body)
+            LongDescriptionText(
+                text: .init(rssItem.description),
+                style: .chevron
+            ) { text in
+                text.applyTextAttributes(
+                    .default(with: .body),
+                    using: theme
                 )
-            } label: {
-                EmptyView()
+                .textSelection(.enabled)
             }
-            .disclosureGroupStyle(DescriptionDisclosureStyle())
         }
     }
 }

@@ -29,16 +29,16 @@ struct MiniOverlayPlayer: View {
                 }
             }
 
+            let attributes = componentFactory.attributeProvider.labelAttributes(
+                localAttributes: .default(with: .body, weight: .medium),
+                theme: theme
+            )
+
             MarqueeText(
                 text: media.title,
-                animationEnabled: .init(
-                    get: {
-                        return !expandPlayer
-                    },
-                    set: { _ in
-                    }
-                )
+                font: attributes.text.fontType.font
             )
+            .disabled(expandPlayer)
 
             Spacer(minLength: 0)
 

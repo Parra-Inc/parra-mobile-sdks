@@ -131,38 +131,18 @@ struct FeedYouTubeVideoDetailViewHeader: View {
     @ViewBuilder
     @MainActor private var descriptionLabel: some View {
         if let description = youtubeVideo.description, !description.isEmpty {
-            ViewThatFits(in: .vertical) {
-                // TODO: Test this with actual long content
-                Text(
-                    description.attributedStringWithHighlightedLinks(
-                        tint: theme.palette.primary.toParraColor(),
-                        font: .system(.callout),
-                        foregroundColor: theme.palette.secondaryText
-                            .toParraColor()
-                    )
+            LongDescriptionText(
+                text: description.attributedStringWithHighlightedLinks(
+                    tint: theme.palette.primary.toParraColor(),
+                    font: .system(.callout),
+                    foregroundColor: theme.palette.secondaryText
+                        .toParraColor()
                 )
-                .textSelection(.enabled)
-                .padding(.top, 12)
-                .tint(theme.palette.primary.toParraColor())
-
-                DisclosureGroup(
-                    isExpanded: $isDescriptionExpanded
-                ) {
-                    Text(
-                        description.attributedStringWithHighlightedLinks(
-                            tint: theme.palette.primary.toParraColor(),
-                            font: .system(.callout),
-                            foregroundColor: theme.palette.secondaryText
-                                .toParraColor()
-                        )
-                    )
+            ) { text in
+                text
                     .textSelection(.enabled)
                     .padding(.top, 12)
                     .tint(theme.palette.primary.toParraColor())
-                } label: {
-                    EmptyView()
-                }
-                .disclosureGroupStyle(YouTubeDescriptionDisclosureStyle())
             }
         }
     }

@@ -16,12 +16,14 @@ struct ScrubbingProgressView: View {
         progress: Binding<Double>,
         duration: TimeInterval,
         height: CGFloat = 4,
-        trackColor: Color = Color.gray.opacity(0.3)
+        trackColor: Color = Color.gray.opacity(0.3),
+        onEnded: @escaping (Double) -> Void
     ) {
         self._progress = progress
         self.duration = duration
         self.height = height
         self.trackColor = trackColor
+        self.onEnded = onEnded
     }
 
     // MARK: - Internal
@@ -30,6 +32,7 @@ struct ScrubbingProgressView: View {
     let height: CGFloat
     let trackColor: Color
     let duration: TimeInterval // Total duration in seconds
+    let onEnded: (Double) -> Void
 
     var body: some View {
         GeometryReader { geometry in
@@ -100,25 +103,29 @@ struct ScrubbingProgressView: View {
             }
             .contentShape(Rectangle())
             .gesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { value in
-                        if !isDragging {
-                            withAnimation(.easeInOut(duration: 0.15)) {
-                                isDragging = true
-                            }
-                        }
-
-                        let newProgress = min(
-                            max(0, value.location.x / geometry.size.width),
-                            1.0
-                        )
-                        progress = newProgress
-                    }
-                    .onEnded { _ in
+                DragGesture(
+                    minimumDistance: 0
+                )
+                .onChanged { value in
+                    if !isDragging {
                         withAnimation(.easeInOut(duration: 0.15)) {
-                            isDragging = false
+                            isDragging = true
                         }
                     }
+
+                    let newProgress = min(
+                        max(0, value.location.x / geometry.size.width),
+                        1.0
+                    )
+                    progress = newProgress
+                }
+                .onEnded { _ in
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        isDragging = false
+                    }
+
+                    onEnded(progress)
+                }
             )
         }
         .frame(height: height)

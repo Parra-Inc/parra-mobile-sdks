@@ -7,180 +7,222 @@
 
 import SwiftUI
 
-private let logger = Logger()
-
 struct MarqueeText: View {
     // MARK: - Lifecycle
 
     init(
         text: String,
-        animationEnabled: Binding<Bool>,
-        speed: Double = 50,
-        spacing: CGFloat = 50,
-        pauseDuration: Double = 2.0,
-        startDelay: Double = 2.0,
-        fadeWidth: CGFloat = 20
+        font: Font,
+        leftFade: CGFloat = 20,
+        rightFade: CGFloat = 20,
+        startDelay: TimeInterval = 2.0,
+        alignment: Alignment = .leading
     ) {
         self.text = text
-        self._animationEnabled = animationEnabled
-        self.speed = speed
-        self.spacing = spacing
-        self.pauseDuration = pauseDuration
+        self.font = font
         self.startDelay = startDelay
-        self.fadeWidth = fadeWidth
+        self.alignment = alignment
+        self.leftFade = leftFade
+        self.rightFade = rightFade
     }
 
     // MARK: - Internal
 
-    let text: String
-    let speed: Double
-    let spacing: CGFloat
-    let pauseDuration: Double // Pause at start/end
-    let startDelay: Double
-    let fadeWidth: CGFloat // Width of the fade effect
+    var text: String
+    var font: Font
+    var leftFade: CGFloat
+    var rightFade: CGFloat
+    var startDelay: TimeInterval
+    var alignment: Alignment
+
+    var isCompact = false
 
     var body: some View {
-        GeometryReader { geometry in
-            HStack(spacing: spacing) {
-                componentFactory.buildLabel(
-                    text: text,
-                    localAttributes: .default(with: .body, weight: .medium)
-                )
-                .fixedSize()
-                .background(
-                    GeometryReader { textGeometry in
-                        Color.clear
-                            .onAppear {
-                                textWidth = textGeometry.size.width
-                            }
-                    }
-                )
+        let stringWidth = text.widthOfString(usingFont: font)
+        let stringHeight = text.heightOfString(usingFont: font)
 
-                componentFactory.buildLabel(
-                    text: text,
-                    localAttributes: .default(with: .body, weight: .medium)
-                )
-                .fixedSize()
-            }
-            .offset(x: animate ? -(textWidth + spacing) : 0)
-            .onAppear {
-                containerWidth = geometry.size.width
+        // Create our animations
+        let animation = Animation
+            .linear(duration: Double(stringWidth) / 30)
+            .delay(startDelay)
+            .repeatForever(autoreverses: false)
 
-                stopAnimation()
+        let nullAnimation = Animation.linear(duration: 0)
 
-                if textWidth > containerWidth {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + startDelay) {
-                        startTimerBasedAnimation()
-                    }
-                }
-            }
-            .onChange(of: geometry.size.width) { _, newWidth in
-                if containerWidth == newWidth {
-                    return
-                }
+        GeometryReader { geo in
+            // Decide if scrolling is needed
+            let needsScrolling = (stringWidth > geo.size.width)
 
-                containerWidth = newWidth
+            ZStack {
+                if needsScrolling {
+                    // MARK: - Scrolling (Marquee) version
 
-                if textWidth > containerWidth && animationTimer == nil {
-                    stopAnimation()
+                    makeMarqueeTexts(
+                        stringWidth: stringWidth,
+                        stringHeight: stringHeight,
+                        geoWidth: geo.size.width,
+                        animation: animation,
+                        nullAnimation: nullAnimation
+                    )
+                    // force left alignment when scrolling
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity,
+                        minHeight: 0,
+                        maxHeight: .infinity,
+                        alignment: .topLeading
+                    )
+                    .offset(x: leftFade)
+                    .mask(
+                        fadeMask(
+                            leftFade: leftFade,
+                            rightFade: rightFade
+                        )
+                    )
+                    .frame(width: geo.size.width + leftFade)
+                    .offset(x: -leftFade)
+                } else {
+                    // MARK: - Non-scrolling version
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + startDelay) {
-                        if animationEnabled {
-                            startTimerBasedAnimation()
+                    Text(text)
+                        .font(.init(font))
+                        .onChange(of: text) { _, _ in
+                            animate = false // No scrolling needed
                         }
-                    }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            minHeight: 0,
+                            maxHeight: .infinity,
+                            alignment: alignment // use alignment only if not scrolling
+                        )
                 }
             }
-            .onDisappear {
-                stopAnimation()
+            .onAppear {
+                // Trigger scrolling if needed
+                animate = isEnabled && needsScrolling
             }
-            .frame(
-                maxHeight: .infinity
-            )
-            .clipped()
+            .onChange(
+                of: isEnabled,
+                initial: true
+            ) { _, newValue in
+                if newValue && needsScrolling {
+                    animate = true
+                }
+            }
+            .onChange(of: text) { _, newValue in
+                let newStringWidth = newValue.widthOfString(usingFont: font)
+                if newStringWidth > geo.size.width {
+                    // Stop the old animation first
+                    animate = false
+
+                    // Kick off a new animation on the next runloop
+                    DispatchQueue.main.async {
+                        animate = true
+                    }
+                } else {
+                    animate = false
+                }
+            }
         }
-        .mask(
-            LinearGradient(
-                gradient: Gradient(stops: [
-                    .init(color: .clear, location: 0.0),
-                    .init(color: .black, location: animate ? 0.0 : 0.04),
-                    .init(color: .black, location: 0.96),
-                    .init(color: .clear, location: 1.0)
-                ]),
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-        )
-        .clipped()
+        .frame(height: stringHeight)
+        .frame(maxWidth: isCompact ? stringWidth : nil)
+        .onDisappear {
+            animate = false
+        }
     }
 
     // MARK: - Private
 
-    @Binding private var animationEnabled: Bool
-
     @State private var animate = false
-    @State private var textWidth: CGFloat = 0
-    @State private var containerWidth: CGFloat = 0
-    @State private var animationTimer: Timer?
-    @State private var animationStartCount = 0
-    @State private var animationCompletionCount = 0
+    @Environment(\.isEnabled) private var isEnabled
 
-    @Environment(\.parraTheme) private var theme
-    @Environment(\.parraComponentFactory) private var componentFactory
+    // MARK: - Marquee pair of texts
 
-    private var animationDuration: Double {
-        (textWidth + spacing) / speed
-    }
+    @ViewBuilder
+    private func makeMarqueeTexts(
+        stringWidth: CGFloat,
+        stringHeight: CGFloat,
+        geoWidth: CGFloat,
+        animation: Animation,
+        nullAnimation: Animation
+    ) -> some View {
+        // Two stacked texts moving across in opposite phases
+        Group {
+            Text(text)
+                .lineLimit(1)
+                .font(.init(font))
+                .offset(x: animate ? -stringWidth - stringHeight * 2 : 0)
+                .animation(animate ? animation : nullAnimation, value: animate)
+                .fixedSize(horizontal: true, vertical: false)
 
-    private func startTimerBasedAnimation() {
-        guard textWidth > containerWidth else {
-            return
-        }
-
-        // Perform the first animation immediately
-        performAnimation()
-
-        // Set up timer for subsequent animations
-        animationTimer = Timer.scheduledTimer(
-            withTimeInterval: animationDuration + pauseDuration,
-            repeats: true
-        ) { _ in
-            performAnimation()
-        }
-    }
-
-    private func performAnimation() {
-        // Notify animation start
-        animationStartCount += 1
-        logger.trace("animation started: \(animationStartCount)")
-
-        // Reset to start position without animation
-        animate = false
-
-        // Start the animation to end position
-        withAnimation(.linear(duration: animationDuration)) {
-            animate = true
-        }
-
-        // Schedule completion notification
-        DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
-            animationCompletionCount += 1
-            logger.trace("animation completed: \(animationCompletionCount)")
+            Text(text)
+                .lineLimit(1)
+                .font(.init(font))
+                .offset(x: animate ? 0 : stringWidth + stringHeight * 2)
+                .animation(animate ? animation : nullAnimation, value: animate)
+                .fixedSize(horizontal: true, vertical: false)
         }
     }
 
-    private func stopAnimation() {
-        animationTimer?.invalidate()
-        animationTimer = nil
-        animate = false
+    // MARK: - Fade mask
+
+    @ViewBuilder
+    private func fadeMask(leftFade: CGFloat, rightFade: CGFloat) -> some View {
+        HStack(spacing: 0) {
+            Rectangle().frame(width: 2).opacity(0)
+
+            LinearGradient(
+                gradient: Gradient(colors: [Color.black.opacity(0), Color.black]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .frame(width: leftFade)
+
+            LinearGradient(
+                gradient: Gradient(colors: [Color.black, Color.black]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+
+            LinearGradient(
+                gradient: Gradient(colors: [Color.black, Color.black.opacity(0)]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .frame(width: rightFade)
+
+            Rectangle().frame(width: 2).opacity(0)
+        }
     }
 }
 
-#Preview {
-    ParraAppPreview {
-        MarqueeText(
-            text: "This is a long title of a podcast!",
-            animationEnabled: .constant(true)
-        )
+extension MarqueeText {
+    func makeCompact(_ compact: Bool = true) -> Self {
+        var view = self
+        view.isCompact = compact
+        return view
+    }
+}
+
+extension String {
+    func widthOfString(usingFont font: Font) -> CGFloat {
+        let fontAttributes = [
+            NSAttributedString.Key.font: font.toUIFont
+        ]
+
+        let size = size(withAttributes: fontAttributes)
+
+        return size.width
+    }
+
+    func heightOfString(usingFont font: Font) -> CGFloat {
+        let fontAttributes = [
+            NSAttributedString.Key.font: font.toUIFont
+        ]
+
+        let size = size(withAttributes: fontAttributes)
+
+        return size.height
     }
 }

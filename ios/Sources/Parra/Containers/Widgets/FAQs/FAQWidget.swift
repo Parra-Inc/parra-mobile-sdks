@@ -50,7 +50,7 @@ struct FAQWidget: ParraContainer {
                 layout: layout,
                 config: config
             )
-        case .error(let error):
+        case .error:
             componentFactory.buildEmptyState(
                 config: .errorDefault,
                 content: config.errorStateContent
