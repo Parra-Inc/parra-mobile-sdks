@@ -2,7 +2,7 @@
 //  DeleteAccountCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 06/09/2025.
+//  Bootstrapped with ❤️ by Parra on 06/11/2025.
 //  Copyright © 2025 Parra Inc.. All rights reserved.
 //
 
