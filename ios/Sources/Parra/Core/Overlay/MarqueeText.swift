@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct MarqueeText: View {
     // MARK: - Lifecycle
@@ -211,9 +212,9 @@ extension String {
             NSAttributedString.Key.font: font.toUIFont
         ]
 
-        let size = size(withAttributes: fontAttributes)
+        let s = (self as NSString).size(withAttributes: fontAttributes)
 
-        return size.width
+        return s.width
     }
 
     func heightOfString(usingFont font: Font) -> CGFloat {
@@ -221,8 +222,8 @@ extension String {
             NSAttributedString.Key.font: font.toUIFont
         ]
 
-        let size = size(withAttributes: fontAttributes)
+        let s = (self as NSString).size(withAttributes: fontAttributes)
 
-        return size.height
+        return s.height
     }
 }
