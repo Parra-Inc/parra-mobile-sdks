@@ -17,14 +17,15 @@ extension [String: String] {
             let key = $0.key as NSString
             let value = $0.value as NSString
 
-            guard
-                let encodedKey = key.addingPercentEncoding(
-                    withAllowedCharacters: .rfc3986Unreserved
-                ),
-                let encodedValue = value.addingPercentEncoding(
-                    withAllowedCharacters: .rfc3986Unreserved
-                ) else
-            {
+            guard let encodedKey = key.addingPercentEncoding(
+                withAllowedCharacters: .rfc3986Unreserved
+            ) else {
+                return nil
+            }
+
+            guard let encodedValue = value.addingPercentEncoding(
+                withAllowedCharacters: .rfc3986Unreserved
+            ) else {
                 return nil
             }
 
