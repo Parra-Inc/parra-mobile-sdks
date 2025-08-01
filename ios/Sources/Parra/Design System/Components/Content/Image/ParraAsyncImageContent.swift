@@ -14,7 +14,8 @@ public struct ParraAsyncImageContent: Hashable, Equatable {
 
     public init(
         _ imageAsset: ParraImageAsset,
-        preferredThumbnailSize: ParraImageAssetThumbnailSize? = nil
+        preferredThumbnailSize: ParraImageAssetThumbnailSize? = nil,
+        fallbackImage: UIImage? = nil
     ) {
         if let preferredThumbnailSize,
            let (thumbUrl, thumbSize) = imageAsset.thumbnailUrl(
@@ -29,16 +30,19 @@ public struct ParraAsyncImageContent: Hashable, Equatable {
         }
 
         self.blurHash = imageAsset.blurHash
+        self.fallbackImage = fallbackImage
     }
 
     public init(
         url: URL,
         blurHash: String? = nil,
-        originalSize: CGSize? = nil
+        originalSize: CGSize? = nil,
+        fallbackImage: UIImage? = nil
     ) {
         self.url = url
         self.blurHash = blurHash
         self.originalSize = _ParraSize(cgSize: originalSize)
+        self.fallbackImage = fallbackImage
     }
 
     // MARK: - Internal
@@ -46,4 +50,5 @@ public struct ParraAsyncImageContent: Hashable, Equatable {
     let url: URL
     let blurHash: String?
     let originalSize: _ParraSize?
+    let fallbackImage: UIImage?
 }

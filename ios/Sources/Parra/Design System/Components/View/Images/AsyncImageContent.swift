@@ -37,7 +37,13 @@ struct AsyncImageContent: View {
                 )
                 .blur(radius: config.blurContent ? 10 : 0, opaque: true)
         case .failure:
-            renderBlurHash(for: phase)
+            if let fallbackImage = content.fallbackImage {
+                Image(uiImage: fallbackImage)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                renderBlurHash(for: phase)
+            }
         @unknown default:
             EmptyView()
         }
